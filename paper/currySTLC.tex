@@ -1,0 +1,76 @@
+The Curry-style simply typed $\lambda$-calculus is exactly
+Church-style simply type $\lambda$-calculus except there is no type
+annotations on $\lambda$-abstractions.  That is we have $[[\x.t]]$
+instead of $\lambda [[x]]:[[T]].[[t]]$ in the syntax for terms.  This
+definition of STLC was an extension of Curry's work on combinator
+logic. The syntax and reduction relation of this theory is defined in
+Fig.~\ref{fig:cstlc_syntax} and the typing judgment is defined in
+Fig.~\ref{fig:cstlc_typing}. We call the typing judgment defined
+here an implicit typing paradigm.  The fact that it is implicit shows
+up in the applicatin typing rule $\CSTLCdrulename{App}$:
+\begin{center}
+  \begin{math}
+    \CSTLCdruleApp{}
+  \end{math}
+\end{center}
+Recall that these rules are read bottom up.  Up until now we have
+considered the typing judgment as simply a checking procedure with the
+type as one of the inputs, but often this judgment is defined so that
+the type is computed and becomes an output.  In theories like this the
+above rule causes some trouble.  The type $[[T1]]$ is left implicit
+that is by looking at only the conclusion of the rule one cannot tell
+what the value of $[[T1]]$ must be.  This problem also exists for the
+typing rule for $\lambda$-abstractions.  This is, however, not a
+problem in Church style STLC because that type is annotated on
+functions.  This suggest that for some Curry style type theories type
+construction is undecidable.  Not all type theories have a Church
+style and a Curry style formulations.  Therry Coquand's Calculus of
+Constructions is an example of a type theory that is in the style of
+Church, but it is also unclear how to define a Curry style version.
+It is also unclear how to define a Church style version of the type
+theory of intersection types \cite{Barendregt:1992}.
+
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{lll}
+      Syntax: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          [[T]] & ::= & [[X]]\,|\,[[T -> T']]\\
+          [[t]] & ::= & [[x]]\,|\,[[\x.t]]\,|\,[[t1 t2]]
+        \end{array}
+      \end{math}
+      & \\
+      Full $\beta$-reduction: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          \CSTLCdruleRXXBeta{} & \CSTLCdruleRXXLam{}\\
+          & \\
+          \CSTLCdruleRXXAppOne{} & \CSTLCdruleRXXAppTwo{}
+        \end{array}
+      \end{math}
+    \end{tabular}
+  \end{center}
+
+  \caption{Syntax and reduction rules for the Curry-style simply-typed $\lambda$-calculus}
+  \label{fig:cstlc_syntax}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \CSTLCdruleVar{} & \CSTLCdruleLam{} & \CSTLCdruleApp{}
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Type-checking algoritym for the Curry-style simply typed $\lambda$-calculus}
+  \label{fig:cstlc_typing}
+\end{figure}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

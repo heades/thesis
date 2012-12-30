@@ -1,0 +1,201 @@
+In the previous section we introduced classical type theories and
+defined the $\lambda\mu$-calculus.  We saw that it was a sequent style
+logic.  In this section we define the natural deduction equivalent of
+$\lambda\mu$-calculus called the $\lambda\Delta$-calculus.  After we
+define the type theory we give a brief explanation of its equivalence
+to the $\lambda\mu$-calculus, but we do not prove its equivalence.
+The $\lambda\Delta$-calculus was defined by Jakob Rehof and Morten
+S\o{}rensen in Rehof's thesis \cite{Rehof:1994}.  Their work on the
+$\lambda\Delta$-calculus was done independently of the
+$\lambda\mu$-calculus and they were not aware of their equivalence
+until Parigot pointed it out.  To our knowledge no actual proof was
+ever published, but the proof is rather straightforward.  The
+$\lambda\Delta$-calculus is an extension of STLC with the LDN in the
+form of a control operator called $\Delta$.  Unlike the other type
+theories we have seen we are going to first present the language and
+then the typing rules.  Lastly, we will define the reduction rules.
+It is our belief that the reduction rules may be more clear after the
+reader sees the typing rules.
+
+The language is defined in Fig.~\ref{fig:lamd_syntax} and the typing rules in
+Fig.~\ref{fig:lamd_typing}.  
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{lll}
+      Syntax: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          [[T]],[[A]],[[B]],[[C]] & ::= & [[X]]\,|\,[[_|_]]\,|\,[[A -> B]]\\
+          [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\d x:T.t]]\,|\,[[t1 t2]]\\
+        \end{array}
+      \end{math}      
+    \end{tabular}
+  \end{center}
+
+  \caption{Syntax and reduction rules for the $\lambda\Delta$-calculus}
+  \label{fig:lamd_syntax}
+\end{figure}
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \LamddruleVar{} & \LamddruleLam{}\\
+          & \\
+          \LamddruleDelta{} & \LamddruleApp{}\\
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Type-checking algorithm for the $\lambda\Delta$-calculus}
+  \label{fig:lamd_typing}
+\end{figure}
+We give the formulation a la Church, but the formulation a la Curry
+does exist.  We can see that the syntax really is just the extension
+of STLC with the $[[\d x:T.t]]$ control operator.  This operator is
+the elimination form for absurdity $[[_|_]]$.  We can see this
+connection by looking at its typing rule $\Lamddrulename{Delta}$.
+Here we assume $[[{-A}]]$ and show $[[_|_]]$, and obtain
+$[[A]]$.  We can use this rule to prove LDN:
+\begin{definition}
+  \label{def:lamd_ldn}
+  The proof of $[[{-{-A}} -> A]]$ in the $\lambda\Delta$-calculus:
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=Lam] {
+        $$\mprset{flushleft}
+        \inferrule* [right=Delta] {
+          $$\mprset{flushleft}
+          \inferrule* [right=App] {
+            $$\mprset{flushleft}
+            \inferrule* [right=Var] {
+              \ 
+            }{[[x : {-{-A}}, y : {-A} |- x : {-{-A}}]]}
+            \\
+            $$\mprset{flushleft}
+            \inferrule* [right=Var] {
+              \ 
+            }{[[x : {-{-A}}, y : {-A} |- y : {-A}]]}
+          }{[[x : {-{-A}}, y : {-A} |- x y : _|_]]}
+        }{[[x : {-{-A}} |- \d y : {-A}.(x y) : A]]}
+      }{[[. |- \x:{-{-A}}.(\d y:{-A}.(x y)) : {-{-A}} -> A]]}
+    \end{math}
+  \end{center}
+\end{definition}
+
+The $\lambda\Delta$-calculus is equivalent to the $\lambda\mu$-calculus.  The
+following definition gives an embedding from the $\lambda\mu$-calculus to
+the $\lambda\Delta$-calculus.
+\begin{definition}
+  \label{def:lamd_embed_lamu}
+  The following embeds the Church style formulation of the $\lambda\mu$-calculus into
+  the $\lambda\Delta$-calculus:
+  
+  \ \\
+  Context:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        |[[G]],[[A]]^[[x]]| & := & |[[G]]|,[[x]]:[[A]]\\
+        &\\
+        |\Delta,[[A]]^\alpha| & := & |\Delta|,[[x]]:[[{-A}]], \text{where } [[x]] \text{ is fresh in } |\Delta|\\
+        &\\
+        |[[A]],\Delta| & := & |\Delta|\\
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \ \\
+  Terms and Statements:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        |[[x]]|  & := & [[x]]\\
+        &\\
+        |\alpha| & := & [[y]] \text{, for some fresh variable } [[y]]\\
+        &\\
+        |\lambda [[x]]:[[A]].[[t]]| & := & \lambda [[x]]:[[A]].|[[t]]|\\
+        &\\
+        |[[t1 t2]]|  & := & |[[t1]]|\,|[[t2]]|\\
+        &\\
+        |\mu \alpha:[[A]].s| & := & \Delta [[x]]:[[{-A}]].|[[s]]| \\
+        &\\
+        |[\alpha][[t]]| & := & [[z]]\,|[[t]]|
+          \text{, where } [[z]] \text{ is fresh in } [[t]]
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+Using the previous definition we can now prove that if a term is typeable in the $\lambda\mu$-calculus
+then we can construct a corresponding term of the same type in the $\lambda\Delta$-calculus. 
+\begin{lemma}
+  \label{lemma:lamu_is_lamd}
+  \begin{itemize}
+  \item[i.] If $[[t]]:\Gamma \vdash [[A]],\Delta$ then $[[G]],|\Delta| \vdash |[[t]]|:[[A]]$.
+  \item[ii.] If $[[t]]:\Gamma \vdash .,\Delta$ then $[[G]],|\Delta| \vdash |[[t]]|:[[_|_]]$.
+  \end{itemize}
+\end{lemma}
+\noindent
+The previous lemma establishes that the $\lambda\Delta$-calculus is at
+least as expressive -- in terms of typeability -- than the
+$\lambda\mu$-calculus.  It so happens that we can prove that the
+$\lambda\mu$-calculus is at least as strong as the
+$\lambda\Delta$-calculus which implies that both type theories are
+equivalent with respect to typeability.  We assume without loss of
+generality that the typing context $[[G]]$ is sorted so that all
+negative types come after all positive types.  A negative type is of
+the form $[[{-A}]]$.  
+\begin{definition}
+  \label{def:embed_lamd_lamu}
+  The following embeds the Church style formulation of the $\lambda\Delta$-calculus into the
+  $\lambda\mu$-calculus:
+  
+  \ \\
+  Contexts:\\  
+  If $[[G]] \equiv [[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]], [[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]$, then
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        |[[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]]| & := & [[A1]]^{[[x1]]}, \ldots, [[Ai]]^{[[xi]]} \equiv [[G]]_\mu\\
+        &\\
+        |[[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]| & := & [[B1]]^{\alpha_1},\ldots,[[Bj]]^{\alpha_j} \equiv \Delta\\
+      \end{array}
+    \end{math}
+  \end{center}
+  
+  \ \\
+  Terms:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        |[[x]]|  & := & [[x]]\\
+        &\\
+        |\lambda [[x]]:[[A]].[[t]]| & := & \lambda [[x]]:[[A]].|[[t]]|\\
+        &\\
+        |[[t1 t2]]|  & := & |[[t1]]|\,|[[t2]]|\\
+        &\\
+        |\Delta x:[[{-A}]].[[t]]| & := & \mu \alpha.[ \beta ]|[[t]]|
+          \text{, where } \alpha \not \equiv \beta
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+\noindent
+Similar to the previous embedding we can now prove that all inhabited
+types of the $\lambda\Delta$-calculus are inhabited in the
+$\lambda\mu$-calculus.
+\begin{lemma}
+  \label{lemma:lamd_is_lamu}
+  If $[[G |- t : A]]$ then $|[[t]]| : [[G]]_\mu \vdash A,\Delta$.
+\end{lemma}
+\noindent 
+Both of the above lemmas can be proven by induction on the form of the
+assumed typing derivations.  This equivalence extends to the reduction
+rules as well, but the reduction rules are not step by step
+equivalent, but rather terms of the $\lambda\Delta$-calculus will have
+to do more reduction than the corresponding terms of the
+$\lambda\mu$-calculus.  We do not show this here.
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

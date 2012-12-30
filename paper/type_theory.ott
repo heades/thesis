@@ -1,0 +1,290 @@
+% Martin-Lof's Type Theory.
+% This is neither intensional or extensional.
+metavar term_var, x, y, z, f, u, v ::=
+metavar type_var, X ::=
+indexvar i ::= 
+
+grammar
+
+kind, sort, S :: 'Sort_' ::=
+  | Type :: :: Type
+  | True :: :: True
+
+type, T, A, B, C :: 'Type_' ::=
+  | X               ::   :: Var
+  | 1               ::   :: Unit
+  {{ tex \top }}
+  | 0               ::   :: Bottom
+  {{ tex \perp }}
+  | A + B           ::   :: Coproduct
+  {{ tex [[A]] + [[B]] }}
+  | ( x : A ) -> B  ::   :: Pi
+  {{ tex \Pi [[x]]:[[A]].[[B]] }}
+  | A -> B          :: S :: Arrow
+  {{ tex [[A]] \to [[B]] }}
+  | { x : A } -> B  ::   :: Sum
+  {{ tex \Sigma [[x]]:[[A]].[[B]] }}
+  | A x B           :: S :: Product
+  {{ tex [[A]] \times [[B]] }}
+  | Id A , a , b    :: M :: Id
+  {{tex \mathsf{Id}\,[[A]],[[a]],[[b]] }}
+  | B ( t1 , t2 , t3 ) :: M :: Depends
+  | [ t / x ] A        :: M :: Substitution1
+
+term, t, s, a, b, c, d :: 'Term_' ::= 
+  | x                   ::   :: Var
+  | tt                  ::   :: Unit
+  {{tex \mathsf{tt} }}
+  | \ x : A . t         ::   :: Lam
+  {{tex \lambda [[x]]:[[A]].[[t]] }}
+  | t1 t2               ::   :: App
+  {{tex [[t1]]\,[[t2]] }}
+  | ( t1 , t2 )         ::   :: Product
+  | fst t               :: S :: Fst
+  {{tex \pi_1\,[[t]] }}
+  | snd t               :: S :: Snd
+  {{tex \pi_2\,[[t]] }}
+  | case s of x , y . t ::   :: Case1
+  {{tex \mathsf{case}\,[[s]]\,\mathsf{of}\,[[x]],[[y]].[[t]] }}
+  | case s of x . t1 , y . t2 :: S  :: Case2
+  {{tex \mathsf{case}\,[[s]]\,\mathsf{of}\,[[x]].[[t1]],[[y]].[[t2]] }}
+  | abort :: :: Abort
+  {{tex \mathsf{abort} }}
+  | [ t / x ] a :: M :: Substitution
+  | r ( a )             :: M :: Refl
+  {{tex \mathsf{r}([[a]]) }}
+  | J ( a , b , c , d ) :: M :: IEq1
+  {{tex \mathsf{J}([[a]],[[b]],[[c]],[[d]]) }}
+  | ( t ) :: S :: Parens
+
+G {{ tex \Gamma }} :: 'Context_' ::=
+  | x : T       :: :: Element
+  | T : Type    :: :: Type
+  | T : True    :: :: True1
+  | .           :: :: Empty
+    {{tex \cdot }}
+  | G , G'      :: :: Extension
+
+terminals :: 'terminals_' ::=
+  | Type :: :: Type
+  {{tex \mathsf{Type} }}
+  | True :: :: True
+  {{tex \mathsf{True} }}
+
+formula :: 'formula_' ::=
+  | judgement   ::  :: judgement
+  | ( formula ) ::  :: parens
+  | x fresh in T :: :: Fresh
+  {{tex [[x]]\,\text{fresh}\,\text{in}\,[[T]] }}
+
+defns
+  JTyping :: '' ::=
+  defn
+  G |- T : Type :: :: kinding :: 'K_'
+    {{ tex [[G]] \vdash [[T]] : [[Type]] }}
+  by
+  
+  ------------- :: Bottom
+  G |- 0 : Type
+
+  ------------- :: Unit
+  G |- 1 : Type
+
+  G, x : A |- B : Type
+  ------------------------ :: Ext
+  G |- {x : A} -> B : Type
+
+  G |- A : Type
+  G |- B : Type
+  ----------------- :: Prod
+  G |- A x B : Type
+
+  G, x : A |- B : Type
+  ------------------------ :: Pi
+  G |- (x : A) -> B : Type
+
+  G |- A : Type
+  G |- B : Type
+  ------------------ :: Arrow
+  G |- A -> B : Type
+
+  G |- A : Type
+  G |- B : Type
+  ----------------- :: Coprod
+  G |- A + B : Type
+
+  defn
+  G |- T : True :: :: validity :: 'L_'
+    {{ tex [[G]] \vdash [[T]] : \mathsf{True} }}
+  by 
+
+  ------------- :: True
+  G |- 1 : True
+
+  G |- A : True
+  G |- B : True
+  ----------------- :: Prod
+  G |- A x B : True
+
+  G, x : A |- B : True
+  ------------------------ :: Foralli
+  G |- (x : A) -> B : True
+
+  G |- t : A
+  G |- (x : A) -> B : True
+  ------------------------ :: Foralle
+  G |- [t/x]B : True
+
+  G, X : True |- A : True
+  ----------------------- :: Impi
+  G |- X -> A : True
+
+  G |- X : True
+  G |- X -> A : True
+  ------------------ :: Impe
+  G |- A : True
+
+  G |- A : True
+  ----------------- :: Ori1
+  G |- A + B : True  
+
+  G |- B : True
+  ----------------- :: Ori2
+  G |- A + B : True  
+
+  G |- A + B : True
+  G, A : True |- C : True
+  G, B : True |- C : True
+  ----------------------- :: Ore
+  G |- C : True
+
+  G |- t : A
+  G |- [t/x]B : True
+  ------------------------ :: Exti
+  G |- {x : A} -> B : True
+
+  x fresh in C
+  G |- {x : A} -> B : True
+  G, x : A, B : True |- C : True
+  ------------------------------ :: Exte
+  G |- C : True
+
+  defn
+  G |- t : T :: :: typing :: 'T_' 
+    {{ tex [[G]] \vdash [[t]] : [[T]] }}
+  by
+   
+  ----------- :: Unit
+  G |- tt : 1
+
+  G |- A : Type
+  ----------------- :: Var
+  G, x : A |- x : A
+
+  G |- t : A
+  G |- b : [t/x]B
+  -------------------------- :: Sum
+  G |- (t, b) : {x : A} -> B
+
+  G |- s : {x : A} -> B
+  G, x : A, y : B |- c : C
+  -------------------------- :: Case1
+  G |- case s of x, y.c : C  
+
+  G |- a : A
+  G |- b : B
+  ------------------ :: Prod
+  G |- (a,b) : A x B
+
+  G |- c : A x B
+  -------------- :: Prod1
+  G |- fst c : A
+
+  G |- c : A x B
+  -------------- :: Prod2
+  G |- snd c : B
+
+  G, x : A |- t : B
+  ------------------------ :: Pi
+  G |- \x:A.t:(x : A) -> B
+  
+  G |- t' : A
+  G |- t : (x : A) -> B
+  --------------------- :: App1
+  G |- t t' : [t'/x]B
+
+  x fresh in B
+  G, x : A |- t : B
+  ------------------ :: Arrow
+  G |- \x:A.t:A -> B
+
+  G |- t' : A
+  G |- t : A -> B
+  --------------- :: App2
+  G |- t t' : B
+  
+  G |- B : Type
+  G |- a : A
+  -------------- :: CoProd1
+  G |- a : A + B
+
+  G |- A : Type
+  G |- b : B
+  -------------- :: CoProd2
+  G |- b : A + B
+
+  G |- s : A + B
+  G, x : A |- c : C
+  G, y : B |- c' : C
+  --------------------------- :: Case2
+  G |- case s of x.c,y.c' : C
+
+  G |- A : Type
+  --------------------- :: Abort
+  G, x : 0 |- abort : A
+
+  defn
+  G |- a = b : A :: :: eq :: 'Eq_' 
+    {{ tex [[G]] \vdash [[a]] = [[b]] : [[A]] }}
+  by
+
+  G |- a : 1
+  --------------- :: Unit
+  G |- a = tt : 1
+
+  G |- a : A
+  G |- b : B
+  ---------------------- :: Fst
+  G |- a = fst (a,b) : A
+
+  G |- a : A
+  G |- b : B
+  ---------------------- :: Snd
+  G |- b = snd (a,b) : B
+  
+  G |- t : A
+  G, x : A |- b : B
+  --------------------------------- :: Beta
+  G |- (\x:A.b) t = [t/x]b : [t/x]B
+
+  G |- t1 : (x:A) -> B
+  ---------------------------------- :: Eta
+  G |- t1 = \x:A.(t1 x) : (x:A) -> B
+
+  G |- a : A
+  G, x : A |- c : C
+  G, y : B |- c' : C
+  ----------------------------------------- :: Case1
+  G |- case a of x.c,y.c' = [a/x]c : [a/x]C
+
+  G |- b : B
+  G, x : A |- c : C
+  G, y : B |- c' : C
+  ------------------------------------------ :: Case2
+  G |- case b of x.c,y.c' = [b/x]c' : [b/x]C
+
+  G |- t : T
+  G |- a : [t/x]A
+  G, x : T, y : A |- b : B
+  ---------------------------------------------------- :: Case3
+  G |- case (t,a) of x,y.b = [t/x][a/y]b : [t/x][a/y]B

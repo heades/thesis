@@ -1,0 +1,126 @@
+% The Calculus of Constructions.
+metavar term_var, x, y, z, f, u, v ::=
+metavar type_var, X ::=
+indexvar i ::= 
+
+grammar
+
+term, t, a, b, c :: 'Term_' ::= 
+  | Type           ::   :: Type
+    {{tex \mathsf{Type} }}
+  | x              ::   :: Variables
+  | \ x : t . t'   ::   :: Lam (+ bind x in t +)
+    {{ tex \lambda [[x]] : [[t]] . [[t']] }}
+  | t1 t2          ::   :: App
+  | ( x : a ) -> b ::   :: Pi
+    {{tex \Pi [[x]] : [[a]] . [[b]] }}
+  | [ t / x ] t'   :: M :: Substitution
+  | ( t )          :: S :: Parens
+
+G {{ tex \Gamma }} :: 'Context_' ::=
+  | ( x : t ) -> G  :: :: Element
+    {{tex \Pi [[x]] : [[t]] . [[G]] }}
+  | Type            :: :: Empty
+    {{tex \mathsf{Type} }}
+  | G , x : t       :: M :: Ctx1
+  | G , x : G'      :: M :: Ctx2
+  | .               :: M :: EmptyCtx
+  {{tex \cdot }}
+
+formula :: 'formula_' ::=
+  | judgement       ::  :: judgement
+  | ( formula )     ::  :: parens
+  | ( x : t ) in G  ::  :: Ele
+  | ( x : t ) \in G ::  :: NEle
+  {{tex ([[x]] : [[t]]) \not \in [[G]] }}
+
+defns
+  JTyping :: '' ::=
+  defn
+  G Valid :: :: contexts :: ''
+  {{tex [[G]]\,\mathsf{Valid} }}
+  by
+
+  ---------- :: Empty
+  Type Valid
+
+  G Valid
+  G |- G'
+  -------------- :: Fam
+  G, x:G' Valid
+
+  G Valid
+  G |- t : Type
+  ------------- :: Ext 
+  G, x : t Valid
+  
+  defn
+  G1 |- G2 :: :: typefam :: ''
+  {{tex [[G1]] \vdash [[G2]] }}
+  by
+  
+  G, x : t |- G'
+  ------------------ :: Ctx
+  G |- (x : t) -> G'  
+
+  defn
+  G |- t : t' :: :: typing :: 'T_' 
+    {{ tex [[G]] \vdash [[t]] : [[t']] }}
+  by
+  
+  G, x : t |- t' : Type
+  ---------------------- :: Prod
+  G |- (x : t) -> t' : Type  
+
+  G Valid
+  (x : t) in G
+  ------------ :: Var
+  G |- x : t
+
+  G, x : t1 |- t : t2
+  ----------------------------- :: Lam
+  G |- \x:t1.t : (x : t1) -> t2
+
+  G |- t2 : t
+  G |- t1 : (x : t) -> t'
+  ----------------------- :: App
+  G |- t1 t2 : [t/x]t'
+
+  G |- t : t1
+  G |- t1 ~ t2
+  ------------ :: Conv
+  G |- t : t2
+
+  defn
+  G |- t1 ~ t2 :: :: eq :: 'Eq_'
+  {{tex [[G]] \vdash [[t1]] \approx [[t2]] }}
+  by
+
+  --------------------------- :: Beta
+  G |- (\x:t1.t) t' ~ [t'/x]t
+
+  G |- t1 ~ t'1
+  G |- t2 ~ t'2
+  -------------------------------------- :: Prod
+  G |- (x : t1) -> t2 ~ (x : t'1) -> t'2
+
+  G, x : t |- t1 ~ t2
+  -------------------------- :: Lam
+  G |- (\x:t.t1) ~ (\x:t.t2)
+
+  G |- t2 ~ t'2
+  G |- t1 ~ t'1
+  -------------------- :: App
+  G |- t1 t2 ~ t'1 t'2
+
+  ---------- :: Refl
+  G |- t ~ t
+
+  G |- t1 ~ t2
+  ------------ :: Sym 
+  G |- t2 ~ t1
+
+  G |- t1 ~ t2
+  G |- t2 ~ t3
+  ------------ :: Trans
+  G |- t1 ~ t3

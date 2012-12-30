@@ -1,0 +1,202 @@
+% System Fw.
+metavar term_var, x, y, z, f, u, v ::=
+metavar type_var, X, Y, Z, S, N ::= 
+
+grammar
+
+sort, S :: 'Sort_' ::=
+  | * :: :: Star
+  
+kind, K :: 'Kind_' ::=
+  | Type    ::   :: Type
+    {{ tex \mathsf{Type} }}
+  | ( X : K ) -> K' ::   :: Prod1
+    {{ tex \Pi [[X]]:[[K]].[[K']] }}
+  | ( x : T ) -> K  ::   :: Prod2
+    {{ tex \Pi [[x]]:[[T]].[[K]] }}
+  | [ t / x ] K     ::   :: Substitution
+
+type, T, A :: 'Type_' ::=
+  | X               ::   :: Var
+  | \ X : K . T     ::   :: Lam1
+    {{ tex \lambda [[X]]:[[K]].[[T]] }} 
+  | \ x : T1 . T2   ::   :: Lam2
+    {{ tex \lambda [[x]]:[[T1]].[[T2]] }} 
+  | T1 T2           ::   :: App1
+  | T t             ::   :: App2
+  | ( X : K ) -> T  ::   :: Prod1
+    {{ tex \Pi [[X]]:[[K]].[[T]] }}
+  | ( x : T ) -> T'  ::   :: Prod2
+    {{ tex \Pi [[x]]:[[T]].[[T']] }}
+  | ( T )           :: S :: Parens
+  | [ T / X ] T'    :: M :: Substitution1
+  | [ t / x ] T     :: M :: Substitution2
+
+term, t :: 'Term_' ::= 
+  | x              ::   :: Variables
+  | \ x : T . t    ::   :: Lam (+ bind x in t +)
+    {{ tex \lambda [[x]] : [[T]] . [[t]] }}
+  | \ X : K . t   ::   :: TypeAbs
+    {{ tex \lambda [[X]]:[[K]] . [[t]] }}
+  | t1 t2          ::   :: App
+  | t T            ::   :: TypeApp
+  | [ t / x ] t'   :: M :: Substitution
+  | [ T / X ] t    :: M :: TypeSubstitution
+  | ( t )          :: S :: Parens
+
+exp, e :: 'Exp_' ::=
+  | t :: :: Term
+  | T :: :: Type
+
+G {{ tex \Gamma }} :: 'Context_' ::=
+  | x : T       :: :: TermElement
+  | X : K       :: :: TypeElement
+  | .           :: :: Empty
+  | G , G'      :: :: Extension
+
+formula :: 'formula_' ::=
+  | judgement   ::  :: judgement
+  | ( formula ) ::  :: parens
+
+defns
+  JTyping :: '' ::=
+  defn
+    G |- K : * :: :: sorting :: 'S_'
+    {{ tex [[G]] \vdash [[K]] : [[*]] }}
+  by
+  
+  ------------- :: Type
+  G |- Type : *
+
+  G, X:K |- K' : *
+  ------------------------ :: Prod1
+  G |- ( X : K ) -> K' : *
+
+  G, x : T |- K : *
+  ------------------- :: Prod2
+  G |- (x:T) -> K : *
+
+  defn
+    G |- T : K :: :: kinding :: 'K_'
+    {{ tex [[G]] \vdash [[T]] : [[K]] }}
+  by
+
+  --------------------------- :: Var
+  G, X : Type, G' |- X : Type
+
+  G, x:T1 |- T2 : Type
+  ------------------------ :: Prod1
+  G |- (x:T1) -> T2 : Type
+
+  G, X:K |- T : Type
+  ---------------------- :: Prod2
+  G |- (X:K) -> T : Type
+ 
+  G, x : T1 |- T2 : K
+  --------------------------- :: Lam1
+  G |- \x:T1.T2 : (x:T1) -> K
+
+  G, X : K1 |- T : K2
+  --------------------------- :: Lam2
+  G |- \X:K1.T : (X:K1) -> K2
+
+  G |- T1 : (X:K1) -> K2
+  G |- T2 : K1
+  ------------------ :: App1
+  G |- T1 T2 : K2
+
+  G |- T : (x:T) -> K
+  G |- t : T
+  ------------------ :: App2
+  G |- T t : [t/x]K
+
+  defn
+  G |- t : T :: :: typing :: '' 
+    {{ tex [[G]] \vdash [[t]] : [[T]] }}
+  by
+  
+  G |- T : Type
+  --------------------- :: Var
+  G, x : T, G' |- x : T
+
+  G, x : T1 |- t : T2
+  --------------------------- :: Lam
+  G |- \x:T1.t : (x:T1) -> T2
+
+  G |- t1 : (x:T1) -> T2
+  G |- t2 : T1
+  --------------------- :: App
+  G |- t1 t2 : [t2/x]T2
+
+  G, X : K |- t : T
+  ------------------------ :: TypeAbs
+  G |- \X:K.t : (X:K) -> T
+
+  G |- T : K
+  G |- t : (X:K) -> T'
+  -------------------- :: TypeApp
+  G |- t T : [T/X]T'
+
+  G |- t : T1
+  G |- T1 ~> T2
+  ------------- :: Conv
+  G |- t : T2
+
+defns
+ Opsem :: '' ::=
+ defn
+ G |- e ~> e' :: :: opsem :: 'R_'
+   {{tex [[G]] \vdash [[e]] \approx [[e']] }}
+ by
+
+  -------------------------- :: Beta1
+  G |- (\x : T . t) t' ~> [t'/x]t  
+
+  -------------------------- :: Beta2
+  G |- (\X : K . t) T ~> [T/X]t  
+
+  ------------------------ :: Beta3
+  G |- (\x : T . T') t ~> [t/x]T
+
+  -------------------------- :: Beta4
+  G |- (\X : K . T) T' ~> [T'/X]T  
+
+  G,x:T |- t ~> t'
+  ----------------- :: Lam1
+  G |- \x:T.t ~> \x:T.t'
+
+  G,X:K |- T ~> T'
+  ---------------------- :: Lam2
+  G |- \X:K.T ~> \X:K.T'
+
+  G,x:T |- T ~> T'
+  ---------------------- :: Lam3
+  G |- \x:A.T ~> \x:A.T'
+
+  G |- t1 ~> t'1
+  --------------- :: App1
+  G |- t1 t2 ~> t'1 t2
+
+  G |- t2 ~> t'2
+  --------------- :: App2
+  G |- t1 t2 ~> t1 t'2
+
+  G |- t1 ~> t2
+  ------------ :: App3
+  G |- T t1 ~> T t2
+
+  G |- T1 ~> T2
+  ------------ :: App4
+  G |- T1 t ~> T2 t
+
+  G |- t ~> t'
+  ------------- :: TypeApp1
+  G |- t T ~> t' T
+
+  G |- T1 ~> T2
+  ------------- :: TypeApp2
+  G |- T T1 ~> T T2
+
+  G |- T1 ~> T2
+  ------------ :: TypeApp3
+  G |- T1 T ~> T2 T
