@@ -1,0 +1,74 @@
+\documentclass{report} 
+
+\usepackage{times}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathpartir}
+
+\usepackage{fullpage}
+\usepackage{moreverb}
+\usepackage{ifthen}
+% Ott
+\usepackage{supertabular}
+\usepackage{ottlayout}
+\include{ST-ott}
+% Ott end
+
+\begin{document}
+\bibliographystyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{lemma}[thm]{Lemma}
+
+\newtheorem{corollary}[thm]{Corollary}
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{notn}[thm]{Notation}
+\newtheorem{observation}[thm]{Observation}
+
+\newcommand{\interp}[1]{[\negthinspace[#1]\negthinspace]}
+\newcommand{\normto}[0]{\rightsquigarrow^{!}}
+\newcommand{\case}[4]{\text{case}\ #1\ \text{of}\ #2\text{.}#3\text{,}#2\text{.}#4}
+\newcommand{\join}[0]{\downarrow}
+
+\title{Categorical Semantics of Type Theories}
+\author{Harley D. Eades III \\
+Computer Science\\
+The University of Iowa}
+
+\maketitle
+
+\begin{abstract}
+  Category theory and its applications to type theory are well known and 
+  have been explored extensively.  In this manuscript we present basic category
+  theory and give a categorical semantics to a large class of type theories.
+  In this document we emphasize rigor and give as much detail as possible
+  with respect to the abilities of the authors.  This document will also be
+  self contained.
+\end{abstract}
+
+\tableofcontents
+
+\listoffigures
+
+\section{Introduction}
+\label{sec:introduction}
+We give an amazingly rich and engaging introduction.
+% section introduction (end)
+
+\chapter{Category Theory}
+\label{chap:cat_theory}
+
+We detail all the results in category theory needed to understand everything in this
+document.
+% chapter cat_theory (end)
+
+\chapter{Simple Type Theories}
+\label{chap:simple_types}
+
+\input{st-gen}
+
+% chapter simple_types (end)
+
+\end{document}

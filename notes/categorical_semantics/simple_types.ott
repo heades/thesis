@@ -1,0 +1,89 @@
+% This OTT file contains all Curry Style simple type theories
+% we use in the report.
+metavar term_var, x, y, z ::=
+metavar type_var, X ::= 
+metavar const, c, k, f ::= 
+metavar type_const, U, S ::=
+indexvar ivar, i, j ::=
+
+grammar
+
+arities :: 'Arities_' ::=
+  | Term           :: :: Term
+  {{tex \textsf{Term} }}
+  | Type           :: :: Type
+  {{tex \textsf{Type} }}
+  | Term i => Term :: :: nAryFuncType
+  {{tex [[Term]]^{[[i]]} \Rightarrow [[Term]] }}
+  | ( G : [ Term x Type ] ) => ( t : Term ) => ( U : Type ) => Type :: M :: JudgmentType
+  {{tex ( \Gamma : [ [[Term]] \times [[Type]] ]) \Rightarrow ( [[t]] : [[Term]] ) \Rightarrow ( [[U]] : [[Type]] ) \Rightarrow [[Type]] }}
+
+type, T, A, B, C :: 'Type_' ::=
+  | U       ::   :: TypeConst
+  | X       ::   :: Base
+  | T -> T' ::   :: Arrow
+    {{ tex [[T]] \to [[T']] }}
+  | A x B   ::   :: Products
+  {{tex [[A]]\times[[B]] }}
+  | A + B   ::   :: CoProducts
+  {{tex [[A]]+[[B]] }}
+  | ( T )   :: S :: Parens  
+
+term, t :: 'Term_' ::= 
+  | c              ::   :: Constants
+  | f x1 ... xi    ::   :: FunctionSymbols
+  | x              ::   :: Variables
+  | \ x . t        ::   :: Lam (+ bind x in t +)
+    {{ tex \lambda [[x]] . [[t]] }}
+  | t1 t2          ::   :: App
+  | [ t / x ] t'   :: M :: Substitution
+  | ( t )          :: S :: Parens
+  | [ t / x ] t'   :: M :: Subst
+
+G {{ tex \Gamma }} :: 'Context_' ::=
+  | x : T                   ::   :: Element
+  | x1 : T1 , ... , xi : Ti :: M :: Expanded
+  | .                       ::   :: Empty
+  | G , G'                  ::   :: Extension
+
+formula :: 'formula_' ::=
+  | judgement              ::  :: judgement
+  | ( formula )            ::  :: parens
+
+defns
+  JTyping :: '' ::=
+  defn
+  G |- t : T :: :: typing :: '' 
+    {{ tex [[G]] \vdash [[t]] : [[T]] }}
+  by
+  
+  --------------------- :: Var
+  G, x : S, G' |- x : S
+
+  ---------- :: Const
+  G |- c : U
+
+  ---------------------------------------- :: Fun
+  x1 : S1, ..., xi : Si |- f x1 ... xi : U
+
+  defn
+  G |- t1 = t2 : T :: :: defeq :: '' 
+    {{ tex [[G]] \vdash [[t1]] = [[t2]] : [[T]] }}
+  by
+ 
+  -------------- :: Refl
+  G |- t = t : T
+
+  G |- t1 = t2 : T
+  ---------------- :: Sym
+  G |- t2 = t1 : T
+
+  G |- t1 = t2 : T
+  G |- t2 = t3 : T
+  ---------------- :: Trans
+  G |- t1 = t3 : T
+
+  G |- t1 = t2 : T1
+  G, x : T1 |- t = t' : T2
+  ---------------------------- :: Subst
+  G |- [t1/x]t = [t2/x]t' : T2

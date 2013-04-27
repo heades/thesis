@@ -1,0 +1,80 @@
+
+\section{A Metaframework}
+\label{sec:a_metaframework}
+We will use Martin-L\"of's Type Theory for our metaframework throughout this chapter.  
+This will allow use to give precise types to all of the structures in our object languages.
+In fact all of the type theories discussed in this chapter can be rigorously defined within
+this framework where binding can be encoded using either de Bruijn indecies or using the
+locally nameless representation \footnote{We prefer the latter.} \cite{??}.
+% section a_metaframework (end)
+
+
+\section{The Theory of Constants}
+\label{sec:the_theory_of_constants}
+We begin our journey into the world of categorical semantics of type theories by first 
+showing how to interpret a simple algebraic theory consisting of a countably infinite set
+of variables, a finite set of constant types, a finite set of $[[i]]$-ary function symbols,
+a typing judgment, and a definitional equality judgment.  This theory is called the
+theory of constants. We first give a formal definition of this theory in the presentation we
+will adopt for the reminder of this document.  The syntax for the theory of constants is 
+defined in Figure~\ref{fig:syntax_theory_constants}.  
+
+The free variables of the theory can be defined at the metalevel as de
+Bruijn indices, but we will use mathematical notation to simplify the
+presentation.  They have type $[[Term]]$ and are classified by
+constant types of type $[[Type]]$.  The $[[i]]$-ary function symbols
+have type $[[Term i => Term]]$.  The constant types of the theory of constants
+have meta-type $[[Type]]$.  Judgments are metastatements describing
+what type a term can be assigned.  All of the judgements we will
+define can be defined at the metalevel as an inductive datatype where
+each rule of the judgment is defined as a constructor. If we call the
+typing judgment $\text{has}\_\text{type}$ at the type level then its
+type is $[[ (G:[Term x Type]) => (t:Term) => (U:Type) => Type]]$.  We
+denote this judgment by $[[G |- t : U]]$. The type of the definitional
+equality judgment is similar.  We define the type assignment judgment
+in Figure~\ref{fig:typing_theory_constants} and the definitional
+equality judgment in Figure~\ref{fig:eq_theory_constants}.
+
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{rlllll}
+        (Types)    & [[T]] & ::= & [[S]]\,|\,[[U]]\\
+        (Terms)    & [[t]] & ::= & [[x]]\,|\,[[c]]\,|\,[[f x1 ... xi]]\\
+        (Contexts) & [[G]] & ::= & [[x:T]]\,|\,[[G1,G2]]
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Syntax of the theory of constants}
+  \label{fig:syntax_theory_constants}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{cc}
+        \STdruleVar{} & \STdruleFun{}\\
+        & \\
+        \STdruleConst{}
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Type assignment for the theory of constants}
+  \label{fig:typing_theory_constants}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{cc}
+        \STdruleRefl{} & \STdruleSym{}\\
+        & \\
+        \STdruleTrans{} & \STdruleSubst{}\\
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Definitional equality for the theory of constants}
+  \label{fig:eq_theory_constants}
+\end{figure}
+
+% section the_theory_of_constants (end)
