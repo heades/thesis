@@ -1,0 +1,33 @@
+% This OTT file contains syntax to be used in category theory.
+metavar cat, A {{tex \mathcal{A} }},
+             B {{tex \mathcal{B} }},
+             C {{tex \mathcal{C} }}, 
+             D {{tex \mathcal{D} }}, 
+             E {{tex \mathcal{E} }},
+             F {{tex \mathcal{F} }} ::=
+metavar obj, a {{tex A}}, 
+             b {{tex B}}, 
+             c {{tex C}}, 
+             d {{tex D}}, 
+             e {{tex E}}, 
+             f {{tex F}},
+             x {{tex X}} ::=
+indexvar ivar, i, j ::=
+
+grammar
+
+streams :: 'Streams_' ::=
+  | 1 : : streams :: :: StreamOnes
+  | 1 :: :: One
+
+formula :: 'formula_' ::=
+  | ( formula )  ::  :: parens
+  | head :: :: head
+  {{tex \mathsf{head} }}
+  | next :: :: next
+  {{tex \mathsf{next} }}
+
+
+
+
+

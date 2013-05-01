@@ -1,0 +1,38 @@
+\subsection{Initial Algebras}
+\label{subsec:initial_algebras}
+
+% subsection initial_algebras (end)
+
+\subsection{Final Coalgebras}
+\label{subsec:final_coalgebras}
+Lets consider the infinite stream of ones. 
+\begin{center}
+  \begin{math}
+    [[1 :: 1 :: 1 :: 1]] \cdots
+  \end{math}
+\end{center}
+Now what can be said about such an object?  We definitely can make observations about it.
+That is, we can observe that, say, the first element is a $1$.  In addition to that we can 
+observe that the second element is also a $1$.  Furthermore, we can make the observation 
+that what follows the second element is still an infinite streams of ones.
+We can define this stream using a few morphisms.  That is $[[head]] : [[A]] \to \{1\}$ and
+$[[next]] : [[A]] \to [[A]]$ are the morphisms, where $[[A]]$ is some fixed set.
+Now notice that for any $a \in [[A]]$ we have $[[head]](a) = 1$, and 
+$[[head]](a) = a' \in A$.  Now if we compose these two we obtain 
+$[[head]]([[next]](a)) = [[head]](a') = 1$.  Thus, using these morphisms we can completely
+define our stream above by taking for each position $n \in \mathbb{N}$ in the stream 
+$[[head]]([[next]]^{n}(a))$ to be the value at that position for any $a \in [[A]]$.  These
+two morphisms $[[head]]$ and $[[next]]$ are the observations we can make about the element 
+$a$. It just happens, in this simple example, that the observations are the same for all 
+elements of $[[A]]$.
+
+At this point we can take the product of the two morphisms $[[head]]$ and $[[next]]$ to
+obtain the morphism $\langle [[head]],[[next]] \rangle : [[A]] \to \{1\} \times [[A]]$.
+If we define the functor $[[F]]([[x]]) := \{1\} \times [[x]]$ then we can redefine the
+product as $\langle [[head]],[[next]] \rangle : [[A]] \to [[F]]([[A]])$.  Furthermore,
+if we make $\{1\}$ arbitrary and call it say $[[B]]$ then we obtain 
+the functor $[[F]]([[x]]) := [[B]] \times [[x]]$.  Using this new definition of the functor
+$[[F]]$ and $\langle [[head]],[[next]] \rangle : [[A]] \to [[F]]([[A]])$ we can define any
+infinite stream of elements of $[[B]]$.  Taking the functor $[[F]]$ and the pair
+$([[B]], \langle [[head]], [[next]] \rangle)$ we obtain what is called a coalgebra.
+% subsection final_coalgebras (end)
