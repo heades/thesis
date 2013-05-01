@@ -15,10 +15,10 @@ Now what can be said about such an object?  We definitely can make observations 
 That is, we can observe that, say, the first element is a $1$.  In addition to that we can 
 observe that the second element is also a $1$.  Furthermore, we can make the observation 
 that what follows the second element is still an infinite streams of ones.
-We can define this stream using a few morphisms.  That is $[[head]] : [[A]] \to \{1\}$ and
+We can define this stream using a few morphisms.  That is $[[head]] : [[A]] \to \mathbb{N}$ and
 $[[next]] : [[A]] \to [[A]]$ are the morphisms, where $[[A]]$ is some fixed set.
 Now notice that for any $a \in [[A]]$ we have $[[head]](a) = 1$, and 
-$[[head]](a) = a' \in A$.  Now if we compose these two we obtain 
+$[[next]](a) = a' \in A$.  Now if we compose these two we obtain 
 $[[head]]([[next]](a)) = [[head]](a') = 1$.  Thus, using these morphisms we can completely
 define our stream above by taking for each position $n \in \mathbb{N}$ in the stream 
 $[[head]]([[next]]^{n}(a))$ to be the value at that position for any $a \in [[A]]$.  These
@@ -27,12 +27,55 @@ $a$. It just happens, in this simple example, that the observations are the same
 elements of $[[A]]$.
 
 At this point we can take the product of the two morphisms $[[head]]$ and $[[next]]$ to
-obtain the morphism $\langle [[head]],[[next]] \rangle : [[A]] \to \{1\} \times [[A]]$.
-If we define the functor $[[F]]([[x]]) := \{1\} \times [[x]]$ then we can redefine the
+obtain the morphism $\langle [[head]],[[next]] \rangle : [[A]] \to \mathbb{N} \times [[A]]$.
+If we define the functor $[[F]]([[x]]) := \mathbb{N} \times [[x]]$ then we can redefine the
 product as $\langle [[head]],[[next]] \rangle : [[A]] \to [[F]]([[A]])$.  Furthermore,
-if we make $\{1\}$ arbitrary and call it say $[[B]]$ then we obtain 
+if we make $\mathbb{N}$ arbitrary and call it say $[[B]]$ then we obtain 
 the functor $[[F]]([[x]]) := [[B]] \times [[x]]$.  Using this new definition of the functor
 $[[F]]$ and $\langle [[head]],[[next]] \rangle : [[A]] \to [[F]]([[A]])$ we can define any
 infinite stream of elements of $[[B]]$.  Taking the functor $[[F]]$ and the pair
-$([[B]], \langle [[head]], [[next]] \rangle)$ we obtain what is called a coalgebra.
+$([[A]], \langle [[head]], [[next]] \rangle)$ we obtain what is called a coalgebra.
+
+\begin{definition}[Coalgebra]
+  \label{def:coalgebra}
+  A \textbf{coalgebra} or \textbf{$[[F]]$-coalgebra} is a pair $([[F]], [[sm]]_{[[A]]})$ 
+  with respect to some category $[[C]]$ consisting of an object $[[A]]$ called the 
+  carrier object of the coalgebra, an endofunctor $[[F]] : [[C]] \to [[C]]$,
+  and a morphism $[[sm]]_{[[A]]} : [[A]] \to [[F]]([[A]])$ called the structure of the
+  coalgebra.
+\end{definition}
+It is often the case that coalgebras are denoted simply by specifying the type of the structure of
+the coalgebra.  That is $[[sm]]_{[[A]]} : [[A]] \to [[F]]([[A]])$.  This is precise, because it gives all
+of the elements of a coalgebra, but the category, but this is usually determinable from the context.  So, in our
+example above we can see that $\langle [[head]],[[next]] \rangle : [[A]] \to [[F]]([[A]])$ is indeed a coalgebra with
+respect to the category $[[Set]]$.
+
+Now consider the infinite stream of twos.
+\begin{center}
+  \begin{math}
+    [[2 :: 2 :: 2 :: 2]] \cdots
+  \end{math}
+\end{center}
+This is definable by a coalgebra $\langle \hat{[[head]]},\hat{[[next]]} \rangle : [[B]] \to [[F]]([[B]])$ with respect to the 
+category $[[Set]]$.  Suppose further that there is a function $[[fm]] : [[A]] \to [[B]]$ such that 
+$\hat{[[head]]} \circ [[fm]] = [[head]]$ and $\hat{[[next]]} \circ [[fm]] = [[fm]] \circ [[next]]$.  In this case $[[fm]]$ is called
+a homomorphism between coalgebras.  
+\begin{definition}[Homomorphism]
+  \label{def:homo_coalgebras}
+  A \textbf{homomorphism} between two coalgebras $[[sm1]]:[[A]] \to [[F]]([[A]])$ and $[[sm2]]:[[B]] \to [[F]]([[B]])$ is 
+  a morphism $[[fm]] : [[A]] \to [[B]]$ such that the following diagram commutes:
+  \begin{diagram}
+    [[A]]          & & \rTo{[[fm]]}          &  &  [[B]]\\
+    \dTo{[[sm1]]}  & &                       &  & \dTo_{[[sm2]]}\\
+    [[F]]([[A]])   & &  \rTo_{[[F]]([[fm]])} &  & [[F]]([[B]])       
+  \end{diagram}
+  The above diagram expresses that $[[fm]]$ commutes with the operations of the two coalgebras.
+\end{definition}
+
+\begin{definition}[Final Coalgebras]
+  \label{def:final_coalgebras}
+  A \textbf{final coalgebra} $[[sm1]] : A \to [[F]]([[A]])$ is one such that for any other coalgebra 
+  $[[sm2]] : [[B]] \to [[F]]([[B]])$ there is a unique homomorphism between them.
+\end{definition}
+
 % subsection final_coalgebras (end)

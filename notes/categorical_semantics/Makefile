@@ -11,7 +11,7 @@ category_theory-gen.tex : category_theory.tex category_theory.ott
 	$(OTT) $(OTT_FLAGS) -i category_theory.ott  -o CT-ott.tex -tex_name_prefix CT \
 		-tex_filter category_theory.tex category_theory-gen.tex
 
-main.pdf : main.tex st-gen.tex category_theory-gen.tex
+main.pdf : main.tex st-gen.tex category_theory-gen.tex coalgebras_analysis.tex real_nums.tex
 	pdflatex main.tex
 	pdflatex main.tex
 	pdflatex main.tex

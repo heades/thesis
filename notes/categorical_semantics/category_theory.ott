@@ -12,13 +12,22 @@ metavar obj, a {{tex A}},
              e {{tex E}}, 
              f {{tex F}},
              x {{tex X}} ::=
+metavar morph, am {{tex a}}, 
+               fm {{tex f}}, 
+               sm {{tex s}} ::=
 indexvar ivar, i, j ::=
 
 grammar
 
+cats :: 'Cats_' ::=
+  | Set :: :: Set
+  {{tex \mathit{Set} }}
+
 streams :: 'Streams_' ::=
   | 1 : : streams :: :: StreamOnes
+  | 2 : : streams :: :: StreamTwos
   | 1 :: :: One
+  | 2 :: :: Two
 
 formula :: 'formula_' ::=
   | ( formula )  ::  :: parens
