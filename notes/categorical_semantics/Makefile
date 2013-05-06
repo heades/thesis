@@ -15,3 +15,7 @@ main.pdf : main.tex st-gen.tex category_theory-gen.tex coalgebras_analysis.tex r
 	pdflatex main.tex
 	pdflatex main.tex
 	pdflatex main.tex
+	./skim_revert.sh main.pdf
+
+clean : 
+	rm *.pdf *.aux *.log *.out *.toc *.lof *.rel 

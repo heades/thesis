@@ -14,12 +14,17 @@ metavar obj, a {{tex A}},
              x {{tex X}} ::=
 metavar morph, am {{tex a}}, 
                fm {{tex f}}, 
-               sm {{tex s}} ::=
+               sm {{tex s}},
+               zm {{tex z}},
+               id {{tex id}},
+               gm {{tex g}} ::=
 indexvar ivar, i, j ::=
 
 grammar
 
 cats :: 'Cats_' ::=
+  | Nat :: :: Nat
+  {{tex \mathit{Nat} }}
   | Set :: :: Set
   {{tex \mathit{Set} }}
 

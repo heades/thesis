@@ -1,6 +1,122 @@
 \subsection{Initial Algebras}
 \label{subsec:initial_algebras}
 
+\begin{definition}[Algebra]
+  \label{def:algebra}
+  An \textbf{algebra} or \textbf{$[[F]]$-algebra} is a pair $([[F]], [[sm]]_{[[a]]})$ 
+  with respect to some category $[[C]]$ consisting of an object $[[a]]$ called the 
+  carrier object of the algebra, an endofunctor $[[F]] : [[C]] \to [[C]]$,
+  and a morphism $[[sm]]_{[[a]]} : [[F]]([[a]]) \to [[a]]$ called the structure of the
+  algebra.
+\end{definition}
+
+\begin{definition}[Homomorphism]
+  \label{def:homo_algebras}
+  A \textbf{homomorphism} between two algebras $[[sm1]]:[[F]]([[a]]) \to [[a]]$ and $[[sm2]]:[[F]]([[b]]) \to [[b]]$ is 
+  a morphism $[[fm]] : [[a]] \to [[b]]$ such that the following diagram commutes:
+  \begin{diagram}
+    [[a]]          & & \rTo{[[fm]]}          &  &  [[b]]\\
+    \uTo{[[sm1]]}  & &                       &  & \uTo_{[[sm2]]}\\
+    [[F]]([[a]])   & &  \rTo_{[[F]]([[fm]])} &  & [[F]]([[b]])       
+  \end{diagram}
+  The above diagram expresses that $[[fm]]$ commutes with the operations of the two algebras.
+\end{definition}
+
+\begin{definition}[Initial Algebras]
+  \label{def:initial_algebras}
+  A \textbf{initial algebra} $[[sm1]] : [[F]]([[a]]) \to [[a]]$ is one such that for any other algebra 
+  $[[sm2]] : [[F]]([[b]]) \to [[b]]$ there is a unique homomorphism between them.
+\end{definition}
+
+Lets consider a simple example.  Suppose $[[C]]$ is some category with an object $[[Nat]]$, and morphisms
+$[[zm]] : 1 \to [[Nat]]$ and $[[sm]] : [[Nat]] \to [[Nat]]$.  Then it is possible to construct any natural number
+$[[i]]$ using just these two morphisms.  That is $[[i]]$ is defined by $[[sm]]^{[[i]]}([[zm]])$, hence $[[zm]]$ is 
+the natural number zero and $[[sm]]$ is the successor operator.  Now coparing these two operations up into a single
+morphism results in $[ [[zm]],[[sm]] ] : 1 + [[Nat]] \to [[Nat]]$.  Defining the functor $[[F]]([[x]]) := 1 + [[x]]$ 
+we then obtain $[ [[zm]],[[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$.  Clearly, this is an $[[F]]$-algebra.  Next we show
+that the algebra $[ [[zm]],[[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$ is initial.
+
+\begin{lemma}[Initiality of the Natural Number Algebra]
+  \label{lemma:initiality_nat_alg}
+  Let $[[F]]([[x]]) := 1 + [[x]]$. Then algebra $[ [[zm]], [[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$ is initial.
+\end{lemma}
+\begin{proof}
+  Suppose $[[F]]([[x]]) := 1 + [[x]]$ and $[ [[zm']],[[sm']] ] : [[F]]([[a]]) \to [[a]]$ is an arbitrary algebra. 
+  It suffices to show that there exists a unique morphism $[[fm]] : [[Nat]] \to [[a]]$ such that the following diagram commutes:
+  \begin{diagram}
+    [[Nat]]          & & \rTo{[[fm]]}          &  &  [[a]]\\
+    \uTo{[ [[zm]], [[sm]] ]}  & &                       &  & \uTo_{[ [[zm']],[[sm']] ]}\\
+    [[F]]([[Nat]])   & &  \rTo_{[[F]]([[fm]])} &  & [[F]]([[a]])       
+  \end{diagram}
+  \noindent
+  This diagram is equivalent to the following:
+  \begin{diagram}
+    [[Nat]]          & & \rTo{[[fm]]}          &  &  [[a]]\\
+    \uTo{[ [[zm]], [[sm]] ]}  & &                       &  & \uTo_{[ [[zm']],[[sm']] ]}\\
+    1 + [[Nat]]   & &  \rTo_{\mathit{id} + [[fm]]} &  & 1 + [[a]]       
+  \end{diagram}
+  We know $[[F]]([[fm]]) := \mathit{id} + [[fm]]$, because the only morphisms from $1$ to $1$ are the identity morphisms and they
+  are unique. 
+  
+  \noindent
+  Take $[[fm]](n) := [[sm']]^{(n)} ([[zm']](*))$.  Where $(n)$ is a inductively defined by the following equations:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        ([[zm]](*)) & := & 0\\
+        ([[sm]](a)) & := & 1+(a).\\
+      \end{array}
+    \end{math}
+  \end{center}
+  
+  \noindent
+  At this point we can see that:
+  \begin{center}
+    \begin{tabular}{clc}
+      \begin{math}
+        \begin{array}{lll}
+          ([[fm]] \circ [[zm]])(*) & = & [[fm]]([[sm]](*))\\
+                                   & = & [[sm']]^{(z(*))}([[zm']](*))\\
+                                   & = & [[sm']]^{0}([[zm']](*))\\
+                                   & = & [[zm']](*)\\
+                                   & = & ([[zm']] \circ \mathit{id})(*)\\
+        \end{array}
+      \end{math}
+      & \text{ and } &
+      \begin{math}
+        \begin{array}{lll}
+          ([[fm]] \circ [[sm]])(n) & = & [[fm]]([[sm]](n))\\
+                                   & = & [[sm']]^{1+(n)}([[zm']](*))\\
+                                   & = & [[sm']]([[sm']]^{(n)}([[zm']](*)))\\
+                                   & = & [[sm']]([[fm]](n))\\
+                                   & = & ([[sm']] \circ [[fm]])(n).\\
+        \end{array}
+      \end{math}
+    \end{tabular}
+  \end{center}
+  Thus, 
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[fm]] \circ [ [[zm]],[[sm]] ]  & = & [ [[zm']], [[sm']] ] \circ (\mathit{id} + [[fm]]).\\
+      \end{array}
+    \end{math}
+  \end{center}
+  The previous results shows that the above diagram commutes. However, we still must show that $[[fm]]$ is unique in order for it to be
+  a homomorphism of algebras.  Suppose $[[gm]] : [[Nat]] \to [[A]]$ such that 
+  $[[gm]] \circ [ [[zm]],[[sm]] ]  = [ [[zm']], [[sm']] ] \circ (\mathit{id} + [[gm]])$.  Then it must be the case that 
+  $[[gm]](z(*)) = [[zm']](*)$ and $[[gm]]([[sm]](a)) = \mathit{id} + [[gm]]$, which can be easily shown to be equivalent
+  to $[[fm]]$ by structural induction on the input to $[[fm]]$ and $[[gm]]$.  Therefore, $[[fm]]$ is a homomorphism
+  of algebras, and the algebra $[ [[zm]], [[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$ for functor $[[F]]([[x]]) := 1 + [[x]]$ is
+  initial.
+\end{proof}
+
+\begin{tabular}{lll}
+  - Show initial algebras are unique up to isomorphism.\\
+  - Show for all initial algebras the mediating homomorphism is an isomorphism.\\
+  - Show for all initial algebras the structure of the algebra is an isomorphism.\\
+  - Then describe how functions are defined by induction using initiality.\\
+\end{tabular}
 % subsection initial_algebras (end)
 
 \subsection{Final Coalgebras}
