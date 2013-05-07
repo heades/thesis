@@ -111,6 +111,37 @@ that the algebra $[ [[zm]],[[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$ is initial.
   initial.
 \end{proof}
 
+\begin{lemma}[Uniqueness of Initial Algebras]
+  \label{lemma:uniqueness_of_initial_algebras}
+  If $[[sm]] : [[F]]([[a]]) \to [[a]]$ is an initial algebra of the
+  functor $[[F]]$, then $[[sm]]$ is unique up to isomorphism.
+\end{lemma}
+\begin{proof}
+  Suppose $[[sm]] : [[F]]([[a]]) \to [[a]]$ is an initial algebra for the
+  functor $[[F]]$.  It suffices to show that the mediating homomorphism between
+  $[[sm]]$ and any other initial algebra of the functor $[[F]]$ is an isomorphism.
+  Suppose $[[tm]] : [[F]]([[b]]) \to [[b]]$ is another initial algebra of the functor
+  $[[F]]$. By initiality of these two algebras we know there exists a unique algebra homomorphism
+  $[[fm]] : [[a]] \to [[b]]$ between $[[sm]]$ and $[[tm]]$.
+  Similarly we know there exists a unique algebra homomorphism $[[fm']] : [[b]] \to [[a]]$ between
+  $[[sm]]$ and $[[tm]]$.  Hence we have the following diagrams:
+  \begin{diagram}
+    [[a]]        & & \rTo{[[fm]]!}         && [[b]]            && \rTo{[[fm']]!}        & & [[a]]\\
+    \uTo{[[sm]]} & &                       && \uTo{[[tm]]}     &&                       & & \uTo{[[sm]]}\\
+    [[F]]([[a]]) & & \rTo_{[[F]]([[fm]])}  && [[F]]([[b]])     && \rTo_{[[F]]([[fm']])} & & [[F]]([[a]])
+  \end{diagram}
+  and
+  \begin{diagram}
+    [[b]]        & & \rTo{[[fm']]!}         && [[a]]            && \rTo{[[fm]]!}        & & [[b]]\\
+    \uTo{[[tm]]} & &                        && \uTo{[[sm]]}     &&                       & & \uTo{[[tm]]}\\
+    [[F]]([[b]]) & & \rTo_{[[F]]([[fm']])}  && [[F]]([[a]])     && \rTo_{[[F]]([[fm]])} & & [[F]]([[b]])
+  \end{diagram}
+  Now we know by initiality that $[[fm]]$ and $[[fm']]$ are unique and hence there compositions
+  $[[fm]] \circ [[fm']] : [[a]] \to [[a]]$ and $[[fm']] \circ [[fm]] : [[b]] \to [[b]]$ are also
+  unique.  Thus, it must be the case that $[[fm]] \circ [[fm']] = [[id]]_{[[a]]}$ and $[[fm']] \circ [[fm]] = [[id]]_{[[b]]}$.
+  Thus, $[[fm]]$ and $[[fm']]$ are mutual inverses.  Therefore, $[[fm]]$ is an isomorphism.
+\end{proof}
+
 \begin{tabular}{lll}
   - Show initial algebras are unique up to isomorphism.\\
   - Show for all initial algebras the mediating homomorphism is an isomorphism.\\

@@ -15,6 +15,7 @@ metavar obj, a {{tex A}},
 metavar morph, am {{tex a}}, 
                fm {{tex f}}, 
                sm {{tex s}},
+               tm {{tex t}},   
                zm {{tex z}},
                id {{tex id}},
                gm {{tex g}} ::=
