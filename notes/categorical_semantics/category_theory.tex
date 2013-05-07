@@ -136,16 +136,56 @@ that the algebra $[ [[zm]],[[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$ is initial.
     \uTo{[[tm]]} & &                        && \uTo{[[sm]]}     &&                       & & \uTo{[[tm]]}\\
     [[F]]([[b]]) & & \rTo_{[[F]]([[fm']])}  && [[F]]([[a]])     && \rTo_{[[F]]([[fm]])} & & [[F]]([[b]])
   \end{diagram}
-  Now we know by initiality that $[[fm]]$ and $[[fm']]$ are unique and hence there compositions
+  Now we know by initiality that $[[fm]]$ and $[[fm']]$ are unique and hence their compositions
   $[[fm]] \circ [[fm']] : [[a]] \to [[a]]$ and $[[fm']] \circ [[fm]] : [[b]] \to [[b]]$ are also
   unique.  Thus, it must be the case that $[[fm]] \circ [[fm']] = [[id]]_{[[a]]}$ and $[[fm']] \circ [[fm]] = [[id]]_{[[b]]}$.
-  Thus, $[[fm]]$ and $[[fm']]$ are mutual inverses.  Therefore, $[[fm]]$ is an isomorphism.
+  So $[[fm]]$ and $[[fm']]$ are mutual inverses.  Therefore, $[[fm]]$ is an isomorphism.
+\end{proof}
+
+\begin{lemma}[Initial Algebras are Isomorphisms]
+  \label{lemma:initial_algebras_are_isomorphisms}
+  If $[[sm]] : [[F]]([[a]]) \to [[a]]$ is an initial algebra for some functor $[[F]]$, then
+  it has an inverse $[[sm]]^{-1} : [[a]] \to [[F]]([[a]])$.
+\end{lemma}
+\begin{proof}
+  Suppose $[[sm]] : [[F]]([[a]]) \to [[a]]$ is an initial algebra for the functor $[[F]]$.
+  We must show there exists an inverse $[[sm]]^{-1} : [[a]] \to [[F]]([[a]])$ of $[[sm]]$.
+  This can be shown by cleverly finding another algebra such that $[[sm]]^{-1}$ is 
+  the algebra homomorphism between $[[sm]]$ and this other algebra.  To do this we must
+  fill in the holes of the following diagram:
+  \begin{diagram}
+    [[a]]         & \rTo{[[sm']]} & [[F]]([[a]])\\
+    \uTo{[[sm]]}  &         & \uTo_{?}\\
+    [[F]]([[a]])  & \rTo_{[[F]](?)} & [[F]](?)
+  \end{diagram}
+  So our goal is to find an algebra $[[tm]] : [[F]](?) \to [[F]]([[a]])$ such that there is an
+  algebra homomorphism $[[sm']] : [[a]] \to [[F]]([[a]])$, and the above diagram commutes.  Choose
+  $[[F]]([[sm]]) : [[F]]([[F]]([[a]])) \to [[F]]([[a]])$.  Hence, we obtain the following diagram:
+  \begin{diagram}
+    [[a]]         & \rTo{[[sm']]}         & [[F]]([[a]])\\
+    \uTo{[[sm]]}  &                       & \uTo_{[[F]]([[sm]])}\\
+    [[F]]([[a]])  & \rTo_{[[F]]([[sm']])} & [[F]]([[F]]([[a]]))
+  \end{diagram}
+  Now we know $[[sm]] : [[F]]([[a]]) \to [[a]]$ is an initial algebra, and that $[[tm]] : [[F]]([[F]]([[a]])) \to [[F]]([[a]]$
+  is clearly an algebra.  Thus, $[[sm']] : [[a]] \to [[F]]([[a]])$ is an algebra homomorphism.  Therefore, 
+  by Lemma~\ref{def:initial_algebras} it is unique, and by Lemma~\ref{lemma:uniqueness_of_initial_algebras} it is an
+  isomorphism.  Furthermore, since $[[sm']]$ is unique it is the case that $[[sm']]^{-1} : [[F]]([[a]]) \to [[a]]$ is unique,
+  thus $[[sm']]^{-1} = [[sm]]$.  Hence, $[[sm']] \circ [[sm]] = [[id]]_{[[F]]([[a]])}$ and 
+  $[[sm]] \circ [[sm']] = [[id]]_{[[a]]}$.  Lastly we must show that the above diagram commutes:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[sm']] \circ [[sm]] & = & [[id]]_{[[F]]([[a]])}\\
+                             & = & [[F]]([[id]]_{[[a]]})\\
+                             & = & [[F]]([[sm]] \circ [[sm']])\\
+                             & = & [[F]]([[sm]]) \circ [[F]]([[sm']]).
+      \end{array}
+    \end{math}
+  \end{center}
+  Therefore, the inverse of $[[sm]]$ is $[[sm']]$. 
 \end{proof}
 
 \begin{tabular}{lll}
-  - Show initial algebras are unique up to isomorphism.\\
-  - Show for all initial algebras the mediating homomorphism is an isomorphism.\\
-  - Show for all initial algebras the structure of the algebra is an isomorphism.\\
   - Then describe how functions are defined by induction using initiality.\\
 \end{tabular}
 % subsection initial_algebras (end)
