@@ -166,12 +166,13 @@ that the algebra $[ [[zm]],[[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$ is initial.
     \uTo{[[sm]]}  &                       & \uTo_{[[F]]([[sm]])}\\
     [[F]]([[a]])  & \rTo_{[[F]]([[sm']])} & [[F]]([[F]]([[a]]))
   \end{diagram}
-  Now we know $[[sm]] : [[F]]([[a]]) \to [[a]]$ is an initial algebra, and that $[[tm]] : [[F]]([[F]]([[a]])) \to [[F]]([[a]]$
-  is clearly an algebra.  Thus, $[[sm']] : [[a]] \to [[F]]([[a]])$ is an algebra homomorphism.  Therefore, 
-  by Lemma~\ref{def:initial_algebras} it is unique, and by Lemma~\ref{lemma:uniqueness_of_initial_algebras} it is an
-  isomorphism.  Furthermore, since $[[sm']]$ is unique it is the case that $[[sm']]^{-1} : [[F]]([[a]]) \to [[a]]$ is unique,
-  thus $[[sm']]^{-1} = [[sm]]$.  Hence, $[[sm']] \circ [[sm]] = [[id]]_{[[F]]([[a]])}$ and 
-  $[[sm]] \circ [[sm']] = [[id]]_{[[a]]}$.  Lastly we must show that the above diagram commutes:
+  Now we know $[[sm]] : [[F]]([[a]]) \to [[a]]$ is an initial algebra, and that 
+  $[[F]]([[sm]]) : [[F]]([[F]]([[a]])) \to [[F]]([[a]])$ is clearly an algebra.   
+  Thus, by initiality (Definition~\ref{def:initial_algebras}) we know that $[[sm']] : [[a]] \to [[F]]([[a]])$ must
+  exist and is an algebra homomorphism.  Therefore, it is unique by Definition~\ref{def:homo_algebras}.
+  Hence, $[[sm]] \circ [[sm']] : [[F]]([[a]]) \to [[F]]([[a]])$ is unique.  Furthermore,
+  $[[sm']] \circ [[sm]] = [[id]]_{[[F]]([[a]])}$ and $[[sm]] \circ [[sm']] = [[id]]_{[[a]]}$.  
+  Therefore, we obtain the following:
   \begin{center}
     \begin{math}
       \begin{array}{lll}
