@@ -1,3 +1,59 @@
+\subsection{Monads and Comonads}
+\label{subsec:monads_and_comonads}
+
+In the sequel $[[T]]^n$, for $n \in \mathbb{N}$, is defined to be
+the $n$-fold composition of $[[T]]$, e.g. $[[T]]^2 = [[T]] \circ [[T]]$.
+
+\begin{definition}
+  \label{def:monad}
+  A \textbf{monad} of a category $[[C]]$ consists of an endofunctor
+  $[[T]] : [[C]] \to [[C]]$ and two natural transformations
+  $\eta : id_{[[C]]} \to [[T]]$ and $\mu : [[T]]^2 \to [[T]]$
+  satisfying the following commutative diagrams:
+  \begin{center}
+    \begin{tabular}{lll}
+      \begin{diagram}
+        [[T]]^3    & \rTo{\mu_{[[T]]}} & [[T]]^2\\
+        \dTo{T\mu} &                  & \dTo{\mu}\\
+        [[T]]^2    & \rTo{\mu}        & [[T]]
+      \end{diagram}
+      &
+      \begin{diagram}
+        [[T]]       & \rTo{\eta_{T}} & [[T]]^2\\
+        \dTo{T\eta} & \rdTo{id}      & \dTo_{\mu}\\
+        [[T]]^2     & \rTo{\mu}      & [[T]]
+      \end{diagram}
+    \end{tabular}
+  \end{center}
+\end{definition}
+
+\newcommand{\opeta}[0]{\tilde\eta}
+\newcommand{\opmu}[0]{\tilde\mu}
+
+\begin{definition}
+  \label{def:comonad}
+  A \textbf{comonad} of a category $[[C]]$ consists of an endofunctor
+  $[[T]] : [[C]] \to [[C]]$ and two natural transformations
+  $\opeta : [[T]] \to id_{[[C]]}$ and $\opmu : [[T]] \to [[T]]^2$
+  satisfying the following commutative diagrams:
+  \begin{center}
+    \begin{tabular}{lll}
+      \begin{diagram}
+        [[T]]      & \rTo{\opmu}        & [[T]]^2\\
+        \dTo{\mu}  &                    & \dTo{T\mu}\\
+        [[T]]^2    & \rTo{\opmu_{[[T]]}} & [[T]]^3\\
+      \end{diagram}
+      &
+      \begin{diagram}
+        [[T]]   & \rTo{\opmu}      & [[T]]^2\\
+        \dTo{\opmu} & \rdTo{id}      & \dTo_{T\opeta}\\
+        [[T]]^2 & \rTo{\opeta_{T}} & [[T]]\\
+      \end{diagram}
+    \end{tabular}
+  \end{center}
+\end{definition}
+% subsection monads_and_comonads (end)
+
 \subsection{Initial Algebras}
 \label{subsec:initial_algebras}
 
@@ -186,9 +242,62 @@ that the algebra $[ [[zm]],[[sm]] ] : [[F]]([[Nat]]) \to [[Nat]]$ is initial.
   Therefore, the inverse of $[[sm]]$ is $[[sm']]$. 
 \end{proof}
 
-\begin{tabular}{lll}
-  - Then describe how functions are defined by induction using initiality.\\
-\end{tabular}
+Since our main example has been the natural number initial algebra $[
+[[zm]],[[sm]] ] : 1+[[Nat]] \to [[Nat]]$ we will continue developing
+this example by showing how to use initiality to define functions on
+the natural numbers by induction.  Consider the doubling function,
+$[[double]]$, which takes a natural number as input, and if it is zero 
+returns zero, otherwise, it returns the number summed with itself.  We can define
+this function by induction using initiality as follows.
+
+\begin{diagram}
+    [[Nat]]                  & \rTo{[[double]]}   & [[Nat]]\\
+    \uTo{[ [[zm]], [[sm]] ]} &                 & \uTo_{[ [[zm]], [[sm]] \circ [[sm]] ]}\\
+    1+[[Nat]]                & \rTo_{[[id]]+[[double]]} & 1+[[Nat]]
+  \end{diagram}
+Initiality tells us that $[[double]] : [[Nat]] \to [[Nat]]$ is unique and exists.  Furthermore it tells us the following:
+\begin{center}
+  \begin{math}
+    \begin{array}{rll}
+      [[double]] \circ [[zm]] & = & [[zm]] \circ [[id]] = [[zm]]\\
+      [[double]] \circ [[sm]] & = & [[sm]] \circ [[sm]] \circ [[double]]\\
+    \end{array}
+  \end{math}
+\end{center}
+This is equivalent to the following:
+\begin{center}
+  \begin{math}
+    \begin{array}{rll}
+      [[double]]([[zm]](*)) &  = & [[zm]](*)\\
+      [[double]]([[sm]](n)) & = &  [[sm]]([[sm]]([[double]](n)))\\
+    \end{array}
+  \end{math}
+\end{center}
+Therefore inductively defined functions are no more than algebra homomorphisms between initial algebras!  
+
+\begin{diagram}
+    [[Nat]]                  & \rTo{[[plus]]}   & [[Nat]]^{[[Nat]]}\\
+    \uTo{[ [[zm]], [[sm]] ]} &                  & \uTo_{[ [[\xm.xm]], [[\fm.h(\xm.h(sm(fm(xm))))]] ]}\\
+    1+[[Nat]]                & \rTo_{[[plus]]}    & 1+[[Nat]]^{[[Nat]]}
+  \end{diagram}
+Initiality tells us that $[[plus]] : [[Nat]] \to [[Nat]]^{[[Nat]]}$ is unique and exists.  Furthermore it tells us the following:
+\begin{center}
+  \begin{math}
+    \begin{array}{rllll}
+      [[plus]] \circ [[zm]] & = & [[\fm.h(\xm.xm)]] \circ [[plus]]\\
+      [[plus]] \circ [[sm]] & = & [[\fm.h(\xm.h(sm(fm(xm))))]] \circ [[plus]]\\
+    \end{array}
+  \end{math}
+\end{center}
+This is equivalent to the following:
+\begin{center}
+  \begin{math}
+    \begin{array}{rll}
+      [[plus]]([[zm]](*)) & = & ([[\fm.h(\xm.xm)]])([[plus]]([[zm]])) = [[\xm.xm]]\\
+      [[plus]]([[sm]](n)) & = & ([[\fm.h(\xm.h(sm(fm(xm))))]])([[plus]]([[sm]](n))) = \lambda [[xm]].[[sm]]([[plus]]([[sm]](n))([[xm]]))\\
+    \end{array}
+  \end{math}
+\end{center}
 % subsection initial_algebras (end)
 
 \subsection{Final Coalgebras}

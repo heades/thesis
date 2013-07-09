@@ -4,7 +4,8 @@ metavar cat, A {{tex \mathcal{A} }},
              C {{tex \mathcal{C} }}, 
              D {{tex \mathcal{D} }}, 
              E {{tex \mathcal{E} }},
-             F {{tex \mathcal{F} }} ::=
+             F {{tex \mathcal{F} }},
+             T {{tex \mathcal{T} }} ::=
 metavar obj, a {{tex A}}, 
              b {{tex B}}, 
              c {{tex C}}, 
@@ -18,7 +19,8 @@ metavar morph, am {{tex a}},
                tm {{tex t}},   
                zm {{tex z}},
                id {{tex id}},
-               gm {{tex g}} ::=
+               gm {{tex g}},
+               xm {{tex x}} ::=
 indexvar ivar, i, j ::=
 
 grammar
@@ -41,6 +43,20 @@ formula :: 'formula_' ::=
   {{tex \mathsf{head} }}
   | next :: :: next
   {{tex \mathsf{next} }}
+  | double :: :: double
+  {{tex \mathsf{double} }}
+  | plus :: :: plus
+  {{tex \mathsf{plus} }}
+
+term, t :: 'term_' ::=
+  | \ xm . t :: :: Lam
+  {{tex \lambda [[xm]] . [[t]] }}
+  | obj :: :: obj
+  | morph :: :: morph
+  | t ( t' ) :: :: App
+  | ( t ) :: :: parens
+  | h( t ) :: :: hparens
+  {{tex [[t]] }}
 
 
 
