@@ -81,11 +81,6 @@ Computer Science, The University of Iowa}
 \section{Introduction}
 \label{sec:introduction}
 
-% section introduction (end)
-
-\section{Equality in CCCs}
-\label{sec:equality_in_cccs}
-
 Consider how we interpret the application rule for STLC in a CCC $[[C]]$:
 \begin{center}
   \begin{math}
@@ -141,7 +136,7 @@ Since $\mathsf{cur}$ is an isomorphism the previous diagram is equivalent to the
 \end{center}
 In the previous morphism there are no restrictions on what $[[t2]]$ can be.  Thus, this corresponds to full $\beta\eta$-reduction. 
 In order for this to be the correct model the equality 
-$[[app A B]] \circ [[(cur t , t_2)]] = [[t]] \circ (\mathsf{id}_{\interp{\Gamma}},[[t2]])$.  To prove this we must show that the following
+$[[app A B]] \circ [[(cur t , t_2)]] = [[t]] \circ (\mathsf{id}_{\interp{\Gamma}},[[t2]])$ must hold.  To prove this we must show that the following
 diagram commutes:
 \begin{center}
   \begin{math}
@@ -176,7 +171,34 @@ To finish this proof we must show that
   \end{math}
 \end{center}
 This follows from the following lemma.
-% section equality_in_cccs (end)
+
+\begin{lemma}
+  \label{lemma:}
+  Suppose $[[CC]]$ is a CCC.  Then for any $[[f]] \in [[CC]][ [[A]],[[C]] ]$, 
+  $[[g]] \in [[CC]] [ [[B]],[[D]] ]$, $[[h]] \in [[CC]][ [[J]],[[A]] ]$, and
+  $[[j]] \in [[CC]][ [[J]],[[B]] ]$, we have, $[[f x g]] \circ [[(h, j)]] = [[(f o h, g o j)]]$.
+\end{lemma}
+\begin{proof}
+  Consider the following diagram:
+  \begin{center}
+    \begin{math}
+      \begin{diagram}
+        &             & [[J]]   & &  \\
+        & \ldTo{[[f o h]]}  & \dDashto~{[[h(f x g) o (h,j)]]} & \rdTo{[[g o j]]} &  \\
+        [[C]] & \lTo_{[[proj1 C D]]} & [[C x D]]   & \rTo_{[[proj2 C D]]} & [[D]]\\
+      \end{diagram}
+    \end{math}
+  \end{center}
+  The UMP for products insures the previous diagram commutes.  Furthermore,
+  by uniqueness it is the case that $[[h(f x g) o (h,j)]] = [[(f o h, g o j)]]$.
+\end{proof}
+\noindent
+Therefore, the equality 
+$[[app A B]] \circ [[(cur t , t_2)]] = [[t]] \circ (\mathsf{id}_{\interp{\Gamma}},[[t2]])$ 
+does indeed hold.  This tells us that equality in the model is $\beta\eta$-equality.  
+Thus, in order to model a different notion of equality we must modify the equality in
+the category.
+% section introduction (end)
 
 
 \section{Centered Category}

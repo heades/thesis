@@ -1,6 +1,6 @@
 % Input variables.
 metavar var, x, y, z, u , b, q , r , S , Z, v ::=
-metavar morphisms, f, g, h, t ::= 
+metavar morphisms, f, g, h, t, j ::= 
 metavar cat, CC {{tex \mathbb{C} }}, VV {{tex \mathbb{V} }} ::=
 
 indexvar ivar, i , k ::= 
@@ -34,7 +34,7 @@ cospace, X, Y, Z :: 'COS_' ::=
   | | X |     ::   :: domain
   | ( x , y ) :: M :: pairs
 
-objs, A, B, C, D :: 'Obj_' ::=
+objs, J, A, B, C, D :: 'Obj_' ::=
   | A => B  ::   :: imp
   | A *- B  ::   :: sub
   | A - B   ::   :: Sub
@@ -61,11 +61,13 @@ objs, A, B, C, D :: 'Obj_' ::=
   {{tex \top }}
 
 funcs, F , G :: 'Func_' ::=
-  | - x - :: :: Prod
-  {{tex - \times - }}
 
 morphs :: 'morph_' ::=
   | ( morphs , morphs' ) :: :: pairing
+  | morphs x morphs' :: :: prod
+  {{tex [[morphs]] \times [[morphs']] }}
+  | morphs o morphs' :: :: comp
+  {{tex [[morphs]] \circ [[morphs']] }}
   | f (+) B :: :: plusM
   | app A  :: :: Application
   {{tex \mathsf{app}_{[[A]]} }}
