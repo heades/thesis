@@ -1,3 +1,168 @@
+\subsection{Monoidal Categories}
+\label{subsec:monoidal_categories}
+
+In this section we develope the notions of monoidal categories and symmetric monoidal categories.  
+These types of categories are used extensively in the study of linear logic and linear type theories.
+We first define each of these types of categories and then prove the well-known coherence property. 
+The following defines monoidal categories.
+\begin{definition}
+  \label{def:monoidal_category}
+  A \textbf{monoidal category} is a tuple $([[C]], \otimes, T, \alpha_{A,B,C}, \lambda_{A}, \rho_{A})$,
+  where $[[C]]$ is a category, $\otimes$ is called the multiplication, $T \in [[C]]_0$ is the unit, $\alpha_{A,B,C}$ is
+  a natural isomorphism called the associator, $\lambda_{A}$ is a natural isomorphism called the left unitor, 
+  and $\rho_{A}$ is a natural isomorphism called the right unitor. The components of the monoidal category have the following types:
+  \begin{center}
+    \begin{tabular}{cc}
+    \begin{diagram}
+    [[C]] \times [[C]] & \rTo{\otimes} & [[C]] \\
+  \end{diagram}
+    & \ \ \ \ \ \ 
+  \begin{diagram}
+    (A \otimes B) \otimes C & \rTo{\alpha_{A,B,C}} & A \otimes (B \otimes C)\\
+  \end{diagram}\\
+  & \\
+  \begin{diagram}
+    T \otimes A & \rTo{\lambda_{A}} & A\\
+  \end{diagram}
+    & \ \ \ \ \ \ 
+  \begin{diagram}
+    A \otimes T & \rTo{\rho_{A}} & A\\
+  \end{diagram}
+  \end{tabular}
+  \end{center}
+  Monoidal categories have the following coherence conditions:
+  \begin{diagram}
+                          &               & (A \otimes B) \otimes (C \otimes D) & \\
+           & \ruTo{\alpha_{A \otimes B,C,D}} &                                     & \rdTo{\alpha_{A,B,C \otimes D}} & \\
+    ((A \otimes B) \otimes C) \otimes D & &                                     & & A \otimes (B \otimes (C \otimes D))\\
+          \dTo{\alpha_{A,B,C} \otimes id_D} &  &                                  & & \uTo_{id_A \otimes \alpha_{B,C,D}}\\
+    (A \otimes (B \otimes C)) \otimes D & & \rTo{\alpha_{A,B \otimes C, D}}         & & A \otimes ((B \otimes C) \otimes D)\\
+  \end{diagram}
+  and 
+  \begin{diagram}
+    (A \otimes T) \otimes B & & \rTo{\alpha_{A,T,B}}  & & A \otimes (T \otimes B)\\
+    & \rdTo_{\rho_A \otimes id_B} &                & \ldTo_{id_A \otimes \rho_B} & \\
+    & & A \otimes B & & \\
+  \end{diagram}
+  The first coherence condition is known as the pentagon identity and the second the triangle
+  identity. We also need the following equality to hold:
+  \begin{center}
+    \begin{math}
+      \lambda_T = \rho_T : T \otimes T \to T
+    \end{math}
+  \end{center}
+\end{definition}
+Now a symmetric monoidal category is one in which the monoidal multiplcation is symmetric. 
+\begin{definition}
+  \label{def:SMC}
+  A \textbf{symmetric monoidal category (SMC)} is a monoidal category with an additional 
+  natural isomorphism:
+  \begin{diagram}
+    A \otimes B & \rTo{\beta_{A,B}} & B \otimes A\\
+  \end{diagram}
+  Satisfying the following coherence conditions:
+  \begin{diagram}
+    (A \otimes B) \otimes C & \rTo{\alpha_{A,B,C}} & A \otimes (B \otimes C) & \rTo{\beta_{A,B \otimes C}} & (B \otimes C) \otimes A\\
+    \dTo{\beta_{A,B} \otimes id_C}            &                     &                         &    & \dTo_{\alpha_{B,C,A}}\\
+   (B \otimes A) \otimes C & \rTo{\alpha_{B,A,C}} & B \otimes (A \otimes C) & \rTo{id_B \otimes \beta_{A,C}}  & B \otimes (C \otimes A)\\
+  \end{diagram}
+and
+\begin{center}
+  \begin{math}
+    \beta_{B,A} \circ \beta_{A,B} = id_{A \otimes B}
+  \end{math}
+\end{center}
+\end{definition}
+
+\subsubsection{Free Symmetric Monoidal Categories}
+\label{subsubsec:free_symmetric_monoidal_categories}
+First, we define free monoidal categories in the style of Mac Lane in \cite{MacLane:1998}. 
+The language of \textbf{binary words} is defined by the following grammar:
+\begin{center}
+  \begin{math}
+    \begin{array}{llllllll}
+      \text{(binary words)} & [[w]], [[v]] & ::= & [[em]]\,|\,[[-]]\,|\,[[w [] v]]\\
+    \end{array}
+  \end{math}
+\end{center}
+The length of a binary word is defined by recursion in the following way:
+\begin{center}
+  \begin{math}
+    \begin{array}{lll}
+      length([[em]])  & = & 0\\
+      length([[-]]) & = & 1\\
+      length([[w [] v]]) & = & length([[w]]) + length([[v]])\\
+    \end{array}
+  \end{math}
+\end{center}
+An example of a binary word of length $4$ is $[[(- [] -) [] (- [] (- [] em))]]$.  
+
+The cateogry $W$ of binary words is defined by taking for any two binary words $[[v]]$ and $[[w]]$
+such that $length([[v]]) = length([[w]])$ exactly one arrow $[[v]] \to [[w]]$.  Certainly, this definition includes
+identity arrows $id_w : [[v]] \to [[v]]$.  Composition also clearly exists, because having two arrows
+$f : [[w]] \to [[w']]$ and $g : [[w']] \to [[v]]$ means that the length of the words $[[w]]$,$[[w']]$, and
+$[[v]]$ all coincide, thus, the morphism $g \circ f : [[w]] \to [[v]]$ must exist.  Identities are certainly unique
+by construction.  Thus, identitiy axioms hold.  The only thing left to verify is associativity.   There is exactly
+one arrow between any two objects, thus, it must be the case that $(g \circ f) \circ j = g \circ (f \circ j)$.  
+
+It is easy to see that the previous construction makes $W$ a preorder.  Furthermore, notice that all arrows are invertible. We know
+for any two objects $[[w]]$ and $[[v]]$ there is an arrow $f : [[w]] \to [[v]]$, but we also know there is an
+arrow $f^{-1} : [[v]] \to [[w]]$ by construction.  In addition we know that there is exactly one arrow between
+any two objects, thus, their composition must be the identitiy.  Keeping this in mind it is easy to see that $W$
+is also a monoidal category with the multiplcation being $[[w]],[[v]] \mapsto [[w [] v]]$, $[[em]]$ being the 
+unit, and the isomorphisms $\lambda,\rho$, and $\alpha$ defined to be their respective arrows in $W$. The
+coherence conditions for monoidal categories are guaranteed to hold by the fact that every diagram in $W$ is
+commutative by construction.  Therefore, we have arrived at the following result.
+
+\begin{theorem}[The Free Monoidal Category]
+  \label{thm:the_free_monoidal_category}
+  For any monoidal category $[[B]]$ and any object $[[b]] \in [[B]]_0$, there is a unique functor
+  $W \to [[B]]$ with $- \mapsto [[b]]$.
+\end{theorem}
+\begin{proof}
+  We can think of the objects of $W$ has objects of $[[B]]$ with ``holes''.  The holes are indicated
+  by the $[[-]]$ word.  So to construct an object of $[[B]]$ from an object $W$ we have to ``fill
+  in these holes''.  For some $[[b]] \in [[B]]_0$ we write the desired functor as $[[w]] \mapsto [[w b]]$,
+  denoted $([[w]])_{[[b]]}$.  We write $[[w b]]$ to suggest that we are filling the holes in $[[w]]$ with the object $[[b]]$. Now 
+  on objects of $W$ we define the desired functor by:
+  \begin{center}
+    \begin{math}
+      \begin{array}{ccccc}
+        ([[em]])_{[[b]]} = T & ([[-]])_{[[b]]} = b & ([[w [] v]])_{[[b]]} = ([[w]])_{[[b]]}\,\Box\,([[v]])_{[[b]]}
+      \end{array}
+    \end{math}
+  \end{center}
+  We now prove that this functor uniquely determines every object $(w)_[[b]] \in [[B]]$.  Suppose
+  $([[w]])_{[[b]]} = ([[v]])_{[[b]]}$ for some words $[[w]]$ and $[[v]]$, and we must show that $[[w]] = [[v]]$.  
+  Clearly, $[[w]]$ and $[[v]]$ must have the same length $n$.  So we proceed by induction on $n$.  Suppose
+  $n = 0$, then $([[w]])_{[[b]]} = ([[v]])_{[[b]]} = ([[em]])_{[[b]]} = T$, thus, $[[w]] = [[v]] = [[em]]$. 
+  Now suppose $n = 1$, this case is similiar to the previous. Finally, suppose $n = m > 1$, then 
+  $[[w]] = [[w1 [] w2]]$ and $[[v]] = [[v1 [] v2]]$.  Then 
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        ([[w1 [] w2]])_{[[b]]} & = & ([[v1 [] v2]])_{[[b]]}\\ 
+                              & = & ([[w1]])_{[[b]]}\,\Box\,([[w2]])_{[[b]]}\\
+                              & = & ([[v1]])_{[[b]]}\,\Box\,([[v2]])_{[[b]]}.
+      \end{array}
+    \end{math}
+  \end{center}
+  Hence it must be the case that $([[w1]])_{[[b]]} = ([[v1]])_{[[b]]}$ and $([[w2]])_{[[b]]} = ([[v2]])_{[[b]]}$. 
+  By the induction hypthesis $[[w1]] = [[v1]]$ and $[[w2]] = [[v2]]$.  Therefore, $[[w1 [] w2]] = [[v1 [] v2]]$.
+
+  Next we prove the functor $(\,)_{[[b]]}$ is surjective. 
+  Suppose $[[b]],[[c]] \in [[B]]_0$. We proceed by induction on the length $[[c]]$. 
+  If $[[c]] = T$, then $([[em]])_{[[b]]} = T = [[c]]$.  Now suppose
+  $[[c]] = [[b]]$, then $([[-]])_{[[c]]} = [[c]] = [[b]]$. Lastly, suppose $[[c]] = [[c1]]\,\Box\,[[c2]]$, we
+  know by induction there exsits two binary words $[[w1]]$ and $[[w2]]$ such that $([[w1]])_{[[b]]} = [[c1]]$
+  and $([[w2]])_{[[b]]} = [[c2]]$.  Therefore, $([[w1 [] w2]])_{[[b]]} = [[c1]]\,\Box\,[[c2]]$, and we have
+  shown that we have a bijection from $W$ to $[[B]]$.  
+\end{proof}
+
+% subsubsection free_symmetric_monoidal_categories (end)
+
+% subsection monoidal_categories (end)
+
 \subsection{Monads and Comonads}
 \label{subsec:monads_and_comonads}
 

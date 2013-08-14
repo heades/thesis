@@ -25,6 +25,16 @@ indexvar ivar, i, j ::=
 
 grammar
 
+binaryWords, w, v :: 'BW_' ::= 
+  | em      :: :: empty
+  {{tex \text{e}_0 }}
+  | -       :: :: Var
+  | w [] v  :: :: box  
+  {{tex [[w]]\,\Box\,[[v]] }}
+  | ( w )   :: S :: parens
+  | w b     :: M :: Subst
+  {{tex [[w]]_{[[b]]} }}
+
 cats :: 'Cats_' ::=
   | Nat :: :: Nat
   {{tex \mathit{Nat} }}
