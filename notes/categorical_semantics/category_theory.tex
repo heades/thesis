@@ -1,5 +1,87 @@
-\subsection{Monoidal Categories}
-\label{subsec:monoidal_categories}
+\section{Natural Transformations}
+\label{sec:natural_transformations}
+
+\begin{lemma}[Composing Natural Transformations]
+  \label{lemma:composing_natural_transformations}
+  Suppose $\phi : F_1 \to F_2$ and $\psi : F_2 \to F_3$ are natural transformations between
+  the functors $F_1$, $F_2$, and $F_3$.  Then $\psi \circ \phi : F_1 \to F_3$ is a natural
+  transformation.
+\end{lemma}
+\begin{proof}
+  Suppose $\phi : F_1 \to F_2$ and $\psi : F_2 \to F_3$ are natural transformations between
+  the functors $F_1$, $F_2$, and $F_3$.  Then we know the following by the definition of a 
+  natural transformation:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \begin{diagram}
+          [[a]] \\
+          \dTo{f} \\
+          [[b]]
+        \end{diagram}
+        & \,\,\,\, &
+        \begin{diagram}
+          F_1([[a]])   & \rTo{\phi_{[[a]]}} & F_2([[a]])\\
+          \dTo{F_1(f)} &                   & \dTo_{F_2(f)}\\
+          F_1([[b]])   & \rTo_{\phi_{[[b]]}} & F_2([[b]])\\
+        \end{diagram}
+      \end{array}
+    \end{math}
+  \end{center}
+  and
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \begin{diagram}
+          [[a']] \\
+          \dTo{g} \\
+          [[b']]
+        \end{diagram}
+        & \,\,\,\, &
+        \begin{diagram}
+          F_2([[a']])   & \rTo{\psi_{[[a']]}} & F_3([[a']])\\
+          \dTo{F_2(g)} &                   & \dTo_{F_3(g)}\\
+          F_2([[b']])   & \rTo_{\psi_{[[b']]}} & F_3([[b']])\\
+        \end{diagram}
+      \end{array}
+    \end{math}
+  \end{center}
+  where all of the above diagrams commute.  Now it suffices to show that they following commutes:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \begin{diagram}
+          [[c]] \\
+          \dTo{h} \\
+          [[d]]
+        \end{diagram}
+        & \,\,\,\, &
+        \begin{diagram}
+          F_1([[c]])   & \rTo{\psi_{[[c]]} \circ \phi_{[[c]]}} & F_3([[c]])\\
+          \dTo{F_1(h)} &                   & \dTo_{F_3(h)}\\
+          F_1([[d]])   & \rTo_{\psi_{[[d]]} \circ \phi_{[[d]]}} & F_3([[d]])\\
+        \end{diagram}
+      \end{array}
+    \end{math}
+  \end{center}
+  The fact that the previous diagrams commute follows from the following equational reasoning:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        (\psi_{[[d]]} \circ \phi_{[[d]]}) \circ F_1(h) & = & \psi_{[[d]]} \circ (\phi_{[[d]]} \circ F_1(h))\\
+                                                     & = & \psi_{[[d]]} \circ (F_2(h) \circ \phi_{[[C]]})\\
+                                                     & = & (\psi_{[[d]]} \circ F_2(h)) \circ \phi_{[[C]]}\\
+                                                     & = & (F_3(h) \circ \psi_{[[C]]}) \circ \phi_{[[C]]}\\
+                                                     & = & F_3(h) \circ (\psi_{[[C]]} \circ \phi_{[[C]]})\\
+      \end{array}
+    \end{math}
+  \end{center}
+  Therefore, the composition of two natural transformations is also a natural transformation.
+\end{proof}
+% section natural_transformations (end)
+
+\section{Monoidal Categories}
+\label{sec:monoidal_categories}
 
 In this section we develope the notions of monoidal categories and symmetric monoidal categories.  
 These types of categories are used extensively in the study of linear logic and linear type theories.
@@ -74,8 +156,8 @@ and
 \end{center}
 \end{definition}
 
-\subsubsection{Free Symmetric Monoidal Categories}
-\label{subsubsec:free_symmetric_monoidal_categories}
+\subsection{Free Symmetric Monoidal Categories}
+\label{subsec:free_symmetric_monoidal_categories}
 First, we define free monoidal categories in the style of Mac Lane in \cite{MacLane:1998}. 
 The language of \textbf{binary words} is defined by the following grammar:
 \begin{center}
@@ -159,12 +241,12 @@ commutative by construction.  Therefore, we have arrived at the following result
   shown that we have a bijection from $W$ to $[[B]]$.  
 \end{proof}
 
-% subsubsection free_symmetric_monoidal_categories (end)
+% subsection free_symmetric_monoidal_categories (end)
 
-% subsection monoidal_categories (end)
+% section monoidal_categories (end)
 
-\subsection{Monads and Comonads}
-\label{subsec:monads_and_comonads}
+\section{Monads and Comonads}
+\label{sec:monads_and_comonads}
 
 In the sequel $[[T]]^n$, for $n \in \mathbb{N}$, is defined to be
 the $n$-fold composition of $[[T]]$, e.g. $[[T]]^2 = [[T]] \circ [[T]]$.
@@ -217,10 +299,10 @@ the $n$-fold composition of $[[T]]$, e.g. $[[T]]^2 = [[T]] \circ [[T]]$.
     \end{tabular}
   \end{center}
 \end{definition}
-% subsection monads_and_comonads (end)
+% section monads_and_comonads (end)
 
-\subsection{Initial Algebras}
-\label{subsec:initial_algebras}
+\section{Initial Algebras}
+\label{sec:initial_algebras}
 
 \begin{definition}[Algebra]
   \label{def:algebra}
@@ -463,10 +545,10 @@ This is equivalent to the following:
     \end{array}
   \end{math}
 \end{center}
-% subsection initial_algebras (end)
+% section initial_algebras (end)
 
-\subsection{Final Coalgebras}
-\label{subsec:final_coalgebras}
+\section{Final Coalgebras}
+\label{sec:final_coalgebras}
 Lets consider the infinite stream of ones. 
 \begin{center}
   \begin{math}
@@ -540,4 +622,4 @@ a homomorphism between coalgebras.
   $[[sm2]] : [[B]] \to [[F]]([[B]])$ there is a unique homomorphism between them.
 \end{definition}
 
-% subsection final_coalgebras (end)
+% section final_coalgebras (end)
