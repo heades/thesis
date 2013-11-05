@@ -1,0 +1,63 @@
+\usepackage{amsmath,amssymb,amsthm,amstext}
+\usepackage{mathpartir}
+\usepackage{vmargin}
+\usepackage{enumitem}
+\usepackage{url}
+\usepackage{todonotes}
+\usepackage{listings}
+\usepackage{stmaryrd} 
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\redto}[0]{\rightsquigarrow}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\ifrName}[1]{#1}
+
+\newcommand{\chcalc}[0]{\bar{\lambda}\mu\tilde{\mu}}
+
+\newcommand{\cse}[0]{\noindent\underline{\textbf{Case:}}\ }
+
+\usepackage{supertabular}
+\input{largedot}
+\include{syntax-inc}
+
+\newcommand{\ndto}[1]{\to_{#1}}
+\newcommand{\ndwedge}[1]{\wedge_{#1}}
+
+\newcommand{\To}[0]{\Rightarrow}
+
+\begin{document}
+
+\title{Semantic Analysis of Advanced Programming Languages}
+
+\author{Harley Eades III\\ Computer Science\\ The University of Iowa}
+
+\date{}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+
+% section introduction (end)
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+% section conclusion (end)
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\nocite{*}
