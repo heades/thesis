@@ -244,12 +244,33 @@ an implementation\footnote{$\Sep$'s implementation was authored by
 
 \subsection{Dualized Type Theory (DTT)}
 \label{subsec:dualized_type_theory}
-Constructive control operators are control operators -- operators that
-have the ability to discard evaluation contexts -- that have been
-restricted to discarding only certain context so as to remain
-constructive.
-% subsection dualized_type_theory_(dtt) (end)
+The Freedom of Speech language did not contain algebraic data types.
+$\Sep$ added data types, but separated the two worlds all together.
+In addition neither language contained coinductive data types.  These
+are data types representing infinite objects.  For example, streams.
+So how could we add coinductive data types?  To make matters a bit
+more interesting, how could we add coinductive data types in such a
+way that inductive-coinductive data types could be defined?  That is,
+can we allow for the mixture of inductive and coinductive data?  This
+is not a well understood feature.  In fact, a general framework for
+inductive and coinductive data is an open problem.    
 
+A candidate for a general framework for inductive and coinductive data
+types begins with a logic called Bi-Intuitionistic Logic (BINT). This
+is a constructive logic where for every logical connective its dual
+connective is a logical connective of the logic.  For example, BINT
+contains disjunction and conjunction, and implication, and its dual a
+connective called subtraction or exclusion.  In this section I detail
+the logic of BINT called Dualized Logic (DIL), and a term assignment
+to DIL called Dualized Type Theory (DTT).  I will also discuss its
+potential as a general framework for inductive and coinductive data.
+I also think DTT provides a nice setting for the study of constructive
+control operators. Constructive control operators are control
+operators -- operators that have the ability to discard evaluation
+contexts -- that have been restricted to discarding only certain
+context so as to remain constructive.  The design of DIL and DTT is
+stabilizing, but its analysis is on going work \cite{Stump:2013}.
+% subsection dualized_type_theory_(dtt) (end)
 % section design (end)
 
 \section{Chapter II: Analysis}
