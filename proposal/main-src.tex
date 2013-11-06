@@ -22,7 +22,7 @@
 \newcommand{\redto}[0]{\rightsquigarrow}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\ifrName}[1]{#1}
-\newcommand{\Sep}[0]{\text{Sep}^3}
+\newcommand{\Sep}[0]{\text{SepPP}}
 
 \newcommand{\chcalc}[0]{\bar{\lambda}\mu\tilde{\mu}}
 
@@ -214,12 +214,32 @@ design.  I discuss the analysis in
 Section~\ref{subsubsec:free_speech}.  Interesting properties of this
 design include: implicit arguments, the free speech property, a
 collapsed syntax, and judgmental fragmentation into the logical and
-programmatic fragment.
+programmatic fragment.  This design is complete and formalized in Ott,
+but was never published.
 % subsection freedom_of_speech (end)
 
 \subsection{Separation of Proof from Program ($\Sep$) }
 \label{subsec:separation_of_proof_from_program}
+One of the key features of the Freedom of Speech language is that it
+has a collapsed language where terms and types are apart of the same
+syntactic category.  This makes for a very elegant design, but due to
+having to fragment the language into a logical fragment and a
+programmatic fragment using the typing judgment the language very hard
+to reason about.  This is especially true when we want to extend the
+Freedom of Speech language with additional features.  For example,
+algebraic data types.  To overcome this problem we (the University of
+Iowa group) proposed to separate the logical fragment from the
+programmatic fragment into two distinct languages. Then provide the
+necessary linkage to allow for the logical fragment to contain the
+free speech property.  
 
+In this section the full design of $\Sep$ is detailed and discussed.
+We did not carry out any analysis of this language, but only explored
+its design, and its use in writing real-world programs
+\cite{Kimmel:2013,Kimmel:2012}.  Then full design of $\Sep$ has never
+been published, however, its design is completely written up, and
+an implementation\footnote{$\Sep$'s implementation was authored by
+  Garrin Kimmel.}  exists.
 % subsection separation_of_proof_from_program (end)
 
 \subsection{Dualized Type Theory (DTT)}
