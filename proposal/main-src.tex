@@ -164,13 +164,57 @@ dependently-typed functional programming languages called Freedom of
 Speech, and Separation of Proof from Program, and a new constructive
 type theory with constructive control called Dualized Type Theory.
 This chapter will have a section per language. All the work with
-respect to the first two languages is complete although unpublished.
-The language of Dualized Type Theory is stabilizing, but its analysis
-is on going work \cite{Stump:2013}.
+respect to the first two languages is complete although mostly
+unpublished.  The language of Dualized Type Theory is stabilizing, but
+its analysis is on going work \cite{Stump:2013}.
+
+The TRELLYS project is a collaboration between the University of Iowa,
+University of Pennsylvania, and Portland State University to design a
+new general-purpose dependently-typed functional programming language
+that supports type-based verification.  What sets TRELLYS apart from
+other similar projects is that it contains a number of advanced
+features within the same language.  For example, mixing type-based
+verification with general recursion is not well understood.  This
+mixture is one of the primary aims of this project.  TRELLYS was
+designed from the bottom up.  We started with a small trusted language
+called the core, and then, after the core was finished, we would build
+a surface language on top of it. Then the latter would elaborate into
+the former.  My primary contribution to this project was to the design
+and analysis of the core.  I helped with the design and analysis of
+two core languages.  The first is Freedom of Speech.
 
 \subsection{Freedom of Speech}
 \label{subsec:freedom_of_speech}
+The main objective of the TRELLYS project is to design a functional
+programming language with two discernible fragments: a logical
+fragment, and a programmatic fragment.  The programmatic fragment is a
+general purpose dependently-type functional programming language.
+This is a Turing-complete language with general recursion.  In
+addition it contains the type in type axiom which leads to paradoxes
+\cite{Coquand:1986,Coquand:1994}.  This axiom allows for the
+definition of generic programs.  Now the logical fragment is the
+fragment that can be used to prove properties about the programs
+defined in the programmatic fragment.  In order for this fragment to
+be considered a logic it must terminating.  Meaning every program
+written in the this fragment must terminate in general.  This property
+guarantees that the logic is consistent.
 
+Recall that the three perspectives of computation\footnote{Also known
+  as the Curry-Howard correspondence, and the propositions-as-types
+  proofs-as-programs correspondence.} tell us that programs are proofs
+and their types are propositions.  The most significant feature of
+Freedom of Speech is that logical types can contain programs from the
+programmatic fragment, but they are never allowed to be applied to any
+arguments.  Thus, the logical fragment is allowed to ``talk'' about
+the programmatic fragment.  This property we call free speech.
+
+This section introduces the Freedom of Speech language and discusses
+its design.  The analysis of this language greatly influenced its
+design.  I discuss the analysis in
+Section~\ref{subsubsec:free_speech}.  Interesting properties of this
+design include: implicit arguments, the free speech property, a
+collapsed syntax, and judgmental fragmentation into the logical and
+programmatic fragment.
 % subsection freedom_of_speech (end)
 
 \subsection{Separation of Proof from Program ($\Sep$) }
