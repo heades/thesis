@@ -275,19 +275,50 @@ stabilizing, but its analysis is on going work \cite{Stump:2013}.
 % subsection dualized_type_theory_(dtt) (end)
 % section design (end)
 
-\section{Part II: Basic Syntactic Analysis}
+\section{Part II: Basic-Syntactic Analysis}
 \label{sec:syntactic_analysis}
+
+There is a cardinal rule one must follow when designing programming
+languages.  This rules states that one must carry out at least a
+basic-syntactic analysis of the programming language one is designing.
+A basic-syntactic analysis includes proving that the programming
+language is type safe.  If the language contains a logical fragment
+then this fragment must be proven consistent.  This part presents this
+analysis for the Free Speech language and DTT.
 
 \subsection{Chapter I: Free Speech}
 \label{subsec:free_speech}
-
+This chapter presents a preservation proof of the Free Speech
+language.  Then using this proof I prove weak normalization for the
+logical fragment.  These results do not use any new mathematical
+machinery, but adapts well-known techniques to the language I am
+investigating.  There are however a few non-trivial problems which had
+to be overcome which this chapter will take care in explaining.  This
+analysis is complete and ready to be included in my thesis, however it
+is unpublished.
 % subsection free_speech (end)
 
 \subsection{Chapter II: Dualized Type Theory}
 \label{subsec:dtt}
+The analysis of DTT begins with the analysis of DIL.  We prove that
+DIL is consistent, and complete with respect to a semantics for BINT
+using Kripke models.  The consistency proof is complete and has been
+formalized in the interactive proof assistant Agda \cite{Norell:2007}.
+I am currently finishing up the completeness proof, but on paper.
 
+Now that we know we have a sound and complete bi-intuitionistic logic
+we add a term assignment to DIL.  This takes the logic and produces a
+type theory where proofs are programs and propositions are types.  In
+addition to this term assignment we must define a reduction relation
+which gives the necessary rules for computaiton.  That is, the
+reduction relation relates programs by taking a single step of
+computaiton. Then we must prove this reduction relation is type safe,
+and that it is terminating, because DTT is a logic.  We want to use it
+for logical reasoning, and thus, it cannot contain infinite proofs.  I
+conjecture these properties hold, but they still need to be carried
+out.  This analysis should be strightforward using known techniques.
+I plan to have this work completed by Febuary 2014 for publication.
 % subsection the_analysis_of_dtt (end)
-
 % section syntactic_analysis (end)
 
 \section{Part III: Normalization by Hereditary Substitution}
