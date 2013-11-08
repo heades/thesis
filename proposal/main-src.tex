@@ -44,7 +44,7 @@
 
 \maketitle
 
-\section{Introduction}
+\section{Thesis: Introduction}
 \label{sec:introduction}
 There are two major problems growing in two areas.  The first is in
 Computer Science, in particular software engineering. Software is
@@ -121,25 +121,27 @@ types we wish to include the ability to verify software within the
 programming language being used to write the software. Both programs
 have their merits and are very fruitful and interesting.
 
-This report summarizes my dissertation by chapter, section, and
-subsection.  Each section will be given the name of a chapter, and
-then the contents of the section will consist of a summery of that
-chapter.  Similarly, for subsections.  I make sure to include my
-already published work as well as on going work that needs to be done
-before my defense.  My thesis will be broken into three main chapters.
-The first, gives a history of type theory, and the necessary
-background to facilitate understanding of the main results. The second
-chapter is on the design of new advanced functional programming
-languages.  Finally, the third covers the meta-theoretic analysis of
-various type theories and functional programming languages.
+This report summarizes my dissertation by part, chapter, section, and
+subsection.  Each section will be given the name of a part, and then
+the contents of the section will consist of a summery of that part.
+Similarly, sections will summarize chapters, and so on.  I make sure
+to include my already published work as well as on going work that
+needs to be done before my defense.  My thesis will be broken into
+five main parts.  The first, gives a history of type theory, and the
+necessary background to facilitate understanding of the main
+results. The second part is on the design of new advanced functional
+programming languages.  The third covers the basic syntactic-analysis
+of various type theories and functional programming languages.  The
+forth covers normalization by hereditary substitution.  Finally, the
+fifth covers categorical semantics of type theories.
 % section introduction (end)
 
-\section{Chapter 0: History and Background}
+\section{Part 0: History and Background}
 \label{sec:history_and_background}
-This chapter provides a brief history of type theory as a foundation
-of mathematics and typed-functional programming languages.  It begins
+This part provides a brief history of type theory as a foundation of
+mathematics and typed-functional programming languages.  It begins
 with Bertrand Russell -- the founder of type theory -- and introduces
-key results up to the present. This chapter also serves as an
+key results up to the present. This part also serves as an
 introduction of all the necessary concepts to understand the remainder
 of the thesis.  I make sure and present each type theory in its
 entirety and rigorously.  In fact every language defined in the thesis
@@ -156,14 +158,14 @@ history and background has all been written and was presented as my
 comprehensive exam.
 % section history_and_background (end)
 
-\section{Chapter I: Design}
+\section{Part I: Design}
 \label{sec:design}
 
-This chapter presents the design of a two general-purpose
+This part presents the design of a two general-purpose
 dependently-typed functional programming languages called Freedom of
 Speech, and Separation of Proof from Program, and a new constructive
 type theory with constructive control called Dualized Type Theory.
-This chapter will have a section per language. All the work with
+This part will have a chapter per language. All the work with
 respect to the first two languages is complete although mostly
 unpublished.  The language of Dualized Type Theory is stabilizing, but
 its analysis is on going work \cite{Stump:2013}.
@@ -183,7 +185,7 @@ the former.  My primary contribution to this project was to the design
 and analysis of the core.  I helped with the design and analysis of
 two core languages.  The first is Freedom of Speech.
 
-\subsection{Freedom of Speech}
+\subsection{Chapter I: Freedom of Speech}
 \label{subsec:freedom_of_speech}
 The main objective of the TRELLYS project is to design a functional
 programming language with two discernible fragments: a logical
@@ -208,41 +210,41 @@ programmatic fragment, but they are never allowed to be applied to any
 arguments.  Thus, the logical fragment is allowed to ``talk'' about
 the programmatic fragment.  This property we call free speech.
 
-This section introduces the Freedom of Speech language and discusses
+This chapter introduces the Freedom of Speech language and discusses
 its design.  The analysis of this language greatly influenced its
 design.  I discuss the analysis in
-Section~\ref{subsubsec:free_speech}.  Interesting properties of this
+Section~\ref{subsec:free_speech}.  Interesting properties of this
 design include: implicit arguments, the free speech property, a
 collapsed syntax, and judgmental fragmentation into the logical and
 programmatic fragment.  This design is complete and formalized in Ott,
 but was never published.
 % subsection freedom_of_speech (end)
 
-\subsection{Separation of Proof from Program ($\Sep$) }
+\subsection{Chapter II: Separation of Proof from Program ($\Sep$) }
 \label{subsec:separation_of_proof_from_program}
 One of the key features of the Freedom of Speech language is that it
 has a collapsed language where terms and types are apart of the same
 syntactic category.  This makes for a very elegant design, but due to
 having to fragment the language into a logical fragment and a
-programmatic fragment using the typing judgment the language very hard
-to reason about.  This is especially true when we want to extend the
-Freedom of Speech language with additional features.  For example,
-algebraic data types.  To overcome this problem we (the University of
-Iowa group) proposed to separate the logical fragment from the
-programmatic fragment into two distinct languages. Then provide the
-necessary linkage to allow for the logical fragment to contain the
-free speech property.  
+programmatic fragment using the typing judgment the language became
+very hard to reason about.  This is especially true when we want to
+extend the Freedom of Speech language with additional features.  For
+example, algebraic data types.  To overcome this problem we (the
+University of Iowa group) proposed to separate the logical fragment
+from the programmatic fragment into two distinct languages. Then
+provide the necessary linkage to allow for the logical fragment to
+contain the free-speech property.
 
 In this section the full design of $\Sep$ is detailed and discussed.
 We did not carry out any analysis of this language, but only explored
 its design, and its use in writing real-world programs
-\cite{Kimmel:2013,Kimmel:2012}.  Then full design of $\Sep$ has never
+\cite{Kimmel:2013,Kimmel:2012}.  The full design of $\Sep$ has never
 been published, however, its design is completely written up, and
 an implementation\footnote{$\Sep$'s implementation was authored by
-  Garrin Kimmel.}  exists.
+  Dr. Garrin Kimmel.}  exists.
 % subsection separation_of_proof_from_program (end)
 
-\subsection{Dualized Type Theory (DTT)}
+\subsection{Chapter III: Dualized Type Theory (DTT)}
 \label{subsec:dualized_type_theory}
 The Freedom of Speech language did not contain algebraic data types.
 $\Sep$ added data types, but separated the two worlds all together.
@@ -260,7 +262,7 @@ types begins with a logic called Bi-Intuitionistic Logic (BINT). This
 is a constructive logic where for every logical connective its dual
 connective is a logical connective of the logic.  For example, BINT
 contains disjunction and conjunction, and implication, and its dual a
-connective called subtraction or exclusion.  In this section I detail
+connective called subtraction or exclusion.  In this chapter I detail
 the logic of BINT called Dualized Logic (DIL), and a term assignment
 to DIL called Dualized Type Theory (DTT).  I will also discuss its
 potential as a general framework for inductive and coinductive data.
@@ -273,62 +275,59 @@ stabilizing, but its analysis is on going work \cite{Stump:2013}.
 % subsection dualized_type_theory_(dtt) (end)
 % section design (end)
 
-\section{Chapter II: Analysis}
-\label{sec:analysis}
+\section{Part II: Basic Syntactic Analysis}
+\label{sec:syntactic_analysis}
 
-\subsection{Basic Analysis}
-\label{subsec:basic_analysis}
-\subsubsection{Free Speech}
-\label{subsubsec:free_speech}
+\subsection{Chapter I: Free Speech}
+\label{subsec:free_speech}
 
 % subsection free_speech (end)
 
-\subsubsection{Dualized Type Theory}
-\label{subsubsec:dtt}
+\subsection{Chapter II: Dualized Type Theory}
+\label{subsec:dtt}
 
 % subsection the_analysis_of_dtt (end)
-% subsection basic_analysis (end)
 
-\subsection{Normalization by Hereditary Substitution}
-\label{subsec:normalization_by_hereditary_substitution}
-\subsubsection{Stratified System F (SSF) and its Extensions}
+% section syntactic_analysis (end)
+
+\section{Part III: Normalization by Hereditary Substitution}
+\label{sec:normalization_by_hereditary_substitution}
+\subsection{Chapter I: Stratified System F (SSF) and its Extensions}
 \label{subsec:stratified_system_f_ext}
 
-% subsubsection stratified_system_f_ext (end)
+% subsection stratified_system_f_ext (end)
 
-\subsubsection{The $\lambda\Delta$-Calculus}
+\subsection{Chapter II: The $\lambda\Delta$-Calculus}
 \label{subsec:the_lambdadelta-calculus}
 
-% subsubsection the_lambdadelta-calculus (end)
+% subsection the_lambdadelta-calculus (end)
 
-% subsection normalization_by_hereditary_substitution (end)
+% section normalization_by_hereditary_substitution (end)
 
-\subsection{Categorical Semantics}
-\label{subsec:categorical_semantics}
-\subsubsection{Semi-Bilinear Logic}
+\section{Part IV: Categorical Semantic }
+\label{sec:categorical_semantics}
+
+\subsubsection{Chapter I: Semi-Bilinear Logic}
 \label{subsec:semi-bilinear_logic}
 
 % subsubsection semi-bilinear_logic (end)
 
-\subsubsection{Split Bi-Intuitionistic Logic}
+\subsubsection{Chapter II: Split Bi-Intuitionistic Logic}
 \label{subsec:split_bi-intuitionistic_logic}
 
 % subsubsection split_bi-intuitionistic_logic (end)
 
-\subsubsection{Dualized Type Theory}
+\subsubsection{Chapter III: Dualized Type Theory}
 \label{subsubsec:dualized_type_theory}
 
 % subsection dualized_type_theory (end)
 
-\subsubsection{Nested Bi-Intuitionistic Logic}
+\subsubsection{Chapter IV: Nested Bi-Intuitionistic Logic}
 \label{subsec:nested_bi-intuitionistic_logic}
 
 % subsubsection nested_bi-intuitionistic_logic (end)
+% section categorical_semantics_ (end)
 
-% subsection categorical_semantics (end)
-
-% section analysis (end)
- 
 \section{Conclusion}
 \label{sec:conclusion}
 
