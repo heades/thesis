@@ -323,14 +323,51 @@ I plan to have this work completed by Febuary 2014 for publication.
 
 \section{Part III: Normalization by Hereditary Substitution}
 \label{sec:normalization_by_hereditary_substitution}
+One of the most difficult meta-theoretic results is proving
+normalization whether strong or weak.  The latter is often easier, and
+is enough to conclude consistency.  Therefore, it is a worthy task to
+try and find techniques that make these proofs less difficult.  A
+technique which shows promise of accomplishing this feat is
+normalization by hereditary substitution.  Hereditary substitution is
+a metalevel function which substitutes a term into another and
+recursively reduces any redexes that are created as a result of the
+substitution.  Then using this function we can prove weak
+normalization of the type theory.  The main problem is identifying the
+set of type theories that can be proven weakly normalizing is an open
+problem.  This part identifies several type theories in this set that
+were previously unknown to be amenable to this style of analysis. 
+
 \subsection{Chapter I: Stratified System F (SSF) and its Extensions}
 \label{subsec:stratified_system_f_ext}
-
+SSF is a predicative polymorphic type theory.  It can be seen as a
+restriction of Girard's system F \cite{Leivant:1991}. In this chapter
+we prove weak normalization using hereditary substitution for SSF and
+several of its extensions. The extensions are as follows:
+\begin{itemize}
+\item[-] SSF,
+\item[-] SSF extended with sum types and commuting conversions,
+\item[-] SSF extended with equality types, and
+\item[-] SSF extended with type-level computation.
+\end{itemize}
+\noindent
+All of these results are finished \cite{Eades:2011,Eades:2010}.
 % subsection stratified_system_f_ext (end)
 
 \subsection{Chapter II: The $\lambda\Delta$-Calculus}
 \label{subsec:the_lambdadelta-calculus}
-
+The hereditary substitution proof technique was only applied to
+constructive type theories, but what about classical type theories? My
+advisor and I were the first to apply this technique to type theories
+with control operators.  We choose the $\lambda\Delta$-calculus due to
+it being a straightforward extension of the simply-typed
+$\lambda$-calculus.  The $\lambda\Delta$-calculus adds the law of
+double negation to the simply-typed $\lambda$-calculus, thus, the law
+of excluded middle is provable.  This extension adds a new operator
+called the $\Delta$-operator which can be used to define familiar
+control operators like $call/cc$.  This chapter presents this result
+by first defining the $\lambda\Delta$-calculus and then proving it
+weakly normalizing using hereditary substitution.  This result has
+been published in \cite{Eades:2013}.
 % subsection the_lambdadelta-calculus (end)
 
 % section normalization_by_hereditary_substitution (end)
@@ -338,22 +375,22 @@ I plan to have this work completed by Febuary 2014 for publication.
 \section{Part IV: Categorical Semantic }
 \label{sec:categorical_semantics}
 
-\subsubsection{Chapter I: Semi-Bilinear Logic}
+\subsection{Chapter I: Semi-Bilinear Logic}
 \label{subsec:semi-bilinear_logic}
 
 % subsubsection semi-bilinear_logic (end)
 
-\subsubsection{Chapter II: Split Bi-Intuitionistic Logic}
+\subsection{Chapter II: Split Bi-Intuitionistic Logic}
 \label{subsec:split_bi-intuitionistic_logic}
 
 % subsubsection split_bi-intuitionistic_logic (end)
 
-\subsubsection{Chapter III: Dualized Type Theory}
+\subsection{Chapter III: Dualized Type Theory}
 \label{subsubsec:dualized_type_theory}
 
 % subsection dualized_type_theory (end)
 
-\subsubsection{Chapter IV: Nested Bi-Intuitionistic Logic}
+\subsection{Chapter IV: Nested Bi-Intuitionistic Logic}
 \label{subsec:nested_bi-intuitionistic_logic}
 
 % subsubsection nested_bi-intuitionistic_logic (end)
