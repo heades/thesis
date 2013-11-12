@@ -387,30 +387,81 @@ model of a programming languages or type theory gives a unique
 perspective of the theory.  The difficulty is figuring out what
 categorical constructs one needs in order to model the language.  A
 categorical model for bi-intuitionistic logic is a current open
-problem \cite{??}.  In this part we provide three novel categorical
-models of bi-intuitionistic logic.  All the work in this part is on
-going.
-
+problem.  In this part I provide three novel categorical models of
+bi-intuitionistic logic.  All the work in this part is on going.
 
 \subsection{Chapter I: Split Bi-Intuitionistic Logic}
 \label{subsec:split_bi-intuitionistic_logic}
 
+This formalization of bi-intuitionism came out of studying various
+categorical models.  The idea is in the same spirit as $\Sep$. Split
+BINT splits the language into two distinct syntactic categories: the
+positive fragment, and the negative fragment. The positive fragment
+has a categorical model in cartesian-closed categories, while the
+negative fragment has a categorical model in the opposite category.
+So conjunction, implication, and absurdity are the logical pieces of
+the positive fragment, while disjunction, subtraction, and truth, are
+the logical pieces of the negative fragment.  The two fragments are
+then linked together by two functors representing two negations.
+These allow for the mixture of both the fragments and is the source of
+the bi-intuitionism.  In terms of Kripke models the logical
+connectives of the positive fragment consider all future worlds, while
+the negative fragment considers the existence of past worlds.  The
+negations change the quantifier from a universal to an existential and
+vice versa.  The design and analysis of this formalization is on
+going, but the categorical model has been formalized in Agda.
 % subsubsection split_bi-intuitionistic_logic (end)
 
 \subsection{Chapter II: Dualized Type Theory}
 \label{subsubsec:dualized_type_theory}
-
+One key property of constructive logic that has been hard to obtain in
+bi-intuitionistic logic is cut elimination.  Regaining this key
+property is the reason why DIL and DTT have a very unique sequent.
+The usual sequent of propositional intuitionistic logic is something
+like $\Gamma \vdash \Delta$ where $\Gamma$ is a multiset of hypotheses
+and $\Delta$ is a multiset of conclusions.  To express the idea that
+subtraction considers pasts worlds we had to pull the structure of the
+Kripke model into the object language of the logic and type theory.
+Thus, our sequent changes to $G ; \Gamma \vdash \Delta$ where each
+hypothesis and conclusion is associated with a node of the graph $G$.
+This graph is an abstract Kripke model.  To give a categorical model
+for DTT the category must capture this notion of an abstract Kripke
+model.  For this I defined a novel category called preorder
+categories.  This category has as morphisms a domain, codomain, and a
+preorder, where the domain and codomain are associated with an object
+of the preorder.  I have begun proving soundness with respect to
+preordered categories.  I plan to have completeness proven, as well as
+a proof that the equality in the type theory (DTT) and the equality of
+the model are the same for my thesis.
 % subsection dualized_type_theory (end)
 
 \subsection{Chapter III: Nested Bi-Intuitionistic Logic}
 \label{subsec:nested_bi-intuitionistic_logic}
-
+Another method of regaining cut elimination was proposed by Gor\'e et
+al. using a sequent that contains a subsequent with in it \cite{Gore:2010}.
+Time permitting I plan to give a categorical model of this style of
+logic using a higher-order category called 2-categories.  These have
+objects, morphisms, and additionally morphisms between morphisms.  The
+latter would allow for the interpretation of subsequents. If this
+works out then a very elegant model in higher categories would exist
+and could potentially yield the necessary structure of a more elegant
+logic.
 % subsubsection nested_bi-intuitionistic_logic (end)
 % section categorical_semantics_ (end)
 
 \section{Conclusion}
 \label{sec:conclusion}
-
+This report serves as an outline of my dissertation.  It will consist
+of five major parts on the design and analysis of advanced-programming
+languages, type theories, and logic.  I have explicitly stated which
+work is completed and which still needs to be done.  As a reminder the
+following work still needs to be done:
+\begin{itemize}
+\item[-] The analysis of DIL and DTT,
+\item[-] the design and categorical model of split BINT,
+\item[-] the study of preordered categories and their use as a model of DTT, and
+\item[-] the categorical model of nested BINT.
+\end{itemize}
 % section conclusion (end)
 
 \bibliographystyle{plain} \bibliography{biblio}
