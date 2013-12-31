@@ -121,19 +121,19 @@ types we wish to include the ability to verify software within the
 programming language being used to write the software. Both programs
 have their merits and are very fruitful and interesting.
 
-This report summarizes my dissertation by part, chapter, section, and
-subsection.  Each section will be given the name of a part, and then
-the contents of the section will consist of a summery of that part.
-Similarly, sections will summarize chapters, and so on.  I make sure
-to include my already published work as well as on going work that
-needs to be done before my defense.  My thesis will be broken into
-five main parts.  The first, gives a history of type theory, and the
-necessary background to facilitate understanding of the main
-results. The second part is on the design of new advanced functional
-programming languages.  The third covers the basic syntactic-analysis
-of various type theories and functional programming languages.  The
-forth covers normalization by hereditary substitution.  Finally, the
-fifth covers categorical semantics of type theories.
+This report summarizes my dissertation by part and chapter. Each
+section will be given the name of a part, and then the contents of the
+section will consist of a summery of that part.  Similarly,
+subsections will summarize chapters.  I make sure to include my
+already published work as well as on going work that needs to be done
+before my defense.  My thesis will be broken into five main parts.
+The first, gives a history of type theory, and the necessary
+background to facilitate understanding of the main results. The second
+part is on the design of new advanced functional programming
+languages.  The third covers the basic syntactic-analysis of various
+type theories and functional programming languages.  The forth covers
+normalization by hereditary substitution.  Finally, the fifth covers
+categorical semantics of type theories.
 % section introduction (end)
 
 \section{Part 0: History and Background}
@@ -148,9 +148,9 @@ entirety and rigorously.  In fact every language defined in the thesis
 will be formally defined in Ott \cite{Sewell:2010}.  Ott is a tool for
 writing definitions of programming languages, type theories, and
 $\lambda$-calculi.  Ott generates a parser and a type checker which is
-used to check the accuracy of all objects definable with in the
+used to check the accuracy of all objects definable within the
 language given to Ott as input.  Ott's strongest application is to
-check for syntax errors within research articles.  Ott is a great
+check for syntax errors within research articles.  It is a great
 example of a tool using the very theory I will present in my thesis.
 It clearly stands as a successful step towards the solution of the
 second major problem outlined in the introduction.  Lastly, this
@@ -177,13 +177,10 @@ that supports type-based verification.  What sets TRELLYS apart from
 other similar projects is that it contains a number of advanced
 features within the same language.  For example, mixing type-based
 verification with general recursion is not well understood.  This
-mixture is one of the primary aims of this project.  TRELLYS was
-designed from the bottom up.  We started with a small trusted language
-called the core, and then, after the core was finished, we would build
-a surface language on top of it. Then the latter would elaborate into
-the former.  My primary contribution to this project was to the design
-and analysis of the core.  I helped with the design and analysis of
-two core languages.  The first is Freedom of Speech.
+mixture is one of the primary aims of this project.  My primary
+contribution to this project was to the design and analysis of the
+core.  I helped with the design and analysis of two core languages.
+The first is Freedom of Speech.
 
 \subsection{Chapter I: Freedom of Speech}
 \label{subsec:freedom_of_speech}
@@ -248,20 +245,20 @@ an implementation\footnote{$\Sep$'s implementation was authored by
 \label{subsec:dualized_type_theory}
 The Freedom of Speech language did not contain algebraic data types.
 $\Sep$ added data types, but separated the two worlds all together.
-In addition neither language contained coinductive data types.  These
+In addition, neither language contained coinductive data types.  These
 are data types representing infinite objects.  For example, streams.
 So how could we add coinductive data types?  To make matters a bit
 more interesting, how could we add coinductive data types in such a
 way that inductive-coinductive data types could be defined?  That is,
 can we allow for the mixture of inductive and coinductive data?  This
 is not a well understood feature.  In fact, a general framework for
-inductive and coinductive data is an open problem.    
+inductive and coinductive data is an open problem.
 
 A candidate for a general framework for inductive and coinductive data
 types begins with a logic called Bi-Intuitionistic Logic (BINT). This
 is a constructive logic where for every logical connective its dual
 connective is a logical connective of the logic.  For example, BINT
-contains disjunction and conjunction, and implication, and its dual a
+contains disjunction and conjunction, and implication and its dual, a
 connective called subtraction or exclusion.  In this chapter I detail
 the logic of BINT called Dualized Logic (DIL), and a term assignment
 to DIL called Dualized Type Theory (DTT).  I will also discuss its
@@ -284,18 +281,17 @@ basic-syntactic analysis of the programming language one is designing.
 A basic-syntactic analysis includes proving that the programming
 language is type safe.  If the language contains a logical fragment
 then this fragment must be proven consistent.  This part presents this
-analysis for the Free Speech language and DTT.
+analysis for the Freedom Speech language and DTT.
 
-\subsection{Chapter I: Free Speech}
+\subsection{Chapter I: Freedom Speech}
 \label{subsec:free_speech}
-This chapter presents a preservation proof of the Free Speech
+This chapter presents a preservation proof of the Freedom Speech
 language.  Then using this proof I prove weak normalization for the
 logical fragment.  These results do not use any new mathematical
-machinery, but adapts well-known techniques to the language I am
-investigating.  There are however a few non-trivial problems which had
-to be overcome which this chapter will take care in explaining.  This
-analysis is complete and ready to be included in my thesis, however it
-is unpublished.
+machinery, but adapts well-known techniques to this language.  There
+are however a few non-trivial problems which had to be overcome, which
+this chapter will take care in explaining.  This analysis is complete
+and ready to be included in my thesis, however it is unpublished.
 % subsection free_speech (end)
 
 \subsection{Chapter II: Dualized Type Theory}
@@ -306,15 +302,15 @@ using Kripke models.  The consistency proof is complete and has been
 formalized in the interactive proof assistant Agda \cite{Norell:2007}.
 I am currently finishing up the completeness proof, but on paper.
 
-Now that we know we have a sound and complete bi-intuitionistic logic
-we add a term assignment to DIL.  This takes the logic and produces a
+Now that I know I have a sound and complete bi-intuitionistic logic
+I add a term assignment to DIL.  This takes the logic and produces a
 type theory where proofs are programs and propositions are types.  In
 addition to this term assignment we must define a reduction relation
 which gives the necessary rules for computaiton.  That is, the
 reduction relation relates programs by taking a single step of
 computaiton. Then we must prove this reduction relation is type safe,
 and that it is terminating, because DTT is a logic.  We want to use it
-for logical reasoning, and thus, it cannot contain infinite proofs.  I
+for logical reasoning, and thus it cannot contain infinite proofs.  I
 conjecture these properties hold, but they still need to be carried
 out.  This analysis should be strightforward using known techniques.
 I plan to have this work completed by Febuary 2014 for publication.
@@ -332,10 +328,10 @@ normalization by hereditary substitution.  Hereditary substitution is
 a metalevel function which substitutes a term into another and
 recursively reduces any redexes that are created as a result of the
 substitution.  Then using this function we can prove weak
-normalization of the type theory.  The main problem is identifying the
-set of type theories that can be proven weakly normalizing is an open
-problem.  This part identifies several type theories in this set that
-were previously unknown to be amenable to this style of analysis. 
+normalization of the type theory.  Identifying the set of type
+theories that can be proven weakly normalizing is an open problem.
+This part identifies several type theories in this set that were
+previously unknown to be amenable to this style of analysis.
 
 \subsection{Chapter I: Stratified System F (SSF) and its Extensions}
 \label{subsec:stratified_system_f_ext}
@@ -399,9 +395,9 @@ BINT splits the language into two distinct syntactic categories: the
 positive fragment, and the negative fragment. The positive fragment
 has a categorical model in cartesian-closed categories, while the
 negative fragment has a categorical model in the opposite category.
-So conjunction, implication, and absurdity are the logical pieces of
+So conjunction, implication, and absurdity are the logical constructs of
 the positive fragment, while disjunction, subtraction, and truth, are
-the logical pieces of the negative fragment.  The two fragments are
+the logical constructs of the negative fragment.  The two fragments are
 then linked together by two functors representing two negations.
 These allow for the mixture of both the fragments and is the source of
 the bi-intuitionism.  In terms of Kripke models the logical
@@ -426,26 +422,26 @@ Thus, our sequent changes to $G ; \Gamma \vdash \Delta$ where each
 hypothesis and conclusion is associated with a node of the graph $G$.
 This graph is an abstract Kripke model.  To give a categorical model
 for DTT the category must capture this notion of an abstract Kripke
-model.  For this I defined a novel category called preorder
-categories.  This category has as morphisms a domain, codomain, and a
-preorder, where the domain and codomain are associated with an object
-of the preorder.  I have begun proving soundness with respect to
-preordered categories.  I plan to have completeness proven, as well as
-a proof that the equality in the type theory (DTT) and the equality of
-the model are the same for my thesis.
+model.  For this I defined a novel category called preordered
+categories.  This category has morphisms that have a domain, codomain,
+and a preorder, where the domain and codomain are associated with an
+object of the preorder.  I have begun proving soundness with respect
+to preordered categories, and plan to have completeness proven, as
+well as a proof that the equality in the type theory (DTT) and the
+equality of the model are the same for my thesis.
 % subsection dualized_type_theory (end)
 
 \subsection{Chapter III: Nested Bi-Intuitionistic Logic}
 \label{subsec:nested_bi-intuitionistic_logic}
 Another method of regaining cut elimination was proposed by Gor\'e et
-al. using a sequent that contains a subsequent with in it \cite{Gore:2010}.
-Time permitting I plan to give a categorical model of this style of
-logic using a higher-order category called 2-categories.  These have
-objects, morphisms, and additionally morphisms between morphisms.  The
-latter would allow for the interpretation of subsequents. If this
-works out then a very elegant model in higher categories would exist
-and could potentially yield the necessary structure of a more elegant
-logic.
+al. using a sequent that contains a subsequent within
+it \cite{Gore:2010}.  Time permitting I plan to give a categorical
+model of this style of logic using a higher-order category called
+2-categories.  These have objects, morphisms, and, additionally,
+morphisms between morphisms.  The latter would allow for the
+interpretation of subsequents. If this works out then a very elegant
+model in higher categories would exist and could potentially yield the
+necessary structure of a more elegant logic.
 % subsubsection nested_bi-intuitionistic_logic (end)
 % section categorical_semantics_ (end)
 
@@ -462,6 +458,8 @@ following work still needs to be done:
 \item[-] the study of preordered categories and their use as a model of DTT, and
 \item[-] the categorical model of nested BINT.
 \end{itemize}
+I plan to have all this work completed by April 2014, and defend my
+dissertation in June 2014.
 % section conclusion (end)
 
 \bibliographystyle{plain} \bibliography{biblio}
