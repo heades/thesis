@@ -1,0 +1,102 @@
+Moses Ilyich Sch\"onfinkel initially invented combinatory logic as a
+way of eliminating bound variables from logic.  He saw bound variables
+as just some auxiliary syntax.  The combinatory logic can be
+completely defined by two basic operators called $[[S]]$ and $[[K]]$.
+The syntax and reduction rules for combinatory logic are defined by
+Figure~\ref{fig:comb_syntax} and the typing rules in
+Figure~\ref{fig:comb_typing}.  
+\todo{Might need to explain the syntax of the judgments.}
+This is one of the most beautiful and elegant languages every
+conceived.  Later in the year 1927 the combinatory logic was
+rediscovered by an american named Haskell Curry.  He was trying to
+break the substitution process found in propositional logic down into
+a basic algorithm.  To accomplish this he constructed an equivalent
+system of cominbators and furthered his work -- even though he had
+found that combintory logic was first discovered by Sch\"onfinkel --
+on combinators in his thesis. In fact Curry's proof of completeness of
+combinatory logic found in his thesis is one of the most efficent
+proofs known \cite{Cardone:2006}.
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{lll}
+      Syntax: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          [[A]],[[B]],[[C]] & ::= & [[A -> B]]\\
+          [[a]],[[b]],[[c]] & ::= & [[x]]\,|\,[[S]]\,|\,[[K]]\,|\,[[I]]\,|\,[[a b]]
+        \end{array}
+      \end{math}
+      & \\
+      Reduction Rules: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          \CombdruleRedXXK{} & \CombdruleRedXXS{}
+        \end{array}
+      \end{math}
+    \end{tabular}
+  \end{center}
+  
+  \caption{Syntax and reduction rules for combinatory logic}
+  \label{fig:comb_syntax}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{ccc}
+        \CombdruleVar{} & \CombdruleS{}\\
+        & \\
+        \CombdruleK{}   & \CombdruleApp{}\\ 
+        & \\
+        \CombdruleI{}
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \caption{Definitions and type-checking algorithm for combinatory logic}
+  \label{fig:comb_typing}
+\end{figure}
+
+Much later in 1958 Curry found an amazing correspondence between the
+axioms of the implicational fragement of intuitionistic propositional
+logic and combinatory logic.  The axioms are defined in
+Figure~\ref{fig:hilbert_system} \cite{Troelstra:2000}.  If one
+compares the axioms with the types of the combinators $[[S]]$ and
+$[[K]]$ one will find they correspond.  This is the first connection
+between logic and type theory and the first peice of an isomorphism
+today known as the Curry-Howard isomorphism, proposistions as types
+and proofs as programs correspondence, or the Curry-Howard-Lambek
+isomorphism \cite{Howard:1980}.  We will discuss the this
+correspondence in detail in Section~\ref{sec:the_holy_trinity}.
+
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \ 
+        }{[[A -> (B -> A)]]}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \ 
+        }{[[(A -> (B -> C)) -> ((A -> B) -> (A ->C))]]}\\
+        & \\
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+         \  
+        }{[[A]] \to \perp}
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Implicational fragement of intuitionistic propositional logic}
+  \label{fig:hilbert_system}
+\end{figure}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

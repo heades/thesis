@@ -1,0 +1,161 @@
+System T extended STLC with primitive recursion, but it is not really
+that large of a leap forward, logically.  However, a large leap was
+taken independently by a French logician named Jean-Yves Girard and an
+American computer scientist named John Reynolds.  In 1971 Girard
+published his thesis which included a number of advances in type
+theory one of them being an extension of STLC with two new constructs
+\cite{Girard:1971,Girard:1989,Barendregt:1992}.  In STLC we have term
+variables and binders for them called $\lambda$-abstractions.  Girard
+added type variables and binders for them.  This added the ability to
+define a large class of truly universal functions. He named his theory
+system F, and went on to show that it has a beautiful correspondence
+with second order arithmetic \cite{Wadler:2007}.  He showed that
+everything definable in second order arithmetic is also definable in
+system F by defining a projection from system F into second order
+arithmetic.  This shows that system F is a very powerful type theory
+both computationally and as we will see later logically.  Later in
+1974 Reynolds published a paper which contained a type theory
+equivalent to Girard's system F \cite{Reynolds:1974,Reynolds:1998}.
+Reynolds being in the field of programming languages was investigating
+polymorphism.  That is the ability to define universal (or
+generic\footnote{ Throughout this article we will use the term
+  ``generic'' to mean that terms or programs are written with the most
+  abstract type possible.  Try not to confuse this with generic
+  programming in the sense used in the design of algorithms.})
+functions within a programming language.  That is functions with
+generic types which can be instantiated with other types. For example,
+being able to write a generic fold operation which is polymorphic in
+the type of data the list can hold.  In system T or STLC this was not
+possible.  We would have to define a new fold for each type of list.
+Reynolds also showed that system F is equivalent to second order
+arithmetic, in a similar, although different, way Girard did
+\cite{Wadler:2007}.
+
+The syntax for terms, types, and the reduction rules are defined in
+Fig.~\ref{fig:F_syntax} and the definition of the typing relation is
+defined in Fig.~\ref{fig:F_typing}.
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{lll}
+      Syntax: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X.T]]\\
+          [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
+        \end{array}
+      \end{math}
+      & \\
+      Full $\beta$-reduction: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          \FdruleRXXBeta{} & \FdruleRXXTypeRed{}\\
+          & \\
+          \FdruleRXXLam{} & \FdruleRXXTypeAbs{}\\
+          & \\
+          \FdruleRXXAppOne{} & \FdruleRXXAppTwo{}\\
+          & \\
+          \FdruleRXXTypeApp{}
+        \end{array}
+      \end{math}
+    \end{tabular}
+  \end{center}
+
+  \caption{Syntax and reduction rules for system F}
+  \label{fig:F_syntax}
+\end{figure}
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{ccc}
+        \FdruleVar{} &  \FdruleLam{}\\
+        & \\
+        \FdruleTypeAbs{} & \FdruleApp{}\\
+        & \\
+        \FdruleTypeApp{}
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Type-checking algorithm for the system F}
+  \label{fig:F_typing}
+\end{figure}
+Similar to system T we can easily see that system F is an extension of
+STLC.  Types now contain a new type $[[Forall X.T]]$ which binds the
+type variable $[[X]]$ in the type $[[T]]$.  This allows one to define
+more universal types allowing for the definition of single functions
+that can work on data of multiple different types.  Terms are extended
+with two new terms the $[[\\X.t]]$ and $[[t [T] ]]$.  The former is
+the introduction form for the $\forall$-type while the latter is the
+elimination form for the $\forall$-type. The former binds the type
+variable $[[X]]$ in $[[t]]$ similarly to the
+$\lambda$-abstraction. The latter is read, ``instantiate the type of
+term $[[t]]$ with the type $[[T]]$.''  The typing rules make this more
+apparent.  The formulation of system F we present here is indeed
+Church style so terms do contain type annotations.  We need a
+reduction rule to eliminate the bound variable in $[[\\X.t]]$ with an
+actual type much like application for $\lambda$-abstractions.  Hence,
+we extended the reduction rules of STLC with a new rule
+$\Fdrulename{R\_TypeRed}$ which does just that.  We next consider some
+example functions in system F.
+\begin{example}
+  \label{ex:F_terms}
+  Example functions in system F:
+  \begin{center}
+    \footnotesize
+    \begin{math}
+      \begin{array}{lll}
+                         & Term           & Type\\
+        \hline
+\text{Identity:} & [[\\X.\x:X.x]] & [[Forall X.(X -> X)]]\\
+\text{Pairs:}    & [[\\X.\\Y.\x:X.(\y:Y.\\Z.(\z:X->(Y->Z).((z x) y)))]] & 
+     [[Forall X.(Forall Y.(X -> (Y -> (PAIRTY X Y))))]]\\
+\text{First Projection:} & [[\\X.\\Y.(\p:PAIRTY X Y.((p [X]) (\x:X.\y:Y.x)))]] & [[Forall X.(Forall Y.((PAIRTY X Y) -> X))]]\\
+\text{Second Projection:} & [[\\X.\\Y.(\p:PAIRTY X Y.((p [Y]) (\x:X.\y:Y.y)))]] & [[Forall X.(Forall Y.((PAIRTY X Y) -> Y))]]\\
+\text{1:} & [[\\X.(\s:(X->X).(\z:X.(s z)))]] & [[Forall X.((X->X)->(X->X))]]\\
+\text{2:} & [[\\X.(\s:(X->X).(\z:X.(s (s z))))]] & [[Forall X.((X->X)->(X->X))]]\\
+\text{3:} & [[\\X.(\s:(X->X).(\z:X.(s (s (s z)))))]] & [[Forall X.((X->X)->(X->X))]]\\
+\vdots    & \vdots                                   & [[Forall X.((X->X)->(X->X))]]\\
+\text{n:} & \Lambda [[X]].(\lambda [[s]]:([[X->X]]).(\lambda[[z]]:[[X]].([[s]]^n\,[[z]]))) & [[Forall X.((X->X)->(X->X))]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+\end{example}
+Note that in the previous example we used the definition 
+\begin{center}
+  \begin{math}
+    [[PAIRTY X Y]] =^{def} [[Forall Z.((X -> (Y -> Z)) -> Z)]]
+  \end{math}
+\end{center}
+for readability. We could have gone even further than natural numbers
+and pairs by defining
+addition, multiplication, exponentiation, and even primitive
+recursion, but we leave those to the interested reader.  For more
+examples, see \cite{Girard:1989}.  The encodings we use are the famous
+Church encodings of pairs and natural numbers.  What is remarkable
+about the encoding of natural numbers is that they act as function
+iteration.  That is for any function $f$ from any type $[[X]]$ to
+$[[X]]$ and value $v$ of type $[[X]]$ we have $n\,[X]\,f\,v \equiv f^n
+v$, where $n$ is the term $n$ in the above table.
+
+There is one important property of $\Fdrulename{TypeApp}$ which the
+reader should take notice of.  Notice that there are no restrictions
+on what types $[[T]]$ ranges over.  That is there is nothing
+preventing $[[T]]$ from being $[[Forall X.T']]$.  This property is
+known as impredicativity and system F is an impredicative system.  The
+reader may now be questioning whether or not this type theory is
+terminating.  That is can we use impredicativity to obtain a looping
+term?  The answer was settled negatively by Girard and we will see how
+he proved this in Sect.~\ref{sec:metatheory_of_programming_languages}.
+The possibility of writing a looping term in this theory depends on the
+ability to be able find a closed inhabitant of the type 
+$[[Forall X.X]]$.  We call a term closed if all of its variables are bound.
+An inhabitant of a type $[[T]]$ is a term with type $[[T]]$.  Such a
+term could be given the type $[[T1 -> T2]]$ and $[[T1]]$ which would
+allow us to write a looping term.  However, it is impossible to define
+a closed term of type $[[Forall X.X]]$.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

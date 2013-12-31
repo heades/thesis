@@ -1,0 +1,181 @@
+Philip Wadler invented a type theory equivalent to Curien and
+Herbelin's $\LBMMT$-calculus called the dual calculus
+\cite{Wadler:2003}.  What we mean by equivalent here is that both
+correspond to Gentzen's classical sequent calculus LK, but both type
+theories are definitionally inequivalent.  The difference between the
+two type theories is that the $\LBMMT$-calculus is defined with only
+negation, implication, and subtraction.  Then using De Morgan's laws
+we can define conjunction and disjunction.  However, the dual calculus
+is defined with only negation, conjunction, and disjunction.  Then we
+define implication, which implies we may define
+$\lambda$-abstractions.  This is a truly remarkable feature of
+classical logic.
+
+The syntax of the dual calculus is defined in Fig.~\ref{fig:dc_syntax}.
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{rll}
+  [[T]], [[A]], [[B]], [[C]] & ::= & [[X]]\,|\,[[A /\ B]]\,|\,[[A \/ B]]\,|\,[[- A]]\\
+  [[t]], [[a]], [[b]], [[c]] & ::= & [[x]]\,|\,[[< a , b >]]\,|\,[[inl t]]\,|\,[[inr t]]\,|\,[[ [ k ] not]]\,|\,[[( s ) . o]]\\
+  [[k]], [[l]]               & ::= & [[o]]\,|\,[[ [ k , l ] ]]\,|\,[[fst k]]\,|\,[[snd k]]\,|\,[[not [ t ] ]]\,|\,[[x . ( s )]]\\
+  [[s]]                      & ::= & [[t * k]]
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \caption{Syntax of the Dual Calculus}
+  \label{fig:dc_syntax}
+\end{figure}
+It is similar to the $\LBMMT$-calculus, consisting of types,
+terms, coterms (continuations), and statements.  As types we have
+propositional variables, conjunction, disjunction, and negation.  Note
+that negation must be a primitive in the dual calculus rather than
+being defined.  Terms in the dual calculus are variables, the introduction
+form for conjunction called pairs denoted $[[<a,b>]]$, the introduction
+forms for disjunction denoted $[[inl t]]$ and $[[inr t]]$ which can
+be read as inject left and inject right respectively.  The next term
+is the introduction form of negation denoted $[[ [k] not]]$.  The final
+term is a binder for coterms and is the computational correspondent to
+the left-to-right rule.  It is denoted $[[(s).o]]$.  This can be thought
+of as running the statement $[[s]]$ and then routing its output to the output
+port $[[o]]$.  The continuations or coterms are the duals to terms and consist of covariables
+denoted $[[o]]$, copairs denoted $[[ [k,l] ]]$, the duals of inject-left and
+inject-right called first and second denoted $[[fst k]]$ and $[[snd k]]$ respectively.
+The next coterm is the elimination form of negation denoted $[[ not[t] ]]$ which
+can be thought of as the continuation which takes as input a term of a negative 
+formula and routes its output to some output port.  Finally, the dual to binding
+an output port is binding an input port.  This is denoted $[[x.(s)]]$.  Now statements
+are the introduction of a cut and are denoted $[[t * k]]$.  Computationally, we
+can think of this as a command which runs the term $[[t]]$ and routes its output
+to the continuation $[[k]]$ which continues the computation.
+
+The reduction rules for the dual calculus are in Fig.~\ref{fig:dc_red}
+and the typing rules are in Fig.~\ref{fig:dc_typing}.  
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \DCdruleEtaR{} & \DCdruleEtaL{}\\
+        &\\
+        \DCdruleBetaR{} & \DCdruleBetaL{}\\
+        &\\
+        \DCdruleBetaNeg{} & \DCdruleBetaCoProdOne{}\\
+        &\\
+        \DCdruleBetaCoProdTwo{} & \DCdruleBetaProdOne{}\\
+        &\\
+        \DCdruleBetaProdTwo{}
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Reduction Rules for the Dual Calculus}
+  \label{fig:dc_red}
+\end{figure}
+The reduction rules correspond to cut-elimination and can be thought
+of a simplification process on proofs.  Computationally they can be
+thought of as running programs with their continuations.  We derive
+three judgments from the typing rules for terms, coterms, and
+statements.  They have the following forms:
+\begin{center}
+  \begin{math}
+    \begin{array}{lll}
+      \text{Terms}:      & [[G |- D <- t -> A]]\\
+      \text{Coterms}:    & [[G |- D <- k <- A]]\\
+      \text{Statements}: & [[G |- D <- s]]\\
+    \end{array}
+  \end{math}
+\end{center}
+The syntax of judgments are different from Wadler's original syntax.
+Here we use the arrows to indicate data flow.  One meaning for the
+judgment $[[G |- D <- t -> A]]$ is that when all the variables in
+$[[G]]$ have an input in $[[t]]$ then computing $[[t]]$ either returns
+a value of type $[[A]]$ or routes its output to a covariable in
+$[[D]]$.  One meaning for the judgment $[[G |- D <- k <- A]]$ is when
+the continuation gets input for all the variables in $[[G]]$ and gets
+an input of $[[A]]$ it computes a value which is stored in an output
+port in $[[D]]$.  Finally, the meaning of $[[G |- D <- s]]$ is that
+after the $[[s]]$ is done computing it stores its output in an output
+port in $[[D]]$.  Each judgment has a logical meaning.  The typing
+rules for terms correspond to the right rules of LK, and the typing
+rules correspond to the left rules of LK, while the judgment for
+statements correspond to the cut rule of LK.
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        Terms:\\
+        \begin{array}{lll}
+          \DCdruletXXAxR{} & \DCdruletXXProd{}\\
+          &\\
+          \DCdruletXXCoProdl{} & \DCdruletXXCoProdr{}\\
+          &\\
+          \DCdruletXXNegR{} & \DCdruletXXIR{}
+        \end{array}\\
+        &\\
+        Coterms:\\
+        \begin{array}{lll}
+          \DCdrulectXXAxL{} & \DCdrulectXXCoProd{}\\
+          &\\
+          \DCdrulectXXProdFst{} & \DCdrulectXXProdSnd{}\\
+          &\\
+          \DCdrulectXXNegL{} & \DCdrulectXXIR{}
+        \end{array}\\
+        &\\
+        Statements:\\
+        \begin{array}{lll}
+          \DCdrulestXXCut{}
+        \end{array}
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \caption{Typing Rules for the Dual Calculus}
+  \label{fig:dc_typing}
+\end{figure}
+
+It has been said that Wadler invented the dual calculus when reading
+Curien and Herbelin's paper and found the subtraction operator
+confusing.  This was his reason for going with conjunction and
+disjunction instead of implication.  He knew that conjunction and
+disjunction are duals in a well-known way unlike implication and
+subtraction.  Then using negation, conjunction, and disjunction he 
+defined implication, $\lambda$-abstractions, and application.  Now
+the definition of these differs depending on which reduction strategy
+is used.
+\begin{definition}
+  \label{def:dc_cbv_implication}
+  Under CBN Implication, $\lambda$-abstractions, and application are defined in the following way:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[A]] \to [[B]]     & := & [[(-A) \/ B]]\\
+        \lambda [[x]].[[t]] & := & [[(inl ([x.((inr t) * o)] not) * o).o]]\\
+        [[t]]\,[[k]]       & := &  [[ [not [t], k] ]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \ \\
+  Under CBV Implication, $\lambda$-abstractions, and application are defined in the following way:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[A]] \to [[B]]     & := & [[-(A /\ -B)]]\\
+        \lambda [[x]].[[t]] & := & [[ [z.(z * fst (x.(z * snd(not [t]))))] not ]]\\
+        [[t]]\,[[k]]       & := &  [[not [<t, [k]not>] ]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+Notice that the two ways of defining implication in the previous
+definition are duals.  Wadler used the dual calculus to show that CBV
+is dual to CBN in \cite{Wadler:2003} just like Curien and Herbelin did
+in \cite{Curien:2000}.  However, in a follow up paper Wadler showed
+that his duality of the dual calculus into itself is an involution
+\cite{Wadler:2005}.  This was a step further than Selinger.  While
+Curien and Herbelin's duality was an involution they did not prove it.
+In his follow up paper Wadler also showed that the CBV
+$\lambda\mu$-calculus is dual to the CBN $\lambda\mu$-calculus by
+translating it into the dual calculus and taking the dual of the
+translation, and then translating back to the $\lambda\mu$-calculus.
+

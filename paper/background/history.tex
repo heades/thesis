@@ -1,0 +1,153 @@
+In this section we give a short history of type theory.  This history
+will set the stage for the later development by illustrating the
+reasons type theories exist and are important, and by giving some
+definitions of well-known theories that make for good examples in
+later sections.  We first start with the early days of type theory
+between the years of 1900 and 1960 during the days of Bertrand Russell
+and Alonzo Church.  They are as we consider them the founding fathers
+of type theory.  We then move to discuss more modern type theories.
+The time line depicted in Fig.~\ref{fig:timeline} gives a summary of
+the most significant breakthroughs in type theory.  The history given
+here follows this time line exactly.  This is not to be considered a
+complete history, but rather a glimpse at the highlights of the
+history of type theory.  This is the least amount of history one must
+know to fully understand where we have been and where this line of
+research may be heading.  
+
+\begin{figure}
+  \begin{chronology}[10]{1900}{2000}{1ex}{500pt}
+    \event{1901}{{\tiny Russell's Paradox}}
+    \event[1908]{1920}{{\tiny Simple Type Theory}}
+    \event{1920}{{\tiny Sch\"onfinkel - Combinatory Logic}}
+    \event{1927}{{\tiny Curry - Rediscovered Combinatory Logic}}
+    \event{1932}{{\tiny BHK-Interpretation }}
+    \event{1934}{{\tiny Curry - Combinators and Intuitionistic Logic }}
+    \event{1940}{{\tiny Church's Simple Theory of Types}}
+    \event[1958]{1967}{{\tiny System T}}
+    \event{1967}{{\tiny Automath}}
+    \event{1965}{{\tiny Tait - Connection between Cut Elimination and $\beta$-Reduction}}
+    \event{1969}{{\tiny Howard - STLC and Natural Deduction}}
+    \event[1971]{1974}{{\tiny Type:Type, Girard's Paradox, and System F}}
+    \event[1975]{1995}{{\tiny Intuitionistic Type Theory, LCF}}
+    \event{1978}{{\tiny NuPRL}}
+    \event{1980}{{\tiny Lambek - STLC and Cartesian Closed Categories}}
+    \event{1988}{{\tiny The Calculus of Constructions }}
+    \event{1990}{{\tiny The Calculus of (Co)Inductive Constructions }}
+    \event{1992}{{\tiny Pure Type Systems and The $\lambda\mu$-Calculus}}
+    \event[1993]{1994}{{\tiny Edinburgh Logical Framework and $\lambda\Delta$-Calculus}}
+  \end{chronology}
+  \caption{Time line of the History of Type Theory}
+  \label{fig:timeline}
+\end{figure}
+
+\subsection{The Early Days of Type Theory (1900 - 1960)}
+\label{subsec:the_early_days_of_type_theory}
+
+In the early 1900's Bertrand Russell pointed out a paradox in naive
+set theory.  The paradox states that if $H = \{ x\,|\,x \not \in x \}$
+then $H \in H \iff H \not \in H$.  The problem Russell exploits is
+that the comprehension axiom of naive set theory is allowed to use
+impredicative universal quantification. That is $x$ in the definition
+of $H$ could be instantiated with $H$, because we are universally
+quantifying over all sets.  Russell called this vicious circularity,
+and he thought it made no sense at all. Russell plagued by this
+paradox needed a way of eliminating it.  To avoid the paradox Russell,
+as he described in letters to Gottlob Frege \cite{Hintikka:1995,
+  Heijenoort:1967}, considers sets as having a certain level and such
+sets may only contain objects of lower level.  Actually, in his
+letters to Frege he gives a brief description of what came to be
+called the ramified theory of types which is a generalization of the
+type theory we describe here.  However, this less general type theory
+is enough to avoid Russell's logical paradoxes.  These levels can be
+considered as types of objects and so Russell's theory became known as
+simple type theory.  Now what does such a theory look like?  Elliott
+Mendleson gives a nice and simple definition of the simple type theory
+in \cite{Mendelson:2009} and we summarize this in the following
+definition.
+\begin{definition}
+  \label{def:simple_type_theory}
+  Let $U$ denote the universe of sets. We divide $U$ as follows:
+  \begin{itemize}
+  \item $J^1$ is the collection of individuals (objects of type $0$).
+  \item $J^{n+1}$ is the collection of objects of type $n$.
+  \end{itemize}
+\end{definition}
+As mentioned above the simple type theory avoids Russell's paradox.
+Lets consider how this is accomplished.  Take Russell's paradox
+and add types to it following Def.~\ref{def:simple_type_theory}.  We
+obtain if $H^n = \{ x^{n-1}\,|\,x^{n-1} \not \in x^{n-1} \}$ then $H^n
+\in H^n \iff H^n \not \in H^n$.  We can easily see that this paradox is
+false.  $H^n$ can only contain elements of type $n-1$ which excludes
+$H^n$.
+
+Russell's simple type theory reveals something beautiful.  It shows
+that to enforce a particular property over a collection of objects we
+can simply add types to the objects.  This is the common theme behind
+all type theories.  The property Russell wished to enforce was
+predicativity of naive set theory.  Throughout this paper we will see
+several different properties types can enforce.  While ramified type
+theory and simple type theory are the first defined type theories they
+however are not the formulation used throughout computer science.  The
+most common formulations used are the varying formulations and
+extensions of Alonzo Church's simply typed theory and Haskell Curry's
+combinatory logic \cite{Church:1940,Cardone:2006} 
+\footnote{While Church's simple type theory is the most common there
+  are some other type theories that have become very common to use and
+  extend.  To name a few: Thierry Coquand's Calculus of Constructions,
+  Per Martin-L\"of's Type Theory, Michel Parigot's
+  $\lambda\mu$-Calculus, and Philip Wadler's Dual Calculus.}.  
+
+In 1932 Alonzo Church published a paper on a set of formal postulates
+which he thought could be used to get around Russell's logical
+paradoxes without the need for types \cite{Church:1933}.  In this
+paper he defines what we now call the $\lambda$-calculus.  The
+original $\lambda$-calculus consisted of variables, predicates denoted
+$[[\x.t]]$, and predicate application denoted $[[t1 t2]]$.  See
+Appendix~\ref{subsec:the_lambda-calculus} for a complete definition of
+the $\lambda$-calculus.  It was not until Stephen Kleene and John Rosser were
+able to show that the $\lambda$-calculus was inconsistent as a logic
+when Church had to embrace types \cite{Kleene:1935}.  To over come the
+logical paradoxes shown by Kleene and Rosser, Church, added types to
+his $\lambda$-calculus to obtain the simply typed $\lambda$-calculus
+\cite{Church:1940,Andrews:2009}.  In the next section we give a
+complete definition of Church's simple type theory.  The reason we
+postpone the definition of the simply typed $\lambda$-calculus is
+because we provide a modern formulation of the theory.  So far we have
+summarized the beginnings of type theory starting with Russell, Curry,
+and Church.  Some really great references on this early history and more
+can be found in \cite{Cardone:2006,Coquand:2010b,Barendregt:1992}.  We now
+move on to modern type theory where we will cover a large part of type
+theory as it stands today.
+% subsection the_early_days_of_type_theory (end)
+
+\subsection{Modern Type Theory (1961 - Present)}
+\label{subsec:moderen_type_theory}
+In this section we take a journey through modern type theory by
+presenting various important advances in the field.  We will provide
+detailed definitions of each type theory considered.  The reader may
+have noticed that the only definition of type theory we have provide
+is that a type theory is any theory in which one must enforce a
+property by organizing the objects of the theory into collections
+based on a notion of type.  This is not at all a complete definition
+and this section will serve as a guide to a more complete definition.
+We do not give a complete general formal definition of a type theory,
+but we hope that it is discernible from this survey.  The first type
+theory we define is the modern formulation of the simply typed
+$\lambda$-calculus.
+
+\textbf{The simply typed $\lambda$-calculus.} \input{churchSTLC-inc}
+\input{currySTLC-inc}
+
+\textbf{G\"odel's system T.} \input{systemT-inc}
+
+\textbf{Girard-Reynold's System F.} \input{systemF-inc}
+
+\textbf{Stratified System F.} \input{SSF-inc}
+
+\textbf{System $\text{F}^\omega$.} \input{systemFomega-inc}  
+% subsection modern_type_theory (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

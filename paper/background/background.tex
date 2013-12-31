@@ -1,0 +1,1106 @@
+\include{lam-ott}
+\include{CHSTLC-ott}
+\include{CSTLC-ott}
+\include{combinatory_logic-ott}
+\include{T-ott}
+\include{F-ott}
+\include{SSF-ott}
+\include{Fw-ott}
+\include{lamu-ott}
+\include{lamd-ott}
+\include{lam-bar-mu-mu-tilde-ott}
+\include{dual-calculus-ott}
+\include{type-theory-ott}
+\include{CoC-ott}
+\include{CoC_sep-ott}
+
+\include{type-theory_inc}
+
+\section{A Brief History of Type Theory}
+\label{sec:the_history_of_type_theory}
+\input{history-inc}
+% section the_history_of_type_theory (end)
+
+\section{The Three Perspectives of Computation}
+\label{sec:the_three_perspectives}
+The Merriam-Webster dictionary defines ``computation'' as ``the act or
+action of computing : calculation'', ``the use or operation of a
+computer'', ``system of reckoning'', or ``an amount computed''.  These
+meanings suggest computation is nothing more than the process of
+mathematical calculation, but computation is so much more than this.
+In fact there are three perspectives of computation:
+    \begin{center}
+      \begin{tikzpicture}       
+        \node at (-1.87,3.0) {\text{Type Theory}};
+        \node at (-4.43,0.4) {\text{Logic}};
+        \node at (1.28,0.4) {\text{Category Theory}};
+        \node at (-1.94,1.4) {\huge $\cong$};
+        
+        %% The left most triangle.
+        \draw (-2,2.9) -- (-4, 0.3) -- (0,0.3) -- (-2,2.9);
+      \end{tikzpicture}    
+    \end{center}
+Each offering a unique position for studying computational structure.
+The figure above illustrates that type theory, category theory, and
+logic are equals where the symbol in the middle can be read as
+``isomorphic to.''  That is all three fields look very different, but
+can be treated as equivalent.  Type theories -- as we have seen above
+-- or typed $\lambda$-calculi are essentially the study of functions
+where types enforce some properties on these functions.  Now as it
+turns out category theory is basically the abstract study of
+mathematical structures using the abstraction of a function called a
+morphism.  Hence, in hindsight it is not surprising that type theory
+and category theory are equals each offering a unique perspective of
+computation.  Less intuitive is the connection between these two
+fields and that of logic.  Calling this beautiful relationship the
+three perspectives of computation is non-standard.  In fact I am
+proposing that this terminology become standard.  The standard names
+for this relationship is the Curry-Howard correspondence (or
+isomorphism) or the proofs-as-programs propositions-as-types
+correspondence.  The first pays tribute to Haskell Curry and William
+Howard. As we will see both Curry and Howard did have a hand in making
+this ternary relationship explicit, but they were not the only ones.
+Hence, this former name is unsatisfactory. The second only signifies
+the connection between logic and type theory; it does not mention
+category theory.  Thus, it is unsatisfactory.  Therefore, a better
+name for this relationship must become standard and I propose the
+three perspectives of computation.  We now move onto making this
+relationship more precise.  We only discuss the details of the
+correspondence of type theory and logic, and type theory and category
+theory.  The other correspondence between logic and category theory
+follows similarly. Furthermore, we do not go into complete detail of
+each of these correspondences, but we give plenty of references for
+the curious reader.
+
+\subsection{Type Theory and Logic}
+\label{subsec:type_theory_logic}
+Intuitionism began with Luitzen Brouwer.  Implicit in his work was an
+interpretation of the formulas of propositional and predicate
+intuitionistic logic as computational objects.  Brouwer's student
+Arend Heyting made this interpretation explicit for intuitionistic
+predicate logic against the advice of Brouwer.  Brouwer believed that
+intuitionistic logic should never be written down, but only exist in
+the mind of the mathematician.  Additionally, Andrey Kolmogorov
+defined this interpretation for intuitionistic propositional logic.
+This interpretation has become known as the
+Brouwer-Heyting-Kolmogorov-interpretation or the BHK-interpretation of
+intuitionistic logic.  Let's consider this interpretation for
+intuitionistic propositional logic with conjunction, disjunction, and
+implication.  We denote arbitrary computational constructions as $c$
+which can be built up from pairs of proof terms $(t_0,t_1)$, unary
+functions denoted by $\lambda$-abstractions, and injections for proof
+terms for sums $inl(t)$ for inject left and $inr(t)$ for inject right.
+The BHK-interpretation defined in Def.~\ref{def:bhk-interpretation}
+defines the assignment of proof terms using these constructs to
+formulas of intuitionistic propositional logic.
+
+\begin{definition}
+  \label{def:bhk-interpretation}
+  The BHK-interpretation:\\
+  \begin{center}
+          \begin{tabular}{lll}
+      $c\,r\,(A_1 \land A_2)$ & $\iff$ & $c = (t_0,t_1)$ such that $t_0\,r\,A_1$ and 
+            $t_1\,r\,A_2$.\\
+      $c\,r\,(A_1 \lor A_2)$  & $\iff$ & ($c = inl(t)$ and $t\,r\,A_1$) or ($c = inr(t)$ and 
+            $t\,r\,A_2$).\\
+      $c\,r\,(A_1 \to A_2)$   & $\iff$ & $c$ is a function, $\lambda x.t$, such that for any 
+            $d\,r\,A_1$ \\
+                              &     & $(\lambda x.t)d\,r\,A_2$.
+    \end{tabular}
+  \end{center}
+  We say a construction $c$ realizes $A$ $\iff$ $c\,r\,A$.  
+\end{definition}
+This was the first step towards the correspondence between type theory
+and logic.  The second was due to Curry.  We mentioned in
+Section~\ref{sec:the_history_of_type_theory} that Curry noticed that the
+types of the combinatory logic correspond to the formulas of
+intuitionistic propositional logic.  This suggested that combinatory
+logic can be seen as a proof assignment to propositional logic.  This
+was Curry's main contribution to this line of work.  The third step
+was due to Howard.  In \cite{Howard:1980} Howard revealed the
+correspondence between STLC and intuitionistic propositional logic in
+natural deduction style.  He essentially uses the BHK-interpretation
+to assign proof terms to natural deduction and then shows that this
+really is STLC.  It is a beautiful result.  More on this can be found
+in
+\cite{Griffin:1990,Howard:1980,Mints:2000,Murthy:1991,Sorensen:2006,Troelstra:1991}.
+Since these early steps the correspondence between logic and type
+theory has been developed quite extensively.  Reynolds' and Girard
+extended this correspondence to second order predicate logic using
+system F, and to higher order logic using system $\text{F}^\omega$ by
+Girard \cite{Wadler:2007,Girard:1971}.  We will see other advances to this
+correspondence with logic in Section~\ref{sec:dependent_type_theory} where
+we discuss dependent types.
+
+There is one requirement a type theory must meet in order for it to
+correspond to a logic.  We know from logic that proofs must be finite.
+So if computational constructs such as objects of type theory are to
+be considered proofs then they must be total (terminating).  That is
+they must always produce a result.  One part of the correspondence
+between type theory and logic is that the reduction rules of the type
+theory amount to the cut-elimination algorithm for the logic.  That is,
+reducing terms amounts to normalizing proofs.  The validity of the cut
+theorem -- states that any non-cut-free proof can always be reduced to
+a cut-free one -- implies consistency of the logic.  The cut theorem
+in type theory amounts to being able to prove that all terms in the
+type theory are terminating.  Speaking of cut elimination one might
+think that this correspondence only holds for sequent calculi, but one
+can normalize natural deduction proofs as well \cite{Prawitz:1965}.
+It is widely known that showing a type theory to be consistent --
+through the remainder of the paper we will use the words consistent
+and normalizing interchangeably -- can be a very difficult task, and
+often requires advanced mathematical tools.  In fact a lot of the work
+going into defining new type theories goes into showing it consistent.
+The type theories we have seen up till now are all consistent.  We
+will discuss in detail how to show type theories to be normalizing in
+Section~\ref{sec:metatheory_of_programming_languages}.
+% subsection type_theory_logic  (end)
+
+\subsection{Type Theory and Category Theory}
+\label{subsec:tt_ct}
+\input{category_theory-inc.tex}
+% subsection tt_ct (end)
+
+\subsection{The Impact of the Three Perspectives of Computation on Programming Languages}
+\label{subsec:three_perspectives_programming_languages}
+The reader may now be wondering what the benefits are of the three
+perspectives of computation if there are any at all.  The three
+perspectives of computation are all just that.  They provide a unique
+angle on computation. To paraphrase \cite{Zenger:1997} a good idea in
+one can be moved over to the others and it can be very ``fruitful'' to
+to look at the idea at each angle\footnote{Actually, Zenger was
+  talking about the connection between type theory and programming,
+  but we think it applies very nicely here.} .
+
+Type theory can be seen as a foundation of typed functional
+programming languages.  After all they are typed $\lambda$-calculi.
+Thus, the correspondence between type theory and logic results in
+programming becoming proving.  Programs are proofs and their types are
+the propositions they are proving.  This correspondence tells us
+exactly how to add verification to our programming languages.  We
+isolate in some way a consistent fragment of our typed functional
+programming language.  This fragment becomes the logic in which we
+prove properties of the programs definable within our programming
+language.  So the benefit of the correspondence between logic and type
+theory is that it allows one language for programming and stating and
+proving properties of these programs.  
+
+The first use of the correspondence between logic and type theory for
+programming and mathematics -- that is proving theorems -- was
+Automath.  Automath was a formal language much like a type theory
+devised by Nicolaas de Bruijn in the late sixties.  A large body of
+ideas in modern type theory came from Automath.  It allowed for the
+specification of complete mathematical theories and was equipped with
+a automated proof checker which was used to check the correctness of
+the formalized theories.  In fact Automath can be thought of as the
+grandfather to dependent type theory.  It was a wonderful line of work
+that resulted in a large number of great ideas.  One important thing
+was that de Bruijn independently from Howard stated the correspondence
+between intuitionistic propositional logic and type theory
+\cite{Sorensen:2006}.
+
+The correspondence between type theory and category theory has many
+benefits.  The biggest benefit is that category theory is a very
+abstract theory.  It allows one to interpret type theories in such
+a way that one can see the basic structure of the theory.  It has also
+been extensively researched so when moving over to category theory all
+the tools of the theory come along with it.  This makes complex
+properties about type theories more tractable.  It can also be very
+enlightening to take an idea and encode it in category theory.
+Develop the idea there and then move it over to type theory.  Often
+the complexities of syntax get in the way when working directly in
+type theory, but these problems do not exist in category theory.
+% subsection type_theories_as_programming_languages (end)
+% section type_theories_as_logics (end)
+
+\section{Classical Type Theory}
+\label{sec:classical_type_theory}
+Note that every type theory we have seen up till now has been
+intuitionistic.  That is they correspond to intuitionistic logic.  We
+clearly state that all the work Curry, Howard, de Bruijn, Girard, and
+others did was with respect to intuitionistic logic.  So a natural
+question is what about classical logic?
+
+\subsection{The $\lambda\mu$-Calculus}
+\label{subsec:the_lambda-mu-calculus}
+\input{lamu-inc.tex}
+% subsection the_lambda-mu-calculus (end)
+
+\subsection{The $\lambda\Delta$-Calculus}
+\label{subsec:the_lambda-delta-calculus}
+\input{lamd-inc.tex}
+% subsection the_lambda-delta-calculus (end)
+
+\subsection{Beautiful Dualities}
+\label{subsec:beautiful_dualities}
+There are some beautiful dualities present in classical logic.  We say
+a mathematical or logical construct is dual to another if there exists
+an involution translating each construct to each other.  An involution
+is a self invertible one-to-one correspondence.  That is if $i$ is an
+involution then $i(i(x)) = x$.  Now in classical logic negation is
+self dual, by De Morgan's laws conjunction is dual to disjunction and
+vice versa, and existential quantification is dual to universal
+quantification and vice versa.  These dualities lead to wonderful
+symmetries in Gentzen's sequent calculus.  One can see these
+symmetries in the rules for conjunction and disjunction.  They are
+mirror images of each other.  These beautiful dualities are not
+only found in classical logic, but even exist in intuitionistic logic.
+However, the dualities in intuitionistic logic are not well understood
+from a type theoretic perspective.
+
+\subsection{The Duality of Computation}
+\label{subsec:the_duality_of_computation}
+\textbf{The $\LBMMT$-calculus.} \input{lam-bar-mu-mu-tilde-inc}
+% subsection the_duality_of_computation (end)
+
+\subsection{The Dual Calculus}
+\label{subsec:the_dual_calculus}
+\input{dual-calculus-inc}
+% subsection the_dual_calculus (end)
+% subsection beautiful_dualities (end)
+% section classical_type_theory (end)
+
+\section{Dependent Type Theory}
+\label{sec:dependent_type_theory}
+All the type theories we have seen thus far consist of what are called
+``simple types''.  These are types which do not depend on terms.
+System $\Fw$ is an advance where there is a copy of STLC at the type
+level, but this is not a dependency, hence, system $\Fw$ is still
+simply typed.  So it is natural to wonder if it is beneficial to allow
+types to depend on terms.  The answer it turns out is yes. Much like
+the history of System F, dependent types came out of two fields:
+programming language research and mathematical logic.  As we mentioned
+above, the first practical application of the three perspectives of
+computation was a system called Automath which was pioneered by de
+Bruijn in the 1970's \cite{DeBruijn:1970}.  It also turns out that
+Automath's core type theory employed dependent types, and many claim
+it to be the beginning of the research area under the umbrella term
+``dependent type theory''.  Since the work of de Bruijn a large body of
+research on dependent type theory has been conducted.  We start with
+the work of Per Martin-L\"of.
+
+\subsection{Martin-L\"of's Type Theory}
+\label{subsec:martin-lofs_type_theory}
+\input{type-theory-inc}
+% subsection martin-lofs_type_theory (end)
+
+\subsection{The Calculus of Constructions}
+\label{subsec:the_calculus_of_constructions}
+\input{CoC-inc}
+
+\input{CoC_sep-inc}
+% subsection the_calculus_of_constructions (end)
+
+We have now introduced every type theory we need for the remainder of
+this article.  So far we have taken a trip down the rabbit hole of
+type theory,  from the early days of type theory all the way to modern
+type theory.  It is now time to see what we can use these for.
+Throughout the article so far we have mentioned the connection of type
+theory to programming language research.  In the next section we give
+more details of this connection.  We will also discuss several real
+world applications of the type theories we have discussed above.
+Following the next section will be the final section which discusses
+how to reason about type theories at the meta-level.  However, before
+discussing the design of programming languages we first give some open
+problems in dependent type theory.
+
+\textbf{Open Problems in Dependent Type Theory.}  In
+Section~\ref{sec:classical_type_theory} we introduced classical type
+theory.  Take note that every dependent type theory we have introduced
+in this section is intuitionistic. It turns out that very little
+research on classical dependent type theory has been done.  Gilles
+Barthe et al.  defined what they call classical pure type systems in
+\cite{Barthe:1997}.  What they did was take the $\Delta$-operator from
+the $\lambda\Delta$-calculus and added it to PTS'.  Then they did some
+preliminary meta-theory of classical pure type systems.  Another paper
+on classical dependent type theory was by Herbelin
+\cite{Herbelin:2005}, which showed that if one takes the extensional
+version of Martin-L\"of's type theory, full $\beta$-reduction, and the
+$\mu$-abstraction from the $\lambda\mu$-calculus then the type theory
+becomes inconsistent.  He then goes on to show that by choosing a
+particular reduction strategy like CBV or CBN this problem goes away.
+Paul Levy shows in \cite{Levy:2001} that taking Marin-L\"of's Type
+Theory and adding Peirce's law which when combined with the axiom of
+choice results in unwanted stuck terms.  He shows that this occurs
+with any chosen reduction strategy.  Nuria Brede extends Nuprl proof
+assistants core type theory called computational type theory with the
+$\mu$-operator from the $\lambda\mu$-calculus in \cite{Brede:2009}.
+They are not concerned with extracting computational content from the
+classical logic, but rather to just allow for proofs to reason using
+classical reasoning.  These are the only advances in classical
+dependent type theory that we know of.  This suggests that while the
+research on intuitionistic dependent type theory has been throughly
+investigated over the course of the last forty years, since Automath,
+classical dependent type theory has not.  This is startling, since
+classical type theory provides a lot of conveniences and beautiful
+structure.  Hence, we arrive at the following open problem\footnote{We
+  are not the only people concerned about this gap.  Robin Adams has
+  begun a four year program to try and solve this very problem.  Hugo
+  Herbelin has been working on a very promising idea called delimited
+  control.  I do not discuss his work here, because I have just
+  learned of it.}.
+\begin{openproblem}
+  Is it possible to formulate a classical dependent type theory which
+  is consistent with full $\beta$-reduction with the presence of
+  advanced typing features?
+\end{openproblem}
+\noindent
+We believe this is an achievable goal, but we are unsure of whether we
+may need to come up with new operators different from the
+$\mu$-abstraction and the $\Delta$-abstraction.  Another open
+problem presents itself with respect to the dual calculus.
+\begin{openproblem}
+  If we choose CBV as a reduction strategy and extend the dual
+  calculus with dependency what are the duals of dependent product?
+  It seems it would be a strong disjoint union over the output.  Is
+  this true?  This implies that the dual to disjoint union would be a
+  product type over the output. How does equality work in such a
+  language?
+\end{openproblem}
+% section dependent_type_theory (end)
+
+\section{Dependent Types, Proof Assistants, and Programming Languages}
+\label{sec:the_design_of_programming_languages}
+Type theories are wonderful core languages for programming languages.
+Many programming languages have been created based on type
+theories. Some examples are Haskell, OCaml, ML, ACL2, Isabelle, Coq,
+Agda, Epigram, Guru and Idris.  In fact there has been an entire book
+written on using type theory for programming by Benjamin Pierce
+\cite{Pierce:2002}.  Programming languages are defined with a goal in
+mind.  Some programming languages are general purpose languages and
+others are domain specific.  For example, ML, Haskell, Epigram, Idris,
+Guru and OCaml are examples of general purpose programming
+languages. ACL2, Isabelle, Coq, and Agda are more domain
+specific, because they are proof assistants. New programming languages
+are designed usually to provide new advancements in the field.  These
+advancements usually arise from programming language research or
+research on type theory.  In this section we discuss the current
+applications of dependent type theories in both proof assistants and
+as cores to general purpose functional programming languages.  We also
+discuss and give some motivation for using dependent types in the
+design of general purpose functional programming languages.
+
+The latest big advancement that has resulted in a surge of new
+language designs is using dependent types to verify properties of
+programming languages.  To cite just a few references
+\cite{Vytiniotis:2007,Brady:2011,Mcbride:2004,Altenkirch:2003,Norell:2007,Stump:2009,Licata:2005}.
+Now dependent types are very powerful and provide a rich environment
+for verification.  They also are very hard to reason about.  So it is
+natural to wonder if we can obtain some of the features of dependent
+type theories without having to adopt full dependent types.  This is
+the chosen path the inventors of Haskell took.  Tim Sheard showed that
+an extension of system $\Fw$ is a strong enough type theory to obtain
+some features that dependent types yield \cite{Sheard:2006}.  He
+defined a language called $\Omega$ which is based off of system $\Fw$.
+It has also been shown that system $\Fw$ extended with the natural
+numbers can be used to state some nice properties of programs.  One
+example is checking array out of bounds violations during type
+checking versus during run-time.  The kind of types which allow the
+encoding of these types of features are called indexed types and are
+investigated in \cite{Fogarty:2007,Zenger:1997}.  Indexed types are
+just types which depend on some data.  However, this data is in no way
+connected to the language of terms.  This directly implies some indexed
+types are indeed definable in system $\Fw$, while other indexed types
+may require an extension of the type language with other typing
+features, e.g. existential types, natural numbers, etc.  It has been
+conjectured that indexed types may be computationally as powerful as
+dependent types.  However, to make indexed types as strong as
+dependent types the resulting type system would be very cluttered.
+One would have to add a lot of new operators and duplications at the
+type level.  Another approach that provides dependent like features to
+a simple type theory are Algebraic Data Types (GADT) \cite{Xi:2003}.
+These have been added to Haskell \cite{Jones:2006}.  These provide a
+way of guarding recursive data types.  The main feature of GADTs are
+enforcement of local constraints.
+
+There are alternatives to type-based verification.  A large
+body of work has been done using model checking and testing to verify
+correctness of programs we cite only a few
+\cite{Andrews:2003,Aspinall:2007,Cousot:2007,Klein:2003,Yang:2006}.
+However, these are external tools while dependent types are part of
+the programming language itself. There has been some work on automated
+theorem proving using dependent types.  Alasdair Armstrong shows in
+\cite{Armstrong:2011} that automated theorem provers can work in
+harmony with dependent type theory.  One thing this accomplishes is
+that repetitive trivial proofs can be done automatically.  This work
+also shows that the research on dependent type theory benefits from
+the work on automated theorem proving.  We believe that dependent type
+theories are, however, the answer.  They are more or just as powerful as
+the alternatives in a concise and elegant fashion.  They can be used
+as the core of proof assistants, general purpose programming
+languages, domain specific languages, and an entire arsenal of
+features can be encoded in them.
+
+There are several well-known proof assistants based on dependent type
+theory.  The proof assistant Coq is based on an extension of Coquand's
+CoC called the Calculus of Inductive Constructions
+\cite{CoqRefMan:2008}.  Coq has been used to verify the correctness of
+very large scale mathematics and programs.  The proof of the four
+colour theorem has been fully checked in it \cite{Gonthier:2005}.  A C
+compiler has been formally verified with in Coq
+\cite{Leroy:2009,Leroy:2006}.  This project is called CompCert.  Agda
+is the second proof assistant based on dependent type theory.  The
+core of Agda is Martin-L\"of's Type Theory.  However, we are not aware
+of any large scale mathematics in Agda.  NuPrl is another proof
+assistant based on Martin-L\"of's Type Theory \cite{Constable:1986}.
+Finally, Twelf is a proof assistant based on a restricted version of
+Martin-L\"of's Type Theory called LF \cite{Pfenning:1999}.  More
+information on proof assistants can be found in \cite{Geuvers:2009}.
+These projects show that dependent types are powerful enough to do
+real-world large scale mathematics, but what about general purpose
+programming languages?
+
+The number one application of dependent types in general purpose
+programming languages is type based verification of programs.  Hongewi
+Xi has done a large amount of work on this topic.  He has shown that
+array bounds checks can be eliminated when using dependent types
+\cite{Xi:1998}.  They can be eliminated by defining the type of arrays
+to include their size.  Then all programs which manipulate arrays must
+respect the arrays size constraints which are encoded in the type.  Xi
+shows in \cite{Xi:1999c} that dependent types can be used to eliminate
+dead code in the form of unreachable branches of case-expressions.  He
+derives constraints based on the patterns and the type of the function
+being defined.  Then through type checking branches can actually be
+eliminated.  All of this and more can be found in Xi's thesis
+\cite{Xi:1999a}.  
+
+One promising idea is to take a very expressive dependent type theory
+and add general recursion and $\mathsf{Type:Type}$.  Then, either
+identify through a judgment or syntactically identify a sublanguage of
+the dependent type theory which is consistent.  This consistent
+sublanguage will correspond to a logic by the three perspectives of
+computation, and is called the proof fragment.  Garrin Kimmel et
+al. show in \cite{Kimmel:2012} that crafting such a type theory where
+the proof fragment is syntactically separated from the general purpose
+programming language can be done and provides interesting features.
+The language they use is called $\text{Sep}^3$ which stands for
+Separation of Proof and Program. Kimmel uses $\text{Sep}^3$ to verify
+the correctness of a call-by-value $\lambda$-calculus interpreter.
+The unique feature of $\text{Sep}^3$ is that it allows for constraints
+to be verified about non-terminating programs.  All the proof
+assistants we have seen are all terminating.  That is, all programs one
+writes in them are terminating.  This makes it very difficult to
+formalize and verify properties of non-terminating programs.  However,
+$\text{Sep}^3$ is a language which allows for non-terminating programs
+to be defined in the programming language and even be mentioned in
+propositions.  This is called freedom of speech.  It turns out that
+the proof fragment can be completely erased after type checking.  This
+means that proofs are really just specificational.  This erasing is
+done by defining a meta-level function called the eraser
+\cite{Mishra-Linger:2008}.  The erasure was investigated in a similar
+setting as $\text{Sep}^3$ in \cite{Sjoberg:2012}.  It is then applied
+to a program after being type checked.  This will make running
+programs more efficient.  $\text{Sep}^3$ also contains
+$\mathsf{Type:Type}$ this axiom while inconsistent is wonderful for
+programming.  It is shown in \cite{Cardelli-1986} that this axiom can
+be used to encode lots of extra programming features.
+$\mathsf{Type:Type}$ is also very useful for generic programming.
+This axiom, which allows for large eliminations, that is types defined by
+recursion, allow for the definition of very generic programs.  An
+example is a completely generic zipwith function.  This function would
+take a function of arbitrary arity, two list of equal length, and
+returns a list of the same lengths as the input, where the operator is
+applied to the two lists pairwise.  This has actually been done in
+$\text{Sep}^3$ although it was not published.
+
+All this work shows that dependent types need to be in main stream
+programming.  They provide ways to fully verify the correctness of
+programs thus eliminating bugs.  One unique feature of dependent types
+are that they are first class citizens of the programming language.
+This allows for programmers to prove properties of their programs in
+the same language they wrote them in,  thus eliminating the need to
+learn and use external tools.  Dependent type theories correspond to
+logics by the three perspectives of computation, and can be used to
+proof check large scale mathematics.  Dependent types are the future
+of programming languages.
+% section the_design_of_programming_languages (end)
+
+\section{Metatheory of Type Theories}
+\label{sec:metatheory_of_programming_languages}
+In this section we discuss how to reason about type theories at the
+meta-level.  There are many properties that one might wish to prove
+about a type theory, but the property we will concentrate on is
+consistency of type theories.  The mathematical tools we discuss in
+this section have many applications not just consistency.  However,
+proving consistency gives a clear view of how to use these
+mathematical tools.
+
+We have said several times that if a type theory is to correspond to a
+logic then it must be consistent.  Consistency tells us that if a
+theorem can be proven, then it is true with respect to some semantics.
+To show a type theory consistent it is enough to show that it is
+weakly normalizing \cite{Sorensen:2006}.
+\begin{definition}
+  \label{def:weak_norm}
+  A type theory is \emph{weakly normalizing} if and only for all terms $t$
+  there exists a term $t'$ such that $t \redto^* t'$ and there does
+  not exists any term $t''$ such that $t' \redto t''$.  We
+  call $t'$ a \emph{normal form}.
+\end{definition}
+\noindent
+Loosely put, based on the three perspectives of computation terms
+correspond to proofs and reduction corresponds to cut-elimination.  We
+know that if all proofs can be normalized using cut then we know that
+the logic is consistent.  Now Gentzen actually showed that, if all
+proofs can be normalized using cut elimination no matter what order
+the cuts are done, then the logic is consistent, but weak
+normalization still leaves open the possibility that a proof might
+have an infinite reduction sequence. Based on this fact some require
+their type theories to be strongly normalizing.
+\begin{definition}
+  \label{def:strong_norm}
+  A type theory is \emph{strongly normalizing} or \emph{terminating}
+  if and only for all terms $t$ there are no infinite descending
+  chains beginning with $t$.  That is, it is never the case that $t
+  \redto t_1 \redto t_2 \redto \cdots$.
+\end{definition}
+\noindent
+Strong normalization gives a tighter correspondence with cut
+elimination then weak normalization, because there are no chances of
+an infinite cut-elimination process \cite{Sorensen:2006}.  However,
+weak normalization is enough.  We just need to know that a term can be
+normalized.
+
+It turns out that for all simply typed type theories weak
+normalization actually implies strong normalization
+\cite{Sorensen:1997}.  This turns out to be quite a profound result,
+because it is harder to prove strong normalization than it is weak
+normalization.  If weak implies strong then we never have to do the
+harder proof.  There is a long standing conjecture about weak
+normalization implying strong normalization called the
+Barendregt-Geuvers-Klop conjecture \cite{Sorensen:2006}.  They
+conjectured that for any PTS weak normalization implies strong
+normalization.  Now we already know that weak normalization implies
+strong normalization for simply typed theories.  These are the class
+of PTS' where their set of rules are a subset of
+$\{(*,*),(\Box,\Box),(\Box,*),(\Box,\Box)\}$.  However, it is unknown
+whether weak implies strong normalization for the class of dependent
+PTS'.
+\begin{openproblem}
+  Are there any dependent type theories where weak normalization
+  implies strong normalization?
+\end{openproblem}
+
+G\"odel's famous theorems tell us that to prove consistency of a
+theory one must use a more powerful theory than the one that is being
+proven consistent.  Thus, to reason about a type theory we translate
+the theory into a more powerful theory.  We call this more powerful
+theory the semantics of the type theory and it can be thought of as
+giving meaning to the type theory.  The most difficult task is
+choosing what semantics to give to the type theory under
+consideration.  Throughout the remainder of this section we summarize
+several possible semantics to give to type theories.  
+
+\subsection{Hereditary Substitution}
+\label{subsec:hereditary_substitution}
+In \cite{Prawitz:1965} Prawitz shows that using a lexicographic
+combination of the structural ordering on intuitionistic propositional
+formulas and the structural ordering on proofs, propositional
+intuitionistic logic can be proven consistent.  This implies that STLC
+can be proven consistent using the same ordering.  Indeed it can be
+\cite{Girard:1989,Amadio:1998,Levy:1976}.  These proofs have a
+particular structure and are completely constructive.  Kevin Watkins
+was the first to make their constructive content explicit
+\cite{Watkins:2004}.  He examined these proofs and defined a function
+called the hereditary substitution function, which captures the
+constructive content of these proofs.  Following Watkins, Robin Adams
+did the same for dependent types \cite{Adams:2004}.
+
+Intuitively, the hereditary substitution function is just like
+ordinary capture avoiding substitution except that if as a result of
+substitution a new redex is introduced, that redex is then recursively
+reduced.  We write $[t/x]^{T} t'$ for hereditarily substituting $t$ for
+$x$ of type $T$ into $t'$.  Let's consider an example.
+\begin{example}
+  \label{ex:hs}
+  Consider the terms $t \equiv \lambda x:X.x$ and $t' \equiv (y z)$.
+  Then ordinary capture avoiding substitution would have the following
+  result: $$ [t/y]t' = (\lambda x:X.x) z. $$ However, hereditary
+  substitution has the following result: $$[t/y]^{X \to X} t' = z,$$
+  because hereditary substitution first capture avoidingly substitutes
+  $t$ for $y$ in $t'$ and examines the result. It then sees that a new
+  redex $(\lambda x:T.x) z$ has been created.  Then it recursively
+  reduces this redex as follows: $[z/x]^X x.$
+\end{example}
+Hereditary substitution is important for a number of reasons.  It was
+first used as a means to conduct the metatheory of the type theory LF
+which is the core of the proof assistant Twelf.  LF is based on
+canonical forms.  That is, the language itself does not allow any
+non-normal forms to be defined.  That is $(\lambda x:T.t)\,t'$ is not
+a valid term in LF.  Thus, their operational semantics cannot use
+ordinary capture avoiding substitution, because as we saw in the above
+example, we can substitute normal forms into a normal form and end up
+with a non-normal form.  So Watkins used hereditary substitution
+instead of capture avoiding substitution in their operational
+semantics \cite{Watkins:2004}. Adams extended this work to dependent
+types in his thesis \cite{Adams:2004}.  We will show how to use
+hereditary substitution to show weak normalization.  Let's consider how
+to define hereditary substitution for STLC.
+
+\subsection{Hereditary Substitution for STLC}
+\label{subsec:hereditary_substitution_for_stlc}
+The definition of the hereditary substitution depends on a
+partial function called $ctype$.  It is defined by the following definition.
+\begin{definition}
+  \label{def:ctype_stlc}
+  The partial function $ctype$ is defined with respect to a fixed type $T$
+  and has two arguments, a free variable $x$, and a term $t$, where $x$
+  may be free in $t$.  We define $ctype$ by induction on the form of $t$.
+  \begin{itemize}
+  \item[] $ctype_T(x,x) = T$
+  \item[] $ctype_T(x,t_1\ t_2) = T''$
+  \item[] \ \ \ \ Where $ctype_T(x,t_1) = T' \to T''$.
+  \end{itemize}
+\end{definition}
+\noindent
+The $ctype$ function simply computes the type of a term in weak-head normal form.
+The following lemma states two very important properties of $ctype$.  We
+do not include any proofs here, but they can be found in \cite{Eades:2011}.
+\begin{lemma}
+  \label{lemma:ctype_props_stlc}
+  \begin{itemize}
+  \item[i.] If $ctype_T(x,t) = T'$ then $head(t) = x$ and $T'$ 
+    is a subexpression of $T$.
+    
+  \item[ii.] If $\Gamma,x:T,\Gamma' \vdash t:T'$ and $ctype_T(x,t) = T''$ then
+    $T' \equiv T''$.   
+  \end{itemize}
+\end{lemma}
+\noindent
+The purpose of $ctype$ is to detect when a new redex will be created in the
+definition of the hereditary substitution function. We define the
+hereditary substitution function next.
+\begin{definition}
+  \label{def:hereditary_substitution_function_stlc}
+  The following defines the hereditary substitution function for STLC.  It
+  is defined by recursion on the form of the term being substituted
+  into and the cut type $T$.
+  \begin{itemize}
+  \item[] $[t/x]^T x = t$
+  \item[] $[t/x]^T y = y$
+  \item[] \ \ \ \ Where $y$ is a variable distinct from $x$.
+  \item[] $[t/x]^T (\lambda y:T'.t') = \lambda y:T'.([t/x]^T t')$
+  \item[] $[t/x]^T (t_1\ t_2) = ([t/x]^T t_1)\ ([t/x]^T t_2)$
+  \item[] \ \ \ \ Where $([t/x]^T t_1)$ is not a $\lambda$-abstraction, or both $([t/x]^T t_1)$
+    and $t_1$ are $\lambda$-abstractions.
+  \item[] $[t/x]^{T} (t_1\ t_2) = [([t/x]^{T} t_2)/y]^{T''} s'_1$
+  \item[] \ \ \ \ Where $([t/x]^{T} t_1) \equiv \lambda y:T''.s'_1$ 
+    for some $y$, $s'_1$, and $T''$ and $ctype_T(x,t_1) = T'' \to T'$.
+  \end{itemize}
+\end{definition}
+We can see that every case of the previous definition except the
+application cases are identical to the definition of capture-avoiding
+substitution.  This is intentional, because the hereditary
+substitution function should only differ when a new redex is created
+as a result of a capture-avoiding substitution.  The creation of a new
+redex as a result of a capture-avoiding substitution can only occur
+when substituting into an application with respect to STLC.  
+
+One thing to note about our definition of the hereditary substitution
+function defined above is that we define it in terms of all terms not
+just normal forms.  This was first done by Harley Eades and Aaron
+Stump in \cite{Eades:2010} in their work on using the hereditary
+substitution function to show normalization of Stratified System F.
+Secondly, the definition of the hereditary substitution function is
+nearly total by definition.  In fact it is only the second case of
+application that prevents totality from being trivial.  Now if this
+case was used we know that $ctype_T(x,t_1) = T'' \to T'$, and by
+Lemma~\ref{lemma:ctype_props_stlc}, $T'' \to T'$ is a subexpression of
+$T$. This implies that $T''$ is a strict subexpression on $T$.  So in
+this case the type decreases by the strict subexpression ordering.  In
+fact we prove totality of the hereditary substitution function for
+STLC using the lexicographic combination $(T, t)$ of the strict
+subexpression ordering.  This shows that $ctype$ reveals information
+about the types of the input terms to the hereditary substitution
+function, which allows us to use the well-founded ordering to prove
+properties of the hereditary substitution function.  
+
+We do not want to underplay the importance of the ordering on types.
+In order to be able to even define the hereditary substitution
+function and prove that it is indeed a total function one must have an
+ordering on types.  This is very important.  Now in the case of STLC
+the ordering is just the subexpression ordering, while for other
+systems the ordering can be much more complex.  For some type theories
+no ordering exists on just the types.  Whatever ordering we use for
+the types $ctype$ brings this ordering into the definition of the
+hereditary substitution function.
+
+How do we know when a new redex was created as a result of a
+capture-avoiding substitution?  A new redex was created when the
+hereditary substitution function is being applied to an application,
+and if the the hereditary substitution function is applied to the head
+of the application and the head was not a $\lambda$-abstraction to
+begin with, but the result of the hereditary substitution function was
+a $\lambda$-abstraction.  If this is not the case then no redex was
+created.  The first case for applications in the definition of the
+hereditary substitution function takes care of this situation.  Now
+the final case for applications handles when a new redex was created.
+In this case we know applying the hereditary substitution function to
+the head of the application results in a $\lambda$-abstraction and we
+know $ctype$ is defined.  So by
+Lemma~\ref{lemma:ctype_props_stlc} we know the head of $t_1$ is $x$ so
+$t_1$ cannot be a $\lambda$-abstraction.  Thus, we have created a new
+redex so we reduce this redex by hereditarily substituting 
+$[t/x]^T t'_2$ for for $y$ of type $T''$ into the body of the
+$\lambda$-abstraction $t'_1$.  We use hereditary substitution here
+because we may create more redexes as a result of reducing the
+previously created redex.
+
+In STLC the only way to create redexes is through hereditarily
+substituting into the head of an application.  This is because
+according to our operational semantics for STLC (full
+$\beta$-reduction) the only redex is the one contracted by the $\beta$-rule.  If our
+operational semantics included more redexes we would have more ways to
+create redexes and the definition of the hereditary substitution
+function would need to account for this.  Hence, the definition of the
+hereditary substitution function is guided by the chosen operational
+semantics.  
+
+The hereditary substitution function has several properties.  First
+it is a total and type preserving function.
+\begin{lemma}
+  \label{lemma:total}
+  Suppose $\Gamma \vdash t : T$ and $\Gamma, x:T, \Gamma' \vdash t':T'$. Then
+  there exists a term $t''$ such that $[t/x]^T t' = t''$ and $\Gamma,\Gamma' \vdash t'':T'$.
+\end{lemma}
+\noindent
+The next property is normality preserving, which states that when the
+hereditary substitution function is applied to normal forms then the
+result of the hereditary substitution function is a normal form.  We state
+this formally as follows:
+\begin{lemma}
+  \label{corollary:normalization_preserving}
+  If $\Gamma \vdash n:T$ and $\Gamma, x:T \vdash n':T'$ then there exists a normal term $n''$ 
+  such that $[n/x]^T n' = n''$.
+\end{lemma}
+\noindent
+The final property is soundness with respect to reduction. 
+\begin{lemma}
+  \label{lemma:soundness_reduction}
+  If $\Gamma \vdash t : T$ and $\Gamma, x:T, \Gamma' \vdash t':T'$ then
+  $[t/x]t' \redto^* [t/x]^T t'$.
+\end{lemma}
+\noindent
+Soundness with respect to reduction shows that the hereditary
+substitution function does nothing more than what we can do with the
+operational semantics and ordinary capture avoiding substitution.  All
+of these properties should hold for any hereditary substitution
+function, not just for STLC.  They are correctness properties that must
+hold in order to use the hereditary substitution function to show
+normalization.
+
+We can now prove normalization of STLC using the hereditary substitution
+function.  We first define a semantics for the types of STLC.
+\begin{definition}
+  \label{def:interpretation_of_types_stlc}
+  First we define when a normal form is a member of the interpretation of type $T$ in context $\Gamma$
+  \begin{center}
+    \begin{math}
+    n \in \interp{T}_\Gamma \iff \Gamma \vdash n:T,
+  \end{math}
+  \end{center}
+  and this definition is extended to non-normal forms in the following way
+  \begin{center}
+    \begin{math}
+    t \in \interp{T}_\Gamma \iff t \normto n \in \interp{T}_\Gamma,
+  \end{math}
+  \end{center}
+  where $t \normto t'$ is syntactic sugar for $t \redto^* t' \not \redto$.
+\end{definition}
+\noindent 
+The interpretation of types was inspired by the work of Prawitz in
+\cite{Prawitz:2005} although we use open terms here where he used
+closed terms.  Next we show that the definition of the interpretation
+of types is closed under hereditary substitutions.
+\begin{lemma}
+  If $n' \in \interp{T'}_{\Gamma,x:T,\Gamma'}$, $n \in \interp{T}_\Gamma$, then 
+  $[n/x]^T n' \in \interp{T'}_{\Gamma,\Gamma'}$.
+  
+  \label{lemma:interpretation_of_types_closed_substitution_stlc}
+\end{lemma}
+\begin{proof}
+  By Lemma~\ref{lemma:total} we know there exists a term $\hat{n}$ 
+  such that $[n/x]^T n' = \hat{n}$ and $\Gamma,\Gamma' \vdash \hat{n}:T'$ and by 
+  Lemma~\ref{corollary:normalization_preserving} $\hat{n}$ is normal.  Therefore,
+  $[n/x]^T n' = \hat{n} \in \interp{T'}_{\Gamma,\Gamma'}$.
+\end{proof}
+\noindent
+Finally, by the definition of the interpretation of types the
+following result implies that STLC is normalizing.
+\begin{thm}
+  If $\Gamma \vdash t:T$ then $t \in \interp{T}_\Gamma$.
+  \label{thm:soundness_stlc}
+\end{thm}
+
+\begin{corollary}
+  If $\Gamma \vdash t:T$ then $t \normto n$.
+\end{corollary}
+
+This proof method has been applied to a number of different type
+theories.  Eades and Stump show that SSF is weakly normalizing using
+this proof technique in \cite{Eades:2010}.  The advantage of
+hereditary substitution is that it shows promise of being less complex
+than other normalization techniques.  This means that it would be
+easier to formalize in proof assistants.  However, there is a big
+drawback of hereditary substitution and that is it is not known how
+many type theories can be proven normalizing using it.  Which leads us
+to a few open problems.
+\begin{openproblem}
+  Can system T be proven normalizing using hereditary substitution?
+\end{openproblem}
+\noindent
+The solution this open problem has alluded us for quite
+sometime.  It seems as if it would be a straightforward extension of
+the proof of normalization for SLTC, but the natural number recursor
+makes it very hard to put an ordering on the types.  The following
+open problem is even harder to solve.
+\begin{openproblem}
+  Can system F be proven normalizing using hereditary substitution?
+\end{openproblem}
+\noindent
+Clearly no natural number ordering will exist for the types of system
+F.  If one did then we could prove consistency of second order
+arithmetic using a natural number ordering.  We know this is
+impossible.  However, it may be possible to use a semantic technique
+to prove the properties of the hereditary substitution function.  We
+are currently pursuing the idea to use categorical models to prove the
+properties of the hereditary substitution function for system F.  In
+\cite{Joachimski:1999} Felix Joachimski and Ralph Matthes define a
+similar function to hereditary substitution and concludes weak and
+strong normalization of STLC, system T, and system F.  It maybe
+possible to adopt some of their work to hereditary substitution to be
+able to solve the previous two open problems.
+
+Hereditary substitution can be used to maintain canonical forms and
+even prove weak normalization of predicative simple type theories.  It
+can also be used as a normalization function.  A normalization
+function is a function that when given a term it returns the normal
+form of the input term.  Andreas Abel and Dulma Rodriguez used
+hereditary substitution in this manner in \cite{Abel:2008}.  They used
+it to normalize types in a type theory with type level computation
+much like system $\Fw$.  In that paper the authors were investigating
+subtyping in the presence of type level computation.  They found that
+hereditary substitution could be used to normalize types and then do
+subtyping.  This allowed them to only define subtyping on normal
+types.  Similar to their work Chantal Keller and Thorsten Altenkirch
+use hereditary substitution to define a normalizer for STLC and
+formalize their work in Agda \cite{Keller:2010}.
+% subsection hereditary_substitution_for_stlc (end)
+% subsection hereditary_substitution (end)
+As we mentioned above the drawback of hereditary substitution is that
+it does not scale to richer type theories.  Thus, to prove consistency
+of more advanced type theories we need another technique that does
+scale.
+
+\subsection{Tait-Girard Reducibility}
+\label{subsec:tait-griard_reduciblity}
+The Tait-Girard reducibility method is a technique for showing weak and
+strong normalization of type theories.  It originated from the work of
+William Tait.  He showed strong normalization of system T using an
+interpretation of types based on set theory with comprehension.  He
+called this interpretation saturated sets.  Later, John Yves Girard,
+against popular belief\footnote{It has been said that while Girard was
+  working on extending Tait's method other researchers, notably
+  Stephen Kleene, criticized him for trying.  They thought it was an
+  impossible endeavor.}, extended Tait's method to be able to prove
+system F strongly normalizing.  He called his method reducibility
+candidates. The reducibility candidates method is based on second order
+set theory with comprehension.  It turns out that the genius work of
+Girard extends to a large class of type theories. The standard
+reference on all the topics of this section is Girard's wonderful book
+\cite{Girard:1989}.  We will summarize how to show strong
+normalization of STLC using Tait's method and then show how this is
+extended to system F.  We leave all proofs to the interested reader,
+but they can be found in \cite{Girard:1989}.
+
+\input{sn_stlc-inc}
+
+\input{sn_F-inc}
+% subsection tait-Girard_reducibility (end)
+
+\subsection{Logical Relations}
+\label{subsec:logical_relations}
+Logical relations are straightforward extensions of reducibility sets.
+They can be thought of as unary predicates defined by recursion on
+their parameter.  Usually, this is the type.  They are always closed
+under eliminations and a usually defined in the same way as we defined
+the interpretation of types for STLC and system F.  They are called
+``logical'', because of the fact that they are closed under
+eliminations.  This allows us to prove properties that are not
+preserved by elimination.  Termination is an example of this.  Logical
+relations are not required to be unary.  However, we have not seen any
+applications of $n$-arity logical relations where $n > 2$.  Logical
+relations have been used in a wide range of applications, from
+consistency proofs all the way to encryption.
+
+Andrew Pitts used logical relations to show when two inhabitants of
+the disjoint union type are equivalent in \cite{Pitts:1998}.  Karl
+Crary gives a nice introduction to logical relations in
+\cite{Pierce:2004} where he shows how to solve the equivalence problem
+for terms.  The equivalence problem is being able to decide
+operational equivalence of terms.  Eijiro Sumii and Benjamin Pierce
+use logical relations to prove properties of a type theory used for
+encryption in \cite{Sumii:2003}.  They prove behavior equivalences
+between terms of this calculus which depend on encryption.  One such
+property is to show that a particular piece of data a program is
+keeping secret from attacks is never recovered by some attacker.  This
+property can be formalized as a behavior equivalence.  They then use
+logical relations to prove such equivalences.
+
+\subsubsection{Step-Indexed Logical Relations}
+\label{subsec:step_indexed_logical_relations}
+There is one last extension to logical relations.  So far we have
+introduced the reducibility method and its extension to reducibility
+candidates.  We briefly summarized the fact that reducibility
+candidates gives rise to logical relations.  However, we have used
+logical relations only to prove properties about terminating theories.
+Can logical relations be used to reason about non-terminating type
+theories?  There is a partial solution to this question and an
+existing open problem. 
+
+Adding the ability to define general recursive types to a type theory
+results in the theory being non-terminating.  That is, one can define a
+diverging term.  In the field of programming languages recursive
+types are a very powerful feature.  One property one may wish to prove
+about a type theory with recursive types is contextual equivalence of
+terms.  Logical relations are usually used to prove such a property,
+but they turn out not to work in the presence of recursive types.
+This was an outstanding open problem until Andrew Appel and David
+McAllester were able to find an extension of logical relations called
+step-indexed logical relations.
+
+Step-indexed models were first introduced by Andrew Appel and David
+McAllester in \cite{Appel:2001} as the semantics of recursive types.
+At the time it was not known how to model recursive types without
+using complex machinery like domain theory.  Later, Amal Ahmed
+extended the earlier work by Appel and McAllester and was able to
+prove contextual equivalence of terms of system F with recursive types
+\cite{Ahmed:2006}.  Since this earlier work a number of applications
+of step-indexed logical relations have been conducted, e.g.
+\cite{Acar:2008,Ahmed:2009,Neis:2009,Vytiniotis:2009}.  One drawback
+of using step-indexed logical relations is that the proofs usually
+involve tedious computations of step indices.  In \cite{Dreyer:2010}
+Derek Dreyer et al. introduce a way of encapsulating the step index in
+such away that the index no longer needs to be present in the model.
+
+The major application of step-indexed logical relations have so far been
+meta-theoretic results such as type safety, contextual equivalence or
+other safety results. It was not until 2012 when they were actually
+used to prove normalization of typed $\lambda$-calculi.  Chris
+Casinghino et al. in \cite{Casinghino:2012} developed a type theory
+with general recursion and recursive types with a collapsed syntax.
+This is a very interesting development, because they use modal
+operators to separate a logical world (only terminating programs) from
+a programmatic world within the same language.  They then prove
+normalization of the logical world using step-indexed logical relations.
+
+We briefly describe what step-indexed logical relations are through an
+example.  We extend the CBV STLC with iso-recursive types and then try
+to prove type safety of this extension using logical relations.  We
+will run into trouble and will be forced to use step-indexed logical
+relations instead.
+
+\input{step_index_lr}
+% subsubsection step_indexed_logical_relations (end)
+% subsection logical_relations (end)
+% section metatheory_of_programming_languages (end)
+
+
+%% \appendix
+%% \newpage
+%% \section{Type Theories}
+%% \label{sec:type_theories}
+%% \subsection{The $\lambda$-Calculus}
+%% \label{subsec:the_lambda-calculus}
+%% \Lamall{}
+%% % subsection the_lambda-calculus (end)
+
+%% \newpage
+%% \subsection{Church-Style Simply Typed $\lambda$-Calculus}
+%% \label{subsec:church_style_simply_typed_lambda-calculus}
+%% \CHSTLCall{}
+%% % subsection church_style_simply_typed_lambda-calculus (end)
+
+%% \newpage
+%% \subsection{Curry-Style Simply Typed $\lambda$-Calculus}
+%% \label{subsec:curry_style_simply_typed_lambda-calculus}
+%% \CSTLCall{}
+%% % subsection curry_style_simply_typed_lambda-calculus (end)
+
+%% \newpage
+%% \subsection{Combinatory Logic}
+%% \label{subsec:combinatory_logic}
+%% \Comball{}
+%% % subsection combinatory_logic (end)
+
+%% \newpage
+%% \subsection{G\"odel's System T}
+%% \label{subsec:godels_system_t}
+%% \Tall{}
+%% % subsection godels_system_t (end)
+
+%% \newpage
+%% \subsection{Girard/Reynold's System F}
+%% \label{subsec:girard-reynolds_system_f}
+%% \Fall{}
+%% % subsection girard-reynolds_system_f (end)
+
+%% \newpage
+%% \subsection{Stratified System F}
+%% \label{subsec:stratified_system_f}
+%% \SSFall{}
+%% % subsection girard-reynolds_system_f (end)
+
+%% \newpage
+%% \subsection{System $\text{F}^\omega$}
+%% \label{subsec:system_fw}
+%% \Fwall{}
+%% % subsection system_fw (end)
+
+%% \newpage
+%% \subsection{The $\lambda\mu$-Calculus}
+%% \label{subsec:lamu_all}
+%% \Lamuall{}
+%% % subsection lamu_all (end)
+
+%% \newpage
+%% \subsection{The $\lambda\Delta$-Calculus}
+%% \label{subsec:lamd_all}
+%% \Lamdall{}
+%% % subsection lamd_all (end)
+
+%% \newpage
+%% \subsection{The $\LBMMT$-Calculus}
+%% \label{subsec:lbmmt_all}
+%% \LBMMTall{}
+%% % subsection lbmmt_all (end)
+
+%% \newpage
+%% \subsection{The Dual-Calculus}
+%% \label{subsec:dc_all}
+%% \DCall{}
+%% % subsection dual_calculus_all (end)
+
+%% \newpage
+%% \subsection{Martin-L\"of's Type Theory}
+%% \label{subsec:tt_all}
+%% \TTall{}
+%% % subsection tt_all (end)
+
+%% \newpage
+%% \subsection{The Calculus of Constructions}
+%% \label{subsec:coc_all}
+%% \CoCall{}
+%% % subsection coc_all (end)
+
+%% \newpage
+%% \subsection{The Separated Calculus of Constructions}
+%% \label{subsec:coc_sep_all}
+%% \CoCSall{}
+% subsection coc_sep_all (end)
+% section type_theories (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: ../thesis.tex
+%%% End: 

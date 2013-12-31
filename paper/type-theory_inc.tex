@@ -1,0 +1,65 @@
+% Theorems
+\newcounter{thm}
+%% Resets the thm counter at the start of each section.
+\makeatletter
+\@addtoreset{thm}{section}
+\makeatother
+%% This makes sure \ref has the section, subsection, and thm number.
+\def\thethm{\thesubsection.\arabic{thm}}
+%% This makes the figure numbering match the other environments.
+\renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
+
+\newenvironment{thm}{
+ \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Theorem \thethm.}} \begin{em}
+}{
+  \end{em} \par \addvspace{\baselineskip} 
+}
+\newenvironment{lemma}{
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Lemma \thethm.}} \begin{em}
+}{
+  \end{em} \par \addvspace{\baselineskip}
+}
+\newenvironment{corollary}{
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Corollary \thethm.}} \begin{em}
+}{
+  \end{em} \par \addvspace{\baselineskip}
+}
+\newenvironment{definition}{
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Definition \thethm.}} 
+  \begin{em}
+}{
+  \end{em} \par \addvspace{\baselineskip} 
+}
+\newenvironment{example}{
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Example \thethm.}} \begin{em}
+}{
+  \end{em} \par \addvspace{\baselineskip}
+}
+\newenvironment{openproblem}{
+  \par \addvspace{\baselineskip} \noindent \textbf{\underline{Open Problem. \arabic{section}.\arabic{subsection}.\arabic{thm}.}} 
+  \refstepcounter{thm} \begin{em}
+}{
+  \end{em} \par \addvspace{\baselineskip} 
+}
+
+% Commands that are useful for writing about type theory and programming language design.
+\newcommand{\case}[4]{\text{case}\ #1\ \text{of}\ #2\text{.}#3\text{,}#2\text{.}#4}
+\newcommand{\interp}[1]{[\negthinspace[#1]\negthinspace]}
+\newcommand{\normto}[0]{\rightsquigarrow^{!}}
+\newcommand{\join}[0]{\downarrow}
+\newcommand{\redto}[0]{\rightsquigarrow}
+\newcommand{\nat}[0]{\mathbb{N}}
+\newcommand{\terms}[0]{\mathcal{T}}
+\newcommand{\fun}[2]{\lambda #1.#2}
+\newcommand{\CRI}[0]{\text{CR-Norm}}
+\newcommand{\CRII}[0]{\text{CR-Pres}}
+\newcommand{\CRIII}[0]{\text{CR-Prog}}
+\newcommand{\subexp}[0]{\sqsubseteq}
+\newcommand{\napprox}[2]{\lfloor #1 \rfloor_{#2}}
+\newcommand{\interpset}{\mathcal{I}}
+\newcommand{\powerset}[1]{\mathcal{P}(#1)}
+\newcommand{\vinterp}[1]{\mathcal{V}[\negthinspace[#1]\negthinspace]}
+\newcommand{\vbinterp}[2]{\bar{\mathcal{V}}_{#1}[\negthinspace[#2]\negthinspace]}
+\newcommand{\ginterp}[1]{\mathcal{G}[\negthinspace[#1]\negthinspace]}
+\newcommand{\dinterp}[1]{\mathcal{D}[\negthinspace[#1]\negthinspace]}
+\newcommand{\tinterp}[1]{\mathcal{T}[\negthinspace[#1]\negthinspace]}

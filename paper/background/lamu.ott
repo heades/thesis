@@ -1,0 +1,141 @@
+metavar var, x, y, z, f, u, v ::=
+metavar tvar, X, Y ::= 
+metavar nvar, a {{ tex \alpha }}, b {{ tex \beta}} ::=
+  
+indexvar ivar, i, n, m, k, r ::= 
+
+grammar
+
+type, T,A,B,C :: 'type_' ::=
+  | _|_          ::   :: Bottom
+    {{ tex \perp }}
+  | X            ::   :: Base
+    {{ tex \text{b} }}
+  | A -> B       ::   :: Implication
+    {{ tex [[A]] \to [[B]] }}
+  | { - A }      :: S :: Negation
+    {{ tex \neg [[A]] }}
+  | A x          :: M :: VarTypes
+    {{ tex [[A]]^[[x]] }}
+  | A a          :: M :: NVarTypes
+    {{ tex [[A]]^[[a]] }}
+  | [ t / x ] A  :: M :: Substitution
+  | ( A )        :: M :: Parens
+
+term, t :: 'term_' ::= 
+  | x              ::   :: Variables
+  | \ x . t        ::   :: Lam
+    {{ tex \lambda [[x]] . [[t]] }}
+  | \m a . s       ::   :: NameAbstraction
+    {{ tex \mu [[a]] . [[s]] }}
+  | [ a ] t        ::   :: Naming
+  | t1 t2          ::   :: App  
+  | [ t / x ] t'   :: M :: Substitution
+  | [ t /* a ] t'  :: M :: Substitution2
+    {{ tex [ [[t]] /^* [[a]] ] [[t']] }}
+  | [ a / b ] t  :: M :: Substitution3
+    {{ tex [ [[a]] / [[b]] ] [[t]] }}
+  | ( t )          :: M :: Parens 
+  | catch a t      :: M :: Catch
+    {{ tex \textsf{catch}_{[[a]]}\,[[t]] }}
+  | throw a t      :: M :: Throw
+    {{ tex \textsf{throw}_{[[a]]}\,[[t]] }}
+
+statement, s :: 'statement_' ::=
+  | [ a ] t      ::   :: Naming
+  | [ a / b ] s  :: M :: Substitution1
+  | [ t /* a ] s :: M :: Substitution2
+   {{ tex [ [[t]] /^* [[a]] ] [[s]] }}
+
+expression, e :: 'exp_' ::=
+  | t :: :: Term
+  | s :: :: Statement            
+
+assump, P {{tex \Pi }}, G {{tex \Gamma }} :: 'ctx_' ::=
+  | .             :: M :: Empty
+    {{ tex \cdot }}
+  | A1 , ... , An :: M :: SetsOfAssmp
+  | P1 , P2       :: M :: Extension
+  | ( P )         :: M :: Parens
+
+nassump, D {{tex \Delta }}, S {{tex \Sigma }} :: 'nctx_' ::=
+  | .             :: M :: Empty
+    {{ tex \cdot }}
+  | T             ::  :: Types
+  | D1 , ... , Dn :: M :: SetsOfNAssmp
+  | D1 , D2       :: M :: Extension
+  | ( D )         :: M :: Parens
+
+terminal :: 'terminal_' ::=
+  | |- :: :: Turnstyle
+    {{tex \vdash }}
+
+ formula :: 'formula_' ::=
+  | judgement              ::  :: judgement
+  | formula1 ... formulan  ::  :: judgement_list
+  | ( formula )            ::  :: parens
+  | a fresh in D           ::  :: fresh
+    {{ tex [[a]] \text{ fresh in } [[D]]}}
+
+defns
+  Jtyp :: '' ::=
+ defn
+ e : G |- D  :: :: typing :: '' 
+   {{tex [[e]] : [[G]] \vdash [[D]] }}
+ by
+  
+  ------------------ :: Var
+  x : G, A x |- A, D
+
+  t :  G , A x |- B, D
+  ------------------------ :: Lam
+  \ x . t : G |- A -> B, D 
+  
+  s : G |- A a, D
+  ------------------ :: Mu
+   \m a.s : G |- A,D
+
+  t2 : G' |- A , D'
+  t1 : G |- A -> B , D
+  ---------------------- :: App
+  t1 t2 : G,G' |- B,D,D'
+
+  t : G |- A,D
+  ----------------- :: NameApp
+  [a]t : G |- A a,D
+
+defns
+  JRed :: '' ::=
+  defn
+  e ~> e' :: :: red :: 'R_'
+    {{tex [[e]] \redto [[e']] }}
+  by    
+
+  -------------------- :: Beta
+  (\x.t) t' ~> [t'/x]t
+
+  ------------------------ :: Struct
+  (\m a.s) t' ~> [t'/* a]s
+
+  --------------------- :: Renaming
+  [a](\m b.s) ~> [a/b]s
+
+  t ~> t'
+  ------------- :: Lam
+  \x.t ~> \x.t'
+
+  s ~> s'
+  ----------------- :: Mu
+  \m a.s ~> \m a.s'
+
+  t ~> t'
+  ------------- :: Naming
+  [a]t ~> [a]t'
+
+  t' ~> t''
+  ------------- :: App1
+  t' t ~> t'' t
+
+  t' ~> t''
+  ------------- :: App2
+  t t' ~> t t''

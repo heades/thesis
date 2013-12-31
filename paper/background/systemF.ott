@@ -1,0 +1,99 @@
+% Girard/Reynold's System F.
+metavar term_var, x, y, z, f, u, v, p, s ::=
+metavar type_var, X, Y, Z ::= 
+
+grammar
+
+type, T :: 'Type_' ::=
+  | X            ::   :: Var
+  | T -> T'      ::   :: Arrow
+    {{ tex [[T]] \to [[T']] }}
+  | Forall X . T ::   :: Forall
+    {{ tex \forall [[X]] . [[T]] }}
+  | ( T )        :: S :: Parens
+  | [ T / X ] T' :: M :: Substitution
+  | PAIRTY T1 T2 :: M :: PairTy
+  {{tex \mathsf{PAIR_{TY}\,[[T1]]\,[[T2]] } }}
+
+term, t :: 'Term_' ::= 
+  | x              ::   :: Variables
+  | \ x : T . t    ::   :: Lam (+ bind x in t +)
+    {{ tex \lambda [[x]] : [[T]] . [[t]] }}
+  | \\ X . t       ::   :: TypeAbs
+    {{ tex \Lambda [[X]] . [[t]] }}
+  | t1 t2          ::   :: App
+  | t [ T ]        ::   :: TypeApp
+  | [ t / x ] t'   :: M :: Substitution
+  | [ T / X ] t    :: M :: TypeSubstitution
+  | ( t )          :: S :: Parens
+
+G {{ tex \Gamma }} :: 'Context_' ::=
+  | x : T       :: :: TermElement
+  | X           :: :: TypeElement
+  | .           :: :: Empty
+  {{tex \cdot }}
+  | G , G'      :: :: Extension
+
+formula :: 'formula_' ::=
+  | judgement   ::  :: judgement
+  | ( formula ) ::  :: parens
+
+defns
+  JTyping :: '' ::=
+  defn
+  G |- t : T :: :: typing :: '' 
+    {{ tex [[G]] \vdash [[t]] : [[T]] }}
+  by
+  
+  --------------------- :: Var
+  G, x : T, G' |- x : T
+
+  G, x : T1 |- t : T2
+  ----------------------- :: Lam
+  G |- \x:T1.t : T1 -> T2
+
+  G |- t1 : T1 -> T2
+  G |- t2 : T1
+  ------------------ :: App
+  G |- t1 t2 : T2
+
+  G, X |- t : T
+  ------------------------ :: TypeAbs
+  G |- \\X.t : Forall X.T
+
+  G |- t : Forall X.T'
+  -------------------- :: TypeApp
+  G |- t[T] : [T/X]T'
+
+defns
+ Opsem :: '' ::=
+ defn
+ t ~> t' :: :: opsem :: 'R_'
+   {{tex [[t]] \redto [[t']] }}
+ by
+  
+  -------------------------- :: Beta
+  (\x : T . t) t' ~> [t'/x]t  
+
+  ---------------------- :: TypeRed
+  (\\X.t)[T] ~> [T/X]t
+
+  t ~> t'
+  ----------------- :: Lam
+  \x:T.t ~> \x:T.t'
+
+  t ~> t'
+  --------------- :: TypeAbs
+  \\X.t ~> \\X.t'
+
+  t1 ~> t'1
+  --------------- :: App1
+  t1 t2 ~> t'1 t2
+
+  t2 ~> t'2
+  --------------- :: App2
+  t1 t2 ~> t1 t'2
+
+  t ~> t'
+  ------------- :: TypeApp
+  t[T] ~> t'[T]

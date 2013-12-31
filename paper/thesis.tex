@@ -1,0 +1,228 @@
+%
+% you should only have one "documentclass" line.  the following lines
+% are samples that give various options.  the nofrontmatter option is
+% nice because it suppresses the title and signature pages when you want
+% to focus only on the main body of the thesis
+%
+% Friday April 10 2010 Ray Hylock <ray-hylock@uiowa.edu>
+% documentclass options:
+%   abstractpage            if you want to add an internal abstract (optional)
+%   ackpage                 if you would like to add an acknowledgements page (optional)
+%   algorithms              if you want a list of algorithms (optional)
+%   appendix                if you have an appendix (optional)
+%   copyrightpage           if you wish to copyright your thesis (optional)
+%   dedicationpage          if you wish to make a dedication (optional)
+%   epigraphpage            if you would like to add an epigraph to the beginning of your thesis (optional)
+%   examples                if you want a list of examples (this uses the ntheorem package)
+%   exampleslemmas          if you want a combined list of examples and lemmas (this uses the ntheorem package) (optional)
+%   examplestheorems        if you want a combined list of examples and theorems (this uses the ntheorem package) (optional)
+%   exampleslemmastheorems  if you want a combined list of examples, lemmas, and theorems (this uses the ntheorem package) (optional)
+%   figures                 if you have any figures (this is required if you have even one figure)
+%   lemmas                  if you want a list of lemmas (this uses the ntheorem package) (optional)
+%   lemmastheorems          if you want a combined list of lemmas and theorems (this uses the ntheorem package) (optional)
+%   nofrontmatter           suppresses the title and signiture pages for working on the body
+%   tables                  if you have any tables (this is required if you have even one table)
+%   theorems                if you want a list of theorems (this uses the ntheorem package) (optional)
+%   phd                     if phd student; this will add the doctoral abstract (mandatory for PhD and DMA thesis candidates only)
+%
+
+% full options
+%\documentclass[phd,abstractpage,copyrightpage,dedicationpage,epigraphpage,ackpage,figures,tables,lemmas,appendix]{uithesis}
+
+% common options
+%\documentclass[phd,dedicationpage,ackpage,figures,tables,appendix]{uithesis}
+
+% example
+\documentclass[phd,appendix]{uithesis}
+
+%=============================================================================
+% User packages
+%=============================================================================
+\usepackage{bookmark}		% [recommended] for PDF bookmark generation
+\usepackage{blindtext} 	% example text generation
+\usepackage{mathpartir}
+\usepackage{amsmath, amssymb,amsthm}
+\usepackage{todonotes}
+\usepackage{tikz}
+\usepackage{diagrams}
+\usepackage{supertabular}
+\usepackage{chronology}
+\usepackage{import}
+
+\input{type-theory_inc}
+%=============================================================================
+% prelude
+%=============================================================================
+
+\title{The Semantic Analysis of Advanced Programming Languages}
+\author{Harley Daniel Eades III}
+\dept{Computer Science}
+
+% multipleSupervisors=true for two advisors
+\setboolean{multipleSupervisors}{false}
+\advisor{Associate Professor Aaron Stump}
+% for multiple advisors; change <value> to line up the names
+%\setboolean{multipleSupervisors}{true}
+%\advisor{Advisor 1\\\hspace{<value>mm}Advisor 2...}
+%
+% edit the names below to have your committee members names appear
+% on the signature page.  memberOne should be your advisor.
+%
+\memberOne{Aaron Stump}
+\memberTwo{Cesare Tinelli}
+\memberThree{Stephanie Weirich}
+\memberFour{Gregory Landini}
+\memberFive{Kasturi Varadarajan}
+\submitdate{June 30}
+\copyrightyear{2014}
+
+\Abstract{
+\blindtext
+}
+
+%\dedication{Dedication here (optional)}
+
+%\epigraph{Epigraph here (optional)}
+
+%\acknowledgements{Acknowledgements here (optional)}
+
+\newcommand{\LBMMT}[0]{\bar{\lambda}\mu\tilde\mu}
+
+\begin{document}
+
+\frontmatter
+
+\section{Introduction}
+\label{sec:introduction}
+
+There are two major problems growing in two areas.  The first is in
+Computer Science, in particular software engineering. Software is
+becoming more and more complex, and hence more susceptible to software
+defects.  Software bugs have two critical repercussions: they cost
+companies lots of money and time to fix, and they have the potential
+to cause harm. 
+
+The National Institute of Standards and Technology estimated that
+software errors cost the United State's economy approximately sixty
+billion dollars annually, while the Federal Bureau of Investigations
+estimated in a 2005 report that software bugs cost U.S. companies
+approximately sixty-seven billion a year \cite{nist02,fbi05}.
+
+Software bugs have the potential to cause harm.  In 2010 there were a
+approximately a hundred reports made to the National Highway Traffic
+Safety Administration of potential problems with the braking system of
+the 2010 Toyota Prius \cite{Consumer:2010}.  The problem was that the
+anti-lock braking system would experience a ``short delay'' when
+the brakes where pressed by the driver of the vehicle
+\cite{thedetroitbureau.com:2009}.  This actually caused some crashes.
+Toyota found that this short delay was the result of a software bug,
+and was able to repair the the vehicles using a software update
+\cite{Reuters:2009}.  Another incident where substantial harm was
+caused was in 2002 where two planes collided over \"{U}berlingen in
+Germany. A cargo plane operated by DHL collided with a passenger
+flight holding fifty-one passengers.  Air-traffic control did not
+notice the intersecting traffic until less than a minute before the
+collision occurred.  Furthermore, the on-board collision detection
+system did not alert the pilots until seconds before the collision.
+It was officially ruled by the German Federal Bureau of Aircraft
+Accidents Investigation that the on-board collision detection was
+indeed faulty \cite{Collision:2004}.
+
+The second major problem affects all of science.  Scientific
+publications are riddled with errors.  A portion of these errors are
+mathematical.  In 2012 Casey Klein et al. used specialized computer
+software to verify the correctness of nine papers published in the
+proceedings of the International Conference on Functional Programming
+(ICFP).  Two of the papers where used as a control which where known
+to have been formally verified before.  In their paper
+\cite{Klein:2012} they show that all nine papers contained
+mathematical errors.  This is disconcerting especially since most
+researchers trust published work and base their own work off of these
+papers.  Kline's work shows that trusting published work might result
+in wasted time for the researchers basing their work off of these
+error prone publications.  Faulty research hinders scientific
+progress.
+
+Both problems outlined above have been the focus of a large body of
+research over the course of the last forty years.  These challenges
+have yet to be completed successfully.  The work we present here makes
+up the foundations of one side of the programs leading the initiative
+to build theory and tools which can be used to verify the correctness
+of software and mathematics.  This program is called program
+verification using dependent type theories.  The second program is
+automated theorem proving.  In this program researchers build tools
+called model checkers and satisfiability modulo-theories solvers.
+These tools can be used to model and prove properties of large complex
+systems carrying out proofs of the satisfiability of certain
+constraints on the system nearly automatically, and in some cases
+fully automatically.  As an example Andr\'{e} Platzer and Edmund
+Clarke in 2009 used automated theorem proving to verify the
+correctness of the in flight collision detection systems used in
+airplanes.  They actually found that there were cases where two plans
+could collide, and gave a way to fix the problem resulting in a fully
+verified algorithm for collision detection.  That is he mathematically
+proved that there is no possible way for two plans to collide if the
+systems are operational \cite{DBLP:conf/fm/PlatzerC09}.  Automated
+theorem provers, however, are tools used to verify the correctness of
+software externally to the programming language and compiler one uses
+to write the software.  In contrast with verification using dependent
+types we wish to include the ability to verify software within the
+programming language being used to write the software. Both programs
+have their merits and are very fruitful and interesting.
+
+Every formal language within this article has been formally defined in
+a tool called Ott \cite{Sewell:2010}.  The full Ott specification of
+every type theory defined with in this article can be found in the
+appendix.  Ott is a tool for writing definitions of programming
+languages, type theories, and $\lambda$-calculi.  Ott generates a
+parser and a type checker which is used to check the accuracy of all
+objects definable with in the language given to Ott as input.  Ott's
+strongest application is to check for syntax errors within research
+articles.  Ott is a great example of a tool using the very theory we
+are presenting in this article.  It clearly stands as a successful
+step towards the solution of the second major problem outlined above.
+% section introduction (end)
+
+
+\part{Background}
+\label{part:background}
+
+\import*{background/}{background}
+
+% part background (end)
+
+\part{Design}
+\label{part:design}
+
+% part design (end)
+
+\part{Analysis}
+\label{part:analysis}
+
+% part analysis (end)
+
+%=============================================================================
+\appendix
+%=============================================================================
+
+%=============================================================================
+\chapter{Sample Appendix}
+
+\section{Appendix One}
+
+\section{Appendix Two}
+
+%=============================================================================
+% bibliography
+%=============================================================================
+\interlinepenalty=10000	% prevents bib items from splitting across pages
+\nocite{*}
+\bibliographystyle{uithesis}
+\bibliography{thesis}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

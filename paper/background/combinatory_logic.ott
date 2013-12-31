@@ -1,0 +1,75 @@
+% Combinatory Logic.
+metavar var, x, y, z, f, u, v ::=
+
+grammar
+
+type, A, B, C :: 'Type_' ::=
+  | A -> B ::   :: Arrow
+    {{ tex [[A]] \to [[B]] }}
+  | ( A )  :: S :: Parens
+
+term, a,b,c :: 'Term_' ::= 
+  | x              ::   :: var
+  | S              ::   :: S
+    {{tex \mathsf{S} }}
+  | K              ::   :: K
+    {{tex \mathsf{K} }}
+  | I              ::   :: I
+    {{tex \mathsf{I} }}
+  | a b            ::   :: App
+  | [ a / x ] t'   :: M :: Substitution
+  | ( a )          :: S :: Parens
+
+G {{ tex \Gamma }} :: 'Context_' ::=
+  | x : A       :: :: Element
+  | .           :: :: Empty
+    {{ tex \cdot }}
+  | G , G'      :: :: Extension
+
+formula :: 'formula_' ::=
+  | judgement   ::  :: judgement
+  | ( formula ) ::  :: parens
+
+defns 
+  Definitions :: '' ::=
+  defn
+  a = b :: :: defined_terms :: ''
+    {{tex [[a]] =^{def} [[b]] }}
+  by
+  
+  ---------- :: I
+  I = S K K
+
+defns
+  Typing :: '' ::=
+  defn
+  G |- a : A :: :: typing :: '' 
+    {{ tex [[G]] \vdash [[a]] : [[A]] }}
+  by
+
+  --------------------- :: Var
+  G, x : A, G' |- x : A
+  
+  ---------------------- :: S
+  . |- S : A -> (B -> A)
+
+  -------------------------------------------------- :: K
+  . |- K : (A -> (B -> C)) -> ((A -> B) -> (A -> C))
+
+  G |- b : A -> B
+  G |- a : A
+  --------------- :: App
+  G |- b a : B
+
+defns
+ Reduction :: '' ::=
+ defn
+ a ~> b :: :: red :: 'Red_'
+   {{tex [[a]] \redto [[b]] }}
+ by
+  
+  ---------- :: K
+  K a b ~> a
+
+  -------------------- :: S
+  S a b c ~> a c (b c)

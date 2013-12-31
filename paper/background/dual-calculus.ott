@@ -1,0 +1,254 @@
+% Input variables (ordinary intuitionistic varaibles).
+metavar var, x, y, z, f, u ::=
+% Output variables (classical variables).  You can think of these as
+% output ports which get values after computation.  Programs (proofs)
+% can route output either to its return value or an output port
+% (output variable).
+metavar outvar, o {{ tex \alpha }}, p {{ tex \beta }} ::=  
+% Type variables.
+metavar typevar, X, Y, Z ::= 
+indexvar ivar, n, i ::= 
+
+grammar
+
+% Types.  Note that we do not have an arrow type.  This is due to the
+% fact that we can encode arrow and lambda-abstractions using
+% products, coproducts and negation.
+type, T, A, B, C :: 'type_' ::=
+  | X            ::  :: Var
+  | A /\ B       ::  :: Products
+  {{tex [[A]] \land [[B]] }}
+  | A \/ B       ::  :: Coproducts
+  {{tex [[A]] \lor [[B]] }}
+  | - A          ::  :: Negation
+  {{tex \neg [[A]] }}
+  | ( A )       :: S :: Parens
+
+% Terms. These essentially include strictly introduction forms.
+term, t, a, b, c :: 'term_' ::= 
+  | x           :: :: Var
+  | < a , b >   :: :: Pairs
+  {{tex \langle [[a]],[[b]] \rangle }}
+  | inl t       :: :: InjectLeft 
+  {{tex \mathsf{inl}\,[[t]] }}
+  | inr t       :: :: InjectRight
+  {{tex \mathsf{inr}\,[[t]] }}
+  % When [ k ] not gets input it hands the input to
+  % k and then computes k.
+  | [ k ] not   :: :: Not
+   {{tex \,[ [[k]] ]\text{not} }}
+  % We compute (s).o by computing s and then binding (routing) its
+  % output to o (an output port).
+  | ( s ) . o   :: :: OutputBinding
+  | [ b / x ] a :: M :: Substitution
+  | ( t )       :: S :: Parens
+
+% Coterms. These essentially include strictly elimination forms. This
+% makes sense, because coterms are dual to terms which are
+% introduction forms.
+%
+% We can think of these as continuations which assign their outputs to
+% output ports (output variables) once they obtain input.
+coterm, k, l :: 'coterm_' ::= 
+  | o           :: :: OutputVar
+  | [ k , l ]   :: :: Copairs
+  | fst k       :: :: First
+   {{tex \,\text{fst}\,[[k]] }}
+  | snd k       :: :: Second
+   {{tex \,\text{snd}\,[[k]] }}
+  | not [ t ]   :: :: Conot
+   {{tex \,\text{not}[ [[t]] ] }}
+  | x . ( s )   :: :: InputBinding
+  | [ l / o ] k :: :: Substitution
+  | ( k )       :: S :: Parens
+
+% The statement t * k means compute t with
+% input k.
+statement, s :: 'statement_' ::= 
+  | t * k       ::   :: Comp_t_with_k
+  {{tex [[t]] \cdot [[k]] }}
+  | [ t / x ] s :: M :: Substitution1
+  | [ k / o ] s :: M :: Substitution2
+
+% Syntactic union of terms, coterms, and statements.
+exp, e :: 'expressions_' ::= 
+     | t :: :: Terms
+     | k :: :: Coterms
+     | s :: :: Statements
+
+% Intuitionistic typing context.
+iassump, G {{tex \Gamma }} :: 'ictx_' ::=
+  | .             ::   :: Empty
+    {{ tex \cdot }}
+  | x : T         ::   :: Vars
+  | G1 , G2       ::   :: Extension
+  | ( G )         :: S :: Parens
+
+cassump, D {{tex \Delta }} :: 'cctx_' ::=
+  | .             ::   :: Empty
+    {{ tex \cdot }}
+  | o : T         ::   :: Vars
+  | D1 , D2       ::   :: Extension
+  | ( D )         :: S :: Parens
+
+terminals :: '' ::=
+  | []  :: :: Box
+    {{ tex \Box }}
+  | |-  :: :: vdash
+    {{ tex \vdash }}
+  | |=  :: :: models
+    {{ tex \models }}
+  | \   :: :: slash
+    {{ tex \lambda }}
+  | ~>  :: :: step
+    {{ tex \redto }}
+  | ~*> :: :: mstep
+    {{ tex \redto^* }}
+  | =   :: :: Eq
+  | ==  :: :: Equiv
+    {{ tex \equiv }}
+  | =~ :: :: Cong
+    {{ tex \cong }}
+  | FV :: :: FV
+    {{ tex \mathsf{FV} }}
+
+ formula :: 'formula_' ::=
+  | judgement                    ::   :: judgement
+  | formula1 ... formulan        ::   :: judgement_list
+  | ( formula )                  ::   :: parens
+  | x notin dom ( G )            ::   :: NotInDomCtx
+   {{tex [[x]] \not \in dom([[G]]) }}
+  | o notin dom ( D )            ::   :: NotInDomCtx2
+   {{tex [[o]] \not \in dom([[D]]) }}
+  | Ok G , D                     :: M :: OkBoth
+    {{tex \mathsf{Ok}\,[[G]],[[D]] }}
+
+defns
+  Jtyp :: '' ::=
+
+% This is the typing judgment.  Its meaning is if each element of
+% [[G]] has a value then we compute [[t]] and either assign a value to
+% an output port (element of [[D]]) or return a value of type [[A]].
+%
+% The arrows in the judgement depict the output flow.  Either [[t]] outputs
+% a value of type [[A]] (->) or it assigns a value to an output port (<-).
+defn
+ G |- D <- t -> A :: :: typing :: 't_'
+  {{tex [[G]] \vdash [[D]] \leftarrow [[t]] \to [[A]] }}
+by
+  ----------------------- :: AxR
+  G, x : A |- D <- x -> A
+
+  G |- D <- a -> A
+  G |- D <- b -> B
+  ------------------------- :: Prod
+  G |- D <- <a,b> -> A /\ B
+
+  G |- D <- a -> A
+  ------------------------- :: CoProdl
+  G |- D <- inl a -> A \/ B
+
+  G |- D <- b -> B
+  ------------------------- :: CoProdr
+  G |- D <- inr b -> A \/ B
+
+  G |- D <- k <- A
+  ----------------------- :: NegR
+  G |- D <- [k] not -> -A
+
+  G |- D,o:A <- s
+  -------------------- :: IR
+  G |- D <- (s).o -> A
+
+% This is the cotyping judgment.  Its meaning is if each element of
+% [[G]] as a value and some input of type [[A]] is given to [[k]],
+% then we compute [[k]] and assign its value to an output port
+% (element of [[D]]).
+% 
+% Here <- indicats that [[k]] takes a value of type [[A]] and then
+% the second <- indicates that [[k]] must assign a value to an output
+% port after it is computed.
+% 
+% The rules of this judgment make up the left rules of classical
+% sequent calculus.
+defn
+ G |- D <- k <- A :: :: cotyping :: 'ct_'
+  {{tex [[G]] \vdash [[D]] \leftarrow [[k]] \leftarrow [[A]] }}
+by
+
+  -------------------- :: AxL
+  G |- D,o:A <- o <- A
+
+  G |- D <- k <- A
+  G |- D <- l <- B
+  ------------------------- :: CoProd
+  G |- D <- [k,l] <- A \/ B
+
+  G |- D <- k <- A
+  ------------------------- :: ProdFst
+  G |- D <- fst k <- A /\ B
+
+  G |- D <- k <- B
+  ------------------------- :: ProdSnd
+  G |- D <- snd k <- A /\ B
+
+  G |- D <- t -> A
+  ------------------------ :: NegL
+  G |- D <- not [t] <- - A
+
+  G,x:A |- D <- s
+  -------------------- :: IR
+  G |- D <- x.(s) <- A
+
+% This is the cotyping judgment.  Its meaning is if each element of
+% [[G]] as a value then we compute [[s]] and assign its value to an
+% output port (element of [[D]]).
+% 
+% <- indicates that [[s]] must assign a value to an output
+% port after it is computed.
+% 
+% The only rule of this judgment is the cut rule for classical sequent
+% calculus.
+defn
+ G |- D <- s :: :: sttyping :: 'st_'
+  {{tex [[G]] \vdash [[D]] \leftarrow [[s]] }}
+by
+
+  G |- D <- t -> A
+  G |- D <- k <- A
+  ---------------- :: Cut
+  G |- D <- t * k
+
+defns
+  Red :: '' ::=
+
+ defn
+  e ~> e' :: :: reduc :: ''
+ by
+  
+  -------------- :: EtaR
+  (a * o).o ~> a
+
+  -------------- :: EtaL
+  x.(x * k) ~> k
+
+  ------------------- :: BetaR
+  (s).o * k ~> [k/o]s
+
+  ------------------- :: BetaL
+  a * x.(s) ~> [a/x]s
+
+  ------------------------ :: BetaNeg
+  [k]not * not[a] ~> a * k
+
+  ---------------------- :: BetaCoProd1
+  inl a * [k,l] ~> a * k
+
+  ---------------------- :: BetaCoProd2
+  inr a * [k,l] ~> a * l
+
+  ---------------------- :: BetaProd1
+  <a,b> * fst k ~> a * k
+
+  ---------------------- :: BetaProd2
+  <a,b> * snd k ~> b * k

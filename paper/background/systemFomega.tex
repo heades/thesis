@@ -1,0 +1,116 @@
+\newcommand{\Fw}[0]{\text{F}^\omega} In Girard's thesis
+\cite{Girard:1971} Girard extends the type language of system F with a
+copy of STLC.  This type theory is called system $\Fw$.  The syntax
+and reduction rules are in Fig.~\ref{fig:Fw_syntax}, the kinding rules
+in Fig.~\ref{fig:Fw_kinding}, and the typing rules in
+Fig.~\ref{fig:Fw_typing}.
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{lll}
+      Syntax: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          [[K]] & ::= & [[Type]]\,|\,[[K -> K']]\\
+          [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X.T]]\,|\,[[\X:K.T]]\,|\,[[T1 T2]]\\
+          [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
+        \end{array}
+      \end{math}
+      & \\
+      Full $\beta$-reduction: & \\
+      & 
+      \begin{math}
+        \begin{array}{lll}
+          \FwdruleRXXBeta{} & \FwdruleRXXTypeRed{}\\
+          & \\
+          \FwdruleRXXLam{} & \FwdruleRXXTypeAbs{}\\
+          & \\
+          \FwdruleRXXAppOne{} & \FwdruleRXXAppTwo{}\\
+          & \\
+          \FwdruleRXXTypeApp{} & \FwdruleTRXXTypeBeta{}\\
+          &\\
+          \FwdruleTRXXTypeLam{} & \FwdruleTRXXTypeAppOne{}\\ 
+          &\\
+          \FwdruleTRXXTypeAppTwo{}\\
+        \end{array}
+      \end{math}
+    \end{tabular}
+  \end{center}
+
+  \caption{Syntax and reduction rules for system $\Fw$}
+  \label{fig:Fw_syntax}
+\end{figure}
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \FwdruleKXXVar{} &  \FwdruleKXXArrow{}\\
+        & \\
+        \FwdruleKXXForall{} & \FwdruleKXXLam{}\\
+        & \\
+        \FwdruleKXXApp{}
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Kinding rules of system $\Fw$}
+  \label{fig:Fw_kinding}
+\end{figure}
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{ccc}
+        \FwdruleVar{} &  \FwdruleLam{}\\
+        & \\
+        \FwdruleTypeAbs{} & \FwdruleApp{}\\
+        & \\
+        \FwdruleTypeApp{}
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Type-checking algorithm for the system $\Fw$}
+  \label{fig:Fw_typing}
+\end{figure}
+There are two kinds denoted $[[Type]]$ and $[[K1 -> K2]]$.  The
+formers inhabitants are well-formed types, while the latter's
+inhabitants are type level functions whose inputs are types and
+outputs are types.  There are only three forms of well-formed types:
+variables, arrow types, and $\forall$-types.  The additional members
+of the syntactic category for types are used to compute types.  These
+are $\lambda$-abstractions denoted $[[\X:K.T]]$ and applications
+denoted $[[T1 T2]]$.  Note that in general these are not types.  They
+are type constructors.  However, applications may be considered a type
+when $[[T1 T2]]$ has type $[[Type]]$, but this is not always the case,
+because STLC allows for partial applications of functions.
+
+The ability to compute types is known as type computation.  Type level
+computation adds a lot of power.  It can be used to write generic
+function specifications.  We mentioned above that system F allows one
+to write functions with more generic types which allows one to define
+term level functions once and for all.  Type level computation
+increases this ability.  In fact module systems can be encoded in
+system $\Fw$ \cite{Shan:2006}.  There is one drawback though.  Since
+terms are disjoint from types we obtain a lot of duplication.  For
+example, we need two copies of the natural numbers: one at the type
+level and one at the term level.  This is unfortunate.  A fix for this
+problem is to unite the term and type level allowing for types to
+depend on terms.  This is called dependent type theory and is the
+subject of Section~\ref{sec:dependent_type_theory}.  Using dependent
+types and type-level computation we could amongst other things define
+and use only a single copy of the natural numbers.
+
+Logically, through the three perspectives of computation (see
+Section~\ref{sec:the_three_perspectives}) system $\Fw$ corresponds to
+higher order logic, because we are able to define predicates of higher
+type.  This is quite a large logical leap forward from System F which
+corresponds to second order predicate logic.
+
+Throughout this section we took a brief journey into modern type
+theory.  We defined each of the most well-known types theories that
+are at the heart of the vast majority of existing research in type
+theory and foundations of functional programming languages.  This was
+by no means a complete history, but whose aim was to give the reader a
+nice introduction to the field.
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

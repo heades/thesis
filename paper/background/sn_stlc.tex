@@ -1,0 +1,105 @@
+The first step in proving strong normalization of STLC using Tait's
+method is to define the interpretation of types.  An interpretation of
+a type $[[T]]$ is a set of closed terms closed under eliminations.  We
+denote the set of strongly normalizing terms as $\mathsf{SN}$.
+Defining the interpretation of types depends on an extension by Girard
+which constrains the number of lemmas down to a minimal amount.  A term
+is \emph{neutral} if it is of the form $[[t1 t2]]$ for some terms
+$[[t1]]$ and $[[t2]]$.  
+\begin{definition}
+  \label{def:stlc_interpretation_taits}
+  The interpretation of types are defined as follows:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \interp{[[X]]} & = & \{[[t]]\,|\, [[t]] \in \mathsf{SN} \}\\
+        \interp{[[T1 -> T2]]} & = & \{ t\,|\,\forall t' \in \interp{[[T1]]}.
+               [[t t']] \in \interp{[[T2]]} \}      
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+\noindent
+The interpretation of types are known as reducibility sets.  We say a
+term is reducible if it is a member of one of these sets.  Next we
+have some constraints the previous definition must satisfy.  Girard
+called these the \textbf{CR 1-4} properties.  Their proofs can be
+found in \cite{Girard:1989}.
+\begin{lemma}
+  \label{lemma:stlc_sn_cr1}
+  If $[[t]] \in \interp{[[T]]}$, then $[[t]] \in \mathsf{SN}$.
+\end{lemma}
+
+\begin{lemma}
+  \label{lemma:stlc_sn_cr2}
+  If $[[t]] \in \interp{[[T]]}$ and $[[t ~> t']]$ then $[[t']] \in \interp{[[T]]}$.
+\end{lemma}
+
+\begin{lemma}
+  \label{lemma:stlc_sn_cr3}
+  If $[[t]]$ is neutral, $[[t']] \in \interp{[[T]]}$ and $[[t ~> t']]$ then 
+  $[[t]] \in \interp{[[T]]}$.
+\end{lemma}
+
+\begin{lemma}
+  \label{lemma:stlc_sn_cr4}
+  If $[[t]]$ is neutral and normal then $[[t]] \in \interp{[[T]]}$.
+\end{lemma}
+
+The proof that $\interp{[[T]]}$ defined in
+Def.~\ref{def:stlc_interpretation_taits} satisfies these four
+properties can be done by induction on the structure of $[[T]]$.
+We need two additional lemmas to show that all typeable terms
+of STLC are reducible.  
+\begin{lemma}
+  \label{lemma:sn_red_lam}
+  If for all $[[t2]] \in \interp{[[T1]]}$ and $[[ [t2/x]t1]] \in \interp{[[T2]]}$ then
+  $[[\x:T1.t1]] \in \interp{[[T1 -> T2]]}$.
+\end{lemma}
+\noindent
+The proof is by case analysis on the possible reductions of
+$[[(\x:T1.t1) t2]]$.  To prove that all terms are reducible we must
+first define sets of well-formed substitutions.  We denote the empty
+substitution as $\emptyset$.
+\begin{definition}
+  \label{def:stlc_well-formed_subs}
+  %% Why not just define G |- \sigma instead of doing it two pieces?
+  Well-formed substitutions are defined as follows:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \ 
+        }{\vdash \emptyset}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          t \in \interp{[[T]]}
+          \\
+          \vdash \sigma
+        }{\vdash \sigma \cup ([[x]],[[t]])}
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+We say a substitution is well-formed with respect to a context if the
+substitution is well-formed, the domain of the substitution consists
+of all the variables of the context, and the range of the substitution
+consists of terms with the same type as the variable they are
+replacing.  We denote this by $[[G]] \vdash \sigma$.  Thus, if $[[G]]
+\vdash \sigma$ then the domain of $\sigma$ is the domain of $[[G]]$
+and the range of $\sigma$ are reducible typeable terms with the same
+type as the variable they are replacing.  We define the interpretation
+of a context as $[[G]] = \{ \sigma\,|\,[[G]] \vdash \sigma\}$.  We now
+have everything we need to show that all typeable terms are reducible,
+hence, strongly normalizing.
+\begin{thm}
+  \label{thm:stlc_red}
+  If $\sigma \in \interp{[[G]]}$ and $[[G |- t : T]]$ then $\sigma\,t \in \interp{[[T]]}$.
+\end{thm}
+
+\begin{corollary}
+  \label{corollary:stlc_sn}
+  If $[[. |- t : T]]$ then $[[t]] \in \mathsf{SN}$.
+\end{corollary}

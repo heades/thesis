@@ -1,0 +1,342 @@
+Pierre-Louis Curien and Hugo Herbelin put these dualities to work in a
+very computational way.  They used these dualities to show that the
+call-by-value reduction strategy (CBV) is dual to the call-by-name
+reduction strategy (CBN).  To do this they crafted an extension of the
+$\lambda\mu$-calculus formalized in such a way that the symmetries are
+explicit \cite{Curien:2000}.  They are not the first to attempt this.
+Andrzej Filinski to our knowledge was the first to investigate
+dualities with respect to programming languages in his thesis
+\cite{Filinski:1989}.  It is there he investigates the dualities in a
+categorical setting.  Advancing on this early work Peter Selinger gave
+a categorical semantics to the $\lambda\mu$-calculus and then used
+these semantics to show that CBV is dual to CBN \cite{Selinger:2001}.
+However, Selinger's work did not provide an involution of duality.  In
+\cite{Selinger:2001} Selinger defines a new class of categories called
+control categories.  These provide a model for control operators.  He
+takes the usual cartesian closed category and enriches it with a new
+functor modeling classical disjunction.  While this is beautiful work
+we do not go into the details here.  
+
+\begin{openproblem}
+  We mentioned in Sect.~\ref{subsec:the_lambda-delta-calculus} that
+  there are no published proofs of the equivalence of the
+  $\lambda\mu$-calculus.  In that section we also provide a sketch of
+  how to go about proving their equivalence.  However, another
+  question is, since we can model the $\lambda\mu$-calculus as a
+  control category due to Selinger can we model the
+  $\lambda\Delta$-calculus using the same interpretation as the
+  $\lambda\mu$-calculus.  The answer is most certainly yes, but since
+  the $\lambda\Delta$-calculus is slightly less complicated than the
+  $\lambda\mu$-calculus would its control categorical model be less
+  complicated than the $\lambda\mu$-calculus'?  We believe it would.
+  Even more so it would provide a way of showing that these beautiful
+  dualities we have been discussing are indeed present in the
+  $\lambda\Delta$-calculus.  They are indeed less obvious due the
+  $\lambda\Delta$-calculus being a natural deduction formulation of
+  classical logic.
+
+  \ \\
+  \noindent
+  \textbf{Task:} Give a control categorical semantics of the
+  $\lambda\Delta$-calculus and show that it is a less complex internal
+  language to control categories than the $\lambda\mu$-calculus'.  Then
+  use this semantics to show that CBN is dual to CBV in the
+  $\lambda\Delta$-calculus.
+\end{openproblem}
+\noindent
+Following Filinski and Selinger are the work of Curien and Herbelin,
+while following them is the work of Philip Wadler.  Below we discuss
+Curien and Herbelin's work then Wadler's.  Before going into their work
+we first define call-by-value and call-by-name reduction.
+
+The call-by-value reduction strategy is a restriction of full
+$\beta$-reduction.  It is defined for the $\lambda\mu$-calculus
+as follows.  We first extend the language of the $\lambda\mu$-calculus
+by defining two new syntactic categories called values
+and evaluation contexts.
+\begin{center}
+  \begin{math}
+    \begin{array}{lll}
+      v ::= x\,|\,\lambda x.t\,|\, \mu \alpha.t\\
+      E ::= \Box\,|\,E\,t\,|\,v\,E\,|\,[\alpha]E\\
+    \end{array}
+  \end{math}
+\end{center}
+Values are the well-formed results of computations.  In the
+$\lambda\mu$-calculus we only consider variables,
+$\lambda$-abstractions, and $\mu$-abstractions as values.  The
+evaluation contexts are defined by $E$.  They give the locations of
+reduction and reduction order.  They tell us that one may reduce the
+head of an application at any moment, but only reduce the tail of an
+application if and only if the head has been reduced to a value.  This
+is called left-to-right CBV and is defined next.
+\begin{definition}
+  \label{def:lamu_cbv}
+  CBV is defined by the following rules:
+  \begin{center}
+    \begin{math}
+      \begin{array}{llllll}
+        $$\mprset{flushleft}
+        \inferrule* [right=Beta] {
+          \ 
+        }{(\lambda x.t)\,v \redto [v/x]t}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=Struct] {
+          \ 
+        }{(\mu \alpha.s)\,v \redto [v/^* \alpha]s}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=Naming] {
+          \ 
+        }{[\alpha](\mu \beta.s) \redto [\alpha/\beta]s}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=Context] {
+          t \redto t'
+        }{E[t] \redto E[t']}
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+\noindent
+A similar definition can be given for right-to-left CBV, but we do not
+give it here.  
+
+CBN can now be defined.  We use the same definition of values as for CBV,
+but we redefine the evaluation contexts.
+\begin{center}
+  \begin{math}
+    \begin{array}{lll}
+      E ::= \Box\,|\,E\,t\,|\,[\alpha]E\,|\,\mu \alpha.E\\
+    \end{array}
+  \end{math}
+\end{center}
+\begin{definition}
+  \label{def:lamu_cbv}
+  CBN is defined by the following rules:
+  \begin{center}
+    \begin{math}
+      \begin{array}{llllll}
+        $$\mprset{flushleft}
+        \inferrule* [right=Beta] {
+          \ 
+        }{(\lambda x.t)\,t' \redto [t/x]t}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=Struct] {
+          \ 
+        }{(\mu \alpha.s)\,t \redto [t/^* \alpha]s}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=Naming] {
+          \ 
+        }{[\alpha](\mu \beta.s) \redto [\alpha/\beta]s}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=Context] {
+          t \redto t'
+        }{E[t] \redto E[t']}
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+\noindent
+The difference between CBN and CBV is that in CBN no reduction takes
+place within the argument to a function.  Instead we wait and reduce
+the argument if it is needed within a function.  If the argument is
+never used it is never reduced.  CBN in general is less efficient than
+CBV, but it can terminate more often than CBV.  If the argument to a
+function is divergent then CBV will never terminate, because it must
+reduce the argument to a value, but CBN may terminate if the argument
+is never used, because arguments are not reduced.
+
+At this point we would like to give some intuition of why CBV is dual
+to CBN.  We reformulate an explanation due to Curien and Herbelin in
+\cite{Curien:2000}.  To understand the relationship between CBN and
+CBV we encode CBV on top of CBN using a new term construct and
+reduction rule.  It is well-known how to encode CBN on top of CBV, but
+encoding CBV on top of CBN illustrates their relationship between each
+other.  Suppose we extend the language of the CBN
+$\lambda\mu$-calculus with the following term:
+\begin{center}
+  \begin{math}
+    t ::= \ldots\,|\,\textsf{let}\,x = E\,\textsf{in}\,t
+  \end{math}
+\end{center}
+This extends the language to allow for terms to contain their evaluation
+contexts.  Then we add the following reduction rule:
+\begin{center}
+  \begin{math}
+    $$\mprset{flushleft}
+    \inferrule* [right=LetCtx] {
+      \ 
+    }{v\,(\textsf{let}\,x = \Box\,\textsf{in}\,t) \redto [v/x]t}
+  \end{math}
+\end{center}
+Using this new term and reduction rule we can now encode CBV on top
+of CBN.  That is a CBV redex is defined in the following way:
+\begin{center}
+  \begin{math}
+    (\lambda x.t)_{CBV}\,t' := t'\,(\textsf{let}\,y = \Box\,\textsf{in}\,(\lambda x.t) y)
+  \end{math}
+\end{center}
+Now consider the following redex:
+\begin{center}
+  \begin{math}
+    (\mu x.s)\,(\textsf{let}\,x = \Box\,\textsf{in}\,t)
+  \end{math}
+\end{center}
+We can reduce the previous term by first reducing the $\mu$-redex, but
+we can also start by reducing the let-redex, because
+$\mu$-abstractions are values. However, the two reducts obtained from
+doing these reductions are not always joinable.  This forms a critical
+pair and shows an overlap between the $\LBMMTdrulename{LetCtx}$ rule
+and the $\mu$-reduction rule.  This can be overcome by giving priority
+to one or the other redex.  Now if we give priority to $\mu$-redexes
+over all other redexes then it turns out that the reduction strategy
+will be all CBN, but if we choose to give priority to the let-redexes
+over all other redexes then all terms containing let-redexes will be
+reduced using CBV, because the let-expression forces the term we are
+binding to $x$ to be a value.  What does this have to do with duality?
+Well the let-expression we added to the $\lambda\mu$-calculus is
+actually the dual to the $\mu$-abstraction.  To paraphrase Curien and
+Herbelin \cite{Curien:2000}:
+\begin{quote}
+  \emph{The CBV discipline manipulates input in the same way as the
+  $\lambda\mu$-calculus manipulates output.  That is computing
+  $t_1\,t_2$ can be viewed as filling the hole of the context
+  $t_1\,\Box$ with the result of $t_2$ -- its value -- hence this
+  value of $t_2$ is an input.  This seems dual to passing output
+  values to output ports in the $\lambda\mu$-calculus.}
+\end{quote}
+This tells us that to switch from CBN to CBV we take the dual of the
+$\mu$-abstraction suggesting that CBV is dual to CBN and vice versa.
+This was the starting point of Curien and Herbelin's work.  They make
+this relationship more precise by defining an extension of the
+$\lambda\mu$-calculus with duals of $\lambda$-abstractions and
+$\mu$-abstractions.  This requires the dual to implication.  Let's
+define Curien and Herbelin's extension of the $\lambda\mu$-calculus
+and then discuss how they used it to show that CBV is dual to CBN.
+Curien and Herbelin called their extension of the $\lambda\mu$-calculus
+the $\LBMMT$-calculus.  Despite the ugly name it is a beautiful type
+theory.  Its syntax and reduction rules are in
+Fig.~\ref{fig:lbmmt_syntax} and its typing rules are in Fig.~\ref{fig:lbmmt_typing}.
+\begin{figure}
+  \begin{center}
+    \begin{math}
+      \begin{array}{rll}
+        [[T]],[[A]],[[B]],[[C]] & ::= & [[_|_]]\,|\,[[X]]\,|\,[[A -> B]]\,|\,[[A - B]]\\
+        [[c]] & ::= &  [[< v | e >]]\\
+        [[v]] & ::= &  [[x]]\,|\,[[\ x . v]]\,|\,[[\m a . c]]\,|\,[[e * v]]\\
+        [[e]] & ::= &  [[a]]\,|\,[[\mt x . c]]\,|\,[[v * e]]\,|\,[[b \ . e]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \LBMMTdruleRXXBeta{} & \LBMMTdruleRXXMu{}\\
+        &\\
+        \LBMMTdruleRXXMuT{} & \LBMMTdruleRXXCoBeta{}\\
+        &\\
+        \LBMMTdruleEXXCtx{}
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \caption{The Syntax and Reduction Rules for the $\LBMMT$-Calculus}
+  \label{fig:lbmmt_syntax}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{lcc}
+      Commands:\\
+      &
+      \begin{math}
+        \LBMMTdruleCut{}
+      \end{math}\\     
+      & \\
+      Terms:\\
+      &
+        \begin{math}
+          \begin{array}{lll}
+            \LBMMTdruleVar{} & \LBMMTdruleLam{}\\
+            &\\
+            \LBMMTdruleMu{} & \LBMMTdruleCoCtx{}
+          \end{array}
+        \end{math}\\
+      &\\
+      Contexts:\\
+      &
+        \begin{math}
+          \begin{array}{lll}
+            \LBMMTdruleCovar{} & \LBMMTdruleComu{}\\
+            &\\
+            \LBMMTdruleCtx{} & \LBMMTdruleColam{}
+          \end{array}
+        \end{math}
+    \end{tabular}
+  \end{center}
+  \caption{The Typing Rules for the $\LBMMT$-Calculus}
+  \label{fig:lbmmt_typing}
+\end{figure}
+
+The new type $[[A - B]]$ is the dual to implication called
+subtraction.  It is logically equivalent to $[[A]] \land [[{-B}]]$
+which is the dual to $[[{-A}]] \lor [[B]]$ which is logically
+equivalent to $[[A -> B]]$.  The syntactic category $[[c]]$ are called
+commands.  They have the form of $[[< v | e >]]$ where $[[v]]$ is a
+computation and $[[e]]$ is its environment.  Commands essentially
+encode an abstract stack machine directly in the type theory.  We can
+think of $[[e]]$ as the stack of terms to which $[[v]]$ will be applied to. It
+also turns out that logically commands denote cuts using the cut-rule
+of the underlying sequent calculus.  Values defined by the syntactic
+category $[[v]]$ come in three flavors: variables,
+$\lambda$-abstractions, $\mu$-abstractions, and co-contexts denoted by
+$[[e * v]]$.  These can be thought of as the computations to give to
+the co-$\lambda$-abstraction and their output routed to an output port
+bound by the co-$\lambda$-abstraction.  Finally, we have expressions
+or co-terms which come in four flavors: co-variables (output ports),
+$\tilde\mu$-abstractions, contexts, and co-$\lambda$-abstractions.
+The $\tilde\mu$-abstraction is the encoding of the let-expression we
+defined above.  We write $\textsf{let}\,x = \Box\,\textsf{in}\,[[v]]$
+as $[[\mt x.<v|e>]]$ where $[[e]]$ is the evaluation context for
+$[[v]]$.  Thus, the $\tilde\mu$-abstraction is the dual to the
+$\mu$-abstraction.  Now contexts are commands.  These provide a way of feeding
+input to programs.  Co-$\lambda$-abstractions denoted $[[b\.e]]$ are
+the dual to $\lambda$-abstractions.  In stead of taking input
+arguments they return outputs assigned to the output port bound by the
+abstraction.  We can see that this is a rather large
+reformulation/extension of the $\lambda\mu$-calculus.  Just to summarize:
+Curien and Herbelin extended the $\lambda\mu$-calculus with all the
+duals of the constructs of the $\lambda\mu$-calculus.
+
+Now reduction amounts to cuts logically, and computationally as running
+these abstract machine states we are building.  Programming and proving
+amounts to the construction of these abstract machines.  Other then
+this the reduction rules are straightforward. The typing algorithm
+consists of three types of judgments:
+\begin{center}
+  \begin{math}
+    \begin{array}{lll}
+      \text{Commands:} & [[c : (G |- D)]]\\
+      \text{Terms:} & [[G |- v : A | D]]\\
+      \text{Contexts:} & [[G | e : A |- D]]\\
+    \end{array}
+  \end{math}
+\end{center}
+As we said early the command typing rule is cut while the judgment for
+terms and contexts consist of the left rules and the right rules
+respectively.  The bar $|$ separates input from output or left from
+right.  Finally, using this type theory Curien and Herbelin define a
+duality of the $\LBMMT$-calculus into itself.  Then using this duality
+they show that starting with the CBN $\LBMMT$-calculus and taking the
+dual one obtains the CBV $\LBMMT$-calculus.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "paper"
+%%% End:

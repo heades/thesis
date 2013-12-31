@@ -1,0 +1,123 @@
+% Stratified System F.
+metavar term_var, x, y, z, f, u, v ::=
+metavar type_var, X, Y ::= 
+indexvar level_var, l ::= 
+         
+grammar
+
+kind, K :: 'Kind_' ::=
+  | l                  ::  :: Level
+  | K + 1              ::  :: LevelUp
+  | max ( K , K' )     ::  :: Max
+    {{ tex \mathsf{max} ( [[K]] , [[K']] ) }}
+
+type, T  :: 'Type_' ::=
+  | X            ::   :: Var
+  | T -> T'      ::   :: Arrow
+    {{ tex [[T]] \to [[T']] }}
+  | Forall X : K . T ::   :: Forall
+    {{ tex \forall [[X]]:[[K]] . [[T]] }}
+  | ( T )        :: S :: Parens
+  | [ T / X ] T' :: M :: Substitution
+
+term, t :: 'Term_' ::= 
+  | x              ::   :: Variables
+  | \ x : T . t    ::   :: Lam (+ bind x in t +)
+    {{ tex \lambda [[x]] : [[T]] . [[t]] }}
+  | \\ X : K . t       ::   :: TypeAbs
+    {{ tex \Lambda [[X]] : [[K]] . [[t]] }}
+  | t1 t2          ::   :: App
+  | t [ T ]        ::   :: TypeApp
+  | [ t / x ] t'   :: M :: Substitution
+  | [ T / X ] t    :: M :: TypeSubstitution
+  | ( t )          :: S :: Parens
+
+G {{ tex \Gamma }} :: 'Context_' ::=
+  | x : T       :: :: TermElement
+  | X : K       :: :: TypeElement
+  | .           :: :: Empty
+  | G , G'      :: :: Extension
+
+formula :: 'formula_' ::=
+  | judgement   ::  :: judgement
+  | ( formula ) ::  :: parens
+
+defns
+  JTyping :: '' ::=
+  defn
+  G |- T : K :: :: kinding :: 'K_'
+    {{ tex [[G]] \vdash [[T]] : [[K]] }}
+  by
+
+  --------------------- :: Var
+  G, X : K, G' |- X : K
+
+  G |- T1 : K
+  G |- T2 : K'
+  ------------------------- :: Arrow
+  G |- T1 -> T2 : max(K,K')
+
+  G, X:K |- T : K'
+  ------------------------------- :: Forall
+  G |- Forall X:K.T : max(K+1,K')
+
+defns
+ Opsem :: '' ::=
+ defn
+ t ~> t' :: :: opsem :: 'R_'
+   {{tex [[t]] \redto [[t']] }}
+ by
+  
+  -------------------------- :: Beta
+  (\x : T . t) t' ~> [t'/x]t  
+
+  ---------------------- :: TypeRed
+  (\\X:K.t)[T] ~> [T/X]t
+
+  t ~> t'
+  ----------------- :: Lam
+  \x:T.t ~> \x:T.t'
+
+  t ~> t'
+  ------------------- :: TypeAbs
+  \\X:K.t ~> \\X:K.t'
+
+  t1 ~> t'1
+  --------------- :: App1
+  t1 t2 ~> t'1 t2
+
+  t2 ~> t'2
+  --------------- :: App2
+  t1 t2 ~> t1 t'2
+
+  t ~> t'
+  ------------- :: TypeApp
+  t[T] ~> t'[T]
+
+  defn
+  G |- t : T :: :: typing :: '' 
+    {{ tex [[G]] \vdash [[t]] : [[T]] }}
+  by
+
+  G |- T : K  
+  --------------------- :: Var
+  G, x : T, G' |- x : T
+
+  G, x : T1 |- t : T2
+  ----------------------- :: Lam
+  G |- \x:T1.t : T1 -> T2
+
+  G |- t1 : T1 -> T2
+  G |- t2 : T1
+  ------------------ :: App
+  G |- t1 t2 : T2
+
+  G, X:K |- t : T
+  ------------------------------- :: TypeAbs
+  G |- \\X : K .t : Forall X:K.T
+
+  G |- t : Forall X:K.T'
+  G |- T : K
+  ---------------------- :: TypeApp
+  G |- t[T] : [T/X]T'
+
