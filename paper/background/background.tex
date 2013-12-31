@@ -16,13 +16,13 @@
 
 \include{type-theory_inc}
 
-\section{A Brief History of Type Theory}
-\label{sec:the_history_of_type_theory}
+\chapter{A Brief History of Type Theory}
+\label{chap:the_history_of_type_theory}
 \input{history-inc}
 % section the_history_of_type_theory (end)
 
-\section{The Three Perspectives of Computation}
-\label{sec:the_three_perspectives}
+\chapter{The Three Perspectives of Computation}
+\label{chap:the_three_perspectives}
 The Merriam-Webster dictionary defines ``computation'' as ``the act or
 action of computing : calculation'', ``the use or operation of a
 computer'', ``system of reckoning'', or ``an amount computed''.  These
@@ -72,8 +72,8 @@ follows similarly. Furthermore, we do not go into complete detail of
 each of these correspondences, but we give plenty of references for
 the curious reader.
 
-\subsection{Type Theory and Logic}
-\label{subsec:type_theory_logic}
+\section{Type Theory and Logic}
+\label{sec:type_theory_logic}
 Intuitionism began with Luitzen Brouwer.  Implicit in his work was an
 interpretation of the formulas of propositional and predicate
 intuitionistic logic as computational objects.  Brouwer's student
@@ -156,13 +156,13 @@ will discuss in detail how to show type theories to be normalizing in
 Section~\ref{sec:metatheory_of_programming_languages}.
 % subsection type_theory_logic  (end)
 
-\subsection{Type Theory and Category Theory}
-\label{subsec:tt_ct}
+\section{Type Theory and Category Theory}
+\label{sec:tt_ct}
 \input{category_theory-inc.tex}
 % subsection tt_ct (end)
 
-\subsection{The Impact of the Three Perspectives of Computation on Programming Languages}
-\label{subsec:three_perspectives_programming_languages}
+\section{The Impact of the Three Perspectives of Computation on Programming Languages}
+\label{sec:three_perspectives_programming_languages}
 The reader may now be wondering what the benefits are of the three
 perspectives of computation if there are any at all.  The three
 perspectives of computation are all just that.  They provide a unique
@@ -213,26 +213,26 @@ type theory, but these problems do not exist in category theory.
 % subsection type_theories_as_programming_languages (end)
 % section type_theories_as_logics (end)
 
-\section{Classical Type Theory}
-\label{sec:classical_type_theory}
+\chapter{Classical Type Theory}
+\label{chap:classical_type_theory}
 Note that every type theory we have seen up till now has been
 intuitionistic.  That is they correspond to intuitionistic logic.  We
 clearly state that all the work Curry, Howard, de Bruijn, Girard, and
 others did was with respect to intuitionistic logic.  So a natural
 question is what about classical logic?
 
-\subsection{The $\lambda\mu$-Calculus}
-\label{subsec:the_lambda-mu-calculus}
+\section{The $\lambda\mu$-Calculus}
+\label{sec:the_lambda-mu-calculus}
 \input{lamu-inc.tex}
-% subsection the_lambda-mu-calculus (end)
+% section the_lambda-mu-calculus (end)
 
-\subsection{The $\lambda\Delta$-Calculus}
-\label{subsec:the_lambda-delta-calculus}
+\section{The $\lambda\Delta$-Calculus}
+\label{sec:the_lambda-delta-calculus}
 \input{lamd-inc.tex}
-% subsection the_lambda-delta-calculus (end)
+% section the_lambda-delta-calculus (end)
 
-\subsection{Beautiful Dualities}
-\label{subsec:beautiful_dualities}
+\section{Beautiful Dualities}
+\label{sec:beautiful_dualities}
 There are some beautiful dualities present in classical logic.  We say
 a mathematical or logical construct is dual to another if there exists
 an involution translating each construct to each other.  An involution
@@ -251,17 +251,17 @@ from a type theoretic perspective.
 \subsection{The Duality of Computation}
 \label{subsec:the_duality_of_computation}
 \textbf{The $\LBMMT$-calculus.} \input{lam-bar-mu-mu-tilde-inc}
-% subsection the_duality_of_computation (end)
+% section the_duality_of_computation (end)
 
 \subsection{The Dual Calculus}
 \label{subsec:the_dual_calculus}
 \input{dual-calculus-inc}
 % subsection the_dual_calculus (end)
-% subsection beautiful_dualities (end)
-% section classical_type_theory (end)
+% section beautiful_dualities (end)
+% chapter classical_type_theory (end)
 
-\section{Dependent Type Theory}
-\label{sec:dependent_type_theory}
+\chapter{Dependent Type Theory}
+\label{chap:dependent_type_theory}
 All the type theories we have seen thus far consist of what are called
 ``simple types''.  These are types which do not depend on terms.
 System $\Fw$ is an advance where there is a copy of STLC at the type
@@ -279,17 +279,17 @@ it to be the beginning of the research area under the umbrella term
 research on dependent type theory has been conducted.  We start with
 the work of Per Martin-L\"of.
 
-\subsection{Martin-L\"of's Type Theory}
-\label{subsec:martin-lofs_type_theory}
+\section{Martin-L\"of's Type Theory}
+\label{sec:martin-lofs_type_theory}
 \input{type-theory-inc}
-% subsection martin-lofs_type_theory (end)
+% section martin-lofs_type_theory (end)
 
-\subsection{The Calculus of Constructions}
-\label{subsec:the_calculus_of_constructions}
+\section{The Calculus of Constructions}
+\label{sec:the_calculus_of_constructions}
 \input{CoC-inc}
 
 \input{CoC_sep-inc}
-% subsection the_calculus_of_constructions (end)
+% section the_calculus_of_constructions (end)
 
 We have now introduced every type theory we need for the remainder of
 this article.  So far we have taken a trip down the rabbit hole of
@@ -357,10 +357,10 @@ problem presents itself with respect to the dual calculus.
   product type over the output. How does equality work in such a
   language?
 \end{openproblem}
-% section dependent_type_theory (end)
+% chapter dependent_type_theory (end)
 
-\section{Dependent Types, Proof Assistants, and Programming Languages}
-\label{sec:the_design_of_programming_languages}
+\chapter{Dependent Types, Proof Assistants, and Programming Languages}
+\label{chap:the_design_of_programming_languages}
 Type theories are wonderful core languages for programming languages.
 Many programming languages have been created based on type
 theories. Some examples are Haskell, OCaml, ML, ACL2, Isabelle, Coq,
@@ -513,10 +513,10 @@ learn and use external tools.  Dependent type theories correspond to
 logics by the three perspectives of computation, and can be used to
 proof check large scale mathematics.  Dependent types are the future
 of programming languages.
-% section the_design_of_programming_languages (end)
+% chapter the_design_of_programming_languages (end)
 
-\section{Metatheory of Type Theories}
-\label{sec:metatheory_of_programming_languages}
+\chapter{Metatheory of Type Theories}
+\label{chap:metatheory_of_programming_languages}
 In this section we discuss how to reason about type theories at the
 meta-level.  There are many properties that one might wish to prove
 about a type theory, but the property we will concentrate on is
@@ -591,8 +591,8 @@ choosing what semantics to give to the type theory under
 consideration.  Throughout the remainder of this section we summarize
 several possible semantics to give to type theories.  
 
-\subsection{Hereditary Substitution}
-\label{subsec:hereditary_substitution}
+\section{Hereditary Substitution}
+\label{sec:hereditary_substitution}
 In \cite{Prawitz:1965} Prawitz shows that using a lexicographic
 combination of the structural ordering on intuitionistic propositional
 formulas and the structural ordering on proofs, propositional
@@ -637,8 +637,8 @@ types in his thesis \cite{Adams:2004}.  We will show how to use
 hereditary substitution to show weak normalization.  Let's consider how
 to define hereditary substitution for STLC.
 
-\subsection{Hereditary Substitution for STLC}
-\label{subsec:hereditary_substitution_for_stlc}
+\section{Hereditary Substitution for STLC}
+\label{sec:hereditary_substitution_for_stlc}
 The definition of the hereditary substitution depends on a
 partial function called $ctype$.  It is defined by the following definition.
 \begin{definition}
@@ -885,15 +885,15 @@ subtyping.  This allowed them to only define subtyping on normal
 types.  Similar to their work Chantal Keller and Thorsten Altenkirch
 use hereditary substitution to define a normalizer for STLC and
 formalize their work in Agda \cite{Keller:2010}.
-% subsection hereditary_substitution_for_stlc (end)
-% subsection hereditary_substitution (end)
+% section hereditary_substitution_for_stlc (end)
+% section hereditary_substitution (end)
 As we mentioned above the drawback of hereditary substitution is that
 it does not scale to richer type theories.  Thus, to prove consistency
 of more advanced type theories we need another technique that does
 scale.
 
-\subsection{Tait-Girard Reducibility}
-\label{subsec:tait-griard_reduciblity}
+\section{Tait-Girard Reducibility}
+\label{sec:tait-griard_reduciblity}
 The Tait-Girard reducibility method is a technique for showing weak and
 strong normalization of type theories.  It originated from the work of
 William Tait.  He showed strong normalization of system T using an
@@ -916,10 +916,10 @@ but they can be found in \cite{Girard:1989}.
 \input{sn_stlc-inc}
 
 \input{sn_F-inc}
-% subsection tait-Girard_reducibility (end)
+% section tait-Girard_reducibility (end)
 
-\subsection{Logical Relations}
-\label{subsec:logical_relations}
+\section{Logical Relations}
+\label{sec:logical_relations}
 Logical relations are straightforward extensions of reducibility sets.
 They can be thought of as unary predicates defined by recursion on
 their parameter.  Usually, this is the type.  They are always closed
@@ -947,8 +947,8 @@ keeping secret from attacks is never recovered by some attacker.  This
 property can be formalized as a behavior equivalence.  They then use
 logical relations to prove such equivalences.
 
-\subsubsection{Step-Indexed Logical Relations}
-\label{subsec:step_indexed_logical_relations}
+\subsection{Step-Indexed Logical Relations}
+\label{sec:step_indexed_logical_relations}
 There is one last extension to logical relations.  So far we have
 introduced the reducibility method and its extension to reducibility
 candidates.  We briefly summarized the fact that reducibility
@@ -1001,104 +1001,9 @@ will run into trouble and will be forced to use step-indexed logical
 relations instead.
 
 \input{step_index_lr}
-% subsubsection step_indexed_logical_relations (end)
-% subsection logical_relations (end)
-% section metatheory_of_programming_languages (end)
-
-
-%% \appendix
-%% \newpage
-%% \section{Type Theories}
-%% \label{sec:type_theories}
-%% \subsection{The $\lambda$-Calculus}
-%% \label{subsec:the_lambda-calculus}
-%% \Lamall{}
-%% % subsection the_lambda-calculus (end)
-
-%% \newpage
-%% \subsection{Church-Style Simply Typed $\lambda$-Calculus}
-%% \label{subsec:church_style_simply_typed_lambda-calculus}
-%% \CHSTLCall{}
-%% % subsection church_style_simply_typed_lambda-calculus (end)
-
-%% \newpage
-%% \subsection{Curry-Style Simply Typed $\lambda$-Calculus}
-%% \label{subsec:curry_style_simply_typed_lambda-calculus}
-%% \CSTLCall{}
-%% % subsection curry_style_simply_typed_lambda-calculus (end)
-
-%% \newpage
-%% \subsection{Combinatory Logic}
-%% \label{subsec:combinatory_logic}
-%% \Comball{}
-%% % subsection combinatory_logic (end)
-
-%% \newpage
-%% \subsection{G\"odel's System T}
-%% \label{subsec:godels_system_t}
-%% \Tall{}
-%% % subsection godels_system_t (end)
-
-%% \newpage
-%% \subsection{Girard/Reynold's System F}
-%% \label{subsec:girard-reynolds_system_f}
-%% \Fall{}
-%% % subsection girard-reynolds_system_f (end)
-
-%% \newpage
-%% \subsection{Stratified System F}
-%% \label{subsec:stratified_system_f}
-%% \SSFall{}
-%% % subsection girard-reynolds_system_f (end)
-
-%% \newpage
-%% \subsection{System $\text{F}^\omega$}
-%% \label{subsec:system_fw}
-%% \Fwall{}
-%% % subsection system_fw (end)
-
-%% \newpage
-%% \subsection{The $\lambda\mu$-Calculus}
-%% \label{subsec:lamu_all}
-%% \Lamuall{}
-%% % subsection lamu_all (end)
-
-%% \newpage
-%% \subsection{The $\lambda\Delta$-Calculus}
-%% \label{subsec:lamd_all}
-%% \Lamdall{}
-%% % subsection lamd_all (end)
-
-%% \newpage
-%% \subsection{The $\LBMMT$-Calculus}
-%% \label{subsec:lbmmt_all}
-%% \LBMMTall{}
-%% % subsection lbmmt_all (end)
-
-%% \newpage
-%% \subsection{The Dual-Calculus}
-%% \label{subsec:dc_all}
-%% \DCall{}
-%% % subsection dual_calculus_all (end)
-
-%% \newpage
-%% \subsection{Martin-L\"of's Type Theory}
-%% \label{subsec:tt_all}
-%% \TTall{}
-%% % subsection tt_all (end)
-
-%% \newpage
-%% \subsection{The Calculus of Constructions}
-%% \label{subsec:coc_all}
-%% \CoCall{}
-%% % subsection coc_all (end)
-
-%% \newpage
-%% \subsection{The Separated Calculus of Constructions}
-%% \label{subsec:coc_sep_all}
-%% \CoCSall{}
-% subsection coc_sep_all (end)
-% section type_theories (end)
+% subsection step_indexed_logical_relations (end)
+% section logical_relations (end)
+% chapter metatheory_of_programming_languages (end)
 
 %%% Local Variables: 
 %%% mode: latex

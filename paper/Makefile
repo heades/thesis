@@ -35,6 +35,8 @@ thesis.pdf : thesis.tex thesis.bib background.tex
 	$(PDFLATEX) thesis.tex
 	$(PDFLATEX) thesis.tex
 	bibtex thesis
+	$(PDFLATEX) thesis.tex
+	$(PDFLATEX) thesis.tex
 	skim_revert.sh $(CURDIR)/thesis.pdf
 
 root : all
