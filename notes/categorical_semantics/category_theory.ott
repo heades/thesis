@@ -1,27 +1,30 @@
 % This OTT file contains syntax to be used in category theory.
-metavar cat, A {{tex \mathcal{A} }},
-             B {{tex \mathcal{B} }},
-             C {{tex \mathcal{C} }}, 
-             D {{tex \mathcal{D} }}, 
-             E {{tex \mathcal{E} }},
-             F {{tex \mathcal{F} }},
-             T {{tex \mathcal{T} }} ::=
-metavar obj, a {{tex A}}, 
-             b {{tex B}}, 
-             c {{tex C}}, 
-             d {{tex D}}, 
-             e {{tex E}}, 
-             f {{tex F}},
-             x {{tex X}} ::=
-metavar morph, am {{tex a}}, 
-               fm {{tex f}}, 
-               sm {{tex s}},
-               tm {{tex t}},   
-               zm {{tex z}},
-               id {{tex id}},
-               gm {{tex g}},
-               xm {{tex x}} ::=
-indexvar ivar, i, j ::=
+metavar cat,   CA {{tex \mathcal{A} }},
+               CB {{tex \mathcal{B} }},
+               CC {{tex \mathcal{C} }}, 
+               CD {{tex \mathcal{D} }}, 
+               CE {{tex \mathcal{E} }},
+               CF {{tex \mathcal{F} }},
+               CT {{tex \mathcal{T} }} ::=
+metavar func,  A {{tex A }},
+               B {{tex B }},
+               C {{tex C }}, 
+               D {{tex D }}, 
+               E {{tex E }},
+               F {{tex F }},
+               G {{tex G }},
+               T {{tex T }} ::=
+metavar obj,   a {{tex a}}, 
+               b {{tex b}}, 
+               c {{tex c}}, 
+               d {{tex d}}, 
+               e {{tex e}}, 
+               f {{tex f}},
+               g {{tex g}},             
+               h {{tex h}},             
+               j {{tex j}},             
+               x {{tex x}} ::=
+indexvar ivar, i  ::=
 
 grammar
 
@@ -57,6 +60,8 @@ formula :: 'formula_' ::=
   {{tex \mathsf{double} }}
   | plus :: :: plus
   {{tex \mathsf{plus} }}
+  | id   ::  :: id
+  {{tex \mathsf{id} }}
 
 term, t :: 'term_' ::=
   | \ xm . t :: :: Lam
@@ -67,8 +72,4 @@ term, t :: 'term_' ::=
   | ( t ) :: :: parens
   | h( t ) :: :: hparens
   {{tex [[t]] }}
-
-
-
-
 

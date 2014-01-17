@@ -240,10 +240,62 @@ commutative by construction.  Therefore, we have arrived at the following result
   and $([[w2]])_{[[b]]} = [[c2]]$.  Therefore, $([[w1 [] w2]])_{[[b]]} = [[c1]]\,\Box\,[[c2]]$, and we have
   shown that we have a bijection from $W$ to $[[B]]$.  
 \end{proof}
-
 % subsection free_symmetric_monoidal_categories (end)
-
 % section monoidal_categories (end)
+
+\section{Comma Categories}
+\label{sec:comma_categories}
+
+\begin{definition}
+  \label{def:comma_cat}
+  Suppose $[[CC]]$, $[[CD]]$, and $[[CE]]$ are categories.  Given
+  functors $[[F]] : [[CE]] \to [[CC]]$ and $[[G]] : [[CD]] \to [[CC]]$
+  the \textbf{comma category} $([[F]] \downarrow [[G]])$ is defined as follows:
+  \begin{center}
+    \small
+    \begin{math}
+      \begin{array}{lll}
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Obj] {
+          [[e]] \in [[CE]]_0
+          \\\\
+          [[d]] \in [[CD]]_0
+          \\
+          [[f]] : [[F]]\,[[e]] \to [[G]]\,[[d]] \in [[CC]]_1
+        }{([[e]],[[d]],[[f]]) \in ([[F]] \downarrow [[G]])_0}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Morph] {
+          [[h]] : [[e]] \to [[e']] \in [[CE]]_1       
+          \qquad \,\,\,\,\,\,\,
+          ([[e]],[[d]],[[f]]) \in ([[F]] \downarrow [[G]])_0
+          \\\\      
+          [[j]] : [[d]] \to [[d']] \in [[CD]]_1
+          \qquad
+          ([[e']],[[d']],[[f']]) \in ([[F]] \downarrow [[G]])_0
+          \\
+          [[f]];[[G]]\,[[j]] = [[F]]\,[[h]];[[f']]            
+        }{([[h]],[[j]]) : ([[e]],[[d]],[[f]]) \to ([[e']],[[d']],[[f']]) \in ([[F]] \downarrow [[G]])_1}\\
+        & \\
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Iden] {
+          ([[e]],[[d]],[[f]]) \in ([[F]] \downarrow [[G]])_0
+        }{([[id]]_{[[e]]}, [[id]]_{[[d]]}) : ([[e]],[[d]],[[f]]) \to ([[e]],[[d]],[[f]]) \in ([[F]] \downarrow [[G]])_1}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Comp] {
+          ([[h]],[[j]]) : ([[e1]],[[d1]],[[f1]]) \to ([[e2]],[[d2]],[[f2]]) \in ([[F]] \downarrow [[G]])_1
+          \\\\
+          ([[h']],[[j']]) : ([[e2]],[[d2]],[[f2]]) \to ([[e3]],[[d3]],[[f3]]) \in ([[F]] \downarrow [[G]])_1
+        }{([[h]];[[h']],[[j]];[[j']]) : ([[e1]],[[d1]],[[f1]]) \to ([[e3]],[[d3]],[[f3]]) \in ([[F]] \downarrow [[G]])_1}
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+
+
+% section comma_categories (end)
+
 
 \section{Monads and Comonads}
 \label{sec:monads_and_comonads}
