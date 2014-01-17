@@ -293,6 +293,53 @@ commutative by construction.  Therefore, we have arrived at the following result
   \end{center}
 \end{definition}
 
+\begin{example}
+  \label{ex:product_comma}
+  Let $1_{[[CC]]} : [[CC]] \to [[CC]]$ be the identity functor on the
+  category $[[CC]]$.  Then the comma category $1_{[[CC]]} \downarrow
+  1_{[[CC]]}$ is defined as follows:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Obj] {
+          [[e]] \in [[CC]]_0
+          \\\\
+              [[d]] \in [[CC]]_0
+              \\
+                [[f]] : [[e]] \to [[d]] \in [[CC]]_1
+        }{([[e]],[[d]],[[f]]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_0}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Morph] {
+          [[h]] : [[e]] \to [[e']] \in [[CC]]_1       
+          \qquad 
+          ([[e]],[[d]],[[f]]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_0
+          \\\\      
+          [[j]] : [[d]] \to [[d']] \in [[CC]]_1
+          \qquad
+          ([[e']],[[d']],[[f']]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_0
+          \\
+          [[f]];[[j]] = [[h]];[[f']]            
+        }{([[h]],[[j]]) : ([[e]],[[d]],[[f]]) \to ([[e']],[[d']],[[f']]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_1}\\
+        & \\
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Iden] {
+          ([[e]],[[d]],[[f]]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_0
+        }{([[id]]_{[[e]]}, [[id]]_{[[d]]}) : ([[e]],[[d]],[[f]]) \to ([[e]],[[d]],[[f]]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_1}
+        &
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize Comp] {
+          ([[h]],[[j]]) : ([[e1]],[[d1]],[[f1]]) \to ([[e2]],[[d2]],[[f2]]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_1
+          \\\\
+          ([[h']],[[j']]) : ([[e2]],[[d2]],[[f2]]) \to ([[e3]],[[d3]],[[f3]]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_1
+        }{([[h]];[[h']],[[j]];[[j']]) : ([[e1]],[[d1]],[[f1]]) \to ([[e3]],[[d3]],[[f3]]) \in (1_{[[CC]]} \downarrow 1_{[[CC]]})_1}
+      \end{array}
+    \end{math}
+  \end{center}
+  By definition this category is isomorphic to the functor category $[[CC]]^{\mathbf{2}}$.
+\end{example}
+
 
 % section comma_categories (end)
 
