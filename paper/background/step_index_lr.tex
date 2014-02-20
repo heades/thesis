@@ -382,12 +382,15 @@ F above.
 
 \begin{lemma}
   \label{lemma:2}
-  If $\Delta, \alpha \vdash T$, $\rho \in \dinterp{\Delta}$ and $\interpset = \napprox{\vinterp{\mu \alpha . T}_\rho}{k}$ then
-  $\napprox{\vinterp{[\mu \alpha.T/\alpha]T}_\rho}{n} = \napprox{\vinterp{T}_{\rho[\alpha \mapsto \interpset]}}{n}$.
+  If $\Delta, \alpha \vdash T$, $\rho \in \dinterp{\Delta}$ and 
+  $\interpset = \napprox{\vinterp{\mu \alpha . T}_\rho}{k}$ then
+  $\napprox{\vinterp{[\mu \alpha.T/\alpha]T}_\rho}{n} = 
+   \napprox{\vinterp{T}_{\rho[\alpha \mapsto \interpset]}}{n}$.
 \end{lemma}
 
 \noindent
-Finally, we conclude with the fundamental property of logical relations.
+Finally, we conclude with the fundamental property of logical
+relations.
 \begin{thm}
   \label{thm:fundamental_property}
   If $\Gamma \vdash t : T$ then $\Gamma \models t:T$.

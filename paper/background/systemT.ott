@@ -26,11 +26,17 @@ term, t :: 'Term_' ::=
   | exp t1 t2      :: M :: Exp
   | pred t         :: M :: Pred
   | 1              :: M :: 1
+  {{tex \hat{1} }}
   | 2              :: M :: 2
+  {{tex \hat{2} }}
   | 3              :: M :: 3
+  {{tex \hat{3} }}
   | 4              :: M :: 4
+  {{tex \hat{4} }}
   | 5              :: M :: 5
+  {{tex \hat{5} }}
   | 6              :: M :: 6
+  {{tex \hat{6} }}
   | ( t )          :: S :: Parens
 
 G {{ tex \Gamma }} :: 'Context_' ::=

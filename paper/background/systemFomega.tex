@@ -7,33 +7,30 @@ Fig.~\ref{fig:Fw_typing}.
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax: 
+      \vspace{10px} \\
       \begin{math}
         \begin{array}{lll}
           [[K]] & ::= & [[Type]]\,|\,[[K -> K']]\\
           [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X.T]]\,|\,[[\X:K.T]]\,|\,[[T1 T2]]\\
           [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
         \end{array}
-      \end{math}
-      & \\
-      Full $\beta$-reduction: & \\
-      & 
-      \begin{math}
-        \begin{array}{lll}
-          \FwdruleRXXBeta{} & \FwdruleRXXTypeRed{}\\
-          & \\
-          \FwdruleRXXLam{} & \FwdruleRXXTypeAbs{}\\
-          & \\
-          \FwdruleRXXAppOne{} & \FwdruleRXXAppTwo{}\\
-          & \\
-          \FwdruleRXXTypeApp{} & \FwdruleTRXXTypeBeta{}\\
-          &\\
-          \FwdruleTRXXTypeLam{} & \FwdruleTRXXTypeAppOne{}\\ 
-          &\\
-          \FwdruleTRXXTypeAppTwo{}\\
-        \end{array}
-      \end{math}
+      \end{math} \\
+      \\
+      Full $\beta$-reduction:\\
+      \begin{mathpar}
+        \FwdruleRXXBeta{}         \and
+        \FwdruleRXXTypeRed{}      \and
+        \FwdruleRXXLam{}          \and
+        \FwdruleRXXTypeAbs{}      \and  
+        \FwdruleRXXAppOne{}       \and
+        \FwdruleRXXAppTwo{}       \and 
+        \FwdruleRXXTypeApp{}      \and
+        \FwdruleTRXXTypeBeta{}    \and    
+        \FwdruleTRXXTypeLam{}     \and
+        \FwdruleTRXXTypeAppOne{}  \and
+        \FwdruleTRXXTypeAppTwo{}
+      \end{mathpar}
     \end{tabular}
   \end{center}
 
@@ -42,32 +39,28 @@ Fig.~\ref{fig:Fw_typing}.
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \FwdruleKXXVar{} &  \FwdruleKXXArrow{}\\
-        & \\
-        \FwdruleKXXForall{} & \FwdruleKXXLam{}\\
-        & \\
-        \FwdruleKXXApp{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \FwdruleKXXVar{}     \and
+      \FwdruleKXXArrow{}   \and
+      \FwdruleKXXForall{}  \and
+      \FwdruleKXXLam{}     \and
+      \FwdruleKXXApp{}     
+    \end{mathpar}
   \end{center}
   \caption{Kinding rules of system $\Fw$}
   \label{fig:Fw_kinding}
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{ccc}
-        \FwdruleVar{} &  \FwdruleLam{}\\
-        & \\
-        \FwdruleTypeAbs{} & \FwdruleApp{}\\
-        & \\
-        \FwdruleTypeApp{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \FwdruleVar{}       \and
+      \FwdruleLam{}       \and
+      \FwdruleTypeAbs{}   \and
+      \FwdruleApp{}       \and
+      \FwdruleTypeApp{}
+    \end{mathpar}
   \end{center}
-  \caption{Type-checking algorithm for the system $\Fw$}
+  \caption{Typing relation for the system $\Fw$}
   \label{fig:Fw_typing}
 \end{figure}
 There are two kinds denoted $[[Type]]$ and $[[K1 -> K2]]$.  The

@@ -27,8 +27,10 @@ G {{ tex \Gamma }} :: 'Context_' ::=
   | G , G'      :: :: Extension
 
 formula :: 'formula_' ::=
-  | judgement   ::  :: judgement
-  | ( formula ) ::  :: parens
+  | judgement   ::    :: judgement
+  | ( formula ) ::    :: parens
+  | G == G'     :: M  :: CtxDef
+  {{tex [[G]] \defeq [[G']] }}
 
 defns
   JTyping :: '' ::=

@@ -16,6 +16,24 @@
 
 \include{type-theory_inc}
 
+%% Formatting the Ott names.  This is really a bug in Ott.
+\renewcommand{\CSTLCdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\CHSTLCdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\CSTLCdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\CoCdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\CoCSdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Fdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Fwdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\SSFdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Tdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Combdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\DCdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\LBMMTdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Lamdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Lamddrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Lamudrulename}[1]{ {\scriptsize \textsc{#1}} }
+\renewcommand{\TTdrulename}[1]{\scriptsize \textsc{#1}}
+
 \chapter{A Brief History of Type Theory}
 \label{chap:the_history_of_type_theory}
 \input{history-inc}
@@ -29,17 +47,17 @@ computer'', ``system of reckoning'', or ``an amount computed''.  These
 meanings suggest computation is nothing more than the process of
 mathematical calculation, but computation is so much more than this.
 In fact there are three perspectives of computation:
-    \begin{center}
-      \begin{tikzpicture}       
-        \node at (-1.87,3.0) {\text{Type Theory}};
-        \node at (-4.43,0.4) {\text{Logic}};
-        \node at (1.28,0.4) {\text{Category Theory}};
-        \node at (-1.94,1.4) {\huge $\cong$};
-        
-        %% The left most triangle.
-        \draw (-2,2.9) -- (-4, 0.3) -- (0,0.3) -- (-2,2.9);
-      \end{tikzpicture}    
-    \end{center}
+\begin{center}
+  \begin{tikzpicture}       
+    \node at (-1.87,3.1) {\text{Type Theory}};
+    \node at (-4.54,0.4) {\text{Logic}};
+    \node at (1.58,0.4) {\text{Category Theory}};
+    \node at (-1.94,1.4) {\huge $\cong$};
+    
+    %% The left most triangle.
+    \draw (-2,2.9) -- (-4, 0.3) -- (0,0.3) -- (-2,2.9);
+  \end{tikzpicture}    
+\end{center}
 Each offering a unique position for studying computational structure.
 The figure above illustrates that type theory, category theory, and
 logic are equals where the symbol in the middle can be read as

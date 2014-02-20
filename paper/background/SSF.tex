@@ -20,29 +20,27 @@ Fig.~\ref{fig:SSF_typing}.
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax: 
+      \vspace{10px} \\
+      
       \begin{math}
         \begin{array}{lll}
           [[K]] & ::= & 1\,|\,2\,|\,\ldots\\
           [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X:K.T]]\\
           [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X:K.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
         \end{array}
-      \end{math}
-      & \\
-      Full $\beta$-reduction: & \\
-      & 
-      \begin{math}
-        \begin{array}{lll}
-          \SSFdruleRXXBeta{} & \SSFdruleRXXTypeRed{}\\
-          & \\
-          \SSFdruleRXXLam{} & \SSFdruleRXXTypeAbs{}\\
-          & \\
-          \SSFdruleRXXAppOne{} & \SSFdruleRXXAppTwo{}\\
-          & \\
+      \end{math}\\
+      \\
+      Full $\beta$-reduction:\\
+      \begin{mathpar}
+          \SSFdruleRXXBeta{}     \and
+          \SSFdruleRXXTypeRed{}  \and    
+          \SSFdruleRXXLam{}      \and
+          \SSFdruleRXXTypeAbs{}  \and    
+          \SSFdruleRXXAppOne{}   \and
+          \SSFdruleRXXAppTwo{}   \and
           \SSFdruleRXXTypeApp{}
-        \end{array}
-      \end{math}
+      \end{mathpar}
     \end{tabular}
   \end{center}
 
@@ -51,30 +49,26 @@ Fig.~\ref{fig:SSF_typing}.
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{ccc}
-        \SSFdruleKXXVar{} & \SSFdruleKXXArrow{}\\
-        & \\
-        \SSFdruleKXXForall{} 
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \SSFdruleKXXVar{}    \and
+      \SSFdruleKXXArrow{}  \and
+      \SSFdruleKXXForall{} 
+    \end{mathpar}
   \end{center}
-  \caption{Kind-checking rules for the SSF}
+  \caption{Kinding relation for the SSF}
   \label{fig:SSF_kinding}
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{ccc}
-        \SSFdruleVar{} & \SSFdruleLam{}\\
-        & \\
-        \SSFdruleApp{} & \SSFdruleTypeAbs{}\\
-        & \\
-        \SSFdruleTypeApp{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+        \SSFdruleVar{}     \and
+        \SSFdruleLam{}     \and
+        \SSFdruleApp{}     \and
+        \SSFdruleTypeAbs{} \and
+        \SSFdruleTypeApp{} 
+    \end{mathpar}
   \end{center}
-  \caption{Type-checking rules for the SSF}
+  \caption{Typing relation for the SSF}
   \label{fig:SSF_typing}
 \end{figure}
 The objective of SSF is to enforce the property of predicativity on

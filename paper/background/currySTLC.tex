@@ -30,43 +30,41 @@ Church, but it is also unclear how to define a Curry style version.
 It is also unclear how to define a Church style version of the type
 theory of intersection types \cite{Barendregt:1992}.
 
-\begin{figure}
+\begin{figure*}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax: 
+      \vspace{10px} \\
       \begin{math}
         \begin{array}{lll}
           [[T]] & ::= & [[X]]\,|\,[[T -> T']]\\
           [[t]] & ::= & [[x]]\,|\,[[\x.t]]\,|\,[[t1 t2]]
         \end{array}
-      \end{math}
+      \end{math}\\
       & \\
-      Full $\beta$-reduction: & \\
-      & 
-      \begin{math}
-        \begin{array}{lll}
-          \CSTLCdruleRXXBeta{} & \CSTLCdruleRXXLam{}\\
-          & \\
-          \CSTLCdruleRXXAppOne{} & \CSTLCdruleRXXAppTwo{}
-        \end{array}
-      \end{math}
+      Full $\beta$-reduction: \\
+      \begin{mathpar}        
+        \CSTLCdruleRXXBeta{}    \and
+        \CSTLCdruleRXXLam{}     \and  
+        \CSTLCdruleRXXAppOne{}  \and
+        \CSTLCdruleRXXAppTwo{}
+      \end{mathpar}
     \end{tabular}
   \end{center}
 
   \caption{Syntax and reduction rules for the Curry-style simply-typed $\lambda$-calculus}
   \label{fig:cstlc_syntax}
-\end{figure}
+\end{figure*}
 
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \CSTLCdruleVar{} & \CSTLCdruleLam{} & \CSTLCdruleApp{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}      
+      \CSTLCdruleVar{} \and
+      \CSTLCdruleLam{} \and
+      \CSTLCdruleApp{}
+    \end{mathpar}
   \end{center}
-  \caption{Type-checking algorithm for the Curry-style simply typed $\lambda$-calculus}
+  \caption{Typing relation for the Curry-style simply typed $\lambda$-calculus}
   \label{fig:cstlc_typing}
 \end{figure}
 

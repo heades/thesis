@@ -12,30 +12,28 @@ Fig.~\ref{fig:T_typing}.
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax: 
+      \vspace{10px}\\
       \begin{math}
         \begin{array}{lll}
           [[T]] & ::= & [[Nat]]\,|\,[[T -> T']]\\
           [[t]] & ::= & [[x]]\,|\,[[0]]\,|\,[[S]]\,|\,[[\x:T.t]]\,|\,[[t1 t2]]\,|\,[[R]]
         \end{array}
-      \end{math}
+      \end{math}\\
       & \\
-      Full $\beta$-reduction: & \\
-      & 
-      \begin{math}
-        \begin{array}{lll}
-          \TdruleRXXBeta{} & \TdruleRXXRecBase{}\\
-          & \\
-          \TdruleRXXRecStep{} & \TdruleRXXRecCongOne{}\\
-          & \\
-          \TdruleRXXRecCongTwo{} & \TdruleRXXRecCongThree{}\\
-          & \\
-          \TdruleRXXLam{} & \TdruleRXXAppOne{}\\
-          &\\
-          \TdruleRXXAppTwo{} & \TdruleRXXSucc{}
-        \end{array}
-      \end{math}
+      Full $\beta$-reduction: \\
+      \begin{mathpar}
+        \TdruleRXXBeta{}         \and
+        \TdruleRXXRecBase{}      \and
+        \TdruleRXXRecStep{}      \and
+        \TdruleRXXRecCongOne{}   \and
+        \TdruleRXXRecCongTwo{}   \and
+        \TdruleRXXRecCongThree{} \and
+        \TdruleRXXLam{}          \and
+        \TdruleRXXAppOne{}       \and
+        \TdruleRXXAppTwo{}       \and
+        \TdruleRXXSucc{}         
+      \end{mathpar}
     \end{tabular}
   \end{center}
 
@@ -45,17 +43,16 @@ Fig.~\ref{fig:T_typing}.
 
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{ccc}
-        \TdruleVar{} & \TdruleZero{}\\
-        & \\
-        \TdruleSucc{} & \TdruleRec{}\\ 
-        & \\
-        \TdruleLam{} & \TdruleApp{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \TdruleVar{}   \and
+      \TdruleZero{}  \and
+      \TdruleSucc{}  \and
+      \TdruleRec{}   \and
+      \TdruleLam{}   \and
+      \TdruleApp{}    
+    \end{mathpar}
   \end{center}
-  \caption{Type-checking algorithm for the G\"odel's system T}
+  \caption{Typing Relation for the G\"odel's system T}
   \label{fig:T_typing}
 \end{figure}
 We can easily see from the definition of the language that this is a
@@ -113,26 +110,37 @@ computations.
   \label{ex:T_functions}
   Some interesting functions in system T:
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \text{Addition:} & & [[add x y]] := 
-             [[\x:Nat.(\y:Nat.(R x (\z:Nat.(\w:Nat.(S z))) y))]]\\
-        \text{Multiplication:} & & 
-             [[mult x y]] := [[\x:Nat.(\y:Nat.(R 0 (\z:Nat.(\w:Nat.(add x z))) y))]]\\ 
-        \text{Exponentiation:} & & 
-             [[exp x y]] := [[\x:Nat.(\y:Nat.(R (S 0) (\z:Nat.(\w:Nat.(exp x z))) y))]]\\ 
-        \text{Predecessor:} & & 
-             [[pred x]] := [[\x:Nat.(R 0 (\z:Nat.(\w:Nat.w)) x)]]\\ 
-      \end{array}
-    \end{math}
+    \begin{tabular}{lll}
+      Addition: \\
+      \begin{tabular}{r}
+        $[[add x y]] \defeq [[\x:Nat.(\y:Nat.(R x (\z:Nat.(\w:Nat.(S z))) y))]]$
+      \end{tabular} \\
+      \\
+      Multiplication: \\
+      \begin{tabular}{r}
+        $[[mult x y]] \defeq [[\x:Nat.(\y:Nat.(R 0 (\z:Nat.(\w:Nat.(add x z))) y))]]$
+      \end{tabular}\\
+      \\
+      Exponentiation: \\
+      \begin{tabular}{r}
+        $[[exp x y]] \defeq [[\x:Nat.(\y:Nat.(R (S 0) (\z:Nat.(\w:Nat.(exp x z))) y))]]$
+      \end{tabular}\\
+      \\
+      Predecessor: \\
+      \begin{tabular}{lll}
+        $[[pred x]] \defeq [[\x:Nat.(R 0 (\z:Nat.(\w:Nat.w)) x)]]$
+      \end{tabular}\\
+      \\
+    \end{tabular}
   \end{center}
 \end{example}
 
 \begin{example}
   \label{ex:T_reductions}
-  We give an example reduction of addition.  We use numeral
-  syntax for natural numbers, but this should be read as syntactic
-  sugar.  That is, $1 \equiv [[S 0]]$, $2 \equiv [[S (S 0)]]$, etc.
+  We give an example reduction of addition.  We define natural numbers using constructor
+  form, and define a more convenient syntax as follows:  
+  $\hat{1} \defeq [[S 0]]$, $\hat{2} \defeq [[S (S 0)]]$, etc.  Now we provide the following
+  reduction:
   \begin{center}
     \begin{math}
       \begin{array}{lll}

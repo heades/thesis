@@ -62,24 +62,22 @@ Here the empty context is denoted $[[.]]$ and context extension is denoted $[[G1
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax: 
+      \vspace{10px} \\
       \begin{math}
         \begin{array}{lll}
           [[T]] & ::= & [[X]]\,|\,[[T -> T']]\\
           [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[t1 t2]]
         \end{array}
-      \end{math}
+      \end{math}\\
       & \\
-      Full $\beta$-reduction: & \\
-      & 
-      \begin{math}
-        \begin{array}{lll}
-          \CHSTLCdruleRXXBeta{} & \CHSTLCdruleRXXLam{}\\
-          & \\
-          \CHSTLCdruleRXXAppOne{} & \CHSTLCdruleRXXAppTwo{}
-        \end{array}
-      \end{math}
+      Full $\beta$-reduction: \\
+      \begin{mathpar}
+        \CHSTLCdruleRXXBeta{}   \and
+        \CHSTLCdruleRXXLam{}    \and
+        \CHSTLCdruleRXXAppOne{} \and
+        \CHSTLCdruleRXXAppTwo{}
+      \end{mathpar}
     \end{tabular}
   \end{center}
 
@@ -87,17 +85,17 @@ Here the empty context is denoted $[[.]]$ and context extension is denoted $[[G1
   \label{fig:chstlc_syntax}
 \end{figure}
 
-\begin{figure}
-  \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \CHSTLCdruleVar{} & \CHSTLCdruleLam{} & \CHSTLCdruleApp{}
-      \end{array}
-    \end{math}
-  \end{center}
-  \caption{Type-checking algorithm for the Church-style simply typed $\lambda$-calculus}
+\begin{figure*}
+  \begin{mathpar}
+    \CHSTLCdruleVar{} \and
+    \CHSTLCdruleLam{} \and
+    \CHSTLCdruleApp{}
+  \end{mathpar}
+  
+  \caption{Typing Relation for the Church-style simply typed $\lambda$-calculus}
   \label{fig:chstlc_typing}
-\end{figure}
+\end{figure*}
+
 The inference rules deriving the typing judgment are used to determine
 if a term has a particular type.  That is the term
 $[[t]]$ has type $[[T]]$ in context $[[G]]$ if there is a derivation
@@ -109,7 +107,7 @@ following example.
 
 \begin{example}
   \label{ex:chstlc_derivation}
-  We apply each rule starting with its conclusion:
+  Suppose $[[G == x:T1 -> T2,y:T1]]$.  Then we apply each rule starting with its conclusion:
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
@@ -121,12 +119,12 @@ following example.
             $$\mprset{flushleft}
             \inferrule* [right=$\CHSTLCdrulename{Var}$] {
               \ 
-            }{[[x:T1 -> T2,y:T1 |- x : T1 -> T2]]}
+            }{[[G |- x : T1 -> T2]]}
             \\
             $$\mprset{flushleft}
             \inferrule* [right=$\CHSTLCdrulename{Var}$] {
               \ 
-            }{[[x:T1 -> T2,y:T1 |- y : T1]]}
+            }{[[G |- y : T1]]}
           }{[[x:T1 -> T2,y:T1 |- x y : T2]]}
         }{[[x:T1 -> T2 |- \y:T1.(x y):T1 -> T2]]}
       }{[[. |- \x:T1->T2.\y:T1.(x y) : ((T1 -> T2) -> T1) -> T2]]}

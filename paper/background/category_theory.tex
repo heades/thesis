@@ -25,7 +25,7 @@ category.
   Morphisms must obey the following rules:
   \begin{center}
     \begin{math}
-      \begin{array}{lll}
+      \begin{array}{ccc}
         $$\mprset{flushleft}
         \inferrule* [right=] {
           f : A \to B
@@ -149,27 +149,40 @@ $\langle [[G]], [[t]], [[T]] \rangle$ where $[[G |- t : T]]$.
   \end{center}
   Finally, we interpret terms as follows:
   \begin{center}
-    \begin{math}
-      \begin{array}{rllll}
-        \text{Variables: } & \interp{\langle [[G,xi:Ti]], [[xi]], [[Ti]] \rangle} = 
-        \begin{diagram}
-          (\interp{[[G]]}) \times \interp{[[T]]} & \rTo{\pi_i} & \interp{[[T]]}\\          
-        \end{diagram}\\
-        & \\
-        \lambda \text{-Abstractions: } & \interp{\langle [[G]],[[\x:T1.t]],[[T1 -> T2]] \rangle}   = 
+    \begin{tabular}{lllllll}
+      Variables:\\      
+      \begin{math}
+        \begin{array}{r}
+          \interp{\langle [[G,xi:Ti]], [[xi]], [[Ti]] \rangle} = 
+          \begin{diagram}
+            (\interp{[[G]]}) \times \interp{[[T]]} & \rTo{\pi_i} & \interp{[[T]]}\\          
+        \end{diagram}
+        \end{array}
+      \end{math}\\
+      \\
+      $\lambda$-Abstractions:\\
+      \begin{math}
+        \begin{array}{r}
+          \interp{\langle [[G]],[[\x:T1.t]],[[T1 -> T2]] \rangle}   = 
         \begin{diagram}
           \interp{[[G]]} & \rTo{\interp{\langle [[G,x : T1]],[[t]],[[T2]] \rangle}^*} & \interp{[[T2]]}^{\interp{[[T1]]}}
-        \end{diagram}\\
-        & \\
-        \text{Applications: } & \interp{\langle [[G]],[[t1 t2]],[[T2]] \rangle}   = 
-        \begin{diagram}
-          \interp{[[G]]} & \rTo{\langle \interp{\langle [[G]],[[t1]],[[T1 -> T2]] \rangle},
-                                        \interp{\langle [[G]],[[t2]],[[T1]] \rangle} \rangle} 
-                                           & \interp{[[T2]]}^{\interp{[[T1]]}} \times \interp{[[T1]]}
-                         & \rTo{\epsilon} & \interp{[[T2]]}
         \end{diagram}
-      \end{array}
-    \end{math}
+        \end{array}
+      \end{math}\\
+      \\
+      Applications:\\
+      \begin{math}
+        \begin{array}{r}
+          \interp{\langle [[G]],[[t1 t2]],[[T2]] \rangle}   = 
+          \begin{diagram}
+            \interp{[[G]]} & \rTo{\langle \interp{\langle [[G]],[[t1]],[[T1 -> T2]] \rangle},
+              \interp{\langle [[G]],[[t2]],[[T1]] \rangle} \rangle} 
+            & \interp{[[T2]]}^{\interp{[[T1]]}} \times \interp{[[T1]]}
+            & \rTo{\epsilon} & \interp{[[T2]]}
+          \end{diagram}
+        \end{array}
+      \end{math}
+    \end{tabular}
   \end{center}
 \end{definition}
 In the previous definition $\hat{X}$ is just an additional object of

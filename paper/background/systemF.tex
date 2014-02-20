@@ -37,28 +37,25 @@ defined in Fig.~\ref{fig:F_typing}.
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax:
+      \vspace{10px} \\
       \begin{math}
         \begin{array}{lll}
           [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X.T]]\\
           [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
         \end{array}
-      \end{math}
-      & \\
-      Full $\beta$-reduction: & \\
-      & 
-      \begin{math}
-        \begin{array}{lll}
-          \FdruleRXXBeta{} & \FdruleRXXTypeRed{}\\
-          & \\
-          \FdruleRXXLam{} & \FdruleRXXTypeAbs{}\\
-          & \\
-          \FdruleRXXAppOne{} & \FdruleRXXAppTwo{}\\
-          & \\
-          \FdruleRXXTypeApp{}
-        \end{array}
-      \end{math}
+      \end{math}\\
+      \\
+      Full $\beta$-reduction: & \\      
+      \begin{mathpar}
+          \FdruleRXXBeta{}    \and  
+          \FdruleRXXTypeRed{} \and
+          \FdruleRXXLam{}     \and
+          \FdruleRXXTypeAbs{} \and     
+          \FdruleRXXAppOne{}  \and
+          \FdruleRXXAppTwo{}  \and    
+          \FdruleRXXTypeApp{}   
+      \end{mathpar}
     \end{tabular}
   \end{center}
 
@@ -67,17 +64,15 @@ defined in Fig.~\ref{fig:F_typing}.
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{ccc}
-        \FdruleVar{} &  \FdruleLam{}\\
-        & \\
-        \FdruleTypeAbs{} & \FdruleApp{}\\
-        & \\
-        \FdruleTypeApp{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \FdruleVar{}      \and
+      \FdruleLam{}      \and
+      \FdruleTypeAbs{}  \and
+      \FdruleApp{}      \and
+      \FdruleTypeApp{}  
+    \end{mathpar}
   \end{center}
-  \caption{Type-checking algorithm for the system F}
+  \caption{Typing relation for the system F}
   \label{fig:F_typing}
 \end{figure}
 Similar to system T we can easily see that system F is an extension of
@@ -98,33 +93,66 @@ actual type much like application for $\lambda$-abstractions.  Hence,
 we extended the reduction rules of STLC with a new rule
 $\Fdrulename{R\_TypeRed}$ which does just that.  We next consider some
 example functions in system F.
+
 \begin{example}
   \label{ex:F_terms}
-  Example functions in system F:
+  Example functions with their types in system F:
   \begin{center}
-    \footnotesize
-    \begin{math}
-      \begin{array}{lll}
-                         & Term           & Type\\
-        \hline
-\text{Identity:} & [[\\X.\x:X.x]] & [[Forall X.(X -> X)]]\\
-\text{Pairs:}    & [[\\X.\\Y.\x:X.(\y:Y.\\Z.(\z:X->(Y->Z).((z x) y)))]] & 
-     [[Forall X.(Forall Y.(X -> (Y -> (PAIRTY X Y))))]]\\
-\text{First Projection:} & [[\\X.\\Y.(\p:PAIRTY X Y.((p [X]) (\x:X.\y:Y.x)))]] & [[Forall X.(Forall Y.((PAIRTY X Y) -> X))]]\\
-\text{Second Projection:} & [[\\X.\\Y.(\p:PAIRTY X Y.((p [Y]) (\x:X.\y:Y.y)))]] & [[Forall X.(Forall Y.((PAIRTY X Y) -> Y))]]\\
-\text{1:} & [[\\X.(\s:(X->X).(\z:X.(s z)))]] & [[Forall X.((X->X)->(X->X))]]\\
-\text{2:} & [[\\X.(\s:(X->X).(\z:X.(s (s z))))]] & [[Forall X.((X->X)->(X->X))]]\\
-\text{3:} & [[\\X.(\s:(X->X).(\z:X.(s (s (s z)))))]] & [[Forall X.((X->X)->(X->X))]]\\
-\vdots    & \vdots                                   & [[Forall X.((X->X)->(X->X))]]\\
-\text{n:} & \Lambda [[X]].(\lambda [[s]]:([[X->X]]).(\lambda[[z]]:[[X]].([[s]]^n\,[[z]]))) & [[Forall X.((X->X)->(X->X))]]\\
-      \end{array}
-    \end{math}
+    \begin{tabular}{lllllllllll}
+      Identity: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.(X -> X)]]$\\
+        Term: & $[[\\X.\x:X.x]]$\\      
+      \end{tabular}
+      \\
+      Pairs: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.(Forall Y.(X -> (Y -> (PAIRTY X Y))))]]$\\
+        Term: & $[[\\X.\\Y.\x:X.(\y:Y.\\Z.(\z:X->(Y->Z).((z x) y)))]]$\\      
+      \end{tabular}
+      \\
+      First Projection: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.(Forall Y.((PAIRTY X Y) -> X))]]$\\
+        Term: & $[[\\X.\\Y.(\p:PAIRTY X Y.((p [X]) (\x:X.\y:Y.x)))]]$\\      
+      \end{tabular}
+      \\
+      Second Projection: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.(Forall Y.((PAIRTY X Y) -> Y))]]$\\
+        Term: & $[[\\X.\\Y.(\p:PAIRTY X Y.((p [Y]) (\x:X.\y:Y.y)))]]$\\      
+      \end{tabular}
+      \\
+      Natural Number $1$: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.((X->X)->(X->X))]]$\\
+        Term: & $[[\\X.(\s:(X->X).(\z:X.(s z)))]]$\\      
+      \end{tabular}
+      \\
+      Natural Number $2$: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.((X->X)->(X->X))]]$\\
+        Term: & $[[\\X.(\s:(X->X).(\z:X.(s (s z))))]]$\\      
+      \end{tabular}
+      \\
+      Natural Number $3$: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.((X->X)->(X->X))]]$\\
+        Term: & $[[\\X.(\s:(X->X).(\z:X.(s (s (s z)))))]]$\\      
+      \end{tabular}
+      \\
+      Natural Number $n$: \\
+      \begin{tabular}{rl}
+        Type: & $[[Forall X.((X->X)->(X->X))]]$\\
+        Term: & $\Lambda [[X]].(\lambda [[s]]:([[X->X]]).(\lambda[[z]]:[[X]].([[s]]^n\,[[z]])))$\\
+      \end{tabular}
+    \end{tabular}
   \end{center}
 \end{example}
 Note that in the previous example we used the definition 
 \begin{center}
   \begin{math}
-    [[PAIRTY X Y]] =^{def} [[Forall Z.((X -> (Y -> Z)) -> Z)]]
+    [[PAIRTY X Y]] \defeq [[Forall Z.((X -> (Y -> Z)) -> Z)]]
   \end{math}
 \end{center}
 for readability. We could have gone even further than natural numbers
@@ -135,7 +163,7 @@ examples, see \cite{Girard:1989}.  The encodings we use are the famous
 Church encodings of pairs and natural numbers.  What is remarkable
 about the encoding of natural numbers is that they act as function
 iteration.  That is for any function $f$ from any type $[[X]]$ to
-$[[X]]$ and value $v$ of type $[[X]]$ we have $n\,[X]\,f\,v \equiv f^n
+$[[X]]$ and value $v$ of type $[[X]]$ we have $n\,[X]\,f\,v \redto^* f^n
 v$, where $n$ is the term $n$ in the above table.
 
 There is one important property of $\Fdrulename{TypeApp}$ which the

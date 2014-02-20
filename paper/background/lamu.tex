@@ -10,38 +10,38 @@ This allowed for Parigot to define a computational perspective of free
 deduction which he called the $\lambda\mu$-calculus.  We now briefly
 introduce the $\lambda\mu$-calculus.  The syntax and reduction rules
 are in Fig.~\ref{fig:lamu_syntax}.
-\begin{figure}
+
+  \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax: 
+      \vspace{10px} \\
       \begin{math}
         \begin{array}{lll}
           [[T]],[[A]],[[B]],[[C]] & ::= & [[X]]\,|\,[[_|_]]\,|\,[[A -> B]]\\
           [[t]] & ::= & [[x]]\,|\,[[\x.t]]\,|\,[[\m a.s]]\,|\,[[t1 t2]]\\
           [[s]] & ::= & [[ [a]t]] 
         \end{array}
-      \end{math}
+      \end{math} \\
       & \\
-      Full $\beta$-reduction: & \\
-      & 
-      \begin{math}
-        \begin{array}{lll}
-          \LamudruleRXXBeta{} & \LamudruleRXXStruct{}\\
-          &\\
-          \LamudruleRXXRenaming{} & \LamudruleRXXLam{}\\
-          &\\
-          \LamudruleRXXMu{} & \LamudruleRXXNaming{}\\
-          &\\
-          \LamudruleRXXAppOne{} & \LamudruleRXXAppTwo{}
-        \end{array}
-      \end{math}
+      Full $\beta$-reduction: \\
+      \begin{mathpar}
+        \LamudruleRXXBeta{}       \and
+        \LamudruleRXXStruct{}     \and
+        \LamudruleRXXRenaming{}   \and
+        \LamudruleRXXLam{}        \and
+        \LamudruleRXXMu{}         \and
+        \LamudruleRXXNaming{}     \and
+        \LamudruleRXXAppOne{}     \and
+        \LamudruleRXXAppTwo{}
+      \end{mathpar}
     \end{tabular}
   \end{center}
 
   \caption{Syntax and reduction rules for the $\lambda\mu$-calculus}
   \label{fig:lamu_syntax}
 \end{figure}
+
 We can think of the language of the $\lambda\mu$-calculus as an
 extension of the $\lambda$-calculus.  We extend it with two new
 operators.  The first is the $\mu$-abstraction $[[\m a.s]]$ where
@@ -50,17 +50,17 @@ variable.  We call the $\mu$-abstraction a control operator.  This
 name conveys the fact that the $\mu$-abstraction has the ability to
 control whether a value is returned or placed into its bound output
 port.  The body of the $\mu$-abstraction must be a term called a
-statement denoted by the metavariable $[[s]]$.  Statements have the form $[[
-    [a]t]]$.  We can think of this as assigning (or naming) an output
-port to a term.  Now we extend the reduction rules with two new
+statement denoted by the metavariable $[[s]]$.  Statements have the
+form $[[ [a]t]]$.  We can think of this as assigning (or naming) an
+output port to a term.  Now we extend the reduction rules with two new
 reduction rules and two new congruence rules for the $\mu$-abstraction
-and naming operator.  The \Lamudrulename{R\_Struct} is called the
+and naming operator. The \Lamudrulename{R\_Struct} rule is called the
 structural reduction rule.  This allows one to target reduction to a
-named subterm of the body of the $\mu$-abstraction.  This rule uses
-a special substitution operation $[[ [t /* a]s]]$ which says to 
-replace every subterm of $[[s]]$ matching the pattern $[[ [a]t']]$
-with $[[ [a](t' t)]]$.  We may also write $[[ [t /* a]t']]$ for the
-similar operation on terms. This is called structural substitution.
+named subterm of the body of the $\mu$-abstraction.  This rule uses a
+special substitution operation $[[ [t /* a]s]]$ which says to replace
+every subterm of $[[s]]$ matching the pattern $[[ [a]t']]$ with 
+$[[ [a](t' t)]]$.  We may also write $[[ [t /* a]t']]$ for the similar
+operation on terms. This is called structural substitution.
 
 As we said above the language of the $\lambda\mu$-calculus is an
 extension of the $\lambda$-calculus, but its type assignment is very
@@ -68,15 +68,13 @@ different than STLC.  The type assignment rules are defined in
 Fig.~\ref{fig:lamu_typing}.
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \LamudruleVar{} & \LamudruleLam{}\\
-          & \\
-          \LamudruleMu{} & \LamudruleApp{}\\
-          &\\
-          \LamudruleNameApp{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \LamudruleVar{} \and
+      \LamudruleLam{} \and
+      \LamudruleMu{}  \and
+      \LamudruleApp{} \and
+      \LamudruleNameApp{}
+    \end{mathpar}
   \end{center}
   \caption{Type-checking algorithm for the $\lambda\mu$-calculus}
   \label{fig:lamu_typing}
@@ -179,41 +177,47 @@ derivations here, because they are rather straightforward.
 We are now in the state where we can prove $[[{-{-A}} -> A]]$ in the $\lambda\mu$-calculus.
 \begin{example}
   \label{ex:lamu_ldn}
-  The proof of $[[{-{-A}} -> A]]$ is as follows:
+  In this example we prove $[[{-{-A}} -> A]]$.  Suppose $D$ is the
+  following derivation:
   \begin{center}
-    \small
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=Lam] {
+      \inferrule* [right=\Lamudrulename{NegElim1}] {
         $$\mprset{flushleft}
-        \inferrule* [right=Mu] {
+        \inferrule* [right=\Lamudrulename{Var}] {
+          \ 
+        }{[[y : {-{-A}} y |- {-{-A}}, A a]]}
+        \\
+        $$\mprset{flushleft}
+        \inferrule* [right=\Lamudrulename{NegInt2}] {
           $$\mprset{flushleft}
+          \inferrule* [right=\Lamudrulename{NameApp}] {
+            $$\mprset{flushleft}
+            \inferrule* [right=\Lamudrulename{Var}] {
+              \ 
+            }{[[x : {-{-A}} y, A x |- A]]}
+          }{[[ [a]x : {-{-A}} y, A x |- A a]]}
+        }{[[\x.\m b.[a]x : {-{-A}} y |- {-A}, A a]]}
+      }{[[y (\x.\m b.[a]x) : {-{-A}} y |- _|_,A a]]}
+    \end{math}
+  \end{center}
+  Then the final proof is as follows:
+  \begin{center}    
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=\Lamudrulename{Lam}] {
+        $$\mprset{flushleft}
+        \inferrule* [right=\Lamudrulename{Mu}] {
           $$\mprset{flushleft}
-          $$\mprset{flushleft}
-          \inferrule* [right=BtmElim] {
-            \inferrule* [right=NegElim1] {
-              $$\mprset{flushleft}
-              \inferrule* [right=Var] {
-                \ 
-              }{[[y : {-{-A}} y |- {-{-A}}, A a]]}
-              \\
-              $$\mprset{flushleft}
-            \inferrule* [right=NegInt2] {
-              $$\mprset{flushleft}
-              \inferrule* [right=NameApp] {
-                $$\mprset{flushleft}
-                \inferrule* [right=Var] {
-                  \ 
-                }{[[x : {-{-A}} y, A x |- A]]}
-              }{[[ [a]x : {-{-A}} y, A x |- A a]]}
-            }{[[\x.\m b.[a]x : {-{-A}} y |- {-A}, A a]]}
-          }{[[y (\x.\m b.[a]x) : {-{-A}} y |- _|_,A a]]}
+          \inferrule* [right=\Lamudrulename{BtmElim}] {
+            D
           }{[[ [b'](y (\x.\m b.[a]x)) : {-{-A}} y |- A a]]}
         }{[[\m a.[b'](y (\x.\m b.[a]x)):{-{-A}} y |- A]]}
       }{[[\y.\m a.[b'](y (\x.\m b.[a]x)):. |- {-{-A}} -> A]]}
     \end{math}
   \end{center}
 \end{example}
+\noindent
 In the above example we leave out freshness constraints to make the
 presentation cleaner.  This example shows that the
 $\lambda\mu$-calculus really is classical.  So from the logical
@@ -263,8 +267,7 @@ nice reduction rules for these definitions.
 \noindent
 There are other reductions one might want.  For the others and an
 extension of the $\lambda\mu$-calculus see \cite{Geuvers:2012}.
-
 %%% Local Variables: 
 %%% mode: latex
-%%% TeX-master: "paper"
-%%% End:
+%%% TeX-master: ../thesis.tex
+%%% End: 
