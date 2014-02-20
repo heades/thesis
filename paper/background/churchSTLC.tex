@@ -8,47 +8,48 @@ and the second formulations here beginning with the first.  We will
 first define the type theories and then we will comment on the
 differences between the two theories.  The first step in defining a
 type theory is to define its language or syntax.  Following the syntax
-are several judgments specifying some meaning to the language.  A
+are several judgments assigning some meaning to the language.  A
 judgment is a statement about the object language derived from a set
 of inference rules.  In the following type theories we will derive two
 judgments: the reduction relation and the type-assignment relation.
 The syntax and reduction relation of the Church-style simply typed
-$\lambda$-calculus (STLC) is defined in
-Figure~\ref{fig:chstlc_syntax} where $[[t]]$ ranges over syntactic expressions
-called terms and $[[T]]$ ranges over syntactic expressions called types. Terms consist of
-variables $[[x]]$, unary functions $[[\x:T.t]]$ (called $\lambda$-abstractions) where $[[x]]$ is bound
-in $[[t]]$, and function application denoted $[[t1 t2]]$.  Now types
-are variables $[[X]]$ (we use variables as base types or constants
-just to indicate that we may have any number of constants), 
-and function types denoted $[[T1 -> T2]]$ where we call
-$[[T1]]$ the domain type and $[[T2]]$ the range type.  Note that if we
-remove the syntax for types from Figure~\ref{fig:chstlc_syntax} then
-we would obtain the (untyped) $\lambda$-calculus.  The syntax defines
-what language is associated with the type theory.  Additionally, the
-reduction rules describe how to compute with the terms.  The
-$\CHSTLCdrulename{Beta}$ rule says that if a $\lambda$-abstraction $[[\x:T.t]]$ is applied
-to some term $[[t']]$, then that term may be reduced to the term resulting from substituting $[[t']]$ for $[[x]]$ in
-$[[t]]$ which is the English interpretation for $[[ [t'/x]t]]$. We call
-$[[ [t'/x] t]]$ the capture avoiding substitution function. It is a
-meta-level function. That is, it is not part of the object language. In STLC
-the types and terms are disjoint, but in type theories the types are
-used to enforce particular properties on the terms.  To enforce these
-properties we need a method for assigning types to terms.  This is the
-job of what we will call the typing judgment, type-checking judgment,
-or type-assignment judgment\footnote{Throughout the literature one may
+$\lambda$-calculus (STLC) is defined in Figure~\ref{fig:chstlc_syntax}
+where $[[t]]$ ranges over syntactic expressions called terms and
+$[[T]]$ ranges over syntactic expressions called types. Terms consist
+of variables $[[x]]$, unary functions $[[\x:T.t]]$ (called
+$\lambda$-abstractions) where $[[x]]$ is bound in $[[t]]$, and
+function application denoted $[[t1 t2]]$.  Now types are variables
+$[[X]]$ (we use variables as base types or constants just to indicate
+that we may have any number of constants), and function types denoted
+$[[T1 -> T2]]$ where we call $[[T1]]$ the domain type and $[[T2]]$ the
+range type.  Note that if we remove the syntax for types from
+Figure~\ref{fig:chstlc_syntax} then we would obtain the (untyped)
+$\lambda$-calculus.  The syntax defines what language is associated
+with the type theory.  Additionally, the reduction rules describe how
+to compute with the terms.  The $\CHSTLCdrulename{Beta}$ rule says
+that if a $\lambda$-abstraction $[[\x:T.t]]$ is applied to some term
+$[[t']]$, then that term may be reduced to the term resulting from
+substituting $[[t']]$ for $[[x]]$ in $[[t]]$ which is the English
+interpretation for $[[ [t'/x]t]]$. We call $[[ [t'/x] t]]$ the capture
+avoiding substitution function. It is a meta-level function. That is,
+it is not part of the object language. In STLC the types and terms are
+disjoint, but in type theories the types are used to enforce
+particular properties on the terms.  To enforce these properties we
+need a method for assigning types to terms.  This is the job of what
+we will call the typing judgment, type-checking judgment, or
+type-assignment judgment\footnote{Throughout the literature one may
   find the typing judgment being called the typing algorithm,
   type-checking algorithm, or type-assignment algorithm.  However,
-  this is a particular case where the rules deriving the typing judgment
-  are algorithmic in the sense that when deriving conclusions from the
-  inference rules deriving the judgment there is always a
+  this is a particular case where the rules deriving the typing
+  judgment are algorithmic in the sense that when deriving conclusions
+  from the inference rules deriving the judgment there is always a
   deterministic choice on how to proceed.}.  A judgment is a statement
 about the object language derived from a set of inference rules.  The
-typing judgment for STLC is defined in
-Figure~\ref{fig:chstlc_typing}.  The typing judgment depends on a
-typing context $[[G]]$ which for now can be considered as a
-list of ordered pairs consisting of a variable and a type.  This list
-is used to keep track of the types of the free variables in a term.
-The grammar for context is as follows:
+typing judgment for STLC is defined in Figure~\ref{fig:chstlc_typing}.
+The typing judgment depends on a typing context $[[G]]$ which for now
+can be considered as a list of ordered pairs consisting of a variable
+and a type.  This list is used to keep track of the types of the free
+variables in a term.  The grammar for context is as follows:
 \begin{center}
   \begin{math}
     \begin{array}{lll}

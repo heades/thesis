@@ -147,7 +147,7 @@ type theory are terminating.  Speaking of cut elimination one might
 think that this correspondence only holds for sequent calculi, but one
 can normalize natural deduction proofs as well \cite{Prawitz:1965}.
 It is widely known that showing a type theory to be consistent --
-through the remainder of the paper we will use the words consistent
+through the remainder of the thesis we will use the words consistent
 and normalizing interchangeably -- can be a very difficult task, and
 often requires advanced mathematical tools.  In fact a lot of the work
 going into defining new type theories goes into showing it consistent.
@@ -292,71 +292,10 @@ of Per Martin-L\"of.
 % section the_calculus_of_constructions (end)
 
 We have now introduced every type theory we need for the remainder of
-this article.  So far we have taken a trip down the rabbit hole of
-type theory,  from the early days of type theory all the way to modern
-type theory.  It is now time to see what we can use these for.
-Throughout the article so far we have mentioned the connection of type
-theory to programming language research.  In the next section we give
-more details of this connection.  We will also discuss several real
-world applications of the type theories we have discussed above.
-Following the next section will be the final section which discusses
-how to reason about type theories at the meta-level.  However, before
-discussing the design of programming languages we first give some open
-problems in dependent type theory.
-
-\textbf{Open Problems in Dependent Type Theory.}  In
-Section~\ref{sec:classical_type_theory} we introduced classical type
-theory.  Take note that every dependent type theory we have introduced
-in this section is intuitionistic. It turns out that very little
-research on classical dependent type theory has been done.  Gilles
-Barthe et al.  defined what they call classical pure type systems in
-\cite{Barthe:1997}.  What they did was take the $\Delta$-operator from
-the $\lambda\Delta$-calculus and added it to PTS'.  Then they did some
-preliminary meta-theory of classical pure type systems.  Another paper
-on classical dependent type theory was by Herbelin
-\cite{Herbelin:2005}, which showed that if one takes the extensional
-version of Martin-L\"of's type theory, full $\beta$-reduction, and the
-$\mu$-abstraction from the $\lambda\mu$-calculus then the type theory
-becomes inconsistent.  He then goes on to show that by choosing a
-particular reduction strategy like CBV or CBN this problem goes away.
-Paul Levy shows in \cite{Levy:2001} that taking Marin-L\"of's Type
-Theory and adding Peirce's law which when combined with the axiom of
-choice results in unwanted stuck terms.  He shows that this occurs
-with any chosen reduction strategy.  Nuria Brede extends Nuprl proof
-assistants core type theory called computational type theory with the
-$\mu$-operator from the $\lambda\mu$-calculus in \cite{Brede:2009}.
-They are not concerned with extracting computational content from the
-classical logic, but rather to just allow for proofs to reason using
-classical reasoning.  These are the only advances in classical
-dependent type theory that we know of.  This suggests that while the
-research on intuitionistic dependent type theory has been throughly
-investigated over the course of the last forty years, since Automath,
-classical dependent type theory has not.  This is startling, since
-classical type theory provides a lot of conveniences and beautiful
-structure.  Hence, we arrive at the following open problem\footnote{We
-  are not the only people concerned about this gap.  Robin Adams has
-  begun a four year program to try and solve this very problem.  Hugo
-  Herbelin has been working on a very promising idea called delimited
-  control.  I do not discuss his work here, because I have just
-  learned of it.}.
-\begin{openproblem}
-  Is it possible to formulate a classical dependent type theory which
-  is consistent with full $\beta$-reduction with the presence of
-  advanced typing features?
-\end{openproblem}
-\noindent
-We believe this is an achievable goal, but we are unsure of whether we
-may need to come up with new operators different from the
-$\mu$-abstraction and the $\Delta$-abstraction.  Another open
-problem presents itself with respect to the dual calculus.
-\begin{openproblem}
-  If we choose CBV as a reduction strategy and extend the dual
-  calculus with dependency what are the duals of dependent product?
-  It seems it would be a strong disjoint union over the output.  Is
-  this true?  This implies that the dual to disjoint union would be a
-  product type over the output. How does equality work in such a
-  language?
-\end{openproblem}
+this part of thesis.  So far we have taken a trip down the rabbit hole
+of type theory, from the early days of type theory all the way to
+modern type theory.  It is now time to see what we can use these for
+in programming language research.
 % chapter dependent_type_theory (end)
 
 \chapter{Dependent Types, Proof Assistants, and Programming Languages}
@@ -576,10 +515,6 @@ of PTS' where their set of rules are a subset of
 $\{(*,*),(\Box,\Box),(\Box,*),(\Box,\Box)\}$.  However, it is unknown
 whether weak implies strong normalization for the class of dependent
 PTS'.
-\begin{openproblem}
-  Are there any dependent type theories where weak normalization
-  implies strong normalization?
-\end{openproblem}
 
 G\"odel's famous theorems tell us that to prove consistency of a
 theory one must use a more powerful theory than the one that is being
@@ -843,33 +778,7 @@ hereditary substitution is that it shows promise of being less complex
 than other normalization techniques.  This means that it would be
 easier to formalize in proof assistants.  However, there is a big
 drawback of hereditary substitution and that is it is not known how
-many type theories can be proven normalizing using it.  Which leads us
-to a few open problems.
-\begin{openproblem}
-  Can system T be proven normalizing using hereditary substitution?
-\end{openproblem}
-\noindent
-The solution this open problem has alluded us for quite
-sometime.  It seems as if it would be a straightforward extension of
-the proof of normalization for SLTC, but the natural number recursor
-makes it very hard to put an ordering on the types.  The following
-open problem is even harder to solve.
-\begin{openproblem}
-  Can system F be proven normalizing using hereditary substitution?
-\end{openproblem}
-\noindent
-Clearly no natural number ordering will exist for the types of system
-F.  If one did then we could prove consistency of second order
-arithmetic using a natural number ordering.  We know this is
-impossible.  However, it may be possible to use a semantic technique
-to prove the properties of the hereditary substitution function.  We
-are currently pursuing the idea to use categorical models to prove the
-properties of the hereditary substitution function for system F.  In
-\cite{Joachimski:1999} Felix Joachimski and Ralph Matthes define a
-similar function to hereditary substitution and concludes weak and
-strong normalization of STLC, system T, and system F.  It maybe
-possible to adopt some of their work to hereditary substitution to be
-able to solve the previous two open problems.
+many type theories can be proven normalizing using it.
 
 Hereditary substitution can be used to maintain canonical forms and
 even prove weak normalization of predicative simple type theories.  It
@@ -955,8 +864,8 @@ candidates.  We briefly summarized the fact that reducibility
 candidates gives rise to logical relations.  However, we have used
 logical relations only to prove properties about terminating theories.
 Can logical relations be used to reason about non-terminating type
-theories?  There is a partial solution to this question and an
-existing open problem. 
+theories?  It turns out that we can, but it requires yet another
+extension of logical relations.
 
 Adding the ability to define general recursive types to a type theory
 results in the theory being non-terminating.  That is, one can define a
