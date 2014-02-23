@@ -100,17 +100,15 @@ $[[a]]$.  We can define projections for simple pairs as follows:
 The kinding rules are defined in Fig.~\ref{fig:lof_kinding}.
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \TTdruleKXXBottom{} & \TTdruleKXXUnit{}\\
-        &\\
-        \TTdruleKXXExt{} & \TTdruleKXXProd{}\\
-        &\\
-        \TTdruleKXXPi{} & \TTdruleKXXArrow{}\\
-        &\\
+    \begin{mathpar}
+        \TTdruleKXXBottom{}   \and
+        \TTdruleKXXUnit{}     \and
+        \TTdruleKXXExt{}      \and
+        \TTdruleKXXProd{}     \and
+        \TTdruleKXXPi{}       \and
+        \TTdruleKXXArrow{}    \and
         \TTdruleKXXCoprod{}
-      \end{array}
-    \end{math}
+    \end{mathpar}
   \end{center}
   \caption{Kinding for Martin-L\"of's Type Theory}
   \label{fig:lof_kinding}
@@ -126,21 +124,19 @@ In fact we could have denoted $[[(x:A)->B]]$ as $\forall [[x]]:[[A]].[[B]]$
 and $[[{x:A}->B]]$ as $\exists [[x]]:[[A]].[[B]]$. 
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \TTdruleLXXTrue{} & \TTdruleLXXProd{}\\
-        &\\
-        \TTdruleLXXForalli{} & \TTdruleLXXForalle{}\\
-        &\\
-        \TTdruleLXXImpi{} & \TTdruleLXXImpe{}\\
-        &\\
-        \TTdruleLXXOriOne{} & \TTdruleLXXOriTwo{}\\
-        &\\
-        \TTdruleLXXOre{} & \TTdruleLXXExti{}\\
-        &\\
+    \begin{mathpar}
+        \TTdruleLXXTrue{}     \and
+        \TTdruleLXXProd{}     \and
+        \TTdruleLXXForalli{}  \and
+        \TTdruleLXXForalle{}  \and  
+        \TTdruleLXXImpi{}     \and
+        \TTdruleLXXImpe{}     \and
+        \TTdruleLXXOriOne{}   \and
+        \TTdruleLXXOriTwo{}   \and 
+        \TTdruleLXXOre{}      \and
+        \TTdruleLXXExti{}     \and
         \TTdruleLXXExte{}
-      \end{array}
-    \end{math}
+    \end{mathpar}
   \end{center}
   \caption{Validity for Martin-L\"of's Type Theory}
   \label{fig:lof_validity}
@@ -148,38 +144,40 @@ and $[[{x:A}->B]]$ as $\exists [[x]]:[[A]].[[B]]$.
 The typing rules are defined in Fig.~\ref{fig:lof_typing}.
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \TTdruleTXXUnit{} & \TTdruleTXXVar{} & \TTdruleTXXSum{}\\
-        & \\
-        \TTdruleTXXCaseOne{} & \TTdruleTXXProd{} & \TTdruleTXXProdOne{}\\
-        & \\
-        \TTdruleTXXProdTwo{} & \TTdruleTXXPi{} & \TTdruleTXXAppOne{}\\
-        & \\
-        \TTdruleTXXArrow{} & \TTdruleTXXAppTwo{} & \TTdruleTXXCoProdOne{}\\ 
-        & \\
-        \TTdruleTXXCoProdTwo{} & \TTdruleTXXCaseTwo{} & \TTdruleTXXAbort{}\\
-        & \\
+    \begin{mathpar}
+        \TTdruleTXXUnit{}      \and
+        \TTdruleTXXVar{}       \and
+        \TTdruleTXXSum{}       \and
+        \TTdruleTXXCaseOne{}   \and
+        \TTdruleTXXProd{}      \and
+        \TTdruleTXXProdOne{}   \and
+        \TTdruleTXXProdTwo{}   \and
+        \TTdruleTXXPi{}        \and
+        \TTdruleTXXAppOne{}    \and
+        \TTdruleTXXArrow{}     \and
+        \TTdruleTXXAppTwo{}    \and
+        \TTdruleTXXCoProdOne{} \and
+        \TTdruleTXXCoProdTwo{} \and
+        \TTdruleTXXCaseTwo{}   \and
+        \TTdruleTXXAbort{}     \and
         \TTdruleTXXConv{}
-      \end{array}
-    \end{math}
+    \end{mathpar}
   \end{center}
   \caption{Typing Rules for Martin L\"of's Type Theory}
   \label{fig:lof_typing}
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \TTdruleEqXXUnit{} & \TTdruleEqXXFst{}\\
-        &\\
-        \TTdruleEqXXSnd{} & \TTdruleEqXXBeta{}\\
-        &\\
-        \TTdruleEqXXEta{} & \TTdruleEqXXCaseOne{}\\
-        &\\
-        \TTdruleEqXXCaseTwo{} & \TTdruleEqXXCaseThree{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+        \TTdruleEqXXUnit{}      \and
+        \TTdruleEqXXFst{}       \and
+        \TTdruleEqXXSnd{}       \and
+        \TTdruleEqXXBeta{}      \and
+        \TTdruleEqXXEta{}       \and
+        \TTdruleEqXXCaseOne{}   \and
+        \TTdruleEqXXCaseTwo{}   \and
+        \TTdruleEqXXCaseThree{} 
+    \end{mathpar}
   \end{center}
   \caption{Equality for Martin-L\"of's Type Theory}
   \label{fig:lof_eq}
@@ -189,9 +187,9 @@ and cartesian products.  These can be derived as well.  The rules here
 are straightforward, so we only comment on the elimination rule for sum
 types.  The rule is defined as
 \begin{center}
-  \begin{math}
+  \begin{mathpar}
     \TTdruleTXXCaseTwo{}.
-  \end{math}
+  \end{mathpar}
 \end{center}
 We mentioned above that this rule corresponds to the elimination form
 for constructive disjunction.  This rule tells us that to eliminate
@@ -271,9 +269,10 @@ termination of equality and decidability of type checking no longer hold
 
 \textbf{Intensional Type Theory.} Now to make Martin-L\"of's Type Theory intensional we add the following rules:
 \begin{center}
-  \begin{math}
+  \begin{tabular}{lll}
+    \begin{math}
     \begin{array}{lll}
-      Kinding & Typing & Equality\\
+      \text{Kinding:} & \text{Typing:} \\
       $$\mprset{flushleft}
       \inferrule* [right=] {
         [[G |- a : A]]      
@@ -286,14 +285,20 @@ termination of equality and decidability of type checking no longer hold
         [[G, x : A |- d : B(x,x,r(x))]]
         \\\\
         [[G, x:A,y:A,z:Id A x y |- B(x,y,z) : Type]]
-      }{[[G |- J(d,a,b,c) : B(a,b,c)]]}
-      &
+      }{[[G |- J(d,a,b,c) : B(a,b,c)]]} \\              
+    \end{array}          
+  \end{math}\\
+  & \\
+  \begin{math}
+    \begin{array}{lll}
+      \text{Equality:} \\
       $$\mprset{flushleft}
       \inferrule* [right=] {
         [[G |- a : A]]
       }{[[G |- J(d,a,a,r(a)) = d a : B(a,a,r(a))]]}
     \end{array}
   \end{math}
+  \end{tabular}  
 \end{center}
 As we can see here propositional equality is distinct from the
 definitional equality judgment.  In the above rules $[[r(a)]]$ is the

@@ -54,19 +54,17 @@ The reduction rules for the dual calculus are in Fig.~\ref{fig:dc_red}
 and the typing rules are in Fig.~\ref{fig:dc_typing}.  
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \DCdruleEtaR{} & \DCdruleEtaL{}\\
-        &\\
-        \DCdruleBetaR{} & \DCdruleBetaL{}\\
-        &\\
-        \DCdruleBetaNeg{} & \DCdruleBetaCoProdOne{}\\
-        &\\
-        \DCdruleBetaCoProdTwo{} & \DCdruleBetaProdOne{}\\
-        &\\
-        \DCdruleBetaProdTwo{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \DCdruleEtaR{}  \and
+      \DCdruleEtaL{}  \and
+      \DCdruleBetaR{} \and 
+      \DCdruleBetaL{} \and
+      \DCdruleBetaNeg{} \and
+      \DCdruleBetaCoProdOne{} \and
+      \DCdruleBetaCoProdTwo{} \and
+      \DCdruleBetaProdOne{}   \and
+      \DCdruleBetaProdTwo{}      
+    \end{mathpar}
   \end{center}
   \caption{Reduction Rules for the Dual Calculus}
   \label{fig:dc_red}
@@ -101,32 +99,32 @@ rules correspond to the left rules of LK, while the judgment for
 statements correspond to the cut rule of LK.
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        Terms:\\
-        \begin{array}{lll}
-          \DCdruletXXAxR{} & \DCdruletXXProd{}\\
-          &\\
-          \DCdruletXXCoProdl{} & \DCdruletXXCoProdr{}\\
-          &\\
-          \DCdruletXXNegR{} & \DCdruletXXIR{}
-        \end{array}\\
-        &\\
-        Coterms:\\
-        \begin{array}{lll}
-          \DCdrulectXXAxL{} & \DCdrulectXXCoProd{}\\
-          &\\
-          \DCdrulectXXProdFst{} & \DCdrulectXXProdSnd{}\\
-          &\\
-          \DCdrulectXXNegL{} & \DCdrulectXXIR{}
-        \end{array}\\
-        &\\
-        Statements:\\
-        \begin{array}{lll}
-          \DCdrulestXXCut{}
-        \end{array}
-      \end{array}
-    \end{math}
+    \begin{tabular}{lll}
+      Terms:\\
+      \begin{mathpar}
+        \DCdruletXXAxR{}     \and
+        \DCdruletXXProd{}    \and
+        \DCdruletXXCoProdl{} \and
+        \DCdruletXXCoProdr{} \and   
+        \DCdruletXXNegR{}    \and
+        \DCdruletXXIR{}
+      \end{mathpar}\\
+      & \\
+      Coterms:\\
+      \begin{mathpar}
+        \DCdrulectXXAxL{}     \and
+        \DCdrulectXXCoProd{}  \and        
+        \DCdrulectXXProdFst{} \and
+        \DCdrulectXXProdSnd{} \and        
+        \DCdrulectXXNegL{}    \and
+        \DCdrulectXXIR{}
+      \end{mathpar}\\
+      & \\
+      Statements:\\
+      \begin{mathpar}
+        \DCdrulestXXCut{}
+      \end{mathpar}      
+    \end{tabular}    
   \end{center}
 
   \caption{Typing Rules for the Dual Calculus}

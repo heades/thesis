@@ -25,29 +25,21 @@ the typing rules in Fig.~\ref{fig:lamd_typing}.
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
-      Syntax: & \\
-      & 
+      Syntax: 
+      \vspace{10px} \\
       \begin{math}
         \begin{array}{lll}
           [[T]],[[A]],[[B]],[[C]] & ::= & [[X]]\,|\,[[_|_]]\,|\,[[A -> B]]\\
           [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\d x:T.t]]\,|\,[[t1 t2]]\\
         \end{array}
-      \end{math}      
+      \end{math} \\
+      & \\
+      Full $\beta$-reduction: \\
+      \begin{mathpar}
+        \LamddruleBeta{} \and        
+        \LamddruleStructRed{}
+      \end{mathpar}
     \end{tabular}
-    \\
-    \begin{center}
-      \begin{tabular}{lll}
-        Reduction: & \\
-        &
-        \begin{math}
-        \begin{array}{ccc}
-          \LamddruleBeta{} \\
-          & \\
-          \LamddruleStructRed{}
-        \end{array}
-      \end{math}
-      \end{tabular}
-    \end{center}
   \end{center}
   
   \caption{Syntax and reduction rules for the $\lambda\Delta$-calculus}
@@ -55,13 +47,12 @@ the typing rules in Fig.~\ref{fig:lamd_typing}.
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \LamddruleVar{} & \LamddruleLam{}\\
-          & \\
-          \LamddruleDelta{} & \LamddruleApp{}\\
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+      \LamddruleVar{} \and
+      \LamddruleLam{} \and
+      \LamddruleDelta{} \and
+      \LamddruleApp{}
+    \end{mathpar}
   \end{center}
   \caption{Type-checking algorithm for the $\lambda\Delta$-calculus}
   \label{fig:lamd_typing}
@@ -75,7 +66,7 @@ Here we assume $[[{-A}]]$ and show $[[_|_]]$, and obtain
 $[[A]]$.  We can use this rule to prove LDN:
 \begin{example}
   \label{lemma:lamd_ldn}
-  The proof of $[[{-{-A}} -> A]]$ in the $\lambda\Delta$-calculus:
+  Suppose $[[G]] \defeq [[x : {-{-A}}, y : {-A}]]$.  Then the proof of $[[{-{-A}} -> A]]$ in the $\lambda\Delta$-calculus:
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
@@ -87,13 +78,13 @@ $[[A]]$.  We can use this rule to prove LDN:
             $$\mprset{flushleft}
             \inferrule* [right=Var] {
               \ 
-            }{[[x : {-{-A}}, y : {-A} |- x : {-{-A}}]]}
+            }{[[G |- x : {-{-A}}]]}
             \\
             $$\mprset{flushleft}
             \inferrule* [right=Var] {
               \ 
-            }{[[x : {-{-A}}, y : {-A} |- y : {-A}]]}
-          }{[[x : {-{-A}}, y : {-A} |- x y : _|_]]}
+            }{[[G |- y : {-A}]]}
+          }{[[G |- x y : _|_]]}
         }{[[x : {-{-A}} |- \d y : {-A}.(x y) : A]]}
       }{[[. |- \x:{-{-A}}.(\d y:{-A}.(x y)) : {-{-A}} -> A]]}
     \end{math}

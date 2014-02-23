@@ -23,13 +23,11 @@ separated CoC is in Fig.~\ref{fig:CoC_sep_syntax}\footnote{We do not
 This formulation simply extends system $\Fw$ with dependency.
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \CoCSdruleSXXType{} & \CoCSdruleSXXProdOne{}\\
-        &\\
-        \CoCSdruleSXXProdTwo{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}      
+        \CoCSdruleSXXType{}    \and
+        \CoCSdruleSXXProdOne{} \and
+        \CoCSdruleSXXProdTwo{} 
+    \end{mathpar}
   \end{center}
   \caption{Sorting Rules for the Separated Calculus of Constructions}
   \label{fig:CoC_sep_sorting}
@@ -44,55 +42,51 @@ Fig.~\ref{fig:CoC_sep_typing}, and finally the equality rules in
 Fig.~\ref{fig:CoC_sep_red}.
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \CoCSdruleKXXVar{} & \CoCSdruleKXXProdOne{}\\
-        &\\
-        \CoCSdruleKXXProdTwo{} & \CoCSdruleKXXLamOne{}\\
-        &\\
-        \CoCSdruleKXXLamTwo{} & \CoCSdruleKXXAppOne{}\\
-        &\\
+    \begin{mathpar}
+        \CoCSdruleKXXVar{}      \and
+        \CoCSdruleKXXProdOne{}  \and
+        \CoCSdruleKXXProdTwo{}  \and
+        \CoCSdruleKXXLamOne{}   \and
+        \CoCSdruleKXXLamTwo{}   \and
+        \CoCSdruleKXXAppOne{}   \and
         \CoCSdruleKXXAppTwo{}
-      \end{array}
-    \end{math}
+    \end{mathpar}
   \end{center}
   \caption{Kinding Rules for the Separated Calculus of Constructions}
   \label{fig:CoC_sep_kinding}
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \CoCSdruleVar{} & \CoCSdruleLam{}\\
-        &\\
-        \CoCSdruleApp{} & \CoCSdruleTypeAbs{}\\
-        &\\
-        \CoCSdruleTypeApp{} & \CoCSdruleConv{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+        \CoCSdruleVar{}     \and
+        \CoCSdruleLam{}     \and
+        \CoCSdruleApp{}     \and
+        \CoCSdruleTypeAbs{} \and
+        \CoCSdruleTypeApp{} \and
+        \CoCSdruleConv{}
+    \end{mathpar}
   \end{center}
   \caption{Typing Rules for the Separated Calculus of Constructions}
   \label{fig:CoC_sep_typing}
 \end{figure}
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \CoCSdruleRXXBetaOne{} & \CoCSdruleRXXBetaTwo{}\\
-        &\\
-        \CoCSdruleRXXBetaThree{} & \CoCSdruleRXXBetaFour{}\\
-        &\\
-        \CoCSdruleRXXLamOne{} & \CoCSdruleRXXLamTwo{}\\
-        &\\
-        \CoCSdruleRXXLamThree{} & \CoCSdruleRXXAppOne{}\\
-        &\\
-        \CoCSdruleRXXAppTwo{} & \CoCSdruleRXXAppThree{}\\
-        &\\
-        \CoCSdruleRXXAppFour{} & \CoCSdruleRXXTypeAppOne{}\\
-        &\\
-        \CoCSdruleRXXTypeAppTwo{} & \CoCSdruleRXXTypeAppThree{}
-      \end{array}
-    \end{math}
+    \begin{mathpar}
+        \CoCSdruleRXXBetaOne{}      \and
+        \CoCSdruleRXXBetaTwo{}      \and
+        \CoCSdruleRXXBetaThree{}    \and
+        \CoCSdruleRXXBetaFour{}     \and
+        \CoCSdruleRXXLamOne{}       \and
+        \CoCSdruleRXXLamTwo{}       \and
+        \CoCSdruleRXXLamThree{}     \and
+        \CoCSdruleRXXAppOne{}       \and
+        \CoCSdruleRXXAppTwo{}       \and
+        \CoCSdruleRXXAppThree{}     \and
+        \CoCSdruleRXXAppFour{}      \and
+        \CoCSdruleRXXTypeAppOne{}   \and
+        \CoCSdruleRXXTypeAppTwo{}   \and
+        \CoCSdruleRXXTypeAppThree{} 
+    \end{mathpar}
   \end{center}
   \caption{The Equality for the Separated Calculus of Constructions}
   \label{fig:CoC_sep_red}

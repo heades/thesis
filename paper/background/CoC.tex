@@ -55,24 +55,26 @@ inference rules in the next definition.
   \label{def:pst_rules}
   Given a system of the $\lambda$-cube $(S, A, R)$ the inference rules are defined as follows:
   \begin{center}
-    \begin{math}
-      \begin{array}{lll}               
-        $$\mprset{flushleft}
-        \inferrule* [right=Beta] {
-          \ 
-        }{[[(\x:t.b) a]] \redto [[ [a/x]b]]}
-        &
-        $$\mprset{flushleft}
+    \begin{mathpar}
+
+      \inferrule* [right=Beta] {
+        \ 
+      }{[[(\x:t.b) a]] \redto [[ [a/x]b]]}
+
+      \and
+
         \inferrule* [right=Axioms] {
           (c,s) \in A
         }{[[.]] \vdash c : s}
-        &
-        $$\mprset{flushleft}
+        
+        \and
+
         \inferrule* [right=Var] {
           [[G]] \vdash [[a]] : s          
-        }{[[G, x: a |- x : a]]}\\
-        &\\
-        $$\mprset{flushleft}
+        }{[[G, x: a |- x : a]]}
+        
+        \and
+        
         \inferrule* [right=Weakening] {
           [[G |- a : b]]
           \\\\
@@ -80,15 +82,17 @@ inference rules in the next definition.
           \\
           [[(x:a') \in G]]
         }{[[G,x:a' |- a:b]]}
-        &
-        $$\mprset{flushleft}
+        
+        \and
+                
         \inferrule* [right=App] {
           [[G |- a' : b]]
           \\\\
           [[G |- a : (x : b) -> b']]
         }{[[G |- a a' : [a'/x]b']]}
-        &
-        $$\mprset{flushleft}
+        
+        \and
+        
         \inferrule* [right=Conv] {
           [[G |- a : b]]
           \\\\
@@ -96,8 +100,9 @@ inference rules in the next definition.
           \\
           [[b]] \equiv_\beta [[b']]
         }{[[G |- a : b']]}\\
-        &\\
-        $$\mprset{flushleft}
+        
+        \and
+
         \inferrule* [right=Pi] {                 
           [[G]] \vdash [[a]]:s_1
           \\\\
@@ -105,15 +110,15 @@ inference rules in the next definition.
           \\
           (s_1, s_2) \in R
         }{[[G]] \vdash [[(x:a) -> b]]:s_2}
-        &
-        $$\mprset{flushleft}
+        
+        \and
+
         \inferrule* [right=Lam] {
           [[G,x:a |- b : b']]
           \\
           [[G]] \vdash [[(x:a) -> b']] : s
         }{[[G |- \x:a.b:(x : a) -> b']]}
-      \end{array}
-    \end{math}
+    \end{mathpar}
   \end{center}
 \end{definition}
 In the previous definition $s$ ranges over $S$, and we left out the

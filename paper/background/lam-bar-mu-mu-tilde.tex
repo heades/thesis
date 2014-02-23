@@ -47,29 +47,23 @@ is called left-to-right CBV and is defined next.
   \label{def:lamu_cbv}
   CBV is defined by the following rules:
   \begin{center}
-    \begin{math}
-      \begin{array}{llllll}
-        $$\mprset{flushleft}
-        \inferrule* [right=Beta] {
-          \ 
-        }{(\lambda x.t)\,v \redto [v/x]t}
-        &
-        $$\mprset{flushleft}
-        \inferrule* [right=Struct] {
-          \ 
-        }{(\mu \alpha.s)\,v \redto [v/^* \alpha]s}
-        &
-        $$\mprset{flushleft}
-        \inferrule* [right=Naming] {
-          \ 
-        }{[\alpha](\mu \beta.s) \redto [\alpha/\beta]s}
-        &
-        $$\mprset{flushleft}
-        \inferrule* [right=Context] {
-          t \redto t'
-        }{E[t] \redto E[t']}
-      \end{array}
-    \end{math}
+    \begin{mathpar}      
+      \inferrule* [right=Beta] {
+        \ 
+      }{(\lambda x.t)\,v \redto [v/x]t} 
+      \and
+      \inferrule* [right=Struct] {
+        \ 
+      }{(\mu \alpha.s)\,v \redto [v/^* \alpha]s}
+      \and      
+      \inferrule* [right=Naming] {
+        \ 
+      }{[\alpha](\mu \beta.s) \redto [\alpha/\beta]s}
+      \and
+      \inferrule* [right=Context] {
+        t \redto t'
+      }{E[t] \redto E[t']}
+    \end{mathpar}
   \end{center}
 \end{definition}
 \noindent
@@ -89,29 +83,23 @@ but we redefine the evaluation contexts.
   \label{def:lamu_cbv}
   CBN is defined by the following rules:
   \begin{center}
-    \begin{math}
-      \begin{array}{llllll}
-        $$\mprset{flushleft}
+    \begin{mathpar}
         \inferrule* [right=Beta] {
           \ 
         }{(\lambda x.t)\,t' \redto [t/x]t}
-        &
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=Struct] {
           \ 
         }{(\mu \alpha.s)\,t \redto [t/^* \alpha]s}
-        &
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=Naming] {
           \ 
         }{[\alpha](\mu \beta.s) \redto [\alpha/\beta]s}
-        &
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=Context] {
           t \redto t'
         }{E[t] \redto E[t']}
-      \end{array}
-    \end{math}
+    \end{mathpar}
   \end{center}
 \end{definition}
 \noindent
@@ -197,26 +185,27 @@ theory.  Its syntax and reduction rules are in
 Fig.~\ref{fig:lbmmt_syntax} and its typing rules are in Fig.~\ref{fig:lbmmt_typing}.
 \begin{figure}
   \begin{center}
-    \begin{math}
-      \begin{array}{rll}
-        [[T]],[[A]],[[B]],[[C]] & ::= & [[_|_]]\,|\,[[X]]\,|\,[[A -> B]]\,|\,[[A - B]]\\
-        [[c]] & ::= &  [[< v | e >]]\\
-        [[v]] & ::= &  [[x]]\,|\,[[\ x . v]]\,|\,[[\m a . c]]\,|\,[[e * v]]\\
-        [[e]] & ::= &  [[a]]\,|\,[[\mt x . c]]\,|\,[[v * e]]\,|\,[[b \ . e]]\\
-      \end{array}
-    \end{math}
-  \end{center}
-
-  \begin{center}
-    \begin{math}
-      \begin{array}{lll}
-        \LBMMTdruleRXXBeta{} & \LBMMTdruleRXXMu{}\\
-        &\\
-        \LBMMTdruleRXXMuT{} & \LBMMTdruleRXXCoBeta{}\\
-        &\\
-        \LBMMTdruleEXXCtx{}
-      \end{array}
-    \end{math}
+    \begin{tabular}{lll}
+      Syntax:
+      \vspace{10px} \\
+      \begin{math}
+        \begin{array}{rll}
+          [[T]],[[A]],[[B]],[[C]] & ::= & [[_|_]]\,|\,[[X]]\,|\,[[A -> B]]\,|\,[[A - B]]\\
+          [[c]] & ::= &  [[< v | e >]]\\
+          [[v]] & ::= &  [[x]]\,|\,[[\ x . v]]\,|\,[[\m a . c]]\,|\,[[e * v]]\\
+          [[e]] & ::= &  [[a]]\,|\,[[\mt x . c]]\,|\,[[v * e]]\,|\,[[b \ . e]]\\
+        \end{array}
+      \end{math}\\
+      & \\
+      CBV reduction: \\
+      \begin{mathpar}
+        \LBMMTdruleRXXBeta{}   \and
+        \LBMMTdruleRXXMu{}     \and
+        \LBMMTdruleRXXMuT{}    \and
+        \LBMMTdruleRXXCoBeta{} \and
+        \LBMMTdruleEXXCtx{}      
+      \end{mathpar}
+    \end{tabular}
   \end{center}
 
   \caption{The Syntax and Reduction Rules for the $\LBMMT$-Calculus}
@@ -225,32 +214,27 @@ Fig.~\ref{fig:lbmmt_syntax} and its typing rules are in Fig.~\ref{fig:lbmmt_typi
 
 \begin{figure}
   \begin{center}
-    \begin{tabular}{lcc}
-      Commands:\\
-      &
-      \begin{math}
-        \LBMMTdruleCut{}
-      \end{math}\\     
-      & \\
-      Terms:\\
-      &
-        \begin{math}
-          \begin{array}{lll}
-            \LBMMTdruleVar{} & \LBMMTdruleLam{}\\
-            &\\
-            \LBMMTdruleMu{} & \LBMMTdruleCoCtx{}
-          \end{array}
-        \end{math}\\
+    \begin{tabular}{lll}           
+      \ \ \ \ \ \ \ Terms:\\
+        \begin{mathpar}
+            \LBMMTdruleVar{} \and
+            \LBMMTdruleLam{} \and
+            \LBMMTdruleMu{}  \and
+            \LBMMTdruleCoCtx{}
+        \end{mathpar}\\
       &\\
-      Contexts:\\
-      &
-        \begin{math}
-          \begin{array}{lll}
-            \LBMMTdruleCovar{} & \LBMMTdruleComu{}\\
-            &\\
-            \LBMMTdruleCtx{} & \LBMMTdruleColam{}
-          \end{array}
-        \end{math}
+      \ \ \ \ \ \ \ Contexts:\\
+        \begin{mathpar}
+            \LBMMTdruleCovar{} \and
+            \LBMMTdruleComu{}  \and
+            \LBMMTdruleCtx{}   \and
+            \LBMMTdruleColam{}
+        \end{mathpar}\\
+        & \\
+      \ \ \ \ \ \ \ Commands:\\
+      \begin{mathpar}
+        \LBMMTdruleCut{}
+      \end{mathpar}\\     
     \end{tabular}
   \end{center}
   \caption{The Typing Rules for the $\LBMMT$-Calculus}

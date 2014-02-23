@@ -120,7 +120,7 @@ syntax:
     \end{array}
   \end{math}
 \end{center}
-We need one additional rule to complete the operational semantics which is 
+We need one additional rule to complete the operational semantics which is \\
 $\text{unfold}(\text{fold}\ v) \redto v$.  We complete the extension by adding
 two new type checking rules.  They are defined as follows: 
 \begin{center}
@@ -145,21 +145,21 @@ We first have to extend the definition of the logical relations to deal with rec
 \begin{definition}
   \label{def:logical_relations}
   We define logical relations for values and then we extend this definition to
-  expressions (terms t).\\
+  expressions (terms t).
   \ \\
   Logical relations for values: \\
   \begin{math}
     \begin{array}{lllll}
-      \mathcal{V}\interp{\alpha}_\rho & = & \rho(\alpha) \\
+      \mathcal{V}\interp{\alpha}_\rho = \rho(\alpha) \\
       & \\
-      \mathcal{V}\interp{X}_\rho & = &  \{ v\,|\,\cdot \vdash v : X \} \\
+      \mathcal{V}\interp{X}_\rho =  \{ v\,|\,\cdot \vdash v : X \} \\
       & \\
-      \mathcal{V}\interp{T_1 \to T_2}_\rho & = & \{ \lambda x:T.t\ |\ 
-      \cdot \vdash \lambda x:T_1 : T_1 \to T_2 \land
-      \forall v.v \in \mathcal{V} \interp{T_1}_\rho \implies 
-              [v/x]t \in \mathcal{E}\interp{T_2}_\rho \}\\
+      \mathcal{V}\interp{T_1 \to T_2}_\rho = \\
+      \,\,\,\,\,\,\,\,\,\,\,\{ \lambda x:T.t\ |\ 
+      (\cdot \vdash \lambda x:T_1 : T_1 \to T_2 \land
+      \forall v.v \in \mathcal{V} \interp{T_1}_\rho) \implies [v/x]t \in \mathcal{E}\interp{T_2}_\rho \}\\
       & \\
-      \mathcal{V}\interp{\mu \alpha.T}_\rho & = & 
+      \mathcal{V}\interp{\mu \alpha.T}_\rho =  
       \{ \text{fold}\ v\ |\ \forall v.
         \text{unfold}\ (\text{fold}\ v) \in \mathcal{V}\interp{[\mu \alpha.T/\alpha]T}_\rho.\\
     \end{array}
@@ -173,7 +173,6 @@ We first have to extend the definition of the logical relations to deal with rec
       \exists v.t \redto^* v \land v \in \mathcal{V}\interp{T}_\rho \}
     \end{array}
   \end{math}
-  \ \\
   \ \\
   Well-formed substitutions:\\
   \begin{math}
@@ -274,20 +273,23 @@ types (logical relations).
   Logical relations for values: \\
   \begin{math}
     \begin{array}{lllll}
-      \vinterp{\alpha}_\rho & = & \rho(\alpha) \\
+      \vinterp{\alpha}_\rho = \rho(\alpha) \\
       & \\
-      \vinterp{X}_\rho & = &  \{ (k,v) \in Atom^{value}\ |\ \cdot \vdash v : X \} \\
+      \vinterp{X}_\rho =  \{ (k,v) \in Atom^{value}\ |\ \cdot \vdash v : X \} \\
       & \\
-      \vinterp{T_1 \to T_2}_\rho & = & \{ (k, \lambda x:T.t) \in Atom^{value}\ |\ 
+      \vinterp{T_1 \to T_2}_\rho = \{ (k, \lambda x:T.t) \in Atom^{value}\ |\ 
       \cdot \vdash \lambda x:T_1.t : T_1 \to T_2 \,\land \\
-      & & \,\,\,\,\forall j \leq k.\forall v.(j, v) \in \vinterp{T_1}_\rho \implies 
+      \,\,\,\,\,\,\,\,\,\,\,\,\,\,\,
+      \,\,\,\,\,\,\,\,\,\,\,\,\,\,\,
+      \,\,\,\,\,\,\,\,\,\,\,\,\,\,
+      \forall j \leq k.\forall v.(j, v) \in \vinterp{T_1}_\rho \implies 
               (j, [v/x]t) \in \tinterp{T_2}_{\rho} \}\\
       & \\
-      \vbinterp{n}{\mu \alpha.T}_\rho & = & \{ (k,fold\ v) \in Atom^{value}\ |\ 
+      \vbinterp{n}{\mu \alpha.T}_\rho = \{ (k,fold\ v) \in Atom^{value}\ |\ 
         k < n \land \forall j < k.(j,v) \in 
         \vinterp{T}_{\rho[\alpha \mapsto \vbinterp{k}{\mu \alpha.T}_\rho]}\}\\
       & \\
-      \vinterp{\mu \alpha.T}_\rho & = & \bigcup_{n \geq 0} \vbinterp{n}{\mu \alpha.T}_\rho
+      \vinterp{\mu \alpha.T}_\rho = \bigcup_{n \geq 0} \vbinterp{n}{\mu \alpha.T}_\rho
     \end{array}
   \end{math}
 \end{definition}
@@ -298,7 +300,9 @@ The next definition extends the previous to terms.
     Logical relations extended to terms:\\
   \begin{math}
     \begin{array}{lll}
-      \tinterp{T} & = & \{ (k,t) \in Atom\ |\ \cdot \vdash t:T \land 
+      \tinterp{T} = \{ (k,t) \in Atom\ |\ \cdot \vdash t:T \land \\
+      \,\,\,\,\,\,\,\,\,\,\,\,\,\,\,
+      \,\,\,\,\,\,\,\,\,\,\,
       \forall j \leq k.\forall t'.t \redto^j t' \land \cdot \vdash t':T \land 
       (irred(t') \implies (j,t') \in \vinterp{T}_\rho) \}
     \end{array}
@@ -377,13 +381,13 @@ F above.
 \begin{lemma}
   \label{lemma:1}
   If $\Delta \vdash T$, $\rho \in \dinterp{\Delta}$, $(k,v) \in \vinterp{T}_\rho$, and
-  $j \leq k$ then $(j,v) \in \vinterp{T}_\rho$.
+  $j \leq k$ then \\ $(j,v) \in \vinterp{T}_\rho$.
 \end{lemma}
 
 \begin{lemma}
   \label{lemma:2}
   If $\Delta, \alpha \vdash T$, $\rho \in \dinterp{\Delta}$ and 
-  $\interpset = \napprox{\vinterp{\mu \alpha . T}_\rho}{k}$ then
+  $\interpset = \napprox{\vinterp{\mu \alpha . T}_\rho}{k}$ then \\
   $\napprox{\vinterp{[\mu \alpha.T/\alpha]T}_\rho}{n} = 
    \napprox{\vinterp{T}_{\rho[\alpha \mapsto \interpset]}}{n}$.
 \end{lemma}
