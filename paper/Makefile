@@ -1,7 +1,8 @@
-PDFLATEX=pdflatex
-
+PDFLATEX = pdflatex
+BIBTEX = bibtex
 OTT = ott
-OTT_FLAGS := -tex_wrap false -tex_show_meta true -picky_multiple_parses false
+OTT_FLAGS := -tex_wrap false -tex_show_meta false -picky_multiple_parses false
+SKIM = skim_revert.sh
 
 BGRD_FILES :=   background/CoC.tex \
 		background/CoC_sep.tex \
@@ -22,7 +23,13 @@ BGRD_FILES :=   background/CoC.tex \
 		background/systemF.tex \
 		background/systemFomega.tex \
 		background/systemT.tex \
-		background/type-theory.tex
+		background/type-theory.tex \
+	        background/Makefile
+
+FS_FILES := free-speech/FS-analysis.tex \
+	    free-speech/FS-design.tex \
+	    free-speech/Makefile \
+	    free-speech/free-speech.ott
 
 all : pdf
 
@@ -31,16 +38,22 @@ pdf : Makefile thesis.pdf
 background.tex : $(BGRD_FILES)
 	cd background; $(MAKE)
 
-thesis.pdf : thesis.tex thesis.bib background.tex
+FS : $(FS_FILES)
+	cd free-speech; $(MAKE)
+
+thesis.pdf : thesis.tex thesis.bib background.tex FS
+	# $(PDFLATEX) thesis.tex
+	# $(PDFLATEX) thesis.tex
+	# $(BIBTEX) thesis
+	# $(PDFLATEX) thesis.tex
 	$(PDFLATEX) thesis.tex
-	$(PDFLATEX) thesis.tex
-	bibtex thesis
-	$(PDFLATEX) thesis.tex
-	$(PDFLATEX) thesis.tex
-	skim_revert.sh $(CURDIR)/thesis.pdf
+ifeq ($(SKIM), skim_revert.sh)
+	$(SKIM) $(CURDIR)/thesis.pdf
+endif
 
 root : all
 
 clean : 
 	rm -f *.bbl *.blg *.aux *.dvi *.ps *.log *-output.tex *~
 	cd background; $(MAKE) clean
+	cd free-speech; $(MAKE) clean

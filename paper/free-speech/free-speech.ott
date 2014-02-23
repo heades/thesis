@@ -1,0 +1,287 @@
+metavar var, x, y, z, f, u, p ::=
+
+metavar cvar, c {{ tex \mathsf{c} }} ::=
+  
+indexvar ivar, i, n, m, j, k ::= 
+
+grammar
+type_relegation, th {{ tex \theta }} :: 'Eff_' ::= {{ com consistency classifier }}
+  | L     :: :: Term {{tex L}}
+  | C     :: :: Gen {{tex P}} 
+
+sgn, ep {{tex \varepsilon}} :: 'sgn_' ::= {{ com compile time versus run time }}
+  | + :: :: Plus
+  | - :: :: Minus
+
+exp, e :: 'e_' ::=
+  | x                    ::   :: Var
+  | Type                 ::   :: Type {{ tex [[Type]] }}
+  | ( x : th e1 ) ep -> e2  ::   :: arrow (+ bind x in e2 +)
+                                 {{ tex ([[x]]\,:^{[[th]]}\,[[e1]])^{[[ep]]} [[->]] [[e2]] }}
+  | e1 = e2              ::   :: Eq
+  | \ x . e       ::   :: Lambda (+ bind x in e +)
+                                 {{ tex [[\]][[x]]\,.\,[[e]] }}        
+  | e1 e2                ::   :: App
+  | join                 ::   :: Join
+  | injdom               ::   :: injdom
+  | injran               ::   :: injran
+  | contra               ::   :: Contradiction
+  | abort                ::   :: Abort
+  | rec f x e            ::   :: rec (+ bind f in e +) (+ bind x in e +)
+  | rec - f e            ::   :: recImp (+ bind f in e +) 
+                                 {{ tex [[rec]]^{-}\ [[f]]\ [[e]] }}
+  | Nat                  ::   :: Nat
+  | [ e1 / x ] e2        :: M :: subst
+  | ( e1 )               :: M :: parens
+  | C [ e ]              :: M :: EvalCtx {{tex  \mathcal{C} [ [[e]] ] }}
+  | S                    :: M :: Successor {{tex \mathsf{S} }}
+  | Z                    :: M :: Zero {{tex \mathsf{Z} }}
+
+value {{ tex value }}, v :: 'val_' ::= 
+  | x                    ::   :: Var
+  | Type                 ::   :: Type {{ tex [[Type]] }}
+  | ( x : th e1 ) ep -> e2  ::   :: arrow (+ bind x in e1 +)
+                                 {{ tex ([[x]]\,:^{[[th]]}\,[[e1]])^{[[ep]]} [[->]] [[e2]] }}
+  | e1 = e2              ::   :: Eq
+  | \ x . e       ::   :: Lambda (+ bind x in e +)
+                                 {{ tex [[\]][[x]]\,.\,[[e]] }}
+
+  | join                 ::   :: Join
+  | injdom               ::   :: injdom
+  | injran               ::   :: injran
+  | rec f x e            ::   :: rec (+ bind f in e +) (+ bind x in e +)
+  | Nat                  ::   :: Nat
+  | ( value )            :: M :: parens
+
+ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
+  | .                   ::   :: nil
+  | G , x : th e        ::   :: decl_cons
+                                {{ tex [[G]], [[x]]:^{[[th]]} [[e]] }}           
+  | ( G )               :: M :: parens
+  | G1 , G2             :: M :: concat
+
+varset :: 'set_' ::=
+  | FV ( e )        :: M :: FV
+  | dom ( G )        :: M :: dom
+  | x                :: M :: sing
+  | varset U varset' :: M :: union {{ tex [[varset]] \cup [[varset']] }}
+  | ( varset )       :: M :: paren
+   
+
+terminals :: 'terminals_' ::=
+  | ->     :: :: arrow {{tex \to}}
+  | =      :: :: Eq {{tex =}}
+  | \=     :: :: NotEq {{tex \not = }}
+  | join   :: :: join {{tex \mathsf{join} }}
+  | injdom :: :: injdom {{tex \mathsf{injdom} }}
+  | injran :: :: injran {{tex \mathsf{injran} }}
+  | contra :: :: contra {{tex \mathsf{contra} }}
+  | rec    :: :: rec {{tex \mathsf{rec} }}
+  | recnat :: :: recnat {{tex \mathsf{recnat} }}
+  | Nat    :: :: Nat {{tex \mathbb{N} }}
+  | Z      :: :: Z {{tex \mathsf{Z} }}
+  | S      :: :: S {{tex \mathsf{S} }}
+  | \      :: :: lambda {{tex \lambda}}
+  | Type   :: :: Type {{tex \mathsf{Type} }}
+  | |-     :: :: turnstile {{tex \vdash}}
+  | FV    :: :: FV {{tex \mathsf{FV} }}
+  | dom    :: :: dom {{tex \mathsf{dom} }}
+  | <=     :: :: le {{tex \le }}
+  | ~>*    :: :: multistep {{tex \leadsto^{*} }}
+  | \v/    :: :: joinarrow {{tex \downarrow }}
+  | =>     :: :: patarrow {{tex \Rightarrow }}
+  | abort  :: :: abort {{ tex \mathsf{abort} }}
+  | ;      :: :: coloncolon {{ tex \,\ottkw{::}\, }}
+
+formula :: 'formula_' ::=
+  | judgement                      :: :: judgement
+  | formula1 .. formulai           :: :: judgement_list
+  | varset1 subeq varset2          :: :: subset 
+                                   {{tex [[varset1]] \subseteq [[varset2]] }}
+  | varset1 # varset2              :: :: disjoint 
+                                   {{tex [[varset1]] \not \in [[varset2]] }}
+  | x notin varset                  :: :: notin {{tex [[x]] \notin [[varset]] }}
+  | x , y notin varset              :: :: mnotin {{tex [[x]],[[y]] \notin [[varset]] }}
+  | x : th e in G                   :: :: ctxlookup
+    {{ tex [[x]]:^[[th]][[e]]\in[[G]] }}
+  | th1 <= th2                      :: :: thcomp
+  | th = { th1 , th2 }              :: :: ordering_elements
+  | th , th' = { th1 , th2 }        :: :: orderings_elements
+  | th , th' , th'' = { th1 , th2 } :: :: orderings_elements2
+  | e ~>* e'                        :: :: multistep
+  | e = e'                          :: :: metaeq
+  | e \= e'                         :: :: metaneq
+  | ep \= ep'                       :: :: epneq
+  | th \= th'                       :: :: thneq
+
+subrules
+  value <:: exp
+
+defns
+Jtyp :: '' ::=
+  
+  defn
+  e ~> e' :: :: red :: 'Red_'  
+  {{tex [[e]] \rightsquigarrow [[e']]}}
+  by
+
+  e ~b> e'
+  -------------------- :: Ctxt
+  C [ e ] ~> C [ e' ]  
+
+  --------------------- :: Abort
+  C [ abort ] ~> abort 
+  
+  defn
+  e ~b> e' :: :: cbv :: 'Cbv_' 
+  {{tex [[e]] \rightsquigarrow_{CBV} [[e']]}}
+  by
+  
+  ---------------------------- :: App
+  ( \ x . e ) v ~b> [ v / x ] e
+
+  --------------------------------------------------- :: Rec
+  ( rec f x v' ) v ~b> [ rec f x v' / f] [v / x] v'
+
+  defn
+  G |- e : e'   th :: :: typing :: '' 
+    {{tex [[G]] [[|-]]^{[[th]]} [[e]] : [[e']] }}
+  by
+
+    --------------------- :: K_Type
+    G |- Type : Type    C
+
+    ----------------- :: K_Nat
+    G |- Nat : Type L
+
+%% Note that A is not required to be logical here. That is 
+%% our freedom of expression.
+
+    G |- e1 : Type th'
+    G , x : th' e1 |- e2 : Type th
+   ---------------------------------- :: K_Pi
+    G |- ( x : th' e1 ) ep -> e2 : Type th
+
+    G |- e : e1 L
+    ------------- :: Coerce
+    G |- e : e1 C
+
+%% In the general language, we only require types to be classified
+%% by 'type'. 
+
+  G |- e  : Type  th
+  x : th e in G
+  ------------------- :: Var
+  G |- x : e    th
+
+  G |- e1 : Type th
+  G, x : th e1 |- e : e2   th'
+  ---------------------------------- :: Lam
+  G |- \ x . e : (x :th e1) + -> e2   th'
+
+  G |- e1 : Type th'
+  G, x : th' e1 |- v : e2   th
+  x notin FV(v)
+  ----------------------------- :: ILam
+  G |- v : (x : th' e1) - -> e2   th
+
+  G |- e : (x : th e1)+ -> e2   th'
+  G |- v : e1   th
+  ------------------------------- :: AppPiTerm
+  G |- e v : [v/x] e2   th'
+
+
+  G |- e : (x : th e1)- -> e2   th'
+  G |- v : e1   th
+  ------------------------------- :: AppAllTerm
+  G |- e : [v/x] e2   th'
+
+  G |- e : e1    th1
+  G |- e' : e2   th2
+  ------------------------- :: K_Eq
+  G |- e = e' : Type  L
+
+  e \v/ e'
+  G |- e : e1    th1
+  G |- e' : e2   th2
+  ------------------------- :: join
+  G |- join : e = e'   L
+
+  G |- e' : ((x : th e1) ep -> e2) = ((x : th e1') ep -> e2') L
+  ------------------------------------------------------------- :: InjDom
+  G |- injdom : e1 = e1' L
+
+  G |- e' : ((x : th e1) ep -> e2) = ((x : th e1') ep -> e2') L  
+  G |- v : e1 th
+  -------------------------------------------------------------- :: InjRan
+  G |- injran : [v/x]e2 = [v/x]e2' L
+
+  G |- e : [e1/x] e2   th
+  G |- e' : e1 = e1'   L
+  -----------------------  :: Conv
+  G |- e : [e1'/x] e2  th
+
+  G, x : L Nat |- (y : L Nat)+ -> (p : L x = S y)- -> [y/x]e2 : Type L
+  G, x : L Nat, f : L (y : L Nat)+ -> (p : L x = S y)- -> [y/x]e2 |- v : e2   L
+  f,p notin FV (e2)
+  ----------------------------------------------------------------------------- :: RecNat
+  G |- rec f x v : (x : L Nat)+ -> e2   L
+
+
+  G, x : L Nat |- (y : L Nat)- -> (u : L x = S y)- -> [y/x]e2 : Type L
+  G, x : L Nat, f : L (y : L Nat)- -> (u : L x = S y)- -> [y/x]e2 |- v : e2   L
+  f,p notin FV(e2)
+  ----------------------------------------------------------------------------- :: RecNatComp
+   G |- rec- f v : (x : L Nat)- -> e2  L
+
+  G |- e1 : Type th'
+  G, f : th (x : th' e1)+ -> e2, x : th' e1 |- e : e2   th
+  -------------------------------------------------------- :: Rec
+  G |- rec f x e : (x : th' e1)+ -> e2   C
+
+  ----------------- :: Zero
+  G |- Z : Nat   L
+
+  ------------------------------- :: Succ
+  G |- S : (x : L Nat)+ -> Nat  L
+  
+  G |- e1 : Type th
+  G |- e : Z = S e'  L
+  ---------------------- :: Contra
+  G |- contra : e1   L
+
+  G |- e1 : Type th
+  G |- e : v = abort  L
+  ------------------------ :: ContraAbort
+  G |- contra : e1     L
+
+  G |- e : Type th''
+  G |- e' : ((x : th e1) ep -> e2) = ((x : th' e1') ep' -> e2') L
+  th \= th' 
+  --------------------------------------------------------------- :: ContraPiTh
+  G |- contra : e L
+
+  G |- e : Type th''
+  G |- e' : ((x : th e1) ep -> e2) = ((x : th' e1') ep' -> e2') L
+  ep \= ep'
+  --------------------------------------------------------------- :: ContraPiEp
+  G |- contra : e L
+
+  G |- e1 : Type th
+  ---------------------- :: Abort
+  G |- abort : e1  C
+
+defns 
+Join :: '' ::=
+
+  defn
+  e1 \v/ e2 :: :: join :: ''
+    {{tex [[e1]] [[\v/]] [[e2]] }}
+  by
+
+
+  e1 ~>* e
+  e2 ~>* e
+  -------- :: ComputeJoin
+  e1 \v/ e2
+
