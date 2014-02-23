@@ -7,41 +7,55 @@
 \newcommand{\rec}[3]{rec\ #1\ #2\ #3}
 \newcommand{\recc}[3]{rec^{-}\ #1\ #3}
 
-\begin{center}
-  \todo[inline]{Need to define the evaluation contexts.}
-  \begin{mathpar}
-    \FSdruleCbvXXApp{}  \and
-    \FSdruleCbvXXRec{}  \and
-    \FSdruleRedXXCtxt{} \and
-    \FSdruleRedXXAbort{}
-  \end{mathpar}
-\end{center}
-% section operational_semantics (end)
+\begin{figure}
+  \begin{center}
+    \todo[inline]{Need to define the evaluation contexts.}
+    \begin{tabular}{lll}
+      Syntax:
+      \vspace{10px} \\
+      & \\
+      CBV reduction:\\
+      \begin{mathpar}
+        \FSdruleCbvXXApp{}  \and
+        \FSdruleCbvXXRec{}  \and
+        \FSdruleRedXXCtxt{} \and
+        \FSdruleRedXXAbort{}
+      \end{mathpar}
+    \end{tabular}
+  \end{center}  
+  \caption{Syntax and reduction rules for freedom of speech}
+  \label{fig:FS-syn-red}
+\end{figure}
 
-\begin{center}
-  \begin{mathpar}
-    \FSdruleKXXType{}        \and
-    \FSdruleKXXNat{}         \and
-    \FSdruleKXXPi{}          \and
-    \FSdruleKXXEq{}          \and
-    \FSdruleVar{}            \and
-    \FSdruleLam{}            \and
-    \FSdruleILam{}           \and
-    \FSdruleAppPiTerm{}      \and
-    \FSdruleAppAllTerm{}     \and
-    \FSdrulejoin{}           \and
-    \FSdruleConv{}           \and
-    \FSdruleSucc{}           \and
-    \FSdruleZero{}           \and
-    \FSdruleAbort{}          \and
-    \FSdruleContra{}         \and
-    \FSdruleContraAbort{}    \and
-    \FSdruleCoerce{}         \and
-    \FSdruleRecNat{}         \and
-    \FSdruleRecNatComp{}     \and
-    \FSdruleRec{}
-  \end{mathpar}
-\end{center}
+\begin{figure}
+  \begin{center}
+    \begin{mathpar}
+      \FSdruleKXXType{}        \and
+      \FSdruleKXXNat{}         \and
+      \FSdruleKXXPi{}          \and
+      \FSdruleKXXEq{}          \and
+      \FSdruleVar{}            \and
+      \FSdruleLam{}            \and
+      \FSdruleILam{}           \and
+      \FSdruleAppPiTerm{}      \and
+      \FSdruleAppAllTerm{}     \and
+      \FSdrulejoin{}           \and
+      \FSdruleConv{}           \and
+      \FSdruleSucc{}           \and
+      \FSdruleZero{}           \and
+      \FSdruleAbort{}          \and
+      \FSdruleContra{}         \and
+      \FSdruleContraAbort{}    \and
+      \FSdruleCoerce{}         \and
+      \FSdruleRecNat{}         \and
+      \FSdruleRecNatComp{}     \and
+      \FSdruleRec{}
+    \end{mathpar}
+  \end{center}
+  \caption{Typing rules for freedom of speech}
+  \label{fig:FS-typing}
+\end{figure}
+
 
 To prevent equations between $\Pi$-types having different compiletime/runtime arguments or 
 different consistency classifiers we add the following rules:
