@@ -31,6 +31,11 @@ FS_FILES := free-speech/FS-analysis.tex \
 	    free-speech/Makefile \
 	    free-speech/free-speech.ott
 
+SEP3_FILES := sep3/Makefile \
+	      sep3/sep3-annotated.ott \
+	      sep3/sep3-unannotated.ott \
+              sep3/sep3.tex
+
 all : pdf
 
 pdf : Makefile thesis.pdf
@@ -41,7 +46,10 @@ background.tex : $(BGRD_FILES)
 FS : $(FS_FILES)
 	cd free-speech; $(MAKE)
 
-thesis.pdf : thesis.tex thesis.bib background.tex FS
+SEP : $(SEP3_FILES)
+	cd sep3; $(MAKE)
+
+thesis.pdf : background.tex FS SEP thesis.tex thesis.bib
 	$(PDFLATEX) thesis.tex
 	$(PDFLATEX) thesis.tex
 	$(BIBTEX) thesis
@@ -57,3 +65,4 @@ clean :
 	rm -f *.bbl *.blg *.aux *.dvi *.ps *.log *-output.tex *~
 	cd background; $(MAKE) clean
 	cd free-speech; $(MAKE) clean
+	cd sep3; $(MAKE) clean

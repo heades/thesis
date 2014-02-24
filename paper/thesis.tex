@@ -49,6 +49,9 @@
 \usepackage{chronology}
 \usepackage{import}
 \usepackage{verbatim}
+\usepackage{supertabular}
+\usepackage{stmaryrd}
+
 \input{type-theory_inc}
 
 \newcommand{\defeq}{\stackrel{\mathsf{def} }{\equiv}}
@@ -206,7 +209,7 @@ problem outlined above.
 
 \chapter{Separation of Proof from Program}
 \label{chap:separation_of_proof_from_program}
-
+\import*{sep3/}{sep3-inc}
 % chapter separation_of_proof_from_program (end)
 
 \chapter{Dualized Type Theory (DTT)}
@@ -340,6 +343,24 @@ problem outlined above.
 \label{sec:coc_sep_all}
 \CoCSall{}
 % section coc_sep_all (end)
+
+\newpage
+\section{Freedom of Speech}
+\label{sec:freedom_of_speech}
+\FSall{}
+% section freedom_of_speech (end)
+
+\newpage
+\section{Annotated Separation of Proof from Program}
+\label{sec:annotated_separation_of_proof_from_program}
+\Sepall{}
+% section annotated_separated_of_proof_from_program (end)
+
+\newpage
+\section{Unannotated Separation of Proof from Program}
+\label{sec:unannotated_separation_of_proof_from_program}
+\SepUall{}
+% section annotated_separation_of_proof_from_program (end)
 % section type_theories (end)
 
 %=============================================================================

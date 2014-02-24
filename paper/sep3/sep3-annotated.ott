@@ -1,0 +1,1200 @@
+metavar var, x, y, z, f, u, v ::=
+
+metavar K {{tex \mathsf{K} }}, C {{tex \mathsf{C} }} ::= {{ com data constructor constant }}
+
+metavar cvar, c {{ tex \mathsf{c} }} ::=
+
+indexvar ivar, n, m, k, r, s ::= 
+
+grammar
+
+program, prog :: 'prog_' ::= {{com Syntax of programs. }}
+  | pdef      :: :: ProgBase
+  | prog pdef :: :: ProgStep
+
+program_def, pdef :: 'prog_def_' ::= {{com Syntax of top-level definitions. }}
+  | datatype_decl          :: :: DataTypeDeclaration
+  | predicateType x : : LK :: :: PredicateTypeDef
+  | predef x = P           :: :: PredicateDef
+    {{tex \Sepkw{predicate}\,[[x]] = [[P]] }}
+  | theorem x : : P        :: :: TheoremDef
+  | prfdef x = p           :: :: ProofDef
+    {{tex \Sepkw{proof}\,[[x]] = [[p]] }}
+  | type x : : t           :: :: TypeDef
+  | termdef x = t          :: :: TermDef
+    {{tex \Sepkw{term}\,[[x]] = [[t]] }}
+
+stage, ep {{tex \varepsilon}} :: 'sgn_' ::= {{ com compile time versus run time }}
+  | + :: :: Plus
+  | - :: :: Minus
+
+ks {{tex \xi}} :: 'xi_' ::= {{ com logicality }}
+  | L :: :: L
+  | P :: :: P
+      
+datatype_decl, d :: 'd_' ::= {{ com datatype declaration }}
+  | data Ctor C t where M                      :: :: data_decl
+      {{ tex data\,\mathsf{C} \,[[t]]\,where\,[[M]] }}     
+ 
+SuperKind, L :: 'L_' ::= {{ com syntax for super kinds }}
+   | Logical i ::   :: Logical_Kind
+     {{ tex [[Logical]]_{[[i]]} }}
+
+Ti {{ tex \mathcal{A}_{[[i]]} }} :: 'T_' ::=
+   | Type i    ::   :: Type
+     {{ tex [[Type]]_{[[i]]} }}
+   | Formula i ::   :: Formula
+     {{ tex [[Formula]]_{[[i]]} }}
+
+ArgClass, A :: 'A_' ::= 
+  | term                          ::   :: Terms
+  | predicate                     ::   :: Predicate
+  | LK                            ::   :: logical_kinds
+  | [ t1 / x1 ] ... [ tn / xn ] A :: M :: subst_term
+
+Arg, a :: 'a_' ::= 
+  | term       ::   :: terms
+  | proof      ::   :: proofs
+  | predicate  ::   :: predicate
+  
+LogicalKind, LK :: 'LK_' ::= {{ com syntax for logical kinds }}
+  | x                              ::   :: var
+  | Formula i                      ::   :: Formula
+    {{ tex [[Formula]]_{[[i]]} }}
+  | Forall x : A . LK              ::   :: logical_pi (+ bind x in LK +)
+    {{ tex \forall [[x]]\,:\, [[A]].[[LK]] }}
+  | sigma LK                       :: M :: substitution
+    {{ tex \sigma\ [[LK]] }}
+  | ( LK )                         :: S :: parens
+  | [ a1 / x1 ] ... [ an / xn ] LK :: M :: subst_lk
+
+predicate, P :: 'P_' ::= {{ com syntax for predicate }}
+  |  x                                       ::   :: Var
+  | \ L x : A . P                            ::   :: predicate (+ bind x in P +)
+    {{ tex \Lambda [[x]]:[[A]]\,.\,[[P]] }}  
+  | P a                                      ::   :: App
+    {{ tex [[P]]\,[[a]] }}
+  | Forall x : A . P                         ::   :: logical_pi (+ bind x in P +)
+    {{ tex \forall [[x]]\,:\, [[A]].[[P]] }}
+  | let x = p in P                           ::   :: LetProof
+    {{ tex [[let]]\,[[x]] = [[p]]\,in\,[[P]] }}
+  | let x = P in P'                          ::   :: LetPredicate
+    {{ tex [[let]]\,[[x]] = [[P]]\,in\,[[P']] }}
+  | let x = t [ p ] in P                      ::   :: Let
+    {{ tex [[let]]\,[[x]] = [[t]]\,[ [[p]] ]\,in\,[[P]] }}
+  | t1 = t2                                  ::   :: Eq
+  | t !                                      ::   :: Bang 
+    {{ tex [[t]]\,! }}
+  | P1 + P2                                  ::   :: Disjunction 
+    {{ tex [[P1]] + [[P2]] }}
+  | Exists x : A . P                         ::   :: Existentials
+    {{ tex [[Exists]] [[x]]:[[A]].[[P]] }}
+  | bot i                                    ::   :: Bottom
+    {{ tex \bot_{i} }}    
+  | t < t'                                   ::   :: Order
+  | [ e1 / x1 ] P1 ... [ en / xn ] Pn        :: M :: subst_exp_predicate
+  | [ a1 / x1 ] ... [ an / xn ] P            :: M :: subst_predicate
+  | [ t1 / x1 ] ... [ tn / xn ] A            :: M :: subst_A
+  | CC_P [ P ]                               :: M :: context
+  | ( P )                                    :: S :: parens
+  | sigma P                                  :: M :: substitution
+    {{ tex \sigma\ [[P]] }}
+
+proof, p :: 'p_' ::= {{ com syntax for proofs. }}
+  | x                                      ::   :: Var
+  | injl p with P                          ::   :: InjectLeft
+  | injr p with P                          ::   :: InjectRight
+  | case p of x . p' , y . p''             ::   :: OrElim
+    {{ tex [[case]]\,[[p]]\,[[of]]\,[[x]].[[p']],[[y]].[[p'']] }}
+  | \ L x : A . p                          ::   :: lambda (+ bind x in p +)
+    {{ tex \Lambda [[x]]:[[A]]\,.\,[[p]] }}  
+  | p a                                    ::   :: App
+  | (a , p ) as P                          ::   :: Exintro
+    {{ tex [[(a,p)]]\,\mathsf{as}\,[[P]] }}
+  | case p1 of ( x , y ) . p2              ::   :: Exelim
+    {{ tex [[case]]\,[[p1]]\,of\,[[(x,y)]].[[p2]] }}
+  | let x = p' in p                        ::   :: LetProof
+    {{ tex [[let]]\,[[x]] = [[p']]\,in\,[[p]] }}
+  | let x = P in p                         ::   :: LetPredicate
+    {{ tex [[let]]\,[[x]] = [[P]]\,in\,[[p]] }}
+  | let x = t [ y ] in p                   ::   :: Let
+    {{ tex [[let]]\,[[x]] = [[t]]\,[ [[y]] ]\,in\,[[p]] }}
+  | join t1 t2                             ::   :: Join 
+  | conv p by q1 ... qn at x1 ... xm . P   ::   :: Conv
+  | predconv p P                           ::   :: PredConv
+  | valax t                                ::   :: Val
+  | ord t t'                               ::   :: OrderAx
+  | case t [ x ] p of R                    ::   :: CasePf
+  | tcase t [ x ] of abort -> p1 | ! -> p2 ::   :: TerminationCase 
+  | ind f x : t , p1 . p2                  ::   :: ind
+  | contra p1                              ::   :: Contradiction
+  | contraval p1 p2                        ::   :: Contraval
+  | R                                      :: M :: branch
+  | [ p1 / x1 ] ... [ pn / xn ] p          :: M :: proof_subst
+  | [ a1 / x1 ] ... [ an / xn ] p          :: M :: subst_exp
+  | ( p )                                  :: S :: parens
+  | CC_p [ p ]                             :: M :: context
+
+%% note that variables are no longer considered values syntactically, but
+%% they may be so semantically, via the Val judgment below:
+pf_value {{ tex proof value }}, pv :: 'pfval_' ::= 
+  | \ L x : A . p                                              ::   :: lambda (+ bind x in p +)
+  | conv pv by q1 ... qn at x1 ... xm . P                      ::   :: Conv
+  | valax t                                                    ::   :: Val
+  | ( pf_value )                                               :: S :: parens
+
+term, t, w :: 't_' ::= {{ com annotated programmatic expressions }}
+  | x                                      ::   :: Var
+  | Type i                                 ::   :: Type {{ tex [[Type]]_{[[i]]} }}
+  | Pi ep x : A . t                        ::   :: program_pi (+ bind x in t +)
+    {{ tex \Pi [[x]]_{[[ep]]} : [[A]] . [[t]] }}
+  | \ P ep x : A . t                       ::   :: prog_lambda (+ bind x in t +)
+    {{ tex \lambda x_{[[ep]]} : [[A]] . [[t]] }}
+  | let x = p in t                         ::   :: LetProof
+    {{ tex [[let]]\,[[x]] = [[p]]\,in\,[[t]] }}
+  | let x = P in t                         ::   :: LetPredicate
+    {{ tex [[let]]\,[[x]] = [[P]]\,in\,[[t]] }}
+  | let x = t [ y ] in t'                  ::   :: Let
+    {{ tex [[let]]\,[[x]] = [[t]]\,[ [[y]] ]\,in\,[[t']] }}
+  | conv t by q1 ... qn at x1 ... xm . t'  ::   :: Conv
+  | case t [ x ] of H                      ::   :: CaseTerm
+  | tcast t by p                           ::   :: tCast
+  | t a ep                                 ::   :: App
+    {{ tex [[t]]\,[[a]]_[[ep]] }}
+  | app t t1 ep1 dots tn epn               :: M :: multiapp
+    {{ tex [[t]] [[t1]]_{[[ep1]]} [[dots]] [[tn]]_{[[epn]]} }}
+  | abort t                                ::   :: Abort
+  | rec f x : t1 . t2                      ::   :: rec (+ bind f in t2 +) (+ bind x in t2 +) 
+  | Ctor C                                 ::   :: Constructor
+  | Ctor C a1 ep1 dots an epn              :: S :: MultiConApp
+    {{ tex \mathsf{C}\,[[a1]]_{[[ep1]]} \ldots [[an]]_{[[epn]]} }}
+  | Ctor C t1 ep1 dots tn epn              :: S :: MultiConApp2
+    {{ tex \mathsf{C}\,[[t1]]_{[[ep1]]} \ldots [[tn]]_{[[epn]]} }}
+  | x1 : A1 ... xn : An                    :: S :: type_arity
+  | [ t1 / x1 ] ... [ tn / xn ] t          :: M :: subst
+  | [ a1 / x1 ] ... [ an / xn ] t          :: M :: subst_a
+  | [ t1 / x1 ] ... [ tn / xn ] A          :: M :: subst_A
+  | ( term )                               :: S :: parens
+  | sigma t                                :: M :: substitution
+    {{ tex \sigma\ [[t]] }}
+  | D 2 ( t )                              :: M :: TermInSig
+   {{ tex [[D]]_2([[t]]) }}
+  | _                                      :: M :: joker
+  | togglePol ( t , vl )                   :: M :: togglePol
+    {{tex \mathsf{togglePol}([[t]],[[vl]]) }}
+dataty_type, dt :: 'dt_' ::=
+  | Pi x : A . dt                          ::   :: program_pi (+ bind x in dt +)
+    {{ tex \Pi [[x]] : [[A]] . [[dt]] }}
+  | Type i                                 ::   :: Type 
+    {{ tex [[Type]]_{[[i]]} }}
+  
+term_value {{ tex term value }}, tv :: 'tmval_' ::= 
+  | Type i                      ::   :: Type 
+  | Pi ep x : A . t             ::   :: program_pi
+  | \ P ep x : A . t            ::   :: prog_lambda
+  | rec f x : t1 . t2           ::   :: rec
+  | Ctor C tv1 ep1 dots tvn epn ::   :: Ctor
+  | ( term_value )              :: S :: parens
+
+exp, e :: 'e_' ::=
+  | term                                                      ::   :: terms
+  | proof                                                     ::   :: proofs
+  | predicate                                                 ::   :: predicate
+  | LK                                                        ::   :: logical_kinds
+  | super_kind                                                ::   :: superkind
+  | ( e )                                                     :: S :: parens
+  | [ e1 / x1 ] P1 ... [ en / xn ] Pn                         :: M :: subst_predicate
+  | [ a1 / x1 ] e1 ... [ an / xn ] en                         :: M :: subst_term_arg
+  | [ t'1 / x] t1 ... [ t'n / x] tn                           :: M :: term_subst_term
+  | [ t1 / x1 ] ... [ tn / xn ] A                             :: M :: subst_term_A
+
+q :: 'q_' ::=
+  | proof    ::  :: proofs
+  | t1 = t2  ::  :: equations
+
+g {{ tex \gamma }} :: 'gam_' ::= {{ com annotation on variables in context }}
+  | val      ::   :: Val
+
+proof_branches, R :: 'proof_branches_' ::=
+  | Ctor C x1 ep1 dots xn epn => p | R                      ::   :: Branch
+    {{ tex \mathsf{C}\,[[x1]]_{[[ep1]]} \ldots [[xn]]_{[[epn]]} \Rightarrow [[p]]\,|\,[[R]] }}
+  | Ctor C y1 ep1 dots yn epn x1 ep'1 dots xn ep'n => p | R :: S :: Branch2
+    {{ tex \mathsf{C}\,[[y1]]_{[[ep1]]} \ldots [[yn]]_{[[epn]]}\,[[x1]]_{[[ep'1]]} \ldots [[xn]]_{[[ep'n]]} \Rightarrow [[p]]\,|\,[[R]] }}
+  | done                                                    ::   :: BranchDone
+  | ( R )                                                   :: M :: parens
+
+term_branches, H :: 'term_branches_' ::=
+  | Ctor C x1 ep1 dots xn epn => t | H                      ::   :: Branch
+    {{ tex \mathsf{C}\,[[x1]]_{[[ep1]]} \ldots [[xn]]_{[[epn]]} \Rightarrow [[t]]\,|\,[[H]] }}
+  | Ctor C y1 ep1 dots yn epn x1 ep'1 dots xn ep'n => t | H :: S :: Branch2
+    {{ tex \mathsf{C}\,[[y1]]_{[[ep1]]} \ldots [[yn]]_{[[epn]]}\,[[x1]]_{[[ep'1]]} \ldots [[xn]]_{[[ep'n]]} \Rightarrow [[t]]\,|\,[[H]] }}
+  | done                                                    ::   :: BranchDone
+  | ( H )                                                   :: M :: parens
+
+W :: 'W_' ::=
+  | Type      :: :: Type
+  | Formula i :: :: Formula
+
+index, i, j :: 'index_' ::= {{ com indices }}
+  | i + j         ::  :: sum
+  | max ( i , j ) ::  :: max
+  | 1             ::  :: one
+  | 0             ::  :: zero
+  | ( index )     :: S :: parens
+
+ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
+  | .                                       ::   :: nil
+    {{ tex \cdot }}
+  | G , x : g e                             ::   :: decl_cons
+    {{ tex [[G]] , [[x]] :^{[[g]]} [[e]] }}
+  | G , x : e                               ::   :: decl_cons2
+    {{ tex [[G]] , [[x]] : [[e]] }}
+  | vl                                      ::   :: var_list
+  | G1 , G2                                 ::   :: concat
+  | G , x1 : g1 e1 , ldots , xn : gn en     :: S :: dc_dots
+    {{ tex [[G]] , [[x1]] :^{[[g1]]} [[e1]] , \ldots , [[xn]] :^{[[gn]]} [[en]] }}
+  | G , x1 : e1 , ldots , xn : en           :: S :: dc_dots2
+    {{ tex [[G]] , [[x1]] : [[e1]] , \ldots , [[xn]] : [[en]] }}
+  | ( G )                                   :: S :: parens
+
+var_list, vl, rest :: 'var_list_' ::=
+  | nil                                     ::   :: nil
+  | ( x : A ) : : rest                      ::   :: cons0
+  | x : A : : rest                          ::   :: cons1
+  | x : ep A : : rest                       ::   :: cons2 
+  |  ( x : ep A ) : : rest                  ::   :: cons3
+  | x : : rest                              ::   :: cons4
+  | _                                       ::   :: joker
+  | [ y1 : t1' , dots , yn : tn' ]          :: M :: list_ctx
+  | [ x1 : t1' , dots , xn : tn' ]          :: M :: list_ctx2
+  | [ y1 : t1' , dots , yn : tm' ]          :: M :: list_ctx3
+  | ( vl )                                  :: S :: parens
+
+term_list, tl, restt {{tex \mathsf{rest} }} :: 'term_list_' ::=
+  | nil                                     ::   :: nil
+  | t : : restt                             ::   :: cons0
+  | _                                       ::   :: joker
+  | [ t1 , ... , tn ]                       :: S :: term_list
+  | ( tl )                                  :: S :: parens
+
+sig, D {{ tex \Delta }} :: 'sig_' ::=
+  | .                                         ::   :: nil
+  | D , ( C , t , M )                         ::   :: constructor
+  | D , x = ( a , A )                         ::   :: global_def
+  | D1 , D2                                   ::   :: concat
+  | D ( Ctor C )                              :: S :: ctor_image
+  | ( D )                                     :: S :: parens
+
+ctor_set, l :: 'ctor_set_' ::=
+  | empty                               ::  :: empty_set
+    {{ tex \emptyset }}
+  | { Ctor C : t'}                      ::  :: singleton
+  | l1 inter l2                         ::   :: intersection
+    {{ tex [[l1]] \cap [[l2]] }}
+  | l1 - l2                             ::   :: difference
+    {{ tex [[l1]] - [[l2]] }}
+  | l1 = l2                             ::   :: eq1
+    {{ tex [[l1]] = [[l2]] }}
+  | { t : getCType ( t' , Ctor C, D ) } :: M :: ctor_list
+  | D                                   :: M :: sig
+  | l1 union l2                         :: S :: union
+    {{ tex [[l1]] \cup [[l2]] }}
+  | ( ctor_set )                        :: S :: parens
+  | D 3 ( t )                           :: M :: SigM
+    {{ tex [[D]]_3([[t]]) }}
+
+datad_list, M {{ tex [[M]] }} :: 'datad_list_' ::=
+  | nil                                ::  :: empty_set
+  | Ctor C : t'                        ::   :: singleton
+  | M1 : : M2                          ::   :: cons
+    {{ tex [[M1]] :: [[M2]] }}
+  | Ctori Ci : t                        :: S :: singleton3
+    {{ tex { [[C]]_i : [[t]] } }}
+  | ( datad_list )                      :: S :: parens
+  | D 3 ( t )                           :: M :: SigM
+    {{ tex [[D]]_3([[t]]) }}
+
+varset :: 'set_' ::=
+  | FV ( | e | )     :: S :: FV
+  | FV ( e )         ::   :: FV2
+  | ( varset )       :: S :: paren
+   
+terminals :: 'terminals_' ::=
+  | dots      :: :: dots {{tex \ldots }}
+  | with      :: :: with {{tex \mathsf{with} }}
+  | ->        :: :: arrow {{tex \to}}
+  | =         :: :: Eq {{tex =}}
+  | \=        :: :: NotEq {{tex \not = }}
+  | Exists    :: :: Exists {{tex \exists }}
+  | let       :: :: let {{tex \mathsf{let} }}
+  | egen      :: :: Egen {{tex \mathsf{egen} }}
+  | injl      :: :: Inl {{tex \mathsf{inl} }}
+  | injr      :: :: Inr {{tex \mathsf{inr} }}
+  | forall    :: :: Forall {{ tex \forall }}
+  | join      :: :: join {{tex \mathsf{join} }}
+  | contra    :: :: contra {{tex \mathsf{contr} }}
+  | contraval :: :: contraval {{tex \mathsf{contraval} }}
+  | rec       :: :: rec {{tex \mathsf{rec} }}
+  | \         :: :: lambda {{tex \lambda}}
+  | Type      :: :: Type {{tex \mathsf{Type} }}
+  | Logical   :: :: Logical {{tex \mathsf{Logical} }}
+  | Formula   :: :: Formula {{tex \mathsf{Formula} }}
+  | |-        :: :: turnstile {{tex \vdash}}
+  | |-i       :: :: turnstilei {{tex \vdash_i}}
+  | FV        :: :: FV {{tex \mathsf{FV} }}
+  | dom       :: :: dom {{tex \mathsf{dom} }}
+  | setin     :: :: in {{ tex \in }}
+  | notin     :: :: notin {{ tex \not \in }}
+  | subexp    :: :: subexp {{ tex \subexp }}
+  | subexpp   :: :: subexpp {{tex \subexp^+ }}
+  | subseteq  :: :: subseteq {{ tex \subseteq }}
+  | <=        :: :: le {{tex \le }}
+  | ~>*       :: :: multistep {{tex \leadsto^{*} }}
+  | ~>>       :: :: step_cbn {{ tex \leadsto_{CBN} }}
+  | ~>        :: :: step_cbv {{ tex \leadsto }}
+  | \v/       :: :: joinarrow {{tex \downarrow }}
+  | \V/       :: :: compjoinarrow {{tex \curlyveedownarrow }}
+  | =>        :: :: patarrow {{tex \Rightarrow }}
+  | abort     :: :: abort {{ tex \mathsf{abort} }}
+  | ;         :: :: coloncolon {{ tex \,::\, }}
+  | Ctor      :: :: Ctor {{ tex \negthinspace}}
+  | Ctori     :: :: Ctori {{ tex \negthinspace}}
+  | nil       :: :: Nil {{ tex \mathsf{nil} }}
+
+ formula :: 'formula_' ::=
+  | judgement                                  :: :: judgement
+  | formula1 ... formulan                       :: :: judgement_list
+  | ( formula )  :: :: parens
+  | t notin tl   :: :: NotInTermList
+  | t notin dom ( D ) :: :: Domain1
+  | x notin dom ( G ) :: :: Domain2
+  | x notin FV ( G ) :: :: FV_G
+  | x = ( a , A ) setin D     :: :: global_def_in
+  | r = n + m       :: :: ivar_sum
+  | a equiv t       :: :: equiv
+    {{ tex [[a]] \equiv [[t]] }}
+  | x1 ... xn notin FV ( | t | ) :: :: vars_not_in_FV_t
+  | x1 ... xn notin FV ( | P | ) :: :: vars_not_in_FV_P
+  | exists1 e . formula :: :: 2
+    {{ tex \exists [[t]] . [[formula]] }}
+  | exists t , p . formula :: :: 5
+    {{ tex \exists [[t]],[[p]] . [[formula]] }}
+  | formula implies formula' :: :: implies
+    {{ tex [[formula]] \implies [[formula']] }}
+  | formula /\ formula' :: M :: and
+    {{ tex [[formula]] \land [[formula']] }}
+  | empty_set :: :: empty_set
+    {{ tex \emptyset }}
+  | forall a setin a' to a'' . formula :: :: 9
+    {{ tex [[forall]] [[a]] [[setin]] \{[[a']], \ldots, [[a'']]\} . [[formula]] }}
+  | varset = varset' :: M :: varseteq
+    {{ tex [[varset]] = [[varset']] }}
+  | varset1 subeq varset2                      :: :: subset 
+    {{tex [[varset1]] \subseteq [[varset2]] }}
+  | varset1 # varset2                          :: :: disjoint 
+    {{tex [[varset1]] \not \in [[varset2]] }}
+  | x1 , ... , xn notin varset                 :: M :: con_args
+  | x : g e in G                               :: :: ctxlookup
+    {{ tex [[x]]:^{[[g]]}[[e]] \in [[G]] }}
+  | | t |  \V/ | t' | :: :: term_erasure_join
+  | t ~>* t'                                   :: :: multistep_term
+    {{ tex [[t]] \leadsto^* [[t']] }}
+  | t \V/ t'                                   :: :: cjoin
+  | Sig , Gra |- A : Ti                        :: :: A_3
+    {{ tex \Delta, \Gamma [[|-]] [[A]] : [[Ti]] }}
+  | Sig , Gra |- a : A                         :: :: A_1
+    {{ tex \Delta, \Gamma [[|-]] [[a]] : [[A]] }}
+  | Sig , Gra |- b : B                         :: :: B_1
+    {{ tex \Delta, \Gamma [[|-]] [[b]] : [[B]] }}
+  | Sig , Gra |- val a :: :: aVal
+    {{ tex \Delta, \Gamma [[|-]] \text{val}\,a }}
+  | Sig , Gra |- a : A                         :: :: A_2
+    {{ tex \Delta, \Gamma [[|-]] [[a]] : [[A]] }}
+  | Sig , Gra |- t : W                         :: :: Sorting1
+    {{ tex \Delta, \Gamma [[|-]] [[t]] : [[W]] }}
+  | Sig , Gra |- P : W                         :: :: Sorting2
+    {{ tex \Delta, \Gamma [[|-]] [[P]] : [[W]] }}
+  | Sig , Gra |- A : W                         :: :: Sorting3
+    {{ tex \Delta, \Gamma [[|-]] [[A]] : [[W]] }}
+  | e = b                                      :: M :: metabeq
+  | e = e'                                     :: :: metaeq
+  | vl = vl'                                   :: :: vleq
+  | tl = tl'                                   :: :: tleq
+  | M = M'                                     :: :: mleq
+  | e \= e'                                    :: :: metaneq
+  | n \= m                                     :: :: metaneq2
+  | ep \= ep'                                  :: :: epneq
+  | C \= K                                     :: :: Cneq
+  | R eq R'                                    :: :: BranchEq1
+    {{ tex [[R]] \equiv [[R']] }}
+  | H eq H'                                    :: :: BranchEq2
+    {{ tex [[H]] \equiv [[H']] }}
+  | l1 inter l2                                :: :: intersection
+  | l1 union l2                                :: :: union
+  | D inter l                                  :: :: sig_set_inter
+  | D = l                                      :: :: sig_set_eq
+  | l1 = l2                                    :: :: equality
+  | t \in D                                    :: :: in_sig
+    {{ tex [[t]] \in [[D]] }}
+  | e \in PiTys ( e' )                         :: :: build_type
+    {{ tex [[e]] \in [[PiTys]]([[e']]) }}
+  | exists t1 -> t2 \in R.t equiv t'           :: :: ext_eq
+    {{ tex \exists [[t1]] [[->]] [[t2]] \in [[R]].[[t]] \equiv [[t']] }}
+  | exists ( Ctor C , t , M ) setin D . formula  :: :: CtorInD
+  | exists t . formula                           :: :: ExistsTerm
+  | Ctor C : t setin M                           :: :: CtorInM
+
+subrules
+   A <:: exp
+   a <:: exp
+  tv <:: t
+  pv <:: p
+
+funs
+rngType ::= 
+fun
+  rngType( t' ) :: t :: rngType
+  {{ tex \mathsf{rngType} ( [[t']] ) }}
+by
+  rngType(_) === _
+  rngType(Pi ep x : A . t) === rngType(t)
+
+funs
+  getCType ::= 
+fun
+  findCType ( t' , M ) :: t :: findCType
+  {{ tex \mathsf{findCType} ( [[t']] , [[M]] ) }}
+by
+  findCType ( Ctor C , (Ctor C : t) :: M) === t
+  findCType ( Ctor C , (Ctor K : t) :: M) === findCType(Ctor C, M)
+  findCType ( Ctor C , nil)               === _
+
+fun
+  getCType ( t1 , t2 , D ) :: t :: getCType 
+  {{ tex \mathsf{getCType} ( [[t1]] , [[t2]], [[D]] ) }}
+by
+  getCType (t1, Ctor C, D) === findCType(t1, D 3 ( getHC(t1) ) )
+
+funs
+  addParams ::= 
+fun
+  iParam( t' , vl ) :: t :: iParams 
+  {{ tex \mathsf{iParam} ( [[t']] , [[vl]] ) }}
+by
+  iParam(t, nil) === t
+  iParam(t, x:ep A :: vl) === iParam(Pi - x : A.t,vl)
+fun
+  buildCtxSt ( t ) :: vl :: buildCtxSt
+  {{ tex \mathsf{buildCtxSt} ( [[t]] ) }}
+by
+  buildCtxSt ( Pi ep x : A . t' ) === ( x : ep A ) :: buildCtxSt ( t' )
+  buildCtxSt ( _ ) === nil
+fun
+  addParams( t , M' ) :: M :: addParams
+  {{ tex \mathsf{addParams} ( [[t]] , [[M']] ) }}
+by
+  addParams( t , nil ) === nil
+  addParams( t , (Ctor C : t') :: M) === (Ctor C : togglePol(iParam(t', buildCtxSt(t)), buildCtx(t))) :: addParams(t, M)
+
+funs
+  getArgs ::=
+fun
+  getArgs ( t ) :: tl :: getArgs
+  {{ tex \mathsf{getArgs} ( [[t]] ) }}
+by
+  getArgs ( app t t1 ep1 dots tn epn ) === [ t1 , ... , tn ] 
+
+funs 
+  buildCtx ::=
+fun
+  buildCtx ( t ) :: vl :: buildCtx
+  {{ tex \mathsf{buildCtx} ( [[t]] ) }}
+by
+  buildCtx ( Pi ep x : A . t' ) === (x:A) :: buildCtx ( t' )
+  buildCtx ( _ ) === nil
+
+funs
+  cut ::=
+fun
+  cut ( vl1 , vl2 ) :: vl :: cut
+  {{ tex \mathsf{cut} ( [[vl1]] , [[vl2]] ) }}
+by
+  cut ( nil, vl2) === vl2
+  cut ( x::rest, y::rest' ) === cut(rest, rest')
+
+funs
+  getHC ::= 
+fun
+  getHC ( t' ) :: t :: getHC
+  {{ tex \mathsf{getHC} ( [[t']] ) }}
+by
+  getHC ( Ctor C t1 ep1 dots tn epn ) === Ctor C
+
+defns
+PredicateBetaEq :: 'PBEq_' ::=
+  defn
+  P =b P' :: :: pbeq :: ''
+    {{ tex [[P]] =_\beta [[P']] }}
+  by
+
+  ---------------------------- :: App
+  (\ L x:A.P ) a =b [ a / x] P
+
+  -------------------------- :: Let1
+  let x = P in P' =b [P/x]P'  
+
+  ------------------------ :: Let2
+  let x = p in P =b [p/x]P  
+
+  ---------------------------- :: Let3
+  let x = t [p] in P =b [t/x]P  
+  
+defns
+Jtyp :: '' ::=
+  defn
+  D Ok :: :: sig_ok :: 'Sig_Ok_'
+   {{ tex [[D]]\,\mathsf{Ok} }}
+  by 
+   ---- :: Empty
+   . Ok
+
+   D Ok
+   Ctor C notin dom (D)
+   addParams(t, M') = M 
+   D , G |- data Ctor C t where M'   
+   ------------------------------- :: ExtData
+   (D, (C,t,M)) Ok
+
+   D Ok
+   x notin dom (D)
+   D , G |- t : t'
+   ------------------- :: ExtGDef
+   (D, x = (t,t')) Ok
+
+  defn
+  G Ok :: :: ctx_ok :: 'Ctx_Ok_'
+   {{ tex [[G]]\,\mathsf{Ok} }}
+  by 
+   ---- :: Empty
+   . Ok
+
+   G Ok
+   D Ok
+   x notin FV(G)
+   x notin dom(G)
+   D , G |- t : Type i
+   ------------------- :: ExtTerm
+   (G,x:t) Ok
+
+   G Ok
+   D Ok   
+   x notin FV(G)
+   x notin dom(G)
+   D , G |- LK : Logical i
+   --------------------------- :: ExtLK
+   (G,x:LK) Ok
+
+   G Ok
+   D Ok
+   x notin FV(G)
+   x notin dom(G)
+   D , G |- P : Formula i
+   ---------------------- :: ExtPred
+   (G,x:P) Ok
+
+  defn
+  tycheck prog D G :: :: progs :: 'TYPG_' 
+   {{ tex \Sepkw{tycheck}\,[[prog]]\,[[D]]\,[[G]] }}
+  by
+  
+  D , G |- data Ctor C t where M 
+  ---------------------------------- :: DataTypeDeclaration
+  tycheck data Ctor C t where M D G
+
+  D , G |- LK : Logical i
+  ---------------------------------- :: PredicateType
+  tycheck predicateType x : : LK D G
+
+  D , G |- P : LK
+  ------------------------ :: Predicate
+  tycheck predef x = P D G
+
+  D , G |- P : LK
+  ---------------------------- :: Theorem
+  tycheck theorem x : : P D G
+
+  D , G |- p : P
+  ------------------------ :: Proof
+  tycheck prfdef x = p D G
+
+  D , G |- t : Type i
+  ------------------------ :: Type
+  tycheck type x : : t D G
+
+  D , G |- t : t'
+  ------------------------- :: Term
+  tycheck termdef x = t D G
+
+  tycheck prog D G
+  tycheck pdef D G
+  --------------------- :: Step
+  tycheck prog pdef D G
+
+  defn
+  D , G |- v-or-p a :: :: vorp :: 'PV_'
+    {{tex [[D]],[[G]] [[|-]] \text{v-or-p}\ [[a]] }}
+  by
+  
+  Sig, Gra |- p : P
+  ---------------- :: Proof
+  D, G |- v-or-p p
+
+  Sig, Gra |- t : t'
+  Sig, Gra |- val t
+  ----------------- :: Term
+  D, G |- v-or-p t
+
+  defn
+  D , G |- val t  :: :: value :: 'V_' 
+    {{tex [[D]],[[G]] [[|-]] [[val]]\ [[t]] }}
+  by
+
+  G Ok
+  D Ok
+  x : val t in G
+  -------------- :: Var
+  D , G |- val x
+  
+  G Ok
+  D Ok
+  ------------------- :: Type
+  D , G |- val Type i
+
+  G Ok
+  D Ok
+  ---------------------------- :: Pi
+  D , G |- val Pi ep x : A . t   
+
+  G Ok
+  D Ok
+  ------------------------------ :: LamPlus
+  D , G |- val \ P + x : A . t  
+
+  D , G |- val t  
+  ------------------------------ :: LamMinus
+  D , G |- val \ P - x : A . t  
+
+  G Ok
+  D Ok
+  ------------------------------ :: Rec
+  D , G |- val rec f x : t1 . t2 
+
+  D, G |- v-or-p a1 ... D, G |- v-or-p an
+  --------------------------------------- :: Ctor
+  D , G |- val Ctor C a1 ep1 dots an epn
+
+  G Ok
+  D Ok
+  ------------------------ :: tCast
+  D, G |- val tcast t by p
+
+  defn
+  D , G |- M t tl : Ctor C x1 ep1 dots xn epn :: :: dataDecl_branch_typing :: 'Dd_'
+    {{ tex [[D]],[[G]] [[|-]] [[M]]\,[[t]]\,[[tl]] : [[C]]\,[[x1]]_{[[ep1]]}\,\cdots\,[[xn]]_{[[epn]]} }}
+  by
+
+  G Ok
+  D Ok  
+  -------------------------------------------- :: Empty
+  D , G |- nil t tl : Ctor C x1 ep1 dots xn epn
+
+  Ctor C1 notin tl
+  rngType(t') = Ctor C x1 ep1 dots xn epn
+  D , G |- M t (Ctor C1 : : tl) : Ctor C x1 ep1 dots xn epn
+  D , G , buildCtx(t) |- t' : Type i
+  ------------------------------------------------------------ :: Branch
+  D ,G |- (Ctor C1 : t') :: M t tl : Ctor C x1 ep1 dots xn epn
+
+  defn
+  D , G |- data Ctor C t where M :: :: data_typing :: ''
+  by
+
+  Ctor C notin dom(D)
+  D , G |- t : Type i
+  rngType(t) = Type j
+  rngType(t') = Ctor C x1 ep1 dots xn epn
+  D , G |- M t [Ctor C1] : Ctor C x1 ep1 dots xn epn
+  D , G , buildCtx(t) |- t' : Type i
+  ------------------------------------------------ :: DataDecl
+  D , G |- data Ctor C t where (Ctor C1 : t') :: M
+
+  defn
+  D , G |-PB R t1 t2 p l : P :: :: ProofTypeableBranch :: 'PB_'
+    {{tex [[D]],[[G]] [[|-]]^{PB} [[R]]\,[[t1]]\,[[t2]]\,[[p]]\,[[l]] : [[P]] }}
+  by
+
+  G Ok
+  D Ok  
+  ----------------------------------- :: Done
+  D , G |-PB done t1 t2 p empty : P
+  
+  r = n + m
+  x1 ... xn notin FV (|P|)
+  getArgs(t') = [ w1, ..., wm ]
+  buildCtx(t) = [ y1 : t1'', dots, yn : tm'']
+  cut([ y1 : t1'', dots, yn : tm''], buildCtx(getCType(t', Ctor C, D))) = [ x1 : t1', dots, xn : tn' ] 
+  D , G |-PB R t1 t' y ( l - { Ctor C : getCType(t', Ctor C, D) } ) : P
+  D , G, x1 : [w1/y1]t'1 , ldots , xn : [wm/ym]t'n , y : t1 = (Ctor C w'1 ep1 dots w'r epn) |- p'' : P
+  ---------------------------------------------------------------------------------------------------- :: Branch
+  D , G |-PB (Ctor C x1 ep'1 dots xn ep'n => p'' | R)  t1 t' y l : P
+  
+  defn
+  D , G |-TB H t1 t2 p l : t' :: :: TermTypeableBranch :: 'TB_'
+    {{tex [[D]],[[G]] [[|-]]^{TB} [[H]]\,[[t1]]\,[[t2]]\,[[p]]\,[[l]] : [[t']] }}
+  by
+
+  G Ok
+  D Ok  
+  ----------------------------------- :: Done
+  D , G |-TB done t1 t2 p empty : t''
+  
+  r = n + m
+  x1 ... xn notin FV (|t''|)
+  getArgs(t') = [ w1, ..., wm ]
+  buildCtx(D 2 (getHC(t'))) = [ y1 : t1'', dots, yn : tm'']
+  cut([ y1 : t1'', dots, yn : tm''], buildCtx(getCType(t', Ctor C, D)))  = [ x1 : t1', dots, xn : tn' ]
+  D , G |-TB H t1 t' y ( l - { Ctor C : getCType(t', Ctor C, D) } ) : t''
+  D , G, x1 : [w1/y1]t'1 , ldots , xn : [wm/ym]t'n , y : t1 = (Ctor C w'1 ep1 dots w'r epn) |- t2 : t''
+  ----------------------------------------------------------------------------------------------------- :: Branch
+  D , G |-TB (Ctor C x1 ep'1 dots xn ep'n => t2 | H)  t1 t' y l : t''
+
+  defn
+  D , G |- eqpf q ep : P :: :: eqpf :: 'Eq'
+    {{ tex [[D]],[[G]] [[|-]]\,eqpf\,[[q]]\,[[ep]]:[[P]] }}
+  by
+     D, G |- p : t1 = t2
+     ------------------------- :: Proof
+     D, G |- eqpf p + : t1 = t2
+
+     D, G |- t1 = t2 : Formula i
+     ------------------------------- :: Gen
+     D, G |- eqpf t1 = t2 - : t1 = t2
+
+  defn
+  a subexp a' :: :: Subexp :: ''
+  by
+  
+  ----------------------------------- :: Order
+  Ctor C a1 ep1 dots an epn subexp an
+
+  defn
+  a subexpp a' :: :: Subexpp :: 'Trans'
+  by
+    
+  a1 subexp a2
+  -------------- :: 1
+  a1 subexpp a2
+
+  a1 subexpp a2
+  a2 subexpp a3
+  -------------- :: 2
+  a1 subexpp a3
+
+  defn
+  D , G |- x = a :: :: GlobalDefs :: ''
+  by
+  
+  Sig, Gra |- a : A
+  x notin dom(D) 
+  x notin dom(G)
+  x notin FV(a)
+  ------------------------- :: GlobalDef
+  D, x = (a,A), G |- x = a
+
+  defn
+  Ctor C : t setin D :: :: CinD :: ''
+  by
+  
+  exists ( Ctor C' , t', M ) setin D . (Ctor C : t setin M)
+  --------------------------------------------------------- :: CinM
+  Ctor C : t setin D
+
+  defn
+  Ctor C setin D :: :: CinD2 :: ''
+  by
+
+  exists ( Ctor C' , t', M ) setin D . (exists t . (Ctor C : t setin M))
+  ---------------------------------------------------------------------- :: CinM2
+  Ctor C setin D
+
+  defn
+  D , G |- LK : Logical i :: :: LK_typing :: 'LK_' 
+    {{tex [[D]],[[G]] [[|-]] [[LK]] : [[Logical]]_{[[i]]} }}
+  by
+
+  G Ok
+  D Ok
+  ------------------------------------- :: Formula
+  D, G |- Formula i : Logical (i+1)
+
+  Sig , Gra |- A : Ti
+  D , G , x : A |- LK : Logical j
+  --------------------------------------------------- :: Predicate
+  D , G |- Forall x : A . LK : Logical max(i+1,j)
+  
+  defn
+  D , G |- P : LK  :: :: predicate_typing :: 'Predicate_' 
+    {{tex [[D]],[[G]] [[|-]] [[P]] : [[LK]] }}
+  by
+
+  D , G |- LK : Logical i
+  x : g LK in G
+  ---------------------------- :: Var
+  D , G |- x : LK
+
+  G Ok
+  D Ok
+  x = (P, LK) setin D
+  ------------------- :: GlobalDef
+  D , G |- x : LK
+
+  G Ok
+  D Ok
+  -------------------------- :: Bottom
+  D , G |- bot i : Formula i
+
+  D , G |- P1 : Formula i
+  D , G |- P2 : Formula j
+  ----------------------------------- :: Disjunction
+  D , G |- P1 + P2 : Formula max(i,j)
+
+  D , G |- P' : LK
+  D , G |- LK : Logical i
+  D , G , x :  P' |- P : Formula j
+  --------------------------------------------- :: Forall1
+  D , G |- Forall x : P' . P : Formula max(i,j)
+
+  D , G |- t : Type 0
+  D , G , x : t |- P : Formula i
+  -------------------------------------------- :: Forall2
+  D , G |- Forall x : t . P : Formula max(1,i) 
+
+  D , G |- t : Type (i+1)
+  D , G , x : t |- P : Formula j
+  -------------------------------------------- :: Forall3
+  D , G |- Forall x : t . P : Formula max(i+1,j) 
+  
+  D , G |- LK : Logical i
+  D , G , x : LK |- P : Formula j
+  ----------------------------------------------- :: Forall4
+  D , G |- Forall x : LK . P : Formula max(i,j)
+
+  D , G |- P' : LK
+  D , G |- LK : Logical i
+  D , G , x :  P' |- P : Formula j
+  --------------------------------------------- :: Ext1
+  D , G |- Exists x : P' . P : Formula max(i,j)
+
+  D , G |- t : Type 0
+  D , G , x : t |- P : Formula i
+  -------------------------------------------- :: Ext2
+  D , G |- Exists x : t . P : Formula max(1,i) 
+
+  D , G |- t : Type (i+1)
+  D , G , x : t |- P : Formula j
+  ---------------------------------------------- :: Ext3
+  D , G |- Exists x : t . P : Formula max(i+1,j) 
+  
+  D , G |- LK : Logical i
+  D , G , x : LK |- P : Formula j
+  --------------------------------------------- :: Ext4
+  D , G |- Exists x : LK . P : Formula max(i,j)
+
+  Sig , Gra |- p : P'
+  D , G , x : P' |- P : LK
+  x notin FV(p)
+  ------------------------------ :: LetProof
+  D , G |- let x = p in P : LK  
+
+  Sig , Gra |- P : LK'
+  D , G , x : LK |- P' : LK
+  x notin FV(P)
+  ------------------------------ :: LetPredicate
+  D , G |- let x = P in P' : LK  
+
+  Sig , Gra |- t : t'
+  D , G , x : t', x' : x = t |- P : LK
+  x notin FV(t)
+  ------------------------------------ :: Let
+  D , G |- let x = t [ x' ] in P : LK  
+
+  D , G |- t : t1 
+  D , G |- t' : t2
+  --------------------------- :: K_Eq
+  D , G |- t = t' : Formula i
+
+  D , G |- t : t' 
+  -------------------------- :: Terminates
+  D , G |- t ! : Formula i
+
+  Sig , Gra |- A : W
+  D , G, x : A |- P : LK
+  ------------------------------------------- :: Lam
+  D , G |- \ L x : A . P : Forall x : A . LK
+
+  D , G |- P : Forall x : A . LK
+  Sig , Gra |- a : A  
+  --------------------------------- :: App
+  D , G |- P a : [a/x] LK
+
+  defn
+  D , G |- p : P  :: :: proof_typing :: 'Proof_' 
+    {{tex [[D]],[[G]] [[|-]] [[p]] : [[P]] }}
+  by
+
+  D , G |- P : LK
+  x : g P in G
+  ---------------- :: Var
+  D , G |- x : P   
+
+  G Ok
+  D Ok
+  x = (p, P) setin D
+  ------------------- :: GlobalDef
+  D , G |- x : P
+
+  D , G |- p : [a/x]P
+  Sig , Gra |- a : A
+  ----------------------------------------------- :: Exti
+  D , G |- (a,p) as (Exists x:A.P) : Exists x:A.P
+
+  D , G |- p1 : Exists x:A.P
+  D , G, x:A, y:P |- p2 : P'
+  x notin FV(P')
+  --------------------------------- :: ExtE
+  D , G |- case p1 of (x,y).p2 : P'
+
+  D , G |- p : P1
+  D , G |- P2 : Formula i
+  --------------------------------- :: Inl
+  D , G |- injl p with P2 : P1 + P2
+  
+  D , G |- p : P2
+  D , G |- P1 : Formula i
+  --------------------------------- :: Inr
+  D , G |- injr p with P1 : P1 + P2
+
+  D , G |- p : P1 + P2
+  D , G , x : P1 |- p' : P
+  D , G , x : P2 |- p'' : P
+  --------------------------------- :: OrElim
+  D , G |- case p of x.p',x.p'' : P
+
+  D , G |- t : Type i
+  D , G, x : t |- p : P
+  -------------------------------------------- :: ForallTerm
+  D , G |- \ L x : t . p : Forall x : t . P
+
+  D , G |- P : LK
+  D, G |- LK : Logical i
+  D , G, x : val P |- p : P'
+  -------------------------------------------- :: ForallPredicate
+  D , G |- \ L x : P . p : Forall x : P . P'
+
+  D , G |- LK : Logical i
+  D , G, x : val LK |- p : P
+  -------------------------------------------- :: ForallLk
+  D , G |- \ L x : LK . p : Forall x : LK . P
+
+  D , G |- p : Forall x : A . P
+  Sig , Gra |- a : A  
+  ----------------------------- :: App
+  D , G |- p a : [a/x] P
+
+  Sig , Gra |- p' : P'
+  D , G , x : P' |- p : P
+  x notin FV(p')
+  ---------------------------- :: LetProof
+  D , G |- let x = p' in p : P  
+
+  Sig , Gra |- P : LK
+  D , G , x : LK |- p : P
+  x notin FV(P)
+  --------------------------- :: LetPredicate
+  D , G |- let x = P in p : P  
+
+  Sig , Gra |- t : t'
+  D , G , x : t', x' : x = t |- p : P
+  x notin FV(t)
+  -------------------------------------- :: Let
+  D , G |- let x = t [x'] in p : P  
+
+  |t| \V/ |t'|
+  D , G |- t : t1 
+  D , G |- t' : t2
+  --------------------------- :: Join
+  D , G |- join t t' : t = t'
+
+  x1, ... , xn notin FV(|P|)
+  D , G |- p : [t1/x1] ... [tn/xn]P
+  D , G |- [t'1/x1] ... [t'n/xn]P : Formula i
+  D, G |- eqpf  q1 ep1 : t1 = t'1 ... D, G |- eqpf qn epn : tn = t'n
+  -----------------------------------------------------------------------  :: Conv
+  D , G |- conv p by q1 ... qn at x1 ... xn . P : [t'1/x1] ... [t'n/xn]P
+
+  D, G |- p : P
+  P =b P'
+  -------------------------- :: PredConv
+  D, G |- predconv p P' : P'
+
+  D , G |- val t
+  -------------------- :: Val
+  D , G |- valax t : t ! 
+
+  D, G |- t : t1
+  D, G |- t' : t2
+  D, G |- val t
+  D, G |- val t'
+  t subexpp t'
+  ------------------------- :: Ord
+  D, G |- ord t t' : t < t'  
+
+  D , G, x : t1, u:val x! , f : val Forall y : t2 . Forall u:y<x . [y/x]P |- p : P
+  ------------------------------------------------------------------------------------ :: Ind
+  D , G |- ind f x : t1, u . p : Forall x : t1. Forall u : x ! . P
+
+  D , G |- P : Formula i
+  D , G |- p' : Ctor C a1 ep1 dots ar epr = Ctor K a'1 ep'1 dots a's ep's
+  Ctor C \= Ctor K
+  forall a setin a1 to ar  . ((exists1 t . Sig, Gra |- a : t ) implies (exists t',p . (a equiv t' /\ D , G |- p : t' !)))
+  forall a setin a'1 to a's . ((exists1 t . Sig, Gra |- a : t ) implies (exists t',p . (a equiv t' /\ D , G |- p : t' !)))
+  ---------------------------------------------------------------------------------------------------------- :: Contra1
+  D , G |- contra p' : P
+
+  D , G |- p : bot i
+  D , G |- P : Formula i
+  ---------------------- :: Contra2
+  D , G |- contra p : P
+
+  D , G |- P : Formula i
+  D , G |- p1 : t = abort t'
+  D , G |- p2 : t !
+  ---------------------------- :: Contraval
+  D , G |- contraval p1 p2 : P
+
+  D , G |- t : t'
+  D , G |- p : t !
+  D , G |-PB R t t' y D 3 (getHC(t')) : P
+  --------------------------------------- :: Case
+  D , G |- case t [ y ] p of R : P
+
+  D , G |- t : t'
+  D , G, u : val t ! |- p2 : P
+  D , G, u : val abort t' = t |- p1 : P
+  ------------------------------------------------------  :: TCase
+  D , G |- tcase t [ u ] of abort -> p1 | ! -> p2 : P
+
+  defn
+  D , G |- t : t'  :: :: term_typing :: 'Term_' 
+    {{tex [[D]],[[G]] [[|-]] [[t]] : [[t']] }}
+  by
+
+  G Ok
+  D Ok
+  ------------------------ :: Type0
+  D , G |- Type 0 : Type 0
+
+  G Ok
+  D Ok
+  --------------------------- :: Typei
+  D, G |- Type i : Type (i+1)
+
+  D , G |- t : Type 0
+  D , G , x : t |- t' : Type i
+  ---------------------------------- :: Pi
+  D , G |- Pi ep x : t . t' : Type i
+
+  D , G |- P : LK
+  D , G |- LK:Logical (i+1)
+  D , G , x : P |- t : Type j
+  --------------------------------------- :: PiPredicate
+  D , G |- Pi - x : P . t : Type max(i,j)
+
+  D , G |- LK : Logical i
+  D , G , x:LK |- t : Type j
+  -------------------------------------- :: PiLK
+  D , G |- Pi - x : LK.t : Type max(i,j)
+
+  D , G |- t : Type i
+  x : g t in G
+  ------------------- :: Var
+  D , G |- x : t
+
+  D, G |- t : t'
+  D, G |- p : t!
+  ------------------------- :: tCast
+  D, G |- tcast t by p : t'
+
+  G Ok
+  D Ok
+  x = (t, t') setin D
+  ------------------- :: GlobalDef
+  D , G |- x : t'
+
+  G Ok
+  D Ok
+  Ctor C : t setin D 
+  ------------------- :: DataCons
+  D , G |- Ctor C : t  
+
+  D , G, x : val t1 |- t : t2  
+  -------------------------------------------- :: LamPlus
+  D , G |- \ P + x : t1 . t : Pi + x : t1 . t2  
+
+  D , G, x : A |- t : t'
+  x notin FV ( | t | )
+  ------------------------------------------ :: LamMinus
+  D , G |- \ P - x : A . t : Pi - x : A . t'  
+
+  D , G |- t : Pi ep x : A . t'
+  Sig , Gra |- a : A  
+  ---------------------------- :: App
+  D , G |- t a ep : [a/x] t'
+
+  Sig, Gra |- p : P
+  D , G , x : P |- t : t'
+  x notin FV(p)
+  ---------------------------------- :: LetProof
+  D , G |- let x = p in t : t'
+
+  Sig , Gra |- P : LK
+  D , G , x : LK |- t : t'
+  x notin FV(P)
+  --------------------------- :: LetPredicate
+  D , G |- let x = P in t : t'  
+
+  Sig , Gra |- t1 : t1'
+  D , G , x : t', x' : x = t |- t2 : t2'
+  x notin FV(t)
+  ------------------------------------ :: Let
+  D , G |- let x = t1 [x'] in t2 : t2'  
+
+  x1, ... , xn notin FV(|t'|)
+  D , G |- t : [t1/x1] ... [tn/xn]t'
+  Sig , Gra |- [t'1/x] ... [t'n/x]t' : Type
+  D, G |- eqpf  q1 ep1 : t1 = t'1 ... D, G |- eqpf qn epn : tn = t'n
+  ------------------------------------------------------------------------  :: Conv
+  D , G |- conv t by q1 ... qn at x1 ... xn . t' : [t'1/x1] ... [t'n/xn]t'
+
+  D , G, f : val Pi + x : t1 . t2, x : val t1 |- t : t2  
+  ----------------------------------------------------- :: Rec
+  D , G |- rec f x : t1 . t : Pi + x : t1 . t2 
+
+  D , G |- t : Type i
+  -------------------- :: Abort
+  D , G |- abort t : t  
+
+  D , G |- t1 : t'
+  D , G |-TB H t1 t' y D 3 (getHC(t')) : t''
+  ------------------------------------------ :: Case
+  D , G |- case t1 [ y ] of H : t''

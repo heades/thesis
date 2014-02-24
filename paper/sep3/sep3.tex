@@ -1,0 +1,56 @@
+\input{sep3-annotated-ott}
+\input{sep3-unannotated-ott}
+
+\renewcommand{\Sepdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\SepUdrulename}[1]{\scriptsize \textsc{#1}}
+
+% See the seppp.tex file for reminders of the motivation of the
+% design.
+
+We first define some convenient notation. If $([[Ctor C]], [[t]],
+[[M]]) \in [[D]]$ then $[[D]]_1([[Ctor C]]) = [[Ctor C]]$,
+$[[D]]_2([[Ctor C]]) = [[t]]$, and $[[D]]_3([[Ctor C]]) = [[M]]$.
+
+{\bf Judgement Descriptions}
+\begin{center}
+  \begin{tabular}{lll}
+    $[[D , G |- M t tl : Ctor C x1 ep1 dots xn epn]]$\\
+    &
+    \begin{tabular}{lll}
+      $[[M]]$  & List of datatype constructors.\\
+      $[[t]]$  & Type of datatype being declared.\\
+      $[[tl]]$ & Datatype constructor accumulator.\\
+      $[[Ctor C x1 ep1 dots xn epn]]$ & The datatype being declared.\\
+    \end{tabular}
+    & \\
+    $[[D , G |-PB R t1 t2 p l : P]]$\\
+    &
+    \begin{tabular}{lll}
+      $[[R]]$  & List of case branches.\\
+      $[[t1]]$ & The scrutiny of the case expression.\\
+      $[[t2]]$ & The type of the scrutiny.\\
+      $[[p]]$  & The proof that the scrutiny equals the pattern.\\
+      $[[l]]$  & An accumulator.\\
+      $[[P]]$  & The type of the case expression.\\
+    \end{tabular}
+    & \\
+    $[[D , G |-TB H t1 t2 p l : t']]$\\
+    &
+    \begin{tabular}{lll}
+      $[[H]]$  & List of case branches.\\
+      $[[t1]]$ & The scrutiny of the case expression.\\
+      $[[t2]]$ & The type of the scrutiny.\\
+      $[[p]]$  & The proof that the scrutiny has a value.\\
+      $[[l]]$  & An accumulator.\\
+      $[[t']]$ & The type of the case expression.\\
+    \end{tabular}
+    & \\
+    $[[D , G |- eqpf q ep : P]]$\\
+    &
+    \begin{tabular}{lll}
+      $[[q]]$  & Either a proof of an equality or a trivial axiom of equality.\\
+      $[[ep]]$ & The stage of $[[q]]$; $+$ if $[[q]]$ is a proof and $-$ otherwise.\\
+    \end{tabular}
+  \end{tabular}
+\end{center}
+
