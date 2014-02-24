@@ -42,10 +42,10 @@ FS : $(FS_FILES)
 	cd free-speech; $(MAKE)
 
 thesis.pdf : thesis.tex thesis.bib background.tex FS
-	# $(PDFLATEX) thesis.tex
-	# $(PDFLATEX) thesis.tex
-	# $(BIBTEX) thesis
-	# $(PDFLATEX) thesis.tex
+	$(PDFLATEX) thesis.tex
+	$(PDFLATEX) thesis.tex
+	$(BIBTEX) thesis
+	$(PDFLATEX) thesis.tex
 	$(PDFLATEX) thesis.tex
 ifeq ($(SKIM), skim_revert.sh)
 	$(SKIM) $(CURDIR)/thesis.pdf

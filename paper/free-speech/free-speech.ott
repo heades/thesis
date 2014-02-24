@@ -32,6 +32,8 @@ exp, e :: 'e_' ::=
   {{ tex [[rec]]^{-}\ [[f]]\ [[e]] }}
   | Nat                  ::   :: Nat
   | [ e1 / x ] e2        :: M :: subst
+  | r e                  :: M :: Rho
+  {{tex \rho\,[[e]] }}
   | ( e1 )               :: M :: parens
   | C [ e ]              :: M :: EvalCtx {{tex  \mathcal{C} [ [[e]] ] }}
   | S                    ::  :: Successor {{tex \mathsf{S} }}
@@ -70,6 +72,7 @@ evalCtx, C {{tex \mathcal{C} }} :: 'ectx_' ::=
 
 ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
   | .                   ::   :: nil
+  {{tex \cdot }}
   | x : th e        ::   :: decl_cons
   {{ tex [[x]]:^{[[th]]} [[e]] }}           
   | ( G )               :: M :: parens
@@ -159,7 +162,7 @@ Jtyp :: '' ::=
   ( rec f x v' ) v ~b> [ rec f x v' / f] [v / x] v'
 
   defn
-  G |- e : e'   th :: :: typing :: '' 
+  G |- e : e' th :: :: typing :: '' 
     {{tex [[G]] [[|-]]^{[[th]]} [[e]] : [[e']] }}
   by
 
