@@ -9,12 +9,11 @@
 
 \begin{figure}
   \begin{center}
-    \todo[inline]{Need to define the evaluation contexts.}
     \begin{tabular}{lll}
       Syntax:
       \vspace{10px} \\
       \begin{math}
-        \arraycolsep=1.4pt
+        \arraycolsep=2pt\edef\arraystretch{1.2}
         \begin{array}{rllllllllllllllll}
           \text{(Classifiers)}  & [[th]] & := & [[L]]\,|\,[[C]]\\
           \text{(Phases)}       & [[ep]] & := & [[+]]\,|\,[[-]]\\
@@ -35,11 +34,13 @@
       \end{math}\\
       & \\
       CBV reduction:\\
+      \small
       \begin{mathpar}
         \FSdruleCbvXXApp{}  \and
         \FSdruleCbvXXRec{}  \and
         \FSdruleRedXXCtxt{} \and
-        \FSdruleRedXXAbort{}
+        \FSdruleRedXXAbort{} \and
+        \FSdruleComputeJoin{}
       \end{mathpar}
     \end{tabular}
   \end{center}  

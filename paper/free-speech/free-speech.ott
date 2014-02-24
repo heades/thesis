@@ -169,7 +169,7 @@ Jtyp :: '' ::=
     ----------------- :: K_Nat
     G |- Nat : Type L
 
-%% Note that A is not required to be logical here. That is 
+%% Note that e1 is not required to be logical here. That is 
 %% our freedom of expression.
 
     G |- e1 : Type th'
