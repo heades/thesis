@@ -54,3 +54,188 @@ $[[D]]_2([[Ctor C]]) = [[t]]$, and $[[D]]_3([[Ctor C]]) = [[M]]$.
   \end{tabular}
 \end{center}
 
+\label{sec:the_annotated_language}
+\begin{definition}
+  \label{def:asep3_togglepol}  
+  \begin{center}
+    \begin{math}
+    \mathsf{togglePol} ([[t]], [[vl]]) = \left\{
+    \begin{array}{ll}
+      [[Pi - x : y.togglePol(t',vl)]]    & : [[t equiv Pi + x : y.t']] \land \exists [[A]].([[y]]:[[A]]) \in [[vl]]\\
+      [[Pi ep x : A . togglePol(t',vl)]] & : \text{otherwise}
+    \end{array}
+    \right.
+  \end{math}
+  \end{center}
+\end{definition}
+
+\begin{definition}
+  \label{def:eraser_function}
+  The erasers are defined as follows:
+  \begin{itemize}
+  \item Super Kinds:\\
+    \begin{math}
+      \begin{array}{lll}
+        |\mathsf{LogicalKind}_{[[i]]}| & = & \mathsf{LogicalKind}_{[[i]]}
+      \end{array}
+    \end{math}
+  \item Logical Kinds:\\
+    \begin{math}
+      \begin{array}{lll}
+        |[[x]]|                   & = & x\\
+        |\mathsf{Formula}_{[[i]]}| & = & \mathsf{Formula}_{{[[i]]}}\\
+        |[[Forall x : A . LK]]|   & = & \forall [[x]] : |[[A]]|.|[[LK]]|
+      \end{array}
+    \end{math}
+    
+  \item Predicates:\\
+    \begin{math}
+      \begin{array}{lll}
+        |[[\ L x : A . P]]|       & = & \Lambda [[x]] . |[[P]]|\\
+        |[[P a]]|                 & = & |P|\ |a|\\
+        |[[Forall x : A . P]]|    & = & \forall [[x]]:|[[A]]|.|[[P]]|\\
+        |[[t1 = t2]]|             & = & |[[t1]]| = |[[t2]]|\\
+        |[[t !]]|                 & = & |[[t]]|!\\
+        |[[let x = p in P]]|      & = & \mathsf{let}\,[[x]] = |[[p]]|\,in\,|[[P]]|\\
+        |[[let x = P in P']]|     & = & \mathsf{let}\,[[x]] = |[[P]]|\,in\,|[[P']]|\\
+        |[[let x = t [x'] in P]]| & = & \mathsf{let}\,[[x]] = |[[t]]|\,in\,|[[P]]|\\
+        |[[P1 + P2]]|             & = & |[[P1]]| + |[[P2]]|\\
+        |[[Exists x : A . P]]|    & = & \exists [[x]]:|[[A]]|.|[[P]]|\\
+        |[[bot i]]|               & = & [[bot i]]\\
+        |[[t < t']]|              & = & |[[t]]| < |[[t']]|
+      \end{array}
+    \end{math}
+    
+  \item Proofs:\\
+    \begin{math}
+      \begin{array}{lll}
+        |[[x]]| & = & x\\
+        |[[\ L x : A . p]]| & = & \Lambda [[x]].|[[p]]|\\
+        |[[p p']]| & = & |[[p]]|\,|[[p']]|\\
+        |[[p t]]| & = & |[[p]]|\,|[[t]]|\\
+        |[[injl p with P]]| & = & \mathsf{injl}\,|[[p]]|\\
+        |[[injr p with P]]| & = & \mathsf{injr}\,|[[p]]|\\
+        |[[case p of x . p' , y . p'']]| & = & \mathsf{case}\,|[[p]]|\,\mathsf{of}\,[[x]] . |[[p']]| , [[y]] . |[[p'']]|\\
+        |[[(a , p ) as P]]| & = & (|[[a]]|,|[[p]]|)\\
+        |[[case p1 of ( x , y ) . p2]]| & = & \mathsf{case}\,|[[p1]]|\,\mathsf{of}\,( [[x]] , [[y]] ) . |[[p2]]|\\
+        |[[let x = p' in p]]| & = & \mathsf{let}\,[[x]] = |[[p']]|\,in\,|[[p]]|\\
+        |[[let x = P in p]]| & = & \mathsf{let}\,[[x]] = |[[P]]|\,in\,|[[p]]|\\
+        |[[let x = t [x'] in p]]| & = & \mathsf{let}\,[[x]] = |[[t]]|\,in\,|[[p]]|\\
+        |[[join t1 t2]]| & = & \mathsf{join}\\
+        |[[conv p by q1 ... qn at x1 ... xn . P]]| & = & (\lambda x_1.\cdots.\lambda x_m.|[[p]]|)\,|q_1|\,\cdots\,|q_m|\\
+        |[[predconv p P]]| & = & |[[p]]|\\
+        |[[valax t]]| & = & \mathsf{valax}\\
+        |[[case t [ x ] p of R]]| & = & \mathsf{case}\,|[[t]]|\,\mathsf{of}\,|[[R]]|\\
+        |[[tcase t [ x ] of abort -> p1 | ! -> p2]]| & = & 
+            \mathsf{tcase}\,|[[t]]|\,\mathsf{of}\,[[abort]] \to |[[p1]]|\,|\,! \to |[[p2]]|\\
+        |[[ind f x : t , p1 . p2]]| & = & \mathsf{ind}\,f\,[[x]].|[[p2]]|\\
+        |[[contra p1]]| & = & \mathsf{contra}\,|[[p1]]|\\
+        |[[contraval p1 p2]]| & = & \mathsf{contraval}\,|[[p1]]|\,|[[p2]]|\\
+      \end{array}
+    \end{math}
+    
+  \item Proof branches ($[[R]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |[[Ctor C x1 ep1 dots xn epn => p | R]]| & = & |[[Ctor C x1 ep1 dots xn epn]]| \Rightarrow |[[p]]|\,|\,|[[R]]|\\
+        |[[done]]| & = & done 
+      \end{array}
+    \end{math}
+
+  \item Terms: \\
+    \begin{math}
+      \begin{array}{lll}
+        |[[x]]| & = & x\\
+        |\mathsf{Type}_{[[i]]}| & = & \mathsf{Type}_{[[i]]}\\
+        |[[Pi + x : A . t]]| & = & \Pi [[x]]_{+} : |[[A]]|.|[[t]]|\\
+        |[[Pi - x : A . t]]| & = & \Pi [[x]]_{-} : |[[A]]|.|[[t]]|\\
+        |[[\ P + x : LK . t]]| & = & |[[t]]|\\
+        |[[\ P - x : LK . t]]| & = & |[[t]]|\\
+        |[[\ P + x : P . t]]| & = & |[[t]]|\\
+        |[[\ P - x : P . t]]| & = & |[[t]]|\\
+        |[[\ P + x : t' . t]]| & = & \lambda [[x]].|[[t]]|\\
+        |[[\ P - x : t' . t]]| & = & |[[t]]|\\
+        |[[conv t by q1 ... qn at x1 ... xm . t']]| & = & |[[t']]|\\
+        |[[case t [ x ] of H]]| & = & \mathsf{case}\,|[[t]]|\,\mathsf{of}\,|[[H]]|\\
+        |[[t t' +]]| & = & |[[t]]|\,|[[t']]|\\
+        |[[t t' -]]| & = & |[[t]]|\\
+        |[[t p +]]| & = & |[[t]]|\\
+        |[[t p -]]| & = & |[[t]]|\\
+        |[[t P +]]| & = & |[[t]]|\\
+        |[[t P -]]| & = & |[[t]]|\\
+        |[[let x = p in t]]|      & = & |[[ [p/x]t]]|\\
+        |[[let x = P in t']]|     & = & |[[ [P/x]t']]|\\
+        |[[let x = t [y] in t']]| & = & \mathsf{let}\,[[x]] = |[[t]]|\,in\,|[[t']]|\\
+        |[[tcast t by p]]| & = & \mathsf{tcast}\,|[[t]]|\\
+        |[[abort t]]| & = & \mathsf{abort}\\
+        |[[rec f x : t1 . t2]]| & = & \mathsf{rec}\,[[f]]\,[[x]].|[[t2]]|\\
+        |[[Ctor C ]]| & = & \Sepkw{C}\\
+      \end{array}
+    \end{math}
+      
+  \item Term branches ($[[H]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |[[Ctor C x1 ep1 dots xn epn => t | H]]| & = & |[[Ctor C x1 ep1 dots xn epn]]| \Rightarrow |[[t]]|\,|\,|[[H]]|\\
+        |[[done]]| & = & done 
+      \end{array}
+    \end{math}
+
+  \item Logical Contexts ($[[G]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |\cdot| = \cdot\\
+        |[[G,x : g A]]| = |[[G]]|,[[x]]:^[[g]] |[[A]]|
+      \end{array}
+    \end{math}
+
+  \item Programmatic Contexts ($[[G]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |\cdot| = \cdot\\
+        |[[G, x : g t]]| = |[[G]]|,[[x]]:^[[g]] |[[t]]|\\
+        |[[G, x : g P]]| = |[[G]]|\\
+        |[[G, x : g LK]]| = |[[G]]|\\
+      \end{array}
+    \end{math}
+   
+  \item Constructor Sets ($[[l]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |[[empty]]|                 = \emptyset\\
+        |\{ [[Ctor C]] : [[t']]\}|  = \{ [[Ctor C]]:|[[t]]| \}\\
+        |[[l1]] \cap |[[l2]]|       = |[[l1]]| \cap |[[l2]]|\\
+        |[[l1]] - [[l2]]|           = |[[l1]]| - |[[l2]]|\\
+        |[[l1]] = [[l2]]|           = |[[l1]]| = |[[l2]]|\\\\
+      \end{array}
+    \end{math}
+
+  \item Sets of Datatype Constructors ($[[M]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |\mathsf{nil}| = \mathsf{nil}\\
+        |[[(Ctor C : t') :: M]]| = ([[Ctor C]] : |[[t']]|)::|[[M]]| \\
+      \end{array}
+    \end{math}
+    
+  \item Logical Signatures ($[[D]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |\cdot| = \cdot\\
+        |[[D , ( C , t , M )]]| = |[[D]]|, ([[C]], |[[t]]|, |[[M]]|)\\
+        |[[D , x = ( a , A )]]| = |[[D]]| , [[x]] = ( |[[a]]| , |[[A]]| )
+      \end{array}
+    \end{math}
+
+  \item Programmatic Signatures ($[[D]]$):\\
+    \begin{math}
+      \begin{array}{lll}
+        |\cdot| = \cdot\\
+        |[[D , ( C , t , M )]]| = |[[D]]|, ([[C]], |[[t]]|, |[[M]]|)\\
+        |[[D , x = ( P , LK )]]| = |[[D]]|\\
+        |[[D , x = ( p , P )]]| = |[[D]]|\\
+        |[[D , x = ( t , t' )]]| = |[[D]]| , [[x]] = ( |[[t]]| , |[[t']]| )
+      \end{array}
+    \end{math}
+  \end{itemize}
+\end{definition}

@@ -50,10 +50,12 @@ SEP : $(SEP3_FILES)
 	cd sep3; $(MAKE)
 
 thesis.pdf : background.tex FS SEP thesis.tex thesis.bib
+ifndef QUICKPROC
 	$(PDFLATEX) thesis.tex
 	$(PDFLATEX) thesis.tex
 	$(BIBTEX) thesis
 	$(PDFLATEX) thesis.tex
+endif
 	$(PDFLATEX) thesis.tex
 ifeq ($(SKIM), skim_revert.sh)
 	$(SKIM) $(CURDIR)/thesis.pdf
