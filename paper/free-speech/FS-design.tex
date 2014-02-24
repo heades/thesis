@@ -13,6 +13,26 @@
     \begin{tabular}{lll}
       Syntax:
       \vspace{10px} \\
+      \begin{math}
+        \arraycolsep=1.4pt
+        \begin{array}{rllllllllllllllll}
+          \text{(Classifiers)}  & [[th]] & := & [[L]]\,|\,[[C]]\\
+          \text{(Phases)}       & [[ep]] & := & [[+]]\,|\,[[-]]\\
+          \text{(Expressions)}  & [[e]]  & := & 
+          [[x]]\,|\,[[Type]]\,|\,[[Nat]]\,|\,[[(x : th e1) ep -> e2]]\,|\,[[e1 = e2]]\,|\,
+          [[S]]\,|\,[[Z]]\,|\,\\
+          & & & [[\x.e]]\,|\,[[rec f x e]]\,|\,[[rec - f e]]\,|\,[[e1 e2]]\,|\,
+                [[join]]\,|\,[[injdom]]\,|\,[[injran]]\,|\,\\
+          & & & [[contra]]\,|\,[[abort]]\\
+          \text{(Values)}       & [[v]] & := & 
+          [[x]]\,|\,[[Type]]\,|\,[[Nat]]\,|\,[[(x : th v1) ep -> v2]]\,|\,
+          [[e1 = e2]]\,|\,[[\x.e]]\,|\,\\
+          & & & [[join]]\,|\,[[injdom]]\,|\,[[injran]]\,|\,[[rec f x v]]\,|\,[[rec - f v]]\\
+          \text{(Evaluation Contexts)} & [[C]] & := & [[ [] ]]\,|\,[[( x : th C ) ep -> e2]]\,|\,[[( x : th e1 ) ep -> C]]\,|\,[[rec f x C]]\,|\,\\
+          & & & [[rec - f C]]\,|\,[[e1 C]]\,|\,[[C v]]\\
+          \text{(Typing Contexts)}     & [[G]] & := & [[.]]\,|\,[[x : th e]]\,|\,[[G1,G2]]\\        
+        \end{array}
+      \end{math}\\
       & \\
       CBV reduction:\\
       \begin{mathpar}

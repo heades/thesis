@@ -29,19 +29,19 @@ exp, e :: 'e_' ::=
   | abort                ::   :: Abort
   | rec f x e            ::   :: rec (+ bind f in e +) (+ bind x in e +)
   | rec - f e            ::   :: recImp (+ bind f in e +) 
-                                 {{ tex [[rec]]^{-}\ [[f]]\ [[e]] }}
+  {{ tex [[rec]]^{-}\ [[f]]\ [[e]] }}
   | Nat                  ::   :: Nat
   | [ e1 / x ] e2        :: M :: subst
   | ( e1 )               :: M :: parens
   | C [ e ]              :: M :: EvalCtx {{tex  \mathcal{C} [ [[e]] ] }}
-  | S                    :: M :: Successor {{tex \mathsf{S} }}
-  | Z                    :: M :: Zero {{tex \mathsf{Z} }}
+  | S                    ::  :: Successor {{tex \mathsf{S} }}
+  | Z                    ::  :: Zero {{tex \mathsf{Z} }}
 
 value {{ tex value }}, v :: 'val_' ::= 
   | x                    ::   :: Var
   | Type                 ::   :: Type {{ tex [[Type]] }}
-  | ( x : th e1 ) ep -> e2  ::   :: arrow (+ bind x in e1 +)
-                                 {{ tex ([[x]]\,:^{[[th]]}\,[[e1]])^{[[ep]]} [[->]] [[e2]] }}
+  | ( x : th v1 ) ep -> v2  ::   :: arrow (+ bind x in v2 +)
+  {{ tex ([[x]]\,:^{[[th]]}\,[[v1]])^{[[ep]]} [[->]] [[v2]] }}
   | e1 = e2              ::   :: Eq
   | \ x . e       ::   :: Lambda (+ bind x in e +)
                                  {{ tex [[\]][[x]]\,.\,[[e]] }}
@@ -49,14 +49,29 @@ value {{ tex value }}, v :: 'val_' ::=
   | join                 ::   :: Join
   | injdom               ::   :: injdom
   | injran               ::   :: injran
-  | rec f x e            ::   :: rec (+ bind f in e +) (+ bind x in e +)
+  | rec f x v            ::   :: rec (+ bind f in e +) (+ bind x in v +)
+  | rec - f v            ::   :: RecImp
+  {{ tex [[rec]]^{-}\ [[f]]\ [[v]] }}
   | Nat                  ::   :: Nat
   | ( value )            :: M :: parens
 
+evalCtx, C {{tex \mathcal{C} }} :: 'ectx_' ::=
+  | [] :: :: Hole
+  {{tex \Box }}
+  | ( x : th C ) ep -> e2 :: :: PiD
+  {{ tex ([[x]]\,:^{[[th]]}\,[[ C ]])^{[[ep]]} [[->]] [[e2]] }}
+  | ( x : th e1 ) ep -> C :: :: PiR
+  {{ tex ([[x]]\,:^{[[th]]}\,[[e1]])^{[[ep]]} [[->]] [[ C ]] }}
+  | rec f x C :: :: Rec
+  | rec - f C ::   :: RecImp
+  {{ tex [[rec]]^{-}\ [[f]]\ [[C]] }}
+  | e1 C      :: :: AppArg
+  | C v       :: :: AppFunc
+
 ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
   | .                   ::   :: nil
-  | G , x : th e        ::   :: decl_cons
-                                {{ tex [[G]], [[x]]:^{[[th]]} [[e]] }}           
+  | x : th e        ::   :: decl_cons
+  {{ tex [[x]]:^{[[th]]} [[e]] }}           
   | ( G )               :: M :: parens
   | G1 , G2             :: M :: concat
 
