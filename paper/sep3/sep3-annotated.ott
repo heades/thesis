@@ -161,11 +161,11 @@ term, t, w :: 't_' ::= {{ com annotated programmatic expressions }}
   | tcast t by p                           ::   :: tCast
   | t a ep                                 ::   :: App
     {{ tex [[t]]\,[[a]]_[[ep]] }}
-  | app t t1 ep1 dots tn epn               :: M :: multiapp
-    {{ tex [[t]] [[t1]]_{[[ep1]]} [[dots]] [[tn]]_{[[epn]]} }}
   | abort t                                ::   :: Abort
   | rec f x : t1 . t2                      ::   :: rec (+ bind f in t2 +) (+ bind x in t2 +) 
   | Ctor C                                 ::   :: Constructor
+  | app t t1 ep1 dots tn epn               :: M :: multiapp
+    {{ tex [[t]] [[t1]]_{[[ep1]]} [[dots]] [[tn]]_{[[epn]]} }}
   | Ctor C a1 ep1 dots an epn              :: S :: MultiConApp
     {{ tex \mathsf{C}\,[[a1]]_{[[ep1]]} \ldots [[an]]_{[[epn]]} }}
   | Ctor C t1 ep1 dots tn epn              :: S :: MultiConApp2
@@ -250,7 +250,7 @@ ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
     {{ tex [[G]] , [[x]] :^{[[g]]} [[e]] }}
   | G , x : e                               ::   :: decl_cons2
     {{ tex [[G]] , [[x]] : [[e]] }}
-  | vl                                      ::   :: var_list
+  | vl                                      :: M :: var_list
   | G1 , G2                                 ::   :: concat
   | G , x1 : g1 e1 , ldots , xn : gn en     :: S :: dc_dots
     {{ tex [[G]] , [[x1]] :^{[[g1]]} [[e1]] , \ldots , [[xn]] :^{[[gn]]} [[en]] }}
@@ -261,10 +261,10 @@ ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
 var_list, vl, rest :: 'var_list_' ::=
   | nil                                     ::   :: nil
   | ( x : A ) : : rest                      ::   :: cons0
-  | x : A : : rest                          ::   :: cons1
-  | x : ep A : : rest                       ::   :: cons2 
+  | x : A : : rest                          :: M :: cons1
+  | x : ep A : : rest                       :: M :: cons2 
   |  ( x : ep A ) : : rest                  ::   :: cons3
-  | x : : rest                              ::   :: cons4
+  | x : : rest                              :: M :: cons4
   | _                                       ::   :: joker
   | [ y1 : t1' , dots , yn : tn' ]          :: M :: list_ctx
   | [ x1 : t1' , dots , xn : tn' ]          :: M :: list_ctx2

@@ -7,27 +7,81 @@
 % See the seppp.tex file for reminders of the motivation of the
 % design.
 
-\begin{figure}
-  \begin{center}
-    \small
-    \begin{math}
-      \begin{array}{llllllllllllllll}
-        \text{(Programs) }    [[prog]] ::= [[pdef]] \mid [[prog pdef]]\\
-        \text{(Definitions) } [[pdef]] ::= [[datatype_decl]] \mid [[predicateType x :: LK]] \mid
-        [[predef x = P]] \mid \\
-        [[theorem x :: P]] \mid [[prfdef x = p]] \mid [[type x :: t]] \mid [[termdef x = t]] \\
-        \text{(Datatypes) }   [[datatype_decl]] ::= [[data Ctor C t where M]]\\
-        \text{(Stages) }      [[ep]]   ::= [[+]] \mid [[-]]\\
-        \text{(Classifiers) } [[ks]]   ::= [[L]] \mid [[P]]\\
-        \text{(Argument Classifiers) } Arg, A ::= [[term]] \mid [[proof]] \mid LK\\
-        \text{(Super Kinds) } [[L]] ::= [[Logical i]]\\
-        \text{(Indicies) } [[i]] ::= 1 \mid 2 \mid 3 \mid \cdots\\
-      \end{array}
-    \end{math}
-  \end{center}
-  \caption{Syntax for Annotated $\Sep$}
-  \label{fig:ann-sep3-syntax}
-\end{figure}
+\begin{center}
+  \small
+  \begin{math}
+    \begin{array}{llllllllllllllll}
+      \text{(Programs) }    [[prog]] ::= [[pdef]] \mid [[prog pdef]]\\
+      \\
+      \text{(Definitions) } [[pdef]] ::= [[datatype_decl]] \mid [[predicateType x :: LK]] \mid
+      [[predef x = P]] \mid \\
+      [[theorem x :: P]] \mid [[prfdef x = p]] \mid [[type x :: t]] \mid [[termdef x = t]] \\
+      \\
+      \text{(Datatype Types) } [[dt]] ::= [[Pi x : A . dt]] \mid [[Type i]]\\
+      \\
+      \text{(Datatypes) }   [[datatype_decl]] ::= [[data Ctor C t where M]]\\
+      \\
+      \text{(Stages) }      [[ep]]   ::= [[+]] \mid [[-]]\\
+      \\
+      \text{(Classifiers) } [[ks]]   ::= [[L]] \mid [[P]]\\
+      \\
+      \text{(Argument Classifiers) } Arg, A ::= [[term]] \mid [[predicate]] \mid LK\\
+      \\
+      \text{(Logical Argument Classifiers) } [[W]] ::= [[Type]] \mid [[Formula i]]\\
+      \\
+      \text{(Super Kinds) } [[L]] ::= [[Logical i]]\\
+      \\
+      \text{(Base Kinds) }  [[Ti]] ::= [[Type i]] \mid [[Formula i]]\\
+      \\
+      \text{(Logical Kind) } [[LK]] ::= [[x]] \mid [[Formula i]] \mid [[Forall x : A.LK]]\\
+      \\
+      \text{(Arguments) } [[a]] ::= [[term]] \mid [[proof]] \mid [[predicate]]\\
+      \\
+      \text{(Predicates) } [[predicate]], [[P]] ::= [[x]] \mid [[\ L x : A . P]] \mid [[P a]] \mid [[Forall x : A . P]] \mid [[let x = p in P]] \mid [[let x = P in P']] \mid \\
+      [[let x = t [ p ] in P]] \mid [[t1 = t2]] \mid [[t !]] \mid [[P1 + P2]] \mid [[Exists x : A . P]] \mid [[bot i]] \mid [[t < t']] \\
+      \\
+      \text{(Proofs) } [[proof]],[[p]] ::= [[x]] \mid [[injl p with P]] \mid [[injr p with P]] \mid [[case p of x . p' , y . p'']] \mid [[\ L x : A . p]] \mid [[p a]] \mid \\
+      [[(a , p ) as P]] \mid [[case p1 of ( x , y ) . p2]] \mid [[let x = p' in p]] \mid [[let x = P in p]] \mid [[let x = t [ y ] in p]] \mid [[join t1 t2]] \mid \\ 
+      [[conv p by q1 ... qn at x1 ... xm . P]] \mid [[predconv p P]] \mid [[valax t]] \mid [[ord t t']] \mid [[case t [ x ] p of R]] \mid\\
+      [[tcase t [ x ] of abort -> p1 | ! -> p2]] \mid [[ind f x : t , p1 . p2]] \mid [[contra p1]] \mid [[contraval p1 p2]]\\
+      \\
+      \text{(Proof Values) } [[pv]] ::= [[\ L x : A . p]] \mid [[conv pv by q1 ... qn at x1 ... xm . P]] \mid [[valax t]]\\
+      \\
+      \text{(Terms) } [[term]],[[t]],[[w]] ::= [[x]] \mid [[Type i]] \mid [[Pi ep x : A . t]] \mid [[\ P ep x : A . t]] \mid [[let x = p in t]] \mid [[let x = P in t]] \mid \\
+      [[let x = t [ y ] in t']] \mid [[conv t by q1 ... qn at x1 ... xm . t']] \mid [[case t [ x ] of H]] \mid [[tcast t by p]] \mid [[t a ep]] \mid \\
+      [[abort t]] \mid [[rec f x : t1 . t2]] \mid [[Ctor C]]\\      
+    \end{array}
+  \end{math}
+\end{center}
+\begin{center}
+  \begin{math}
+    \begin{array}{llllllllllllllllll}
+      \text{(Term Values) } [[tv]] ::= [[Type i]] \mid [[Pi ep x : A . t]] \mid [[\ P ep x : A . t]] \mid [[rec f x : t1 . t2]] \mid [[Ctor C tv1 ep1 dots tvn epn]]\\
+      \\
+      \text{(Expressions) } [[exp]],[[e]] ::= [[L]] \mid [[LK]] \mid [[predicate]] \mid [[proof]] \mid [[term]]\\
+      \\
+      \text{(Conversions) } [[q]] ::= [[proof]] \mid [[t1 = t2]]\\
+      \\
+      \text{(Proof Branches) } [[R]] ::= [[Ctor C x1 ep1 dots xn epn => p | R]] \mid [[done]]\\
+      \\
+      \text{(Term Branches) } [[H]] ::= [[Ctor C x1 ep1 dots xn epn => t | H]] \mid [[done]]\\
+      \\
+      \text{(Value Annotations) } [[g]] ::= [[val]]\\
+      \\
+      \text{(Typing Contexts) } [[G]] ::= [[.]] \mid [[G , x : g e]] \mid [[G , x : e]] \mid [[G1 , G2]]\\
+      \\
+      \text{(Typing Signature) } [[D]] ::= [[.]] \mid [[D , ( C , t , M )]] \mid [[D , x = ( a , A )]] \mid [[D1 , D2]]\\
+      \\
+      \text{(Term Lists) } [[tl]] ::= [[nil]] \mid [[t :: tl]] \mid [[_]]\\
+      \\
+      \text{(Constructor Sets) } [[l]] ::= [[empty]] \mid [[{ Ctor C : t'}]] \mid [[l1 inter l2]] \mid [[l1 - l2]] \mid [[l1 = l2]]\\
+      \\
+      \text{(Constructor Lists) } [[M]] ::= [[nil]] \mid [[Ctor C : t']] \mid [[M1 :: M2]]\\
+      \\
+      \text{(Indicies) } [[i]] ::= 1 \mid 2 \mid 3 \mid \cdots\\        
+    \end{array}
+  \end{math}
+\end{center}
 
 We first define some convenient notation. If $([[Ctor C]], [[t]],
 [[M]]) \in [[D]]$ then $[[D]]_1([[Ctor C]]) = [[Ctor C]]$,
@@ -76,18 +130,17 @@ $[[D]]_2([[Ctor C]]) = [[t]]$, and $[[D]]_3([[Ctor C]]) = [[M]]$.
   \end{tabular}
 \end{center}
 
-\label{sec:the_annotated_language}
 \begin{definition}
   \label{def:asep3_togglepol}  
   \begin{center}
     \begin{math}
-    \mathsf{togglePol} ([[t]], [[vl]]) = \left\{
-    \begin{array}{ll}
-      [[Pi - x : y.togglePol(t',vl)]]    & : [[t equiv Pi + x : y.t']] \land \exists [[A]].([[y]]:[[A]]) \in [[vl]]\\
-      [[Pi ep x : A . togglePol(t',vl)]] & : \text{otherwise}
-    \end{array}
-    \right.
-  \end{math}
+      \mathsf{togglePol} ([[t]], [[vl]]) = \left\{
+        \begin{array}{ll}
+          [[Pi - x : y.togglePol(t',vl)]]    & : [[t equiv Pi + x : y.t']] \land \exists [[A]].([[y]]:[[A]]) \in [[vl]]\\
+          [[Pi ep x : A . togglePol(t',vl)]] & : \text{otherwise}
+        \end{array}
+      \right.
+    \end{math}
   \end{center}
 \end{definition}
 
@@ -149,7 +202,7 @@ $[[D]]_2([[Ctor C]]) = [[t]]$, and $[[D]]_3([[Ctor C]]) = [[M]]$.
         |[[valax t]]| & = & \mathsf{valax}\\
         |[[case t [ x ] p of R]]| & = & \mathsf{case}\,|[[t]]|\,\mathsf{of}\,|[[R]]|\\
         |[[tcase t [ x ] of abort -> p1 | ! -> p2]]| & = & 
-            \mathsf{tcase}\,|[[t]]|\,\mathsf{of}\,[[abort]] \to |[[p1]]|\,|\,! \to |[[p2]]|\\
+        \mathsf{tcase}\,|[[t]]|\,\mathsf{of}\,[[abort]] \to |[[p1]]|\,|\,! \to |[[p2]]|\\
         |[[ind f x : t , p1 . p2]]| & = & \mathsf{ind}\,f\,[[x]].|[[p2]]|\\
         |[[contra p1]]| & = & \mathsf{contra}\,|[[p1]]|\\
         |[[contraval p1 p2]]| & = & \mathsf{contraval}\,|[[p1]]|\,|[[p2]]|\\
@@ -194,7 +247,7 @@ $[[D]]_2([[Ctor C]]) = [[t]]$, and $[[D]]_3([[Ctor C]]) = [[M]]$.
         |[[Ctor C ]]| & = & \Sepkw{C}\\
       \end{array}
     \end{math}
-      
+    
   \item Term branches ($[[H]]$):\\
     \begin{math}
       \begin{array}{lll}
@@ -220,7 +273,7 @@ $[[D]]_2([[Ctor C]]) = [[t]]$, and $[[D]]_3([[Ctor C]]) = [[M]]$.
         |[[G, x : g LK]]| = |[[G]]|\\
       \end{array}
     \end{math}
-   
+    
   \item Constructor Sets ($[[l]]$):\\
     \begin{math}
       \begin{array}{lll}
