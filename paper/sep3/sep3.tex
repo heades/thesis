@@ -3,9 +3,31 @@
 
 \renewcommand{\Sepdrulename}[1]{\scriptsize \textsc{#1}}
 \renewcommand{\SepUdrulename}[1]{\scriptsize \textsc{#1}}
-
+\newcommand{\Sep}[0]{\text{Sep}^3}
 % See the seppp.tex file for reminders of the motivation of the
 % design.
+
+\begin{figure}
+  \begin{center}
+    \small
+    \begin{math}
+      \begin{array}{llllllllllllllll}
+        \text{(Programs) }    [[prog]] ::= [[pdef]] \mid [[prog pdef]]\\
+        \text{(Definitions) } [[pdef]] ::= [[datatype_decl]] \mid [[predicateType x :: LK]] \mid
+        [[predef x = P]] \mid \\
+        [[theorem x :: P]] \mid [[prfdef x = p]] \mid [[type x :: t]] \mid [[termdef x = t]] \\
+        \text{(Datatypes) }   [[datatype_decl]] ::= [[data Ctor C t where M]]\\
+        \text{(Stages) }      [[ep]]   ::= [[+]] \mid [[-]]\\
+        \text{(Classifiers) } [[ks]]   ::= [[L]] \mid [[P]]\\
+        \text{(Argument Classifiers) } Arg, A ::= [[term]] \mid [[proof]] \mid LK\\
+        \text{(Super Kinds) } [[L]] ::= [[Logical i]]\\
+        \text{(Indicies) } [[i]] ::= 1 \mid 2 \mid 3 \mid \cdots\\
+      \end{array}
+    \end{math}
+  \end{center}
+  \caption{Syntax for Annotated $\Sep$}
+  \label{fig:ann-sep3-syntax}
+\end{figure}
 
 We first define some convenient notation. If $([[Ctor C]], [[t]],
 [[M]]) \in [[D]]$ then $[[D]]_1([[Ctor C]]) = [[Ctor C]]$,

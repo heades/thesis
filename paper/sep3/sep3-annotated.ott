@@ -182,6 +182,7 @@ term, t, w :: 't_' ::= {{ com annotated programmatic expressions }}
   | _                                      :: M :: joker
   | togglePol ( t , vl )                   :: M :: togglePol
     {{tex \mathsf{togglePol}([[t]],[[vl]]) }}
+
 dataty_type, dt :: 'dt_' ::=
   | Pi x : A . dt                          ::   :: program_pi (+ bind x in dt +)
     {{ tex \Pi [[x]] : [[A]] . [[dt]] }}
