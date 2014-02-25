@@ -302,6 +302,44 @@
   \label{fig:ty-terms}
 \end{figure}
 
+\begin{figure}
+  \scriptsize
+  \begin{mathpar}
+    \SepUdruleLcbvXXCtxStep{} \and
+    \SepUdruleLcbvXXGlobalDef{} \and
+    \SepUdruleLcbvXXBetaTerm{} \and
+    \SepUdruleLcbvXXBetaProof{} \and
+    \SepUdruleLcbvXXBetaSumLeft{} \and
+    \SepUdruleLcbvXXBetaSumRight{} \and
+    \SepUdruleLcbvXXBetaExt{} \and
+    \SepUdruleLcbvXXCaseTerm{} \and
+    \SepUdruleLcbvXXTCaseAbort{} \and
+    \SepUdruleLcbvXXTCaseVal{} \and
+    \SepUdruleLcbvXXInd{} \and
+    \SepUdruleLcbvXXLetOne{} \and
+    \SepUdruleLcbvXXLetTwo{} \and
+    \SepUdruleLcbvXXLetThree{}
+  \end{mathpar}
+  \caption{CBV Reduction Rules for Unannotated Proofs}
+  \label{fig:cbv-red-unprf}
+\end{figure}
+
+\begin{figure}
+  \scriptsize
+  \begin{mathpar}
+    \SepUdruleCBVXXCtxStep{} \and
+    \SepUdruleCBVXXGlobalDef{} \and
+    \SepUdruleCBVXXCtxAbort{} \and
+    \SepUdruleCBVXXBeta{} \and
+    \SepUdruleCBVXXLet{} \and
+    \SepUdruleCBVXXRec{} \and
+    \SepUdruleCBVXXTCast{} \and
+    \SepUdruleCBVXXCaseTerm{}
+  \end{mathpar}
+  \caption{CBV Reduction Rules for Unannotated Terms}
+  \label{fig:cbv-red-unterm}
+\end{figure}
+
 
 We first define some convenient notation. If $([[Ctor C]], [[t]],
 [[M]]) \in [[D]]$ then $[[D]]_1([[Ctor C]]) = [[Ctor C]]$,
