@@ -844,7 +844,7 @@ Jtyp :: '' ::=
   D , G |- Forall x : A . LK : Logical max(i+1,j)
   
   defn
-  D , G |- P : LK  :: :: predicate_typing :: 'Predicate_' 
+  D , G |- P : LK  :: :: predicate_typing :: 'PRD_' 
     {{tex [[D]],[[G]] [[|-]] [[P]] : [[LK]] }}
   by
 
@@ -856,17 +856,17 @@ Jtyp :: '' ::=
   G Ok
   D Ok
   x = (P, LK) setin D
-  ------------------- :: GlobalDef
+  ------------------- :: GD
   D , G |- x : LK
 
   G Ok
   D Ok
-  -------------------------- :: Bottom
+  -------------------------- :: Btm
   D , G |- bot i : Formula i
 
   D , G |- P1 : Formula i
   D , G |- P2 : Formula j
-  ----------------------------------- :: Disjunction
+  ----------------------------------- :: Disj
   D , G |- P1 + P2 : Formula max(i,j)
 
   D , G |- P' : LK
@@ -914,13 +914,13 @@ Jtyp :: '' ::=
   Sig , Gra |- p : P'
   D , G , x : P' |- P : LK
   x notin FV(p)
-  ------------------------------ :: LetProof
+  ------------------------------ :: LetPF
   D , G |- let x = p in P : LK  
 
   Sig , Gra |- P : LK'
   D , G , x : LK |- P' : LK
   x notin FV(P)
-  ------------------------------ :: LetPredicate
+  ------------------------------ :: LetPRD
   D , G |- let x = P in P' : LK  
 
   Sig , Gra |- t : t'
@@ -935,7 +935,7 @@ Jtyp :: '' ::=
   D , G |- t = t' : Formula i
 
   D , G |- t : t' 
-  -------------------------- :: Terminates
+  -------------------------- :: TRM
   D , G |- t ! : Formula i
 
   Sig , Gra |- A : W
@@ -949,7 +949,7 @@ Jtyp :: '' ::=
   D , G |- P a : [a/x] LK
 
   defn
-  D , G |- p : P  :: :: proof_typing :: 'Proof_' 
+  D , G |- p : P  :: :: proof_typing :: 'PRF_' 
     {{tex [[D]],[[G]] [[|-]] [[p]] : [[P]] }}
   by
 
@@ -961,7 +961,7 @@ Jtyp :: '' ::=
   G Ok
   D Ok
   x = (p, P) setin D
-  ------------------- :: GlobalDef
+  ------------------- :: GD
   D , G |- x : P
 
   D , G |- p : [a/x]P
@@ -993,18 +993,18 @@ Jtyp :: '' ::=
 
   D , G |- t : Type i
   D , G, x : t |- p : P
-  -------------------------------------------- :: ForallTerm
+  -------------------------------------------- :: FT
   D , G |- \ L x : t . p : Forall x : t . P
 
   D , G |- P : LK
   D, G |- LK : Logical i
   D , G, x : val P |- p : P'
-  -------------------------------------------- :: ForallPredicate
+  -------------------------------------------- :: FPRD
   D , G |- \ L x : P . p : Forall x : P . P'
 
   D , G |- LK : Logical i
   D , G, x : val LK |- p : P
-  -------------------------------------------- :: ForallLk
+  -------------------------------------------- :: FLK
   D , G |- \ L x : LK . p : Forall x : LK . P
 
   D , G |- p : Forall x : A . P
@@ -1015,13 +1015,13 @@ Jtyp :: '' ::=
   Sig , Gra |- p' : P'
   D , G , x : P' |- p : P
   x notin FV(p')
-  ---------------------------- :: LetProof
+  ---------------------------- :: LetPRF
   D , G |- let x = p' in p : P  
 
   Sig , Gra |- P : LK
   D , G , x : LK |- p : P
   x notin FV(P)
-  --------------------------- :: LetPredicate
+  --------------------------- :: LetPRD
   D , G |- let x = P in p : P  
 
   Sig , Gra |- t : t'
@@ -1045,7 +1045,7 @@ Jtyp :: '' ::=
 
   D, G |- p : P
   P =b P'
-  -------------------------- :: PredConv
+  -------------------------- :: PRDConv
   D, G |- predconv p P' : P'
 
   D , G |- val t
@@ -1069,18 +1069,18 @@ Jtyp :: '' ::=
   Ctor C \= Ctor K
   forall a setin a1 to ar  . ((exists1 t . Sig, Gra |- a : t ) implies (exists t',p . (a equiv t' /\ D , G |- p : t' !)))
   forall a setin a'1 to a's . ((exists1 t . Sig, Gra |- a : t ) implies (exists t',p . (a equiv t' /\ D , G |- p : t' !)))
-  ---------------------------------------------------------------------------------------------------------- :: Contra1
+  ---------------------------------------------------------------------------------------------------------- :: CTR1
   D , G |- contra p' : P
 
   D , G |- p : bot i
   D , G |- P : Formula i
-  ---------------------- :: Contra2
+  ---------------------- :: CTR2
   D , G |- contra p : P
 
   D , G |- P : Formula i
   D , G |- p1 : t = abort t'
   D , G |- p2 : t !
-  ---------------------------- :: Contraval
+  ---------------------------- :: CTRV
   D , G |- contraval p1 p2 : P
 
   D , G |- t : t'
@@ -1096,18 +1096,18 @@ Jtyp :: '' ::=
   D , G |- tcase t [ u ] of abort -> p1 | ! -> p2 : P
 
   defn
-  D , G |- t : t'  :: :: term_typing :: 'Term_' 
+  D , G |- t : t'  :: :: term_typing :: 'TRM_' 
     {{tex [[D]],[[G]] [[|-]] [[t]] : [[t']] }}
   by
 
   G Ok
   D Ok
-  ------------------------ :: Type0
+  ------------------------ :: TY0
   D , G |- Type 0 : Type 0
 
   G Ok
   D Ok
-  --------------------------- :: Typei
+  --------------------------- :: TYi
   D, G |- Type i : Type (i+1)
 
   D , G |- t : Type 0
@@ -1118,7 +1118,7 @@ Jtyp :: '' ::=
   D , G |- P : LK
   D , G |- LK:Logical (i+1)
   D , G , x : P |- t : Type j
-  --------------------------------------- :: PiPredicate
+  --------------------------------------- :: PiPRD
   D , G |- Pi - x : P . t : Type max(i,j)
 
   D , G |- LK : Logical i
@@ -1139,22 +1139,22 @@ Jtyp :: '' ::=
   G Ok
   D Ok
   x = (t, t') setin D
-  ------------------- :: GlobalDef
+  ------------------- :: GD
   D , G |- x : t'
 
   G Ok
   D Ok
   Ctor C : t setin D 
-  ------------------- :: DataCons
+  ------------------- :: DC
   D , G |- Ctor C : t  
 
   D , G, x : val t1 |- t : t2  
-  -------------------------------------------- :: LamPlus
+  -------------------------------------------- :: LamPL
   D , G |- \ P + x : t1 . t : Pi + x : t1 . t2  
 
   D , G, x : A |- t : t'
   x notin FV ( | t | )
-  ------------------------------------------ :: LamMinus
+  ------------------------------------------ :: LamMI
   D , G |- \ P - x : A . t : Pi - x : A . t'  
 
   D , G |- t : Pi ep x : A . t'
@@ -1165,13 +1165,13 @@ Jtyp :: '' ::=
   Sig, Gra |- p : P
   D , G , x : P |- t : t'
   x notin FV(p)
-  ---------------------------------- :: LetProof
+  ---------------------------------- :: LetPRF
   D , G |- let x = p in t : t'
 
   Sig , Gra |- P : LK
   D , G , x : LK |- t : t'
   x notin FV(P)
-  --------------------------- :: LetPredicate
+  --------------------------- :: LetPRD
   D , G |- let x = P in t : t'  
 
   Sig , Gra |- t1 : t1'

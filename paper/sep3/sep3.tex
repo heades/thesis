@@ -83,6 +83,226 @@
   \end{math}
 \end{center}
 
+\begin{figure}
+  \begin{mathpar}
+    \SepdrulePBEqXXApp{} \and
+    \SepdrulePBEqXXLetOne{} \and
+    \SepdrulePBEqXXLetTwo{} \and
+    \SepdrulePBEqXXLetThree{}
+  \end{mathpar}
+  \caption{Predicate $\beta$-Equality}
+  \label{fig:pred-beta-eq}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleSigXXOkXXEmpty{} \and
+    \SepdruleSigXXOkXXExtData{} \and
+    \SepdruleSigXXOkXXExtGDef{}
+  \end{mathpar}
+  \caption{Well-defined Typing Signatures}
+  \label{fig:sig-ok}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleCtxXXOkXXEmpty{} \and
+    \SepdruleCtxXXOkXXExtTerm{} \and
+    \SepdruleCtxXXOkXXExtLK{} \and
+    \SepdruleCtxXXOkXXExtPred{}
+  \end{mathpar}
+  \caption{Well-defined Tying Contexts}
+  \label{fig:ctx-ok}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleTYPGXXDataTypeDeclaration{}  \and
+    \SepdruleTYPGXXPredicateType{} \and
+    \SepdruleTYPGXXPredicate{} \and
+    \SepdruleTYPGXXTheorem{} \and
+    \SepdruleTYPGXXProof{} \and
+    \SepdruleTYPGXXType{} \and
+    \SepdruleTYPGXXTerm{} \and
+    \SepdruleTYPGXXStep{}
+  \end{mathpar}
+  \caption{Program Type-checking Rules}
+  \label{fig:prog-ty}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdrulePVXXProof{} \and
+    \SepdrulePVXXTerm{}
+  \end{mathpar}
+  \caption{Values or Proofs}
+  \label{fig:vorp}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleVXXVar{} \and
+    \SepdruleVXXType{} \and
+    \SepdruleVXXPi{} \and
+    \SepdruleVXXLamPlus{} \and
+    \SepdruleVXXLamMinus{} \and
+    \SepdruleVXXRec{} \and
+    \SepdruleVXXCtor{} \and
+    \SepdruleVXXtCast{}
+  \end{mathpar}
+  \caption{Semantic Values}
+  \label{fig:sem-val}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleDdXXEmpty{} \and
+    \SepdruleDdXXBranch{}
+  \end{mathpar}
+  \caption{Constructor List Type-checking Rules}
+  \label{fig:cons-list-ty}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleDataDecl{}
+  \end{mathpar}
+  \caption{Datatype Type-checking Rules}
+  \label{fig:datatype-ty}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdrulePBXXDone{} \and
+    \SepdrulePBXXBranch{}
+  \end{mathpar}
+  \caption{Proof branches Type-checking Rules}
+  \label{fig:PB-ty}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleTBXXDone{} \and
+    \SepdruleTBXXBranch{}
+  \end{mathpar}
+  \caption{Term branches Type-checking Rules}
+  \label{fig:TB-ty}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleEqProof{} \and
+    \SepdruleEqGen{}
+  \end{mathpar}
+  \caption{Type-checking Rules for Conversions}
+  \label{fig:ty-convs}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleGlobalDef{}
+  \end{mathpar}
+  \caption{Type-checking Rules for Global Definitions}
+  \label{fig:ty-global-def}
+\end{figure}
+
+\begin{figure}
+  \begin{mathpar}
+    \SepdruleLKXXFormula{} \and
+    \SepdruleLKXXPredicate{}
+  \end{mathpar}
+  \caption{Type-checking Rules for Logical Kinds}
+  \label{fig:logical-ty}
+\end{figure}
+
+\begin{figure}
+  \scriptsize
+  \begin{mathpar}
+    \SepdrulePRDXXVar{} \and
+    \SepdrulePRDXXGD{} \and
+    \SepdrulePRDXXBtm{} \and
+    \SepdrulePRDXXDisj{} \and
+    \SepdrulePRDXXForallOne{} \and
+    \SepdrulePRDXXForallTwo{} \and
+    \SepdrulePRDXXForallThree{} \and
+    \SepdrulePRDXXForallFour{} \and
+    \SepdrulePRDXXExtOne{} \and
+    \SepdrulePRDXXExtTwo{} \and
+    \SepdrulePRDXXExtThree{} \and
+    \SepdrulePRDXXExtFour{} \and
+    \SepdrulePRDXXLetPF{} \and
+    \SepdrulePRDXXLetPRD{} \and
+    \SepdrulePRDXXLet{} \and
+    \SepdrulePRDXXKXXEq{} \and
+    \SepdrulePRDXXTRM{} \and
+    \SepdrulePRDXXLam{} \and
+    \SepdrulePRDXXApp{}
+  \end{mathpar}
+  \caption{Type-checking Rules for Predicates}
+  \label{fig:pred-ty}
+\end{figure}
+
+\begin{figure}
+  \scriptsize
+  \begin{mathpar}
+    \SepdrulePRFXXVar{} \and
+    \SepdrulePRFXXGD{}  \and
+    \SepdrulePRFXXExti{}  \and
+    \SepdrulePRFXXExtE{}  \and
+    \SepdrulePRFXXInl{} \and
+    \SepdrulePRFXXInr{} \and
+    \SepdrulePRFXXOrElim{} \and
+    \SepdrulePRFXXFT{} \and
+    \SepdrulePRFXXFPRD{} \and
+    \SepdrulePRFXXFLK{} \and
+    \SepdrulePRFXXApp{} \and
+    \SepdrulePRFXXLetPRF{} \and
+    \SepdrulePRFXXLetPRD{} \and
+    \SepdrulePRFXXLet{} \and
+    \SepdrulePRFXXJoin{} \and
+    \SepdrulePRFXXConv{} \and
+    \SepdrulePRFXXPRDConv{} \and
+    \SepdrulePRFXXVal{} \and
+    \SepdrulePRFXXOrd{} \and
+    \SepdrulePRFXXInd{} \and
+    \SepdrulePRFXXCTROne{} \and
+    \SepdrulePRFXXCTRTwo{} \and
+    \SepdrulePRFXXCTRV{} \and
+    \SepdrulePRFXXCase{} \and
+    \SepdrulePRFXXTCase{} 
+  \end{mathpar}
+  \caption{Type-checking Rules for Proofs}
+  \label{fig:proofs-ty}
+\end{figure}
+
+\begin{figure}
+  \scriptsize
+  \begin{mathpar}
+    \SepdruleTRMXXTYZero{} \and
+    \SepdruleTRMXXTYi{} \and
+    \SepdruleTRMXXPi{} \and
+    \SepdruleTRMXXPiPRD{} \and
+    \SepdruleTRMXXPiLK{} \and
+    \SepdruleTRMXXVar{} \and
+    \SepdruleTRMXXtCast{} \and
+    \SepdruleTRMXXGD{} \and
+    \SepdruleTRMXXDC{} \and
+    \SepdruleTRMXXLamPL{} \and
+    \SepdruleTRMXXLamMI{} \and
+    \SepdruleTRMXXApp{} \and
+    \SepdruleTRMXXLetPRF{} \and
+    \SepdruleTRMXXLetPRD{} \and
+    \SepdruleTRMXXLet{} \and
+    \SepdruleTRMXXConv{} \and
+    \SepdruleTRMXXRec{} \and
+    \SepdruleTRMXXAbort{} \and
+    \SepdruleTRMXXCase{}
+  \end{mathpar} 
+  \caption{Type-checking Rules for Terms}
+  \label{fig:ty-terms}
+\end{figure}
+
+
 We first define some convenient notation. If $([[Ctor C]], [[t]],
 [[M]]) \in [[D]]$ then $[[D]]_1([[Ctor C]]) = [[Ctor C]]$,
 $[[D]]_2([[Ctor C]]) = [[t]]$, and $[[D]]_3([[Ctor C]]) = [[M]]$.
