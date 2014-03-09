@@ -288,7 +288,7 @@ associativity of list append -- using a pseudo syntax:
 \mathsf{List}\,\mathsf{Nat}).\mathsf{append}\,A\,(\mathsf{append}\,B\,C)
 = \mathsf{append}\,(\mathsf{append}\,A\,B)\,C \] This equation holds
 regardless of termination of $A$, $B$, or $C$, because if anyone of
-them diverges then both sides of the equation diverges.  
+them happen to diverge then both sides of the equation diverge.  
 
 So the natural question is can we design a programming language based
 on type theory that allows for non-terminating programs, but also be
@@ -296,7 +296,7 @@ able to verify properties of the programs we write in the language?
 It turns out that we can, and in the next two chapters we introduce
 the designs of two new dependently-typed functional programming
 languages called Freedom of Speech and Separation of Proof from
-Program that answer this question.
+Program that amount to solutions to this question.
 
 Directly supporting non-termination is one solution, but there is
 another possibility.  Non-terminating functions can be simulated using

@@ -7,6 +7,57 @@
 \newcommand{\rec}[3]{rec\ #1\ #2\ #3}
 \newcommand{\recc}[3]{rec^{-}\ #1\ #3}
 
+The requirement that every program must terminate can be relaxed by
+first designing a very powerful programming language (PL), and then
+carving out two fragments of programs. The first consists of all the
+terminating programs called the logical fragment, and the second
+consists of all programs, and this is called the programmatic
+fragment. That is we have a picture that looks something like:
+\begin{center}
+  \begin{tikzpicture}[scale=2.5,cap=round,>=latex]
+    % draw the unit circle
+    \draw[thick] (0cm,0cm) circle(1cm);
+    \draw (0cm,0cm) node {PL};
+    \draw (1.4cm,0cm) node {\Large $\Longrightarrow$};
+    \draw[thick] (2.8cm,0cm) circle(1cm);
+    \draw (2.78cm,0cm) node {Programmatic};
+    \draw[thick] (3cm,0.51cm) circle(0.3cm);
+    \draw (3cm,0.5cm) node {Logical};
+  \end{tikzpicture}
+\end{center}
+
+Once the logical fragment has been identified three additional features
+will need to added.  The first feature is that types in the logical
+fragment will need to be able to depend on programs from the
+programmatic fragment, but this feature has to be designed so as to
+prevent these programs from being applied to any arguments or this
+would prevent the logical fragment from being logically consistent.
+For an overview of logical consistency and how it can be proven see
+Chapter~\ref{chap:metatheory_of_programming_languages}.  We call this
+feature freedom of speech, because it intuitively states that logical
+types and programs can talk about potentially non-terminating
+programs, but they are never allowed to actually run them.  
+
+The second and third features are usability features.  The logical
+fragment is purely specificational.  Its primary use is for the
+verification of programs written in the programmatic fragment.
+Furthermore, carrying around non-computationally interesting proofs is
+expensive.  Thus, it is important to allow some specificational data
+to be stripped away during compile time.  In addition it is important
+that the programmer be the one to decide which data is removed.  Now
+logical programs are proofs, but they are also terminating programs,
+and thus can be considered both logical programs and programmatic
+programs.  The third and final feature is the ability to write
+programs in the logical fragment and then move them into the
+programmatic fragment.  This facilitates code reuse and provides a
+means to write verified terminating programs.
+
+In this chapter we introduce the design of a programming language that
+contains all of these features, and some additional ones.  It is
+called Freedom of Speech, because it is the first core
+dependently-typed functional programming language with the freedom of
+speech property.  The syntax and the CBV reduction relation is defined
+in Figure~\ref{fig:FS-syn-red}.  
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
