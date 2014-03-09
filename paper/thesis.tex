@@ -51,10 +51,12 @@
 \usepackage{verbatim}
 \usepackage{supertabular}
 \usepackage{stmaryrd}
+\usepackage{chronology}
 
 \input{type-theory_inc}
 
 \newcommand{\defeq}{\stackrel{\mathsf{def} }{\equiv}}
+\newcommand{\Sep}[0]{\text{Sep}^3}
 
 %=============================================================================
 % prelude
@@ -192,15 +194,126 @@ stands as a successful step towards the solution of the second major
 problem outlined above.
 % section introduction (end)
 
+\section{Novel Contributions}
+\label{sec:novel_contributions}
+This thesis consists of two major topics.  The first topic is on the
+design of general purpose dependently-typed functional programming
+languages. This topic is covered in Part~\ref{part:design}.  The
+second topic is on the analysis of dependently-typed functional
+programming languages and various type theories.  This topic is broken
+up into two parts: Part~\ref{part:basic-analysis} and
+Part~\ref{part:norm-hs}.  It is the content of these parts that
+consists of novel research contributions. Specifically, the following
+list briefly outlines each contribution:
+\begin{itemize}
+\item The design and analysis of a core dependently-typed functional
+  programming language with a new property called freedom of
+  speech. See Chapter~\ref{chap:freedom_of_speech} and
+  Chapter~\ref{chap:freedom_of_speech_anal}.
+
+\item The full design of a core dependently-typed functional
+  programming language called Separation of Proof from Program ($\Sep$) that
+  remedies several short comings of the freedom of speech language.
+  This is a full programming language that has been implemented, but
+  this implementation is not a contribution of this thesis.  See
+  Chapter~\ref{chap:separation_of_proof_from_program}.
+
+\item The design and analysis of a new logic and corresponding type
+  theory called Dualized Intuitionistic Logic (DIL) and Dualized Type
+  Theory (DTT) respectively. We introduce a new completely symmetric
+  syntax that makes for a beautiful definition of the two theories.
+  See Chapter~\ref{chap:dualized_type_theory} and
+  Chapter~\ref{chap:dtt}.
+
+\item We prove weak normalization of an entire family of predicative
+  type theories based on Stratified System F using a proof technique
+  called hereditary substitution. See
+  Chapter~\ref{chap:stratified_system_f_and_beyond}.
+
+\item Similarly, we show that hereditary substitution can be extended
+  to prove normalization of a classical type theory called the
+  $\lambda\Delta$-calculus. See
+  Chapter~\ref{chap:the_lambdadelta-calculus}.
+
+\item The final contribution is the brief history of type theory given
+  in Part~\ref{part:background}.  There we try and highlight the
+  significant contributions of type theory starting with Russell.
+  This history is by no means complete, but we provide the complete
+  definition of many significant type theories.  This tries to provide
+  a one stop shop for an introduction to the field.
+\end{itemize}
+% section novel_contributions (end)
+
 \part{Background}          
 \label{part:background}
-
 \import*{background/}{background}
-
 % part background (end)
 
 \part{Design}
 \label{part:design}
+The design of any programming language must facilitate reasoning about
+the programming language itself.  This facilitation comes in the form
+of a rigorous definition which makes mathematically precise all of the
+structure of the programming language.  This provides a means for
+researchers and implementors to fully understand the limits of the
+language.  Contrary to what programming language designers have done
+in the past this rigors definition does not only include the syntax,
+but also includes mathematical definitions of the type system as well
+as an interpreter. This is a significant benefit of basing programming
+languages on type theories.  As we have seen a type theory must be
+rigorously defined.  
+
+Recall from Chapter~\ref{chap:the_three_perspectives} that the
+computational trinity states that type theories are simultaneously a
+logic as well as a programming language, and this double perspective
+provides the means of verifying properties of the programs we write in
+the theory, but this feature comes with a strong invariant, every
+program must terminate.  Now suppose we are working on a large
+development in a programming language based on type theory like
+Martin-L\"of's Type Theory or CCC which has come to a difficult
+problem that can be solved by the definition of some terminating
+function.  Furthermore, suppose we have found the solution in some
+research paper, but the termination proof is very complex and uses an
+advanced semantic proof technique, and lastly suppose that this
+termination proof is not formalized in a type theory, but is an
+informal proof that we trust.  Since we are conducting our development
+in a terminating type theory there is only one course of action.  We
+have to formalize this complex termination argument. This can be
+devastating to the development, because doing such a proof may take
+months, even years to complete!  Another hypothetical is supposing we
+do not care if a program terminates.  There are correctness properties
+that hold regardless of termination.  For example, consider
+associativity of list append -- using a pseudo syntax:
+\[ \forall (A\,B\,C :
+\mathsf{List}\,\mathsf{Nat}).\mathsf{append}\,A\,(\mathsf{append}\,B\,C)
+= \mathsf{append}\,(\mathsf{append}\,A\,B)\,C \] This equation holds
+regardless of termination of $A$, $B$, or $C$, because if anyone of
+them diverges then both sides of the equation diverges.  
+
+So the natural question is can we design a programming language based
+on type theory that allows for non-terminating programs, but also be
+able to verify properties of the programs we write in the language?
+It turns out that we can, and in the next two chapters we introduce
+the designs of two new dependently-typed functional programming
+languages called Freedom of Speech and Separation of Proof from
+Program that answer this question.
+
+Directly supporting non-termination is one solution, but there is
+another possibility.  Non-terminating functions can be simulated using
+the notion of coinduction which is dual to induction.  Coinduction
+provides a means to define and observe infinite streams of data.
+Furthermore, coinductive types push the notion of non-termination into
+the types. There are a large number of applications of coinduction,
+and even more when we allow the mixture of induction and coinduction,
+for example the definition of an infinite stream of trees requires
+their mixture.  However, currently there is no known type theory that
+supports both induction and coinduction, and supports their
+(unrestricted) mixture while maintaining type safety.  In the third
+chapter of Design we introduce a new logic and corresponding type
+theory called Dualized Intuitionistic Logic and Dualized Type Theory
+respectively that is based on a logic rich in duality that shows
+promise of being a logical framework for induction and coinduction
+that is type safe and supports their mixture.
 
 \chapter{Freedom of Speech}
 \label{chap:freedom_of_speech}
@@ -212,18 +325,17 @@ problem outlined above.
 \import*{sep3/}{sep3-inc}
 % chapter separation_of_proof_from_program (end)
 
-\chapter{Dualized Type Theory (DTT)}
+\chapter{Dualized Logic and Type Theory}
 \label{chap:dualized_type_theory}
 
 % chapter dualized_type_theory (end)
-
 % part design (end)
 
 \part{Basic Syntactic Analysis}
 \label{part:basic-analysis}
 
 \chapter{Freedom of Speech}
-\label{chap:freedom_of_speech}
+\label{chap:freedom_of_speech_anal}
 \import*{free-speech/}{FS-analysis-inc}
 % chapter freedom_of_speech (end)
 

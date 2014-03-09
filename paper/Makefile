@@ -65,6 +65,8 @@ root : all
 
 clean : 
 	rm -f *.bbl *.blg *.aux *.dvi *.ps *.log *-output.tex *~
+
+clean-all : clean
 	cd background; $(MAKE) clean
 	cd free-speech; $(MAKE) clean
 	cd sep3; $(MAKE) clean
