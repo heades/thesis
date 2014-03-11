@@ -25,10 +25,19 @@ fragment. That is we have a picture that looks something like:
     \draw (3cm,0.5cm) node {Logical};
   \end{tikzpicture}
 \end{center}
+The logical fragment will then be considered the ``logical framework''
+of the language, and this is where the programs are proofs and the
+types are propositions, that is the logical fragment makes use of the
+computational trinity (Chapter~\ref{chap:the_three_perspectives}).
+Now the programmatic fragment is where all the usual programming will
+take place, then one can use the logical fragment to verify properties
+of the programs written in the programmatic fragment.  However, the
+programming language will need some additional features to make this
+all work.
 
-Once the logical fragment has been identified three additional features
-will need to added.  The first feature is that types in the logical
-fragment will need to be able to depend on programs from the
+Once the logical fragment has been identified three additional
+features will need to added.  The first feature is that types in the
+logical fragment will need to be able to depend on programs from the
 programmatic fragment, but this feature has to be designed so as to
 prevent these programs from being applied to any arguments or this
 would prevent the logical fragment from being logically consistent.
@@ -36,7 +45,7 @@ For an overview of logical consistency and how it can be proven see
 Chapter~\ref{chap:metatheory_of_programming_languages}.  We call this
 feature freedom of speech, because it intuitively states that logical
 types and programs can talk about potentially non-terminating
-programs, but they are never allowed to actually run them.  
+programs, but they are never allowed to actually run them.
 
 The second and third features are usability features.  The logical
 fragment is purely specificational.  Its primary use is for the
@@ -110,9 +119,11 @@ mean ``belonging to the logical fragment'' and the latter to mean
 denoted $[[ep]]$ which is called the stage annotation which can be
 either $[[+]]$ or $[[-]]$ where the former means ``run time'' and the
 latter means ``compile time''. The consistency classifier essentially
-is how we carve out the logical fragment from the programmatic, and
-the stage annotation implements the second feature above where all
-programs annotated with a $[[-]]$ will be erased after compile time.
+is how we carve out the logical fragment from the programmatic
+fragment, and the stage annotation implements the second feature above
+where all programs annotated with a $[[-]]$ will be erased after
+compile time.  We now give a brief overview of the syntax of Freedom
+of Speech.
 
 Expressions denoted $[[e]]$,$[[e_1]],\ldots,[[e_i]]$ consist of
 $[[Type]]$ which is the type of all types, $[[Nat]]$ the type of
@@ -120,8 +131,8 @@ natural numbers, variables denoted $[[x]]$,$[[y]]$,$[[z]]$, $\ldots$,
 dependent function types denoted $[[(x : th e1) ep -> e2]]$ -- note that
 the programmer gets to decide whether an argument is ``logical'' or
 ``programmatic'' and ``run time'' or ``compile time'' -- next we have
-equations denoted $[[e1 = e1]]$, the successor function denoted
-$[[S]]$, the natural number zero denoted $[[Z]]$,
+equations denoted $[[e1 = e1]]$, the successor function and the
+natural number zero denoted $[[S]]$ and $[[Z]]$ respectively,
 $\lambda$-abstractions denoted $[[\x.e]]$, two recursors $[[rec f x
 e]]$ and $[[rec - f e]]$ where $[[x]]$ is considered bound in $[[e]]$
 in the former, application denoted $[[e1 e2]]$, three forms of proofs
@@ -129,6 +140,9 @@ of equations denoted $[[join]]$, $[[injdom]]$, and $[[injran]]$, where
 the latter two are injectivity proofs and are discussed further below,
 and finally we have two forms of contradictions one logical and one
 programmatic denoted $[[contra]]$ and $[[abort]]$ respectively.
+
+
+
 \begin{figure}
   \begin{center}
     \begin{mathpar}
