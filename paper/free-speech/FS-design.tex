@@ -141,7 +141,64 @@ the latter two are injectivity proofs and are discussed further below,
 and finally we have two forms of contradictions one logical and one
 programmatic denoted $[[contra]]$ and $[[abort]]$ respectively.
 
+The CBV reduction relation is broken up into three different
+judgments.  The first is denoted $[[e1 ~b> e2]]$ and defines standard
+CBV $\beta$-reduction and consists of two rules
+$\FSdrulename{CBV\_App}$ and $\FSdrulename{CBV\_Rec}$ where values are
+defined in Figure~\ref{FS-syn-red}.  We will see that the latter rule
+can be used for both terminating and non-terminating recursion
+depending on which fragment the recursor is typed in.  Note that there
+are no congruence rules in the definition of the first judgment.  The
+second judgment denoted $[[e1 ~> e2]]$ extends the first with
+congruence rules, and a rule for aborting a contradictory computation.
+This judgment consists of two rules $\FSdrulename{Red\_Ctxt}$ and
+$\FSdrulename{Red\_Abort}$.  These two are defined in terms of
+evaluation contexts which can be thought of as a means of specifying
+where with in an expression computation can take place. The syntax of
+evaluation contexts can be found in Figure~\ref{fig:FS-syn-red}.  This
+defines a fragment of the syntax of expressions where exactly one well
+formed subexpression has been replace with a hole.  Holes are denoted
+$[[ [] ]]$. Lets consider a few examples:
+\begin{example}
+  \label{ex:FS-WF-ECTX}
+  The following are all well-formed contexts:
+  \begin{center}
+    $[[((\x.S x) []) ]]$, $[[ ([] Z)]]$, and $[[rec f x (rec g y [])]]$.
+  \end{center}
+  Now $(\lambda x.[[S]]\,[[ [] ]])\,[[Z]]$ and $[[ [] ]]\,[[ [] ]]$
+  are not well-formed contexts.
+\end{example}
+\noindent
+In addition to the syntax of evaluation contexts we also define an
+operation that takes an evaluation context and an expression and
+``plugs'' the expression into the hole of the context.  
 
+\begin{definition}
+  \label{def:FS-ectx-plug}
+  Plugging an expression $[[e]]$ into an evaluation context $[[C]]$ is denoted $[[C[e] ]]$
+  and is defined by recursion on the form of $[[C]]$ as follows:
+  \begin{center}
+    \begin{math}
+      \begin{array}{rll}
+        [[ [] [e] ]]                    & = & e\\
+        [[(( x : th C ) ep -> e2)[e] ]] & = & [[( x : th C[e] ) ep -> e2]]\\
+        [[(( x : th e1 ) ep -> C)[e] ]] & = & [[( x : th e1 ) ep -> (C[e]) ]]\\
+        [[(rec f x C)[e] ]]             & = & [[rec f x (C[e]) ]]\\
+        [[(rec - f C)[e] ]]             & = & [[rec - f (C[e]) ]]\\
+        [[(e1 C)[e] ]]                  & = & [[e1 (C[e]) ]]\\
+        [[(C v)[e] ]]                   & = & [[(C[e]) v]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+At this point one can easily see that the $\FSdrulename{Red\_Ctxt}$
+and $\FSdrulename{Red\_Abort}$ are actually a family of congruence
+rules parametric in the evaluation context $[[C]]$. Now the rule
+$\FSdrulename{Red\_Ctxt}$ simply extended the CBV $\beta$-reduction to
+evaluation contexts, while the rule $\FSdrulename{Red\_Abort}$ says
+that if $[[abort]]$ appears anywhere in an evaluation context then the
+computation is aborted and concludes just $[[abort]]$.  We will see
+how this is used while describing the typing relation below.
 
 \begin{figure}
   \begin{center}
