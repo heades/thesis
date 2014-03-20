@@ -203,18 +203,52 @@ the type system.
 
 \begin{example}
   \label{ex:FS-syn-red-case}
-  First, we define the booleans and boolean case analysis just as we did
-  in system F (see Example~\ref{ex:F_terms} in
+  First, we define the abstracted booleans and abstracted-boolean case
+  similarly to how we defined booleans in system F (see
+  Example~\ref{ex:F_terms} in
   Chapter~\ref{chap:the_history_of_type_theory}):
   \begin{center}
+    \small
     \begin{math}
       \begin{array}{lll}
-        \mathsf{Bool}  \defeq [[(x : C Type)+ -> (y : C x) + -> (z : C x)+ -> x]]\\
-        \mathsf{True}  \defeq [[\x.\y.\z.y]]\\
-        \mathsf{False} \defeq [[\x.\y.\z.z]]\\
+        \mathsf{true}     & \defeq [[\x.\f1.\f2.\y.\z.f1 y]]\\
+        \mathsf{false}    & \defeq [[\x.\f1.\f2.\y.\z.f2 z]]\\
+        \mathsf{case}     & \defeq [[\x.\b.\f1.\f2.\y.\z.(b x f1 f2 y z)]]\\
       \end{array}
     \end{math}
   \end{center}
+  We can define the usual Church-encoded booleans in terms of
+  abstracted booleans as follows:
+  \begin{center}
+    \small
+    \begin{math}
+      \begin{array}{lll}
+        \textsf{CH-true}  & \defeq \lambda [[x]].\lambda [[y]].\lambda [[z]].\mathsf{true}\,[[x]]\,([[\x.x]])\,([[\x.x]])\,[[y]]\,[[z]]\\
+        \textsf{CH-false} & \defeq \lambda [[x]].\lambda [[y]].\lambda [[z]].\mathsf{false}\,[[x]]\,([[\x.x]])\,([[\x.x]])\,[[y]]\,[[z]]\\
+        \textsf{CH-case}  & \defeq \lambda [[x]].\lambda [[b]].\lambda [[y]].\lambda [[z]].\mathsf{case}\,[[x]]\,[[b]]\,([[\x.x]])\,([[\x.x]])\,[[y]]\,[[z]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+
+  Now suppose we have the division function $\mathsf{div}$ and the
+  $\mathsf{isZero}$ function.  Then using these we can define a
+  function that takes in two natural numbers as input and then divides
+  the first plus two by the second.  However, there is a catch, the
+  division function is undefined when the second argument is zero.  So
+  our function must case split on the first argument, and handle the
+  case when it is zero.  What should the function do in this case?
+  This is a good example of when we use $[[abort]]$.  We can define
+  our function in the following way:
+  \begin{center}
+    \small
+    \begin{math}
+      \begin{array}{lll}
+        \textsf{div-plus-2} & \defeq
+             \lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y)\\
+      \end{array}
+    \end{math}
+  \end{center}
+  Lets consider some computations using $\textsf{div-plus-2}$:
 \end{example}
 
 \begin{figure}
