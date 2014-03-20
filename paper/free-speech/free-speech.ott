@@ -1,4 +1,4 @@
-metavar var, x, y, z, f, g, u, p ::=
+metavar var, b , x, y, z, f, g, u, p ::=
 
 metavar cvar, c {{ tex \mathsf{c} }} ::=
   
@@ -38,6 +38,8 @@ exp, e :: 'e_' ::=
   | C [ e ]              :: M :: EvalCtx {{tex [[C]] [ [[e]] ] }}
   | S                    ::  :: Successor {{tex \mathsf{S} }}
   | Z                    ::  :: Zero {{tex \mathsf{Z} }}
+  | Bool                 :: M :: Bool
+  {{tex \mathsf{Bool} }}
 
 value {{ tex value }}, v :: 'val_' ::= 
   | x                       ::   :: Var
