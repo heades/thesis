@@ -36,10 +36,10 @@ programming language will need some additional features to make this
 all work.
 
 Once the logical fragment has been identified three additional
-features will need to added.  The first feature is that types in the
-logical fragment will need to be able to depend on programs from the
-programmatic fragment, but this feature has to be designed so as to
-prevent these programs from being applied to any arguments or this
+features will need to be added.  The first feature is that types in
+the logical fragment will need to be able to depend on programs from
+the programmatic fragment, but this feature has to be designed so as
+to prevent these programs from being applied to any arguments or this
 would prevent the logical fragment from being logically consistent.
 For an overview of logical consistency and how it can be proven see
 Chapter~\ref{chap:metatheory_of_programming_languages}.  We call this
@@ -52,7 +52,7 @@ fragment is purely specificational.  Its primary use is for the
 verification of programs written in the programmatic fragment.
 Furthermore, carrying around non-computationally interesting proofs is
 expensive.  Thus, it is important to allow some specificational data
-to be stripped away during compile time.  In addition it is important
+to be stripped away during compile time.  In addition, it is important
 that the programmer be the one to decide which data is removed.  Now
 logical programs are proofs, but they are also terminating programs,
 and thus can be considered both logical programs and programmatic
@@ -115,15 +115,15 @@ depend on two annotations.  The first is called the consistency
 classifier and is denoted $[[th]]$ which can be one of $[[L]]$ or
 $[[C]]$ where an expression tagged with the former is interpreted to
 mean ``belonging to the logical fragment'' and the latter to mean
-``belonging to the programmatic fragment''.  The second annotation is
-denoted $[[ep]]$ which is called the stage annotation which can be
+``belonging to the programmatic fragment.''  The second annotation is
+denoted $[[ep]]$ which is called the stage annotation and can be
 either $[[+]]$ or $[[-]]$ where the former means ``run time'' and the
-latter means ``compile time''. The consistency classifier essentially
+latter means ``compile time.'' The consistency classifier essentially
 is how we carve out the logical fragment from the programmatic
 fragment, and the stage annotation implements the second feature above
-where all programs annotated with a $[[-]]$ will be erased after
-compile time.  We now give a brief overview of the syntax of Freedom
-of Speech.
+where all programs marked as compile time will be erased before run
+time.  We now give a brief overview of the syntax of Freedom of
+Speech.
 
 Expressions denoted $[[e]]$,$[[e_1]],\ldots,[[e_i]]$ consist of
 $[[Type]]$ which is the type of all types, $[[Nat]]$ the type of
@@ -131,7 +131,7 @@ natural numbers, variables denoted $[[x]]$,$[[y]]$,$[[z]]$, $\ldots$,
 dependent function types denoted $[[(x : th e1) ep -> e2]]$ -- note that
 the programmer gets to decide whether an argument is ``logical'' or
 ``programmatic'' and ``run time'' or ``compile time'' -- next we have
-equations denoted $[[e1 = e1]]$, the successor function and the
+equations denoted $[[e1 = e2]]$, the successor function and the
 natural number zero denoted $[[S]]$ and $[[Z]]$ respectively,
 $\lambda$-abstractions denoted $[[\x.e]]$, two recursors $[[rec f x
 e]]$ and $[[rec - f e]]$ where $[[x]]$ is considered bound in $[[e]]$
@@ -145,7 +145,7 @@ The CBV reduction relation is broken up into three different
 judgments.  The first is denoted $[[e1 ~b> e2]]$ and defines standard
 CBV $\beta$-reduction and consists of two rules
 $\FSdrulename{CBV\_App}$ and $\FSdrulename{CBV\_Rec}$ where values are
-defined in Figure~\ref{FS-syn-red}.  We will see that the latter rule
+defined in Figure~\ref{fig:FS-syn-red}.  We will see that the latter rule
 can be used for both terminating and non-terminating recursion
 depending on which fragment the recursor is typed in.  Note that there
 are no congruence rules in the definition of the first judgment.  The
@@ -157,7 +157,7 @@ evaluation contexts which can be thought of as a means of specifying
 where with in an expression computation can take place. The syntax of
 evaluation contexts can be found in Figure~\ref{fig:FS-syn-red}.  This
 defines a fragment of the syntax of expressions where exactly one well
-formed subexpression has been replace with a hole.  Holes are denoted
+formed subexpression has been replaced with a hole.  Holes are denoted
 $[[ [] ]]$. Lets consider a few examples:
 \begin{example}
   \label{ex:FS-WF-ECTX}
@@ -196,9 +196,8 @@ and $\FSdrulename{Red\_Abort}$ are actually a family of congruence
 rules parametric in the evaluation context $[[C]]$. Now the rule
 $\FSdrulename{Red\_Ctxt}$ simply extended the CBV $\beta$-reduction to
 evaluation contexts, while the rule $\FSdrulename{Red\_Abort}$ says
-that if $[[abort]]$ appears anywhere in an evaluation context then the
-computation is aborted and concludes just $[[abort]]$.  We will see
-how this is used while describing the typing relation below.
+that if $[[abort]]$ appears anywhere in an evaluation context, then the
+computation is aborted and concludes just $[[abort]]$.  
 
 \begin{figure}
   \begin{center}
