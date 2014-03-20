@@ -197,7 +197,26 @@ rules parametric in the evaluation context $[[C]]$. Now the rule
 $\FSdrulename{Red\_Ctxt}$ simply extended the CBV $\beta$-reduction to
 evaluation contexts, while the rule $\FSdrulename{Red\_Abort}$ says
 that if $[[abort]]$ appears anywhere in an evaluation context, then the
-computation is aborted and concludes just $[[abort]]$.  
+computation is aborted and concludes just $[[abort]]$.  Lets consider
+an example using what we have introduced thus far before moving onto
+the type system.
+
+\begin{example}
+  \label{ex:FS-syn-red-case}
+  First, we define the booleans and boolean case analysis just as we did
+  in system F (see Example~\ref{ex:F_terms} in
+  Chapter~\ref{chap:the_history_of_type_theory}):
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        \mathsf{Bool}  \defeq [[(x : C Type)+ -> (y : C x) + -> (z : C x)+ -> x]]\\
+        \mathsf{True}  \defeq [[\x.\y.\z.y]]\\
+        \mathsf{False} \defeq [[\x.\y.\z.z]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+\end{example}
+
 
 \begin{figure}
   \begin{center}
