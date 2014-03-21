@@ -252,7 +252,9 @@ the type system.
   Lets consider some computations using $\textsf{div-plus-2}$:
   \begin{center}
     \begin{math}
-      \lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y)
+      (\lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y))\,[[(S (S Z))]]\,[[Z]] \\
+      \redto & (\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S (S (S Z))))]]\,y))\,[[Z]] \\
+      \redto & \mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,[[Z]])\,[[Z]]\,(\mathsf{div}\,[[(S (S (S (S Z))))]]\,y)\\
     \end{math}
   \end{center}
 \end{example}
