@@ -65,8 +65,12 @@ In this chapter we introduce the design of a programming language that
 contains all of these features, and some additional ones.  It is
 called Freedom of Speech, because it is the first core
 dependently-typed functional programming language with the freedom of
-speech property.  The syntax and the CBV reduction relation is defined
-in Figure~\ref{fig:FS-syn-red}.  
+speech property.  
+
+\section{Syntax and Reduction Relation}
+\label{sec:syntax_and_reduction_relation}
+The syntax and the CBV reduction relation is defined in
+Figure~\ref{fig:FS-syn-red}.
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}
@@ -231,33 +235,75 @@ the type system.
     \end{math}
   \end{center}
 
-  Now suppose we have the division function $\mathsf{div}$ and the
-  $\mathsf{isZero}$ function.  Then using these we can define a
-  function that takes in two natural numbers as input and then divides
+  Now suppose we have the division $\mathsf{div}$ and the
+  $\mathsf{isZero}$ functions.  Then using these we can define a
+  function that takes in two natural numbers as input, and then divides
   the first plus two by the second.  However, there is a catch, the
   division function is undefined when the second argument is zero.  So
-  our function must case split on the first argument, and handle the
-  case when it is zero.  What should the function do in this case?
-  This is a good example of when we use $[[abort]]$.  We can define
-  our function in the following way:
+  instead of leaving the exception handling to the division function
+  lets craft our function to throw an error when the second argument
+  is zero.  In what way can we throw an error?  This is exactly when
+  we use the $[[abort]]$ term.  We can define our function as follows:
   \begin{center}
     \small
     \begin{math}
       \begin{array}{lll}
         \textsf{div-plus-2} & \defeq
-        \lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y)\\
+        \lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,y)\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,y))\,y\,x        
       \end{array}
     \end{math}
   \end{center}
-  Lets consider some computations using $\textsf{div-plus-2}$:
+  In the definition of the function $\textsf{div-plus-2}$ we had to
+  bundle up the abort program inside a constant function to prevent
+  our function from always triggering abort.  This insures us that our
+  function will abort if and only if it calls the function
+  $[[\x.abort]]$.  Similarly, we had to bundle up the division
+  function inside a $\lambda$-abstraction so as to insure that it does
+  not throw an exception before our function can.  Lets consider some
+  computations using $\textsf{div-plus-2}$:
   \begin{center}
+    \small
     \begin{math}
-      (\lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y))\,[[(S (S Z))]]\,[[Z]] \\
-      \redto & (\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S (S (S Z))))]]\,y))\,[[Z]] \\
-      \redto & \mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,[[Z]])\,[[Z]]\,(\mathsf{div}\,[[(S (S (S (S Z))))]]\,y)\\
+      \begin{array}{lll}
+                 & (\lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,y)\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,y))\,y\,x)\,[[(S (S Z))]]\,[[Z]] \\
+        \redto^2 & \mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,[[Z]])\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[Z]]))\,[[Z]]\,[[(S (S Z))]] \\
+        \redto^7 & (\mathsf{isZero}\,[[Z]])\,[[Nat]]\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[Z]]))\,[[Z]]\,[[(S (S Z))]] \\
+        \redto^* & \mathsf{true}\,[[Nat]]\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[Z]]))\,[[Z]]\,[[(S (S Z))]] \\
+        \redto^6 & [[(\x.abort)]]\,[[Z]]\\
+        \redto   & [[abort]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \begin{center}
+    \small
+    \begin{math}
+      \begin{array}{lll}
+                 & (\lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,y)\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,y))\,y\,x)\,[[(S (S Z))]]\,[[(S (S Z))]] \\
+        \redto^2 & \mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,[[(S (S Z))]])\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[(S (S Z))]]))\,[[(S (S Z))]]\,[[(S (S Z))]] \\
+        \redto^7 & (\mathsf{isZero}\,[[(S (S Z))]])\,[[Nat]]\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[(S (S Z))]]))\,[[(S (S Z))]]\,[[(S (S Z))]] \\
+        \redto^* & \mathsf{false}\,[[Nat]]\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[S (S Z)]]))\,[[(S (S Z))]]\,[[(S (S Z))]] \\
+        \redto^6 & (\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[S (S Z)]]))\,[[(S (S Z))]]\\
+        \redto   & \mathsf{div}\,[[(S (S (S (S Z))))]]\,[[S (S Z)]]\\
+        \redto^* & [[S (S Z)]]\\
+      \end{array}
     \end{math}
   \end{center}
 \end{example}
+
+The previous example illustrates the syntax and the reduction relation
+of the freedom of speech language, but it also illustrates how the CBV
+reduction order can be manipulated using $\lambda$-abstractions.
+Notice that by wrapping the division function up in a
+$\lambda$-abstraction we prevent the reduction relation from reducing
+it until it is actually needed.  If the $\mathsf{isZero}$ function
+returns true then the division function is never needed and thus is
+never ran.  This shows how call-by-need reduction can be simulated by
+CBV reduction.  
+% section syntax_and_reduction_relation (end)
+
+\section{Type System}
+\label{sec:type_system}
 
 \begin{figure}
   \begin{center}
@@ -333,3 +379,4 @@ $\Gamma \tvdash{L} injdom:e_1 = e'_1$ and clearly $\Gamma \tvdash{\theta} e_1$ i
 $\Gamma \tvdash{\theta} [e_1/x]x$.  Thus by $\FSdrulename{Conv}$,
 $\Gamma \tvdash{\theta} [e'_1/x]x$, which is equivalent to
 $\Gamma \tvdash{\theta} v:e'_1$.  So $\FSdrulename{InjRan}$ does seem to be sound.
+% section type_system (end)
