@@ -1,6 +1,6 @@
 \input{free-speech-ott}
 
-\renewcommand{\FSdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\FSdrulename}[1]{\textsc{\scriptsize #1}}
 
 \newcommand{\tvdash}[1]{\vdash^{#1}}
 \newcommand{\arrowT}[5]{(#1 :^{#2} #3)^{#4} \to #5}
@@ -263,7 +263,8 @@ the type system.
   computations using $\textsf{div-plus-2}$:
   \begin{center}
     \small
-    \begin{math}
+    \begin{tabular}{lll}
+      \begin{math}
       \begin{array}{lll}
                  & (\lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,y)\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,y))\,y\,x)\,[[(S (S Z))]]\,[[Z]] \\
         \redto^2 & \mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,[[Z]])\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,[[Z]]))\,[[Z]]\,[[(S (S Z))]] \\
@@ -272,11 +273,8 @@ the type system.
         \redto^6 & [[(\x.abort)]]\,[[Z]]\\
         \redto   & [[abort]]\\
       \end{array}
-    \end{math}
-  \end{center}
-
-  \begin{center}
-    \small
+    \end{math}\\
+    \\
     \begin{math}
       \begin{array}{lll}
                  & (\lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,(\mathsf{isZero}\,y)\,[[(\x.abort)]]\,(\lambda x.(\mathsf{div}\,[[(S (S x))]]\,y))\,y\,x)\,[[(S (S Z))]]\,[[(S (S Z))]] \\
@@ -288,6 +286,7 @@ the type system.
         \redto^* & [[S (S Z)]]\\
       \end{array}
     \end{math}
+    \end{tabular}
   \end{center}
 \end{example}
 
@@ -300,6 +299,17 @@ it until it is actually needed.  If the $\mathsf{isZero}$ function
 returns true then the division function is never needed and thus is
 never ran.  This shows how call-by-need reduction can be simulated by
 CBV reduction.  
+
+There is one final judgment defined with the reduction relation in
+Figure~\ref{fig:FS-syn-red}, and it is denoted $[[e1 \v/ e2]]$. We
+call this the joinability judgment and is defined by only one rule
+\FSdrulename{ComputeJoin}. This rule stats that whenever there exists
+an expression $[[e]]$ such that the expressions $[[e1]]$ and $[[e2]]$
+both reduce to $[[e]]$ in any number of steps, then $[[e1]]$ and
+$[[e2]]$ are joinable.  If $[[e1 \v/ e2]]$ holds then we consider the
+expressions $[[e1]]$ and $[[e2]]$ to be equivalent.  This judgment
+will be used to give the $[[join]]$ expression its type in the typing
+rule \FSdrulename{join}.
 % section syntax_and_reduction_relation (end)
 
 \section{Type System}
