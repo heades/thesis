@@ -314,46 +314,47 @@ rule \FSdrulename{join}.
 \section{Type System}
 \label{sec:type_system}
 
-\begin{figure}
-  \begin{center}
-    \begin{mathpar}
-      \FSdruleKXXType{}        \and
-      \FSdruleKXXNat{}         \and
-      \FSdruleKXXPi{}          \and
-      \FSdruleKXXEq{}          \and
-      \FSdruleVar{}            \and
-      \FSdruleLam{}            \and
-      \FSdruleILam{}           \and
-      \FSdruleAppPiTerm{}      \and
-      \FSdruleAppAllTerm{}     \and
-      \FSdrulejoin{}           \and
-      \FSdruleConv{}           \and
-      \FSdruleSucc{}           \and
-      \FSdruleZero{}           \and
-      \FSdruleAbort{}          \and
-      \FSdruleContra{}         \and
-      \FSdruleContraAbort{}    \and
-      \FSdruleCoerce{}         \and
-      \FSdruleRecNat{}         \and
-      \FSdruleRecNatComp{}     \and
-      \FSdruleRec{}
-    \end{mathpar}
-  \end{center}
-  \caption{Typing rules for freedom of speech}
-  \label{fig:FS-typing}
-\end{figure}
+\begin{center}
+  \begin{mathpar}
+    \FSdruleKXXType{} \and
+    \FSdruleKXXNat{}  \and
+    \FSdruleKXXPi{}   \and
+    \FSdruleKXXEq{}          
+  \end{mathpar}
+\end{center}
 
+\begin{center}
+  \begin{mathpar}
+    \FSdruleSucc{} \and
+    \FSdruleZero{} \and
+    \FSdruleVar{}  
+  \end{mathpar}
+\end{center}
+
+\begin{center}
+  \begin{mathpar}
+    \FSdruleLam{}       \and
+    \FSdruleILam{}      \and
+    \FSdruleAppPiTerm{} \and
+    \FSdruleAppAllTerm{}
+  \end{mathpar}
+\end{center}
+
+\begin{center}
+  \begin{mathpar}
+    \FSdrulejoin{}       \and
+    \FSdruleConv{}       \and    
+  \end{mathpar}
+\end{center}
 
 To prevent equations between $\Pi$-types having different compiletime/runtime arguments or 
 different consistency classifiers we add the following rules:
-
 \begin{center}
   \begin{mathpar}
     \FSdruleContraPiTh{} \and
     \FSdruleContraPiEp{}
   \end{mathpar}
 \end{center}
-
 There are many types of problems that arise from the absence of $\FSdrulename{ContraPiTh}$
 and $\FSdrulename{ContraPiEp}$.
 For example, not having this resitrction would allow one to equate programmatic functions taking 
@@ -387,6 +388,29 @@ conclude that $\Gamma \tvdash{\theta} v:e'_1$.  By $\FSdrulename{InjDom}$,
 $\Gamma \tvdash{L} injdom:e_1 = e'_1$ and clearly $\Gamma \tvdash{\theta} e_1$ is equivalent to 
 $\Gamma \tvdash{\theta} [e_1/x]x$.  Thus by $\FSdrulename{Conv}$,
 $\Gamma \tvdash{\theta} [e'_1/x]x$, which is equivalent to
-$\Gamma \tvdash{\theta} v:e'_1$.  So $\FSdrulename{InjRan}$ does seem to be sound.
-% section type_system (end)
+$\Gamma \tvdash{\theta} v:e'_1$.  So $\FSdrulename{InjRan}$ does seem
+to be sound.
 
+\begin{center}
+  \begin{mathpar}
+    \FSdruleAbort{}       \and
+    \FSdruleContra{}      \and
+    \FSdruleContraAbort{}
+  \end{mathpar}
+\end{center}
+
+
+\begin{center}
+  \begin{mathpar}                                         
+    \FSdruleRecNat{}     \and
+    \FSdruleRecNatComp{} \and
+    \FSdruleRec{}
+  \end{mathpar}
+\end{center}
+
+\begin{center}
+  \begin{mathpar}
+    \FSdruleCoerce{}
+  \end{mathpar}
+\end{center}
+% section type_system (end)
