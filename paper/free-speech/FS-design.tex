@@ -244,11 +244,16 @@ the type system.
     \begin{math}
       \begin{array}{lll}
         \textsf{div-plus-2} & \defeq
-             \lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y)\\
+        \lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y)\\
       \end{array}
     \end{math}
   \end{center}
   Lets consider some computations using $\textsf{div-plus-2}$:
+  \begin{center}
+    \begin{math}
+      \lambda x.\lambda y.\mathsf{case}\,[[Nat]]\,[[(\x.abort)]]\,[[(\x.x)]]\,(\mathsf{isZero}\,y)\,[[Z]]\,(\mathsf{div}\,[[(S (S x))]]\,y)
+    \end{math}
+  \end{center}
 \end{example}
 
 \begin{figure}
