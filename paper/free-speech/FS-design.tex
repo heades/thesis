@@ -74,6 +74,7 @@ situation best captured by the following picture:
   \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=5 cm, scale = 1, transform shape]
     \node[state, minimum size=83.1pt] (A)              {Logical};
     \node[state] (B) [right of=A] {Programmatic};
+    \node[draw=none] at (9,0) {\large *};
 
     \path[->] (A) edge [bend left] (B)
               (B) edge [bend left] (A);
@@ -337,7 +338,31 @@ rule \FSdrulename{join}.
 
 \section{Type System}
 \label{sec:type_system}
+Throughout this thesis we have seen that the reduction rules paired
+with the type system is really where the heart of the programming
+language or type theory lives.  The reduction rules tells us how to
+compute while the typing rules tell us which programs are valid and
+which programs we can consider as proofs.  In this section we present
+the typing rules of Freedom of Speech, and we will make explicit how
+it contains all of the features we introduced in the introduction to
+this chapter.  
 
+The type system contains many rules, and so we break up the system and
+introduce it in chunks.  To see the complete definition in one place
+see Appendix~\ref{sec:freedom_of_speech_all}.  Recall from the
+previous section that the syntax is collapsed.  Types and programs are
+described by a single syntactic category called expressions.  This
+then implies that we only have a single judgment defining the typing
+relation.  This judgment is denoted $[[G |- e : e' th]]$, and we read
+this judgment as the expression $[[e]]$ has type $[[e']]$ in fragment
+$[[th]]$ in environment $[[G]]$.  We can think of this judgment as
+being parametric in $[[th]]$, and thus is two judgments in one.  If
+$[[th]]$ is $[[L]]$, then $[[e]]$ is a proof or logical program, while
+if $[[th]]$ is $[[C]]$, then $[[e]]$ is a potentially diverging
+program.  So it is the typing judgment that does the carving out of
+the two fragments.
+
+We begin introducing the type system with the kinding rules:
 \begin{center}
   \begin{mathpar}
     \FSdruleKXXType{} \and
@@ -346,7 +371,36 @@ rule \FSdrulename{join}.
     \FSdruleKXXEq{}          
   \end{mathpar}
 \end{center}
+The expression $[[Type]]$ is a universe containing all of the
+expressions that can be considered well-defined types with respect to
+an environment.  Hence, we call an expression $[[e]]$ a type if and
+only if $[[G |- e : Type th]]$ for some environment $[[G]]$.  If
+$[[th]]$ is $[[L]]$, then $[[e]]$ is can be considered a formula
+otherwise $[[e]]$ is simply a type.  The rules above tell us that
+there are for types, the type $[[Type]]$, which is only a programmatic
+type (for the explanation why see ???), the type of natural numbers,
+dependent product types, and equations between well typed expressions.
+These are the only expressions that will be considered types.  
 
+A few remarks about the types.  Notice that the rule
+$\FSdrulename{K\_Pi}$ does not require the consistency classifier of
+the arguments to match the consistency classifier of the range type.
+This allows functions to take in arguments from one fragment and then
+produce a program of the opposite fragment.  For example, the type
+$[[(x : C Nat)+ -> x = x]]$ takes a programmatic argument, but
+produces a formula which is the statement that $[[x]]$ is equivalent
+to itself.  Thus, formulas can depend on potentially diverging
+programs.  This is exactly the freedom of speech property.  Finally,
+note that the expressions of an equation do not have to have the same
+type.  This called heterogenous equality.  In addition, note that the
+consistency classifiers for the two equations can be different.  For
+example, $[[S Z]]$ is logical and programmatic, thus, $[[S Z = S Z]]$
+where the first is logical and the second is programmatic is a valid
+expression.
+
+Now that we have characterized the types we can introduce how both
+logical and programmatic programs are typed.  First, we introduce the
+axioms for natural numbers and assumptions:
 \begin{center}
   \begin{mathpar}
     \FSdruleSucc{} \and
@@ -354,11 +408,55 @@ rule \FSdrulename{join}.
     \FSdruleVar{}  
   \end{mathpar}
 \end{center}
+The astute reader will have noticed that natural numbers are typed
+only in the logical fragment, but one might think that these are
+purely programmatic, because they do not make for very interesting
+formulas.  As we mentioned above the logical fragment can be
+considered as a terminating functional programming language so if one
+wishes to insure that the program they are constructing is terminating
+then they can construct it in the logical fragment.  To use the
+natural numbers in the programmatic fragment we add an additional
+typing rule:
+\begin{center}
+  \begin{mathpar}
+    \FSdruleCoerce{}
+  \end{mathpar}
+\end{center}
+This rule allows any well-typed logical expression to be coerced into
+the programmatic fragment.  This corresponds to the edge relating the
+logical fragment to the programmatic fragment in the diagram * from
+the introduction of this chapter.  Thus, natural numbers can be used
+in either fragment.  The third rule we introduce above is the variable
+rule \FSdrulename{Var} which depends on the premise $[[G |- e : Type
+th]]$.  This premise -- we will see these all throughout the
+definition of the typing relation -- insures that the expression
+$[[e]]$ is indeed a type.  This is necessary because we only have one
+syntactic category for types.
 
+Programmatic and logical functions are introduced using two styles of
+$\lambda$-abstractions:
 \begin{center}
   \begin{mathpar}
     \FSdruleLam{}       \and
-    \FSdruleILam{}      \and
+    $$\mprset{flushleft}
+    \inferrule* [right=ILam] {
+      [[G |- e1 : Type th']]
+      \\\\
+      [[G, x : th' e1 |- v : e2   th]]
+      \\
+      [[x notin FV(v)]]
+    }{[[G |- v : (x : th' e1) - -> e2 th]]}
+  \end{mathpar}
+\end{center}
+The former introduces $\lambda$-abstractions with runtime relavent
+arguments, while the latter introduces $\lambda$-abstractions whose
+argument is compiletime relavent only.  We call the latter implicit
+$\lambda$-abstractions, because the argument is left implicit.  The
+\FSdrulename{Lam} rule is intuitive, but notice that again the arguments
+consistency classifier does not have to match the bodies, thus
+allowing freedom of speech.  
+\begin{center}
+  \begin{mathpar}    
     \FSdruleAppPiTerm{} \and
     \FSdruleAppAllTerm{}
   \end{mathpar}
@@ -429,12 +527,6 @@ to be sound.
     \FSdruleRecNat{}     \and
     \FSdruleRecNatComp{} \and
     \FSdruleRec{}
-  \end{mathpar}
-\end{center}
-
-\begin{center}
-  \begin{mathpar}
-    \FSdruleCoerce{}
   \end{mathpar}
 \end{center}
 % section type_system (end)
