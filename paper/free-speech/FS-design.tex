@@ -72,17 +72,11 @@ logical fragment to the programmatic fragment.  Thus, we have a
 situation best captured by the following picture:
 \begin{center}
   \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=5 cm, scale = 1, transform shape]
-    \node[state] (A)              {Logical};
+    \node[state, minimum size=83.1pt] (A)              {Logical};
     \node[state] (B) [right of=A] {Programmatic};
 
     \path[->] (A) edge [bend left] (B)
               (B) edge [bend left] (A);
-    % (A) edge [above]      node [align=center]  {$ c = c + 5 $} (B)
-    % (A) edge [left]       node [align=center]  {$ c = c - 1 $} (D)
-    % (B) edge [right]      node [align=center]  {$ c = c - 1 $} (D)
-    % (C) edge [loop above] node [align=center]  {$ c = c + 1 $} (C)
-    % (D) edge [loop below] node [align=center]  {$ c = c - 2 $} (D);
-
   \end{tikzpicture}    
 \end{center}
 In this chapter we introduce the design of a programming language that
