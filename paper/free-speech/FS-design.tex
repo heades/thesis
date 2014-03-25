@@ -31,9 +31,11 @@ types are propositions, that is the logical fragment makes use of the
 computational trinity (Chapter~\ref{chap:the_three_perspectives}).
 Now the programmatic fragment is where all the usual programming will
 take place, then one can use the logical fragment to verify properties
-of the programs written in the programmatic fragment.  However, the
-programming language will need some additional features to make this
-all work.
+of the programs written in the programmatic fragment.  Alternately,
+one can understand the fragments as worlds in the sense of possible
+world semantics of modal logics.  Below we will see how these two
+worlds are connected.  A programming language such as this will need
+some additional features to make this all work.
 
 Once the logical fragment has been identified three additional
 features will need to be added.  The first feature is that types in
@@ -59,8 +61,30 @@ and thus can be considered both logical programs and programmatic
 programs.  The third and final feature is the ability to write
 programs in the logical fragment and then move them into the
 programmatic fragment.  This facilitates code reuse and provides a
-means to write verified terminating programs.
+means to write verified terminating programs.  We mentioned that the
+logical and programmatic fragments can be consider worlds.  Now the
+freedom of speech property relates the programmatic fragment to the
+logical fragment by allowing the objects of the logical fragment to
+express properties about the objects of the programmatic fragment.
+Additionally, the feature allowing the programs of the logical
+fragment to be moved into the programmatic fragment relates the
+logical fragment to the programmatic fragment.  Thus, we have a
+situation best captured by the following picture:
+\begin{center}
+  \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=5 cm, scale = 1, transform shape]
+    \node[state] (A)              {Logical};
+    \node[state] (B) [right of=A] {Programmatic};
 
+    \path[->] (A) edge [bend left] (B)
+              (B) edge [bend left] (A);
+    % (A) edge [above]      node [align=center]  {$ c = c + 5 $} (B)
+    % (A) edge [left]       node [align=center]  {$ c = c - 1 $} (D)
+    % (B) edge [right]      node [align=center]  {$ c = c - 1 $} (D)
+    % (C) edge [loop above] node [align=center]  {$ c = c + 1 $} (C)
+    % (D) edge [loop below] node [align=center]  {$ c = c - 2 $} (D);
+
+  \end{tikzpicture}    
+\end{center}
 In this chapter we introduce the design of a programming language that
 contains all of these features, and some additional ones.  It is
 called Freedom of Speech, because it is the first core
@@ -414,3 +438,4 @@ to be sound.
   \end{mathpar}
 \end{center}
 % section type_system (end)
+
