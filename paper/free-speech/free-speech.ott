@@ -202,9 +202,9 @@ Jtyp :: '' ::=
   ---------------------------------- :: Lam
   G |- \ x . e : (x :th e1) + -> e2   th'
 
-  G |- e1 : Type th'
-  G, x : th' e1 |- v : e2   th
   x notin FV(v)
+  G |- e1 : Type th'
+  G, x : th' e1 |- v : e2   th 
   ----------------------------- :: ILam
   G |- v : (x : th' e1) - -> e2   th
 
