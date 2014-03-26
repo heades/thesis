@@ -454,12 +454,37 @@ $\lambda$-abstractions, because the argument is left implicit.  The
 \FSdrulename{Lam} rule is intuitive, but notice that again the arguments
 consistency classifier does not have to match the bodies, thus
 allowing freedom of speech.  
+
+The typing rule \FSdrulename{ILam} has a restriction on the body of
+the implicit $\lambda$-abstraction, infact there are a number of value
+restrictions in the definition of the typing relation.  This
+restriction is necessary in order to maintain the meattheoretic
+property called progress. This property states that every well-typed
+program can either take a computational step or is already a value.
+Suppose the restirction on \FSdrulename{ILam} is lifted. Then the
+judgment $[[. |- Z Z : (x : L Nat = (y : L Nat) + -> Nat)- -> Nat L]]$
+holds, but $[[Z Z]]$ is niether a value nor a redex.  It is a stuck term!
+Thus, this value restriction is necessary to rule out stuck terms of
+this form.
+
+Now we have two distinct $\lambda$-abstractions, and thus we will need
+two types of applications:
 \begin{center}
   \begin{mathpar}    
     \FSdruleAppPiTerm{} \and
     \FSdruleAppAllTerm{}
   \end{mathpar}
 \end{center}
+The former eliminates function types with runtime arguments, while the
+latter eliminates function types with compile-time arguments.  These
+rules are straightforward, but do contain value restrictions similar
+to \FSdrulename{ILam}.  These restrictions prevent the application
+of a logical function to a diverging non-value computation.  For
+example, if we lift the value restriction then we could type
+$([[e]]\,\mathsf{loop})$ where $\mathsf{loop}$ is a program that
+simply calls itself infinitely often, but then the term
+$([[e]]\,\mathsf{loop})$ diverges, and hence is no longer a proof.
+Remember, logical programs cannot run programmatic programs.
 
 \begin{center}
   \begin{mathpar}
