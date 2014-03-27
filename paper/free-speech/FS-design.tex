@@ -376,10 +376,12 @@ an environment.  Hence, we call an expression $[[e]]$ a type if and
 only if $[[G |- e : Type th]]$ for some environment $[[G]]$.  If
 $[[th]]$ is $[[L]]$, then $[[e]]$ is can be considered a formula
 otherwise $[[e]]$ is simply a type.  The rules above tell us that
-there are four types: the type $[[Type]]$, which is only a programmatic
-type (for the explanation why see ???), the type of natural numbers,
-dependent product types, and equations between well typed expressions.
-These are the only expressions that will be considered types.  
+there are four types: the type $[[Type]]$, which is only a
+programmatic type (for the explanation why see
+Section~\ref{sec:martin-lofs_type_theory}), the type of natural
+numbers, dependent product types, and equations between well typed
+expressions.  These are the only expressions that will be considered
+types.
 
 A few remarks about the types.  Notice that the rule
 $\FSdrulename{K\_Pi}$ does not require the consistency classifier of
@@ -628,5 +630,26 @@ This rule is -- expectedly -- restricted to the programmatic fragment.
 The things to note about this rule are that $[[f]]$ has the exact same
 type as $[[rec f x e]]$, and that there are no proofs requiring any
 arguments to decrease.
+
+Throughout this chapter we have introduced the complete design of a
+new dependently typed functional programming language where proofs and
+general recursive programs can live in harmony with the freedom of
+speech property.  As we discussed the design we paid careful attention
+to our design choices.  Many of these choices were made to enforce
+particular meta-theoretic properties such as type safety and
+consistency.  It turns out that type preservation and consistency do
+indeed hold, and their proofs are detailed in
+Chapter~\ref{chap:freedom_of_speech_anal}.  However, we do not prove
+progress.  There are two interesting insights we gained from the
+design and analysis of freedom of speech.  The first one is that there
+are a number of value restrictions required throughout the typing
+rules.  These make programming very difficult, and it is imperative to
+find ways to lift those restrictions.  The second interesting insight
+is meta-theoretic and is discussed in
+Chapter~\ref{chap:freedom_of_speech_anal}.  In the following chapter
+we introduce the design of a dependently-typed functional programming
+language inspired by freedom of speech, but lifts all of the value
+restrictions, and is greatly extended to include complete programs
+with data types and pattern matching.
 % section type_system (end)
 
