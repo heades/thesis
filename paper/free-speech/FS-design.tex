@@ -376,10 +376,12 @@ an environment.  Hence, we call an expression $[[e]]$ a type if and
 only if $[[G |- e : Type th]]$ for some environment $[[G]]$.  If
 $[[th]]$ is $[[L]]$, then $[[e]]$ is can be considered a formula
 otherwise $[[e]]$ is simply a type.  The rules above tell us that
-there are four types: the type $[[Type]]$, which is only a programmatic
-type (for the explanation why see ???), the type of natural numbers,
-dependent product types, and equations between well typed expressions.
-These are the only expressions that will be considered types.  
+there are four types: the type $[[Type]]$, which is only a
+programmatic type (for the explanation why see
+Section~\ref{sec:martin-lofs_type_theory}), the type of natural
+numbers, dependent product types, and equations between well typed
+expressions.  These are the only expressions that will be considered
+types.
 
 A few remarks about the types.  Notice that the rule
 $\FSdrulename{K\_Pi}$ does not require the consistency classifier of
@@ -449,7 +451,7 @@ $\lambda$-abstractions:
 \end{center}
 The former introduces $\lambda$-abstractions with runtime relavent
 arguments, while the latter introduces $\lambda$-abstractions whose
-argument is compiletime relavent only.  We call the latter implicit
+argument is compile time relavent only.  We call the latter implicit
 $\lambda$-abstractions, because the argument is left implicit.  The
 \FSdrulename{Lam} rule is intuitive, but notice that again the arguments
 consistency classifier does not have to match the bodies, thus
@@ -486,57 +488,74 @@ simply calls itself infinitely often, but then the term
 $([[e]]\,\mathsf{loop})$ diverges, and hence is no longer a proof.
 Remember, logical programs cannot run programmatic programs.
 
+So far we have seen the typing rules for types, natural numbers,
+$\lambda$-abstractions, and applications.  Now we introduce the typing
+rules for introducing and eliminating -- or using -- equations.  The
+typing rules are as follows:
 \begin{center}
   \begin{mathpar}
     \FSdrulejoin{}       \and
     \FSdruleConv{}       \and    
   \end{mathpar}
 \end{center}
+The former introduces an equation by first judging that the
+expressions $[[e]]$ and $[[e']]$ are joinable as defined in
+Figure~\ref{fig:FS-syn-red}, then requiring that $[[e]]$ and $[[e']]$
+be well typed.  Note that the expressions $[[e]]$ and $[[e']]$ can
+have different types and consistency classifiers.  Thus, this rule
+introduces heterogenous equality.  Now equations are completely
+logical hence we can consider $[[join]]$ as the proof that $[[e]]$ and
+$[[e']]$ are equivalent.  Furthermore, $[[e1]]$ and $[[e2]]$ can be
+$[[Type]]$, thus $[[e]]$ and $[[e']]$ can be types making $[[join]]$ a
+proof of an equation between types.  We can now introduce equations,
+but how are they used?  If we have a proof that the expressions
+$[[e1]]$ and $[[e1']]$ are equivalent, that is we know 
+$[[G |- e' : e1 = e1' L]]$, and if we also have an expression $[[e]]$ whose
+type depends on $[[e1]]$, then the rule \FSdrulename{Conv} allows us to replace
+$[[e1]]$ in the type $[[e]]$ with its equivalent $[[e1']]$.  Thus,
+the rule \FSdrulename{Conv} allows one to substitute equals for equals in types.
 
-To prevent equations between $\Pi$-types having different compiletime/runtime arguments or 
-different consistency classifiers we add the following rules:
-\begin{center}
-  \begin{mathpar}
-    \FSdruleContraPiTh{} \and
-    \FSdruleContraPiEp{}
-  \end{mathpar}
-\end{center}
-There are many types of problems that arise from the absence of $\FSdrulename{ContraPiTh}$
-and $\FSdrulename{ContraPiEp}$.
-For example, not having this resitrction would allow one to equate programmatic functions taking 
-programmatic arguments to programmatic functions taking logical arguments, which would be the 
-opposite of the freedom of speech property.  Even worse we could equate logical functions taking
-programmatic arguments to logical functions taking logical arguments which breaks the freedom
-of speech property.
-
-Currently there exists a counter example to type preservation.  Let $\Gamma$ be 
-$X:^L Type, Y:^L Type, x:^L X, $
-$u:^L ((\arrowT{a}{\nat}{L}{+}{X}) = (\arrowT{a}{\nat}{L}{+}{Y}))$.  Then
-if $\Gamma \tvdash{L} \lambda a.x:\arrowT{a}{\nat}{L}{+}{X}$ and $\Gamma \tvdash{L} Zero:Y$
-then $\Gamma \tvdash{L} (\lambda a.x)\ Zero:X$.  By applying $\FSdrulename{Conv}$ and using
-the assumption $u$, $\Gamma \tvdash{L} (\lambda a.x)\ Zero:Y$, but 
-$(\lambda a.x)\ Zero \redto x$ and $\Gamma \tvdash{L} x:X$.
-
-An easy solution to this problem is to add injectivity axioms for $\Pi$-types.  We define the 
-injectivity axioms as follows:
+The rules \FSdrulename{Join} and \FSdrulename{Conv} have one
+particular disadvantage.  Suppose 
+\[ 
+  \begin{array}{lll}
+    [[G]] \defeq [[z: L Type, y: L Type, x: L z, u: L ((a : L Nat) + -> z) = ((a : L Nat) + -> y)]], \\
+    [[G |- \a.x: (a : L Nat) + -> z L]] \text{, and }\\ 
+    [[G |- Z : Nat L]].
+  \end{array}
+\]  Then $[[G |- (\a.x) Z : z L]]$.  By applying $\FSdrulename{Conv}$ and using
+the assumption $u$, we may conclude $[[G |- (\a.x) Z : y L]]$, but 
+$[[(\a.x) Z ~> x]]$ and $[[G |- x:z L]]$.  Therefore, we have obtained a counterexample to type preservation!
+Notice that if we knew $[[z = y]]$ then this would no longer be a counterexample, but it is impossible to prove that $[[z = y]]$
+from knowing $[[((a : L Nat) + -> z) = ((a : L Nat) + -> y)]]$ using only \FSdrulename{Join} and \FSdrulename{Conv}.  So
+to prevent counterexamples such as these we add the following rules:
 \begin{center}  
   \begin{mathpar}
     \FSdruleInjDom{} \and
     \FSdruleInjRan{}
   \end{mathpar}
 \end{center}
+These rules are known as injectivity rules for dependent products.
+The second rule may seem a bit strange, especially the second premise,
+because we are substituting a value $[[v]]$ for two free variables of
+possibly different types.  This is, however, not a problem, because
+from the premises of $\FSdrulename{InjRan}$, $\FSdrulename{InjDom}$,
+and $\FSdrulename{Conv}$ we may conclude $[[G |- v:e'1 th]]$.  Then by
+$\FSdrulename{InjDom}$ we know $[[G |- injdom:e1 = e'1 L]]$, and
+clearly $[[G |- v : e1 th]]$ is equivalent to $[[G |- v : [e1/x]x
+th]]$.  Thus by $\FSdrulename{Conv}$, $[[G |- v : [e'_1/x]x th]]$, which
+is equivalent to $[[G |- v:e'1 th]]$.  So the rule
+\FSdrulename{InjRan} is sound.
 
-There are two rules one for the domain types and a second for the range types.  The second rule 
-may seem a bit strange especially the second premise, because we are substiuting a value $v$ for
-two free variables of possibily different types.  This is however okay, because from the premises
-of $\FSdrulename{InjRan}$ and $\FSdrulename{InjDom}$ and $\FSdrulename{Conv}$ it is easy to
-conclude that $\Gamma \tvdash{\theta} v:e'_1$.  By $\FSdrulename{InjDom}$, 
-$\Gamma \tvdash{L} injdom:e_1 = e'_1$ and clearly $\Gamma \tvdash{\theta} e_1$ is equivalent to 
-$\Gamma \tvdash{\theta} [e_1/x]x$.  Thus by $\FSdrulename{Conv}$,
-$\Gamma \tvdash{\theta} [e'_1/x]x$, which is equivalent to
-$\Gamma \tvdash{\theta} v:e'_1$.  So $\FSdrulename{InjRan}$ does seem
-to be sound.
-
+Equational reasoning is based on the runtime behavior of programs, but
+there a number of different programs of a different type so what
+happens when it is possible to obtain a equation between contradicting
+values?  The reader may object to the very question, because the
+logical fragment -- as we have said above -- must be consistent, but
+it is possible to start with inconsistent assumptions, and in these
+cases the logical fragment needs to be able to trigger a
+contradiction.  We introduce the following rules to eliminate
+contradictory equations:
 \begin{center}
   \begin{mathpar}
     \FSdruleAbort{}       \and
@@ -544,14 +563,93 @@ to be sound.
     \FSdruleContraAbort{}
   \end{mathpar}
 \end{center}
+The first rule introduces $[[abort]]$ and states that $[[abort]]$ can
+have any type.  As we have seen above $[[abort]]$ is used to indicate
+error states.  The second rule \FSdrulename{ContraAbort} introduces
+the proof $[[contra]]$ with any well-defined type as long as there is
+a proof of some value being equivalent to $[[abort]]$.  This means, if
+a program enters an error state, then a contradiction has occurred. An
+example might be trying to verify the correctness of $\mathsf{div}$
+for all natural numbers.  Then when $[[Z]]$ is given as the second
+argument it will reduce to abort.  Thus, we would be able to obtain
+our result by using $[[contra]]$.  The third rule \FSdrulename{Contra}
+is similar to the previous rule, except it requires a proof that
+$[[Z]]$ is equivalent to a natural number greater than $[[Z]]$.  
 
+There is one additional type of inconsistent equations that might be
+introduced that can cause major problems.  The fact that in an
+inconsistent context one can prove two dependent products equivalent
+when they have differing runtime and consistency classifiers can break
+freedom of speech.  For example, it would be possible to equate
+programmatic functions taking programmatic arguments to programmatic
+functions taking logical arguments, which would be the opposite of the
+freedom of speech property.  Even worse we could equate logical
+functions taking programmatic arguments to logical functions taking
+logical arguments which breaks the freedom of speech property.  To
+prevent equations between dependent products having different compile
+time or runtime arguments, or different consistency classifiers we add
+the following two rules:
+\begin{center}
+  \begin{mathpar}
+    \FSdruleContraPiTh{} \and
+    \FSdruleContraPiEp{}
+  \end{mathpar}
+\end{center}
 
+The final three rules of the freedom of speech design handle natural
+number -- terminating -- and general recursion.  Terminating recursion
+is restricted to the logical fragment, but can be moved over to the
+programmatic fragment using the \FSdrulename{Coerce} typing rule.
+Terminating recursion is introduced using the following rules:
+\begin{center}
+  \begin{mathpar}
+    \FSdruleRecNat{}     \and
+    \FSdruleRecNatComp{} 
+  \end{mathpar}
+\end{center}
+A recursive definition is denoted $[[rec f x v]]$ and should be
+thought of as a function from a natural number to some type $[[e2]]$.
+So there are two rules: one with a runtime argument, and one with a
+compile time argument.  The function we are defining we call $[[f]]$
+and is bound in $[[v]]$.  Now $[[x]]$ is the recursive argument that
+decreases across recursive calls, which is also bound in $[[v]]$,
+finally $[[v]]$ is the definition of the recursive function.  Note
+that the invariant that the recursive argument decreases across
+recursive calls is captured by the type of $[[f]]$.  We can see that
+the programmer has to provide a proof that $[[x]]$ is one larger than
+the argument supplied to $[[f]]$ at the sight of the recursive call.
+Thus, termination is clearly captured by the type of $[[f]]$.
+
+Lastly, we have the rule for general recursion:
 \begin{center}
   \begin{mathpar}                                         
-    \FSdruleRecNat{}     \and
-    \FSdruleRecNatComp{} \and
     \FSdruleRec{}
   \end{mathpar}
 \end{center}
+This rule is -- expectedly -- restricted to the programmatic fragment.
+The things to note about this rule are that $[[f]]$ has the exact same
+type as $[[rec f x e]]$, and that there are no proofs requiring any
+arguments to decrease.
+
+Throughout this chapter we have introduced the complete design of a
+new dependently typed functional programming language where proofs and
+general recursive programs can live in harmony with the freedom of
+speech property.  As we discussed the design we paid careful attention
+to our design choices.  Many of these choices were made to enforce
+particular meta-theoretic properties such as type safety and
+consistency.  It turns out that type preservation and consistency do
+indeed hold, and their proofs are detailed in
+Chapter~\ref{chap:freedom_of_speech_anal}.  However, we do not prove
+progress.  There are two interesting insights we gained from the
+design and analysis of freedom of speech.  The first one is that there
+are a number of value restrictions required throughout the typing
+rules.  These make programming very difficult, and it is imperative to
+find ways to lift those restrictions.  The second interesting insight
+is meta-theoretic and is discussed in
+Chapter~\ref{chap:freedom_of_speech_anal}.  In the following chapter
+we introduce the design of a dependently-typed functional programming
+language inspired by freedom of speech, but lifts all of the value
+restrictions, and is greatly extended to include complete programs
+with data types and pattern matching.
 % section type_system (end)
 
