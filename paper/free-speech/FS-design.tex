@@ -594,12 +594,39 @@ the following two rules:
   \end{mathpar}
 \end{center}
 
+The final three rules of the freedom of speech design handle natural
+number -- terminating -- and general recursion.  Terminating recursion
+is restricted to the logical fragment, but can be moved over to the
+programmatic fragment using the \FSdrulename{Coerce} typing rule.
+Terminating recursion is introduced using the following rules:
+\begin{center}
+  \begin{mathpar}
+    \FSdruleRecNat{}     \and
+    \FSdruleRecNatComp{} 
+  \end{mathpar}
+\end{center}
+A recursive definition is denoted $[[rec f x v]]$ and should be
+thought of as a function from a natural number to some type $[[e2]]$.
+So there are two rules: one with a runtime argument, and one with a
+compile time argument.  The function we are defining we call $[[f]]$
+and is bound in $[[v]]$.  Now $[[x]]$ is the recursive argument that
+decreases across recursive calls, which is also bound in $[[v]]$,
+finally $[[v]]$ is the definition of the recursive function.  Note
+that the invariant that the recursive argument decreases across
+recursive calls is captured by the type of $[[f]]$.  We can see that
+the programmer has to provide a proof that $[[x]]$ is one larger than
+the argument supplied to $[[f]]$ at the sight of the recursive call.
+Thus, termination is clearly captured by the type of $[[f]]$.
+
+Lastly, we have the rule for general recursion:
 \begin{center}
   \begin{mathpar}                                         
-    \FSdruleRecNat{}     \and
-    \FSdruleRecNatComp{} \and
     \FSdruleRec{}
   \end{mathpar}
 \end{center}
+This rule is -- expectedly -- restricted to the programmatic fragment.
+The things to note about this rule are that $[[f]]$ has the exact same
+type as $[[rec f x e]]$, and that there are no proofs requiring any
+arguments to decrease.
 % section type_system (end)
 
