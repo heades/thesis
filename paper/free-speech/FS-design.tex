@@ -545,6 +545,15 @@ th]]$.  Thus by $\FSdrulename{Conv}$, $[[G |- v : [e'_1/x]x th]]$, which
 is equivalent to $[[G |- v:e'1 th]]$.  So the rule
 \FSdrulename{InjRan} is sound.
 
+Equational reasoning is based on the runtime behavior of programs, but
+there a number of different programs of a different type so what
+happens when it is possible to obtain a equation between contradicting
+values?  The reader may object to the very question, because the
+logical fragment -- as we have said above -- must be consistent, but
+it is possible to start with inconsistent assumptions, and in these
+cases the logical fragment needs to be able to trigger a
+contradiction.  We introduce the following rules to eliminate
+contradictory equations:
 \begin{center}
   \begin{mathpar}
     \FSdruleAbort{}       \and
@@ -552,23 +561,38 @@ is equivalent to $[[G |- v:e'1 th]]$.  So the rule
     \FSdruleContraAbort{}
   \end{mathpar}
 \end{center}
+The first rule introduces $[[abort]]$ and states that $[[abort]]$ can
+have any type.  As we have seen above $[[abort]]$ is used to indicate
+error states.  The second rule \FSdrulename{ContraAbort} introduces
+the proof $[[contra]]$ with any well-defined type as long as there is
+a proof of some value being equivalent to $[[abort]]$.  This means, if
+a program enters an error state, then a contradiction has occurred. An
+example might be trying to verify the correctness of $\mathsf{div}$
+for all natural numbers.  Then when $[[Z]]$ is given as the second
+argument it will reduce to abort.  Thus, we would be able to obtain
+our result by using $[[contra]]$.  The third rule \FSdrulename{Contra}
+is similar to the previous rule, except it requires a proof that
+$[[Z]]$ is equivalent to a natural number greater than $[[Z]]$.  
 
-To prevent equations between dependent products having different
-compile time or runtime arguments, or different consistency classifiers we
-add the following two rules:
+There is one additional type of inconsistent equations that might be
+introduced that can cause major problems.  The fact that in an
+inconsistent context one can prove two dependent products equivalent
+when they have differing runtime and consistency classifiers can break
+freedom of speech.  For example, it would be possible to equate
+programmatic functions taking programmatic arguments to programmatic
+functions taking logical arguments, which would be the opposite of the
+freedom of speech property.  Even worse we could equate logical
+functions taking programmatic arguments to logical functions taking
+logical arguments which breaks the freedom of speech property.  To
+prevent equations between dependent products having different compile
+time or runtime arguments, or different consistency classifiers we add
+the following two rules:
 \begin{center}
   \begin{mathpar}
     \FSdruleContraPiTh{} \and
     \FSdruleContraPiEp{}
   \end{mathpar}
 \end{center}
-There are many types of problems that arise from the absence of $\FSdrulename{ContraPiTh}$
-and $\FSdrulename{ContraPiEp}$.
-For example, not having this resitrction would allow one to equate programmatic functions taking 
-programmatic arguments to programmatic functions taking logical arguments, which would be the 
-opposite of the freedom of speech property.  Even worse we could equate logical functions taking
-programmatic arguments to logical functions taking logical arguments which breaks the freedom
-of speech property.
 
 \begin{center}
   \begin{mathpar}                                         
