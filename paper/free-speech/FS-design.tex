@@ -449,7 +449,7 @@ $\lambda$-abstractions:
 \end{center}
 The former introduces $\lambda$-abstractions with runtime relavent
 arguments, while the latter introduces $\lambda$-abstractions whose
-argument is compiletime relavent only.  We call the latter implicit
+argument is compile time relavent only.  We call the latter implicit
 $\lambda$-abstractions, because the argument is left implicit.  The
 \FSdrulename{Lam} rule is intuitive, but notice that again the arguments
 consistency classifier does not have to match the bodies, thus
@@ -486,15 +486,76 @@ simply calls itself infinitely often, but then the term
 $([[e]]\,\mathsf{loop})$ diverges, and hence is no longer a proof.
 Remember, logical programs cannot run programmatic programs.
 
+So far we have seen the typing rules for types, natural numbers,
+$\lambda$-abstractions, and applications.  Now we introduce the typing
+rules for introducing and eliminating -- or using -- equations.  The
+typing rules are as follows:
 \begin{center}
   \begin{mathpar}
     \FSdrulejoin{}       \and
     \FSdruleConv{}       \and    
   \end{mathpar}
 \end{center}
+The former introduces an equation by first judging that the
+expressions $[[e]]$ and $[[e']]$ are joinable as defined in
+Figure~\ref{fig:FS-syn-red}, then requiring that $[[e]]$ and $[[e']]$
+be well typed.  Note that the expressions $[[e]]$ and $[[e']]$ can
+have different types and consistency classifiers.  Thus, this rule
+introduces heterogenous equality.  Now equations are completely
+logical hence we can consider $[[join]]$ as the proof that $[[e]]$ and
+$[[e']]$ are equivalent.  Furthermore, $[[e1]]$ and $[[e2]]$ can be
+$[[Type]]$, thus $[[e]]$ and $[[e']]$ can be types making $[[join]]$ a
+proof of an equation between types.  We can now introduce equations,
+but how are they used?  If we have a proof that the expressions
+$[[e1]]$ and $[[e1']]$ are equivalent, that is we know 
+$[[G |- e' : e1 = e1' L]]$, and if we also have an expression $[[e]]$ whose
+type depends on $[[e1]]$, then the rule \FSdrulename{Conv} allows us to replace
+$[[e1]]$ in the type $[[e]]$ with its equivalent $[[e1']]$.  Thus,
+the rule \FSdrulename{Conv} allows one to substitute equals for equals in types.
 
-To prevent equations between $\Pi$-types having different compiletime/runtime arguments or 
-different consistency classifiers we add the following rules:
+The rules \FSdrulename{Join} and \FSdrulename{Conv} have one
+particular disadvantage.  Suppose 
+\[ 
+  \begin{array}{lll}
+    [[G]] \defeq [[z: L Type, y: L Type, x: L z, u: L ((a : L Nat) + -> z) = ((a : L Nat) + -> y)]], \\
+    [[G |- \a.x: (a : L Nat) + -> z L]] \text{, and }\\ 
+    [[G |- Z : Nat L]].
+  \end{array}
+\]  Then $[[G |- (\a.x) Z : z L]]$.  By applying $\FSdrulename{Conv}$ and using
+the assumption $u$, we may conclude $[[G |- (\a.x) Z : y L]]$, but 
+$[[(\a.x) Z ~> x]]$ and $[[G |- x:z L]]$.  Therefore, we have obtained a counterexample to type preservation!
+Notice that if we knew $[[z = y]]$ then this would no longer be a counterexample, but it is impossible to prove that $[[z = y]]$
+from knowing $[[((a : L Nat) + -> z) = ((a : L Nat) + -> y)]]$ using only \FSdrulename{Join} and \FSdrulename{Conv}.  So
+to prevent counterexamples such as these we add the following rules:
+\begin{center}  
+  \begin{mathpar}
+    \FSdruleInjDom{} \and
+    \FSdruleInjRan{}
+  \end{mathpar}
+\end{center}
+These rules are known as injectivity rules for dependent products.
+The second rule may seem a bit strange, especially the second premise,
+because we are substituting a value $[[v]]$ for two free variables of
+possibly different types.  This is, however, not a problem, because
+from the premises of $\FSdrulename{InjRan}$, $\FSdrulename{InjDom}$,
+and $\FSdrulename{Conv}$ we may conclude $[[G |- v:e'1 th]]$.  Then by
+$\FSdrulename{InjDom}$ we know $[[G |- injdom:e1 = e'1 L]]$, and
+clearly $[[G |- v : e1 th]]$ is equivalent to $[[G |- v : [e1/x]x
+th]]$.  Thus by $\FSdrulename{Conv}$, $[[G |- v : [e'_1/x]x th]]$, which
+is equivalent to $[[G |- v:e'1 th]]$.  So the rule
+\FSdrulename{InjRan} is sound.
+
+\begin{center}
+  \begin{mathpar}
+    \FSdruleAbort{}       \and
+    \FSdruleContra{}      \and
+    \FSdruleContraAbort{}
+  \end{mathpar}
+\end{center}
+
+To prevent equations between dependent products having different
+compile time or runtime arguments, or different consistency classifiers we
+add the following two rules:
 \begin{center}
   \begin{mathpar}
     \FSdruleContraPiTh{} \and
@@ -508,43 +569,6 @@ programmatic arguments to programmatic functions taking logical arguments, which
 opposite of the freedom of speech property.  Even worse we could equate logical functions taking
 programmatic arguments to logical functions taking logical arguments which breaks the freedom
 of speech property.
-
-Currently there exists a counter example to type preservation.  Let $\Gamma$ be 
-$X:^L Type, Y:^L Type, x:^L X, $
-$u:^L ((\arrowT{a}{\nat}{L}{+}{X}) = (\arrowT{a}{\nat}{L}{+}{Y}))$.  Then
-if $\Gamma \tvdash{L} \lambda a.x:\arrowT{a}{\nat}{L}{+}{X}$ and $\Gamma \tvdash{L} Zero:Y$
-then $\Gamma \tvdash{L} (\lambda a.x)\ Zero:X$.  By applying $\FSdrulename{Conv}$ and using
-the assumption $u$, $\Gamma \tvdash{L} (\lambda a.x)\ Zero:Y$, but 
-$(\lambda a.x)\ Zero \redto x$ and $\Gamma \tvdash{L} x:X$.
-
-An easy solution to this problem is to add injectivity axioms for $\Pi$-types.  We define the 
-injectivity axioms as follows:
-\begin{center}  
-  \begin{mathpar}
-    \FSdruleInjDom{} \and
-    \FSdruleInjRan{}
-  \end{mathpar}
-\end{center}
-
-There are two rules one for the domain types and a second for the range types.  The second rule 
-may seem a bit strange especially the second premise, because we are substiuting a value $v$ for
-two free variables of possibily different types.  This is however okay, because from the premises
-of $\FSdrulename{InjRan}$ and $\FSdrulename{InjDom}$ and $\FSdrulename{Conv}$ it is easy to
-conclude that $\Gamma \tvdash{\theta} v:e'_1$.  By $\FSdrulename{InjDom}$, 
-$\Gamma \tvdash{L} injdom:e_1 = e'_1$ and clearly $\Gamma \tvdash{\theta} e_1$ is equivalent to 
-$\Gamma \tvdash{\theta} [e_1/x]x$.  Thus by $\FSdrulename{Conv}$,
-$\Gamma \tvdash{\theta} [e'_1/x]x$, which is equivalent to
-$\Gamma \tvdash{\theta} v:e'_1$.  So $\FSdrulename{InjRan}$ does seem
-to be sound.
-
-\begin{center}
-  \begin{mathpar}
-    \FSdruleAbort{}       \and
-    \FSdruleContra{}      \and
-    \FSdruleContraAbort{}
-  \end{mathpar}
-\end{center}
-
 
 \begin{center}
   \begin{mathpar}                                         

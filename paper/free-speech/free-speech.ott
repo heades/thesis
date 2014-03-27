@@ -1,4 +1,4 @@
-metavar var, b , x, y, z, f, g, u, p ::=
+metavar var, b , a, x, y, z, f, g, u, p ::=
 
 metavar cvar, c {{ tex \mathsf{c} }} ::=
   
