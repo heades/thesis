@@ -1,20 +1,18 @@
-\subsection{The inversion lemma}
-\label{subsec:the_inversion_lemma}
-Our initial definition of the inversion lemma is as follows:
-\ \\
-\begin{lemma}[]
-  \label{lemma:orig_inversion}
-  If $\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}$ then
-  $\Gamma,x:^\theta e_1 \tvdash{\theta'} e:e_2$.
-\end{lemma}
-This definition has a counter example.  The main notion behind the counter example is the use of 
-an absurb assumption.  Let $\Gamma$ be $\Gamma', p:^L \nat = \arrowT{x}{L}{e_1}{+}{e_1}$.  Then
-$\Gamma \tvdash{L} \lambda x.e:[\nat/y]y$ and 
-$\Gamma \tvdash{L} p:^L \nat = \arrowT{x}{L}{e_1}{+}{e_1}$, thus by $\FSdrulename{Conv}$
-$\Gamma \tvdash{L} \lambda x.e:[\arrowT{x}{L}{e_1}{+}{e_1}/y]y$.  We can rectify the situation by
-requiring a proof that the type of $\lambda x.e$ is equal to a $\Pi$-type.  The new lemma is 
-defined in Lemma~\ref{lemma:inversion}.
-\ \\
+In Chapter~\ref{chap:freedom_of_speech} we defined the Freedom of
+Speech language in its entirety.  We now introduce its analysis.  The
+main results consist of logical consistency of the logical fragment
+and type preservation.  The former is shown by proving weak
+normalization of the logical fragment -- the reader may wish to recall
+the definition of weak normalization; see
+Definition~\ref{def:weak_norm} of
+Chapter~\ref{chap:metatheory_of_programming_languages}.  The remainder
+of this chapter proceeds by first introducing some basic lemmas to
+which the main results will depend.  Then we prove type preservation,
+and following this we will prove weak normalization.
+
+\section{Basic Results}
+\label{sec:basic_results}
+
 \begin{lemma}[Inversion]
   \label{lemma:inversion}
   If $\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}$ 
@@ -63,7 +61,6 @@ defined in Lemma~\ref{lemma:inversion}.
     $p:(\arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}) = (\arrowT{x}{\theta}{a}{+}{b})$.
   \end{itemize}
 \end{proof}
-% subsection the_inversion_lemma (end)
 
 \begin{lemma}[Substitution]
   \label{lemma:substitution}
@@ -484,321 +481,6 @@ defined in Lemma~\ref{lemma:inversion}.
   \end{itemize}
 \end{proof}
 
-\begin{thm}[Preservation]
-  \label{thm:preservation}
-  If $\Gamma \tvdash{\theta} e:e_1$ and $e \redto e'$ then $\Gamma \tvdash{\theta} e':e_1$.
-\end{thm}
-\begin{proof}
-  We proceed by induction on the assumed typing derivation and only consider non-vacuous 
-  cases.  We will implicitly assume $e \redto e'$ in each case.
-
-  \begin{itemize}
-  \item[Case.]\ \\
-    \begin{center}
-      $\FSdruleAppPiTerm{}$
-    \end{center}
-    We have two cases to consider either $e \redto e'$ or $e \equiv \lambda x.e'$
-    and $e\ v \redto [v/x]e'$.  Consider the former, by the induction hypothesis, if 
-    $e \redto e'$ then 
-    $\Gamma \tvdash{L} e':\arrowT{x}{\theta}{e_1}{+}{e_2}$.  Now by applying the same
-    rule, $\Gamma \tvdash{L} e'\ v:[v/x]e_2$.
-    
-    \noindent
-    Now suppose the latter, by assumption we know $\Gamma \tvdash{\theta} v:e_1$ and
-    $\Gamma \tvdash{L} \lambda x.e':\arrowT{x}{\theta}{e_1}{+}{e_2}$. By the Inversion Lemma, 
-    $\Gamma,x:^\theta e_1 \tvdash{L} e':e_2$.  Thus, by Lemma~\ref{lemma:substitution},
-    $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
-
-  \item[Case.]\ \\
-    \begin{center}
-      $\FSdruleAppAllTerm{}$
-    \end{center}
-    By the induction hypothesis, if $e \redto e'$ then 
-    $\Gamma \tvdash{L} e':\arrowT{x}{\theta}{e_1}{-}{e_2}$.  Thus, by applying 
-    $\FSdrulename{AppAllTerm}$, $\Gamma \tvdash{L} e':[v/x]e_2$.
-    
-  \item[Case.]\ \\
-    \begin{center}
-      $\FSdruleConv{}$
-    \end{center}
-    By the induction hypothesis, if $e \redto e''$ then $\Gamma \tvdash{\theta} e'':[e_1/x]e_2$.
-    By applying $\FSdrulename{Conv}$, $\Gamma \tvdash{\theta} e'':[e'_1/x]e_2$.
-
-  \item[Case.]\ \\
-    \begin{center}
-      $\FSdruleCoerce{}$
-    \end{center}
-    By the induction hypothesis, if $e \redto e'$ then $\Gamma \tvdash{L} e':e_1$ and by applying
-    $\FSdrulename{Coerce}$, $\Gamma \tvdash{P} e':e_1$.
-    
-  \item[Case.]\ \\
-    \begin{center}
-      $\FSdruleRec{}$
-    \end{center}
-    By the induction hypothesis, if $e \redto e'$ then 
-    $\Gamma, f:^\theta \arrowT{x}{\theta'}{e_1}{+}{e_2},x:^{\theta'} e_1 \tvdash{\theta} e':e_2$ 
-    and by applying $\FSdrulename{Rec}$,
-    $\Gamma \tvdash{P} \rec{f}{x}{e'}:\arrowT{x}{\theta'}{e_1}{+}{e_2}$.
-  \end{itemize}
-\end{proof}
-
-% subsection type_preservation (end)
-
-\subsection{Logical consistency}
-\label{subsec:logical_consistency}
-
-\subsubsection{Interpretation of types}
-\label{subsec:interpretation_of_types}
-
-\begin{definition}
-  \label{def:FS-interp}
-  Let $J = \{e\ |\ e \join join \vee e \join injdom \vee e \join injran\}$.  We define the 
-interpretation of types as follows:\\
-
-\begin{center}
-  \begin{tabular}{lll}
-    $e \in \interp{\nat}^{L}_\rho$ if and only if\\
-    \begin{tabular}{lll}
-      -- $[[. |- e:Nat L]]$ \\
-      -- $e \in N = \{e'\ |\ e' \normto [[S]]^n\ [[Z]]\ where \ n \in \nat\}$\\
-    \end{tabular}    \\
-    \\
-    $e \in \interp{[[(x : th e1) + -> e2]]}^{L}_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $[[. |- e : (x : th r e1) + -> r e2 L]]$ \\
-      -- $[[. |- r ((x : th e1) + -> e2):Type th]]$ \\
-      -- $e \in V$\\
-      -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$
-    \end{tabular}\\
-    \\
-    $e \in \interp{\arrowT{x}{\theta}{e_1}{-}{e_2}}^{L}_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $[[. |- e : (x : th r e1) - -> r e2 L]]$ \\
-      -- $[[.  |- r ((x : th e1) - -> e2):Type th]]$ \\ 
-      -- $e \in V$ \\
-      -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e \in \interp{e_2}^L_{\rho[x \mapsto e']}$\\
-    \end{tabular}\\
-    \\
-    $e \in \interp{e_1 = e_2}^{L}_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $\cdot \tvdash{L} e:\rho\ e_1 = \rho\ e_2$ \\
-      -- $\cdot \tvdash{\theta} \rho\ (e_1 = e_2):Type$\\
-      -- $e \in J$\\
-      -- $\rho\ e_1 \join \rho\ e_2$\\
-    \end{tabular}\\
-    \\
-    $e \in \interp{e'}^P_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $\cdot \tvdash{P} e:\rho\ e'$ \\
-      -- $\cdot \tvdash{\theta} \rho\ e':Type$\\
-      -- $e \in V$
-    \end{tabular}
-  \end{tabular}
-\end{center}
-\end{definition}
-
-% subsection interpretation_of_types (end)
-
-\subsubsection{Critical properties}
-\label{subsec:critical_properties}
-
-We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
-\ \\
-\begin{lemma}[$\CRI$]
-  \label{lemma:cri}
-  If $t \in \interp{e}^\theta_\rho$ then $t$ is closed and $t \in V$.
-\end{lemma}
-\begin{proof}
-  Trivial.
-\end{proof}
-
-\begin{lemma}[$\CRII$]
-  \label{lemma:crii}
-  If $t \in \interp{e}^\theta_\rho$ and $t \redto t'$ then $t' \in \interp{e}^\theta_\rho$
-\end{lemma}
-\begin{proof}
-  This is a proof by structural induction on $e$.  By assumption we know 
-  $\cdot \tvdash{\theta} \rho\ e:Type$, for each case below.  Hence, we assume this for
-  the remainder of the proof.  In each of the function-type cases below we 
-  assume $t \redto t'$, and $t' \in V$, because in each case $t \in V$.  We have two cases
-  to consider when $\theta = L$ and when $\theta = P$.  The latter is trivial so we only
-  consider the former.
-
-  \begin{itemize}
-  \item[Case.] Let $e \equiv \nat$.  
-    Suppose $t \in \interp{\nat}^L_\rho$.  Then by the definition of the 
-    interpretation of types, $t \in N$ and $t$ is closed.  Since CBV is deterministic,
-    if $t \redto t'$ then $t' \in N$, and $t$ being closed implies $t'$ is closed.  At this
-    point we still need show that $\cdot \tvdash{L} t':\nat$.  This easily follows from
-    type preservation. Thus, $t' \in \interp{\nat}^L_\rho$.
-
-  \item[Case.] Let $e \equiv (x :^\theta e_1)^+ \rightarrow e_2$.    
-    Suppose $t \in \interp{e}^L_\rho$.  By the definition of the interpretation of types we know 
-    for all $e' \in \interp{e_1}^\theta_\rho$, we have 
-    $t\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$.  
-    Let $e'' \in \interp{e_1}^\theta_\rho$.  By the definition of left-to-right CBV, 
-    $t\ e'' \redto t'\ e''$.  By the induction hypothesis, 
-    $t'\ e'' \in \interp{e_2}^L_{\rho[x \mapsto e'']}$.  Now we need to show
-    $\cdot \tvdash{L} t':(x :^\theta \rho\ e_1)^+ \rightarrow \rho\ e_2$.  This easly follows
-    from type preservation.  Thus, by the definition 
-    of the interpretation of types, $t' \in \interp{e}^L_{\rho}$, because $e''$ is arbitrary.
-    
-  \item[Case.] Let $e \equiv (x :^\theta e_1)^- \to e_2$.
-    Suppose $t \in \interp{e}^L_\rho$.  By type preservation we know 
-    $\cdot \tvdash{L} t':(x :^\theta \rho\ e_1)^- \to \rho\ e_2$.
-    Let $u \in \interp{e_1}^\theta_\rho$. Then 
-    $t \in \interp{e_2}^L_{\rho[x \mapsto u]}$.  By the induction hypothesis,
-    $t' \in \interp{e_2}^L_{\rho[x \mapsto u]}$.  Thus, by the definition
-    of the interpretation of types, $t' \in \interp{e}^L_\rho$.
-      
-  \item[Case.] Let $e \equiv e_1 = e_2$ and $t \in \interp{e}^L_\rho$.  
-    By type preservation we know 
-    $\cdot \tvdash{L} t':\rho\ e_1 = \rho\ e_2$.  By the definition of the 
-    interpretation of types, $t \in V$, $\rho\ e_1 \join \rho\ e_2$, hence, 
-    $t' \in V$, because $t \redto t'$.  Thus, again by the definition 
-    of the interpretation of types, $t' \in \interp{e}^L_\rho$.    
-  \end{itemize}
-\end{proof}
-
-\begin{lemma}[$\CRIII$]
-  \label{lemma:criii}
-  If $t \redto t'$, $\cdot \tvdash{L} t:\rho\ e$, and $t' \in \interp{e}^L_\rho$ 
-  then $t \in \interp{e}^L_\rho$.
-\end{lemma}
-\begin{proof}
-  This is a proof by structural induction on $e$.  
-  By assumption we know $\cdot \tvdash{\theta} \rho\ e:Type$, for each case below.  Hence, we 
-  assume this for the remainder of the proof.  In each of the cases below we assume
-  $t \redto t'$, $t$ is closed, and $t' \in \interp{e}^L_\rho$ and in the function-type cases we 
-  assume $t \in V$, because in each case $t' \in V$.  By assumption $t$ has the required type,
-  thus we omit this assumption from the remainder of the proof.
-
-  \begin{itemize}
-  \item[Case.] Let $e \equiv \nat$.  
-    By the definition of the interpretation of types we know
-    $t' \in N$ and $t'$ is closed.  Now since CBV is deterministic and $t \redto t'$ we know
-    $t \in N$.  Thus, $t \in \interp{\nat}^L_\rho$.
-
-  \item[Case.] Let $e \equiv (x :^\theta e_1)^+ \rightarrow e_2$.    
-    By the definition of the interpretation of types,
-    for all $e' \in \interp{e_1}^\theta_\rho$, we have 
-    $t'\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$.
-    Let $e'' \in \interp{e_1}^\theta_\rho$.  By the definition of left-to-right 
-    CBV, $t\ e'' \redto t'\ e''$ and by the induction hypothesis, 
-    $t\ e'' \in \interp{e_2}^L_{\rho[x \mapsto e'']}$.  By the definition of the interpretation of
-    types, $t \in \interp{e}^L_{\rho}$.
-
-  \item[Case.] Let $e \equiv (x :^\theta e_1)^- \to e_2$ and $u \in \interp{e_1}^\theta_\rho$.  
-    Then $t' \in \interp{e_2}^L_{\rho[x \mapsto u]}$.  By the 
-    induction hypothesis, $t \in \interp{e_2}^L_{\rho[x \mapsto u]}$, thus, by
-    the definition of the interpretation of types, $t \in \interp{e}^L_\rho$.
-
-  \item[Case.] Let $e \equiv e_1 = e_2$.
-    By the definition of the interpretation of types, $t' \in V$,
-    $\rho\ e_1 \join \rho\ e_2$, hence, $t \in V$, because 
-    $t \redto t'$.  Therefore, 
-    by the definition of the interpretation of types, $t \in \interp{e}^L_\rho$.
-  \end{itemize}
-\end{proof}
-% subsection critical_properties (end)
-
-\subsubsection{Type soundness}
-\label{subsec:type_soundness}
-
-\begin{figure}[t]
-  \begin{center}
-    \begin{tabular}{ccc}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [] {\ \\}{
-          \emptyset \in \interp{\cdot}
-        }
-      \end{math}
-       & & 
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule*[]{
-          \Gamma \tvdash{L} e':Type
-          \\
-          \rho \in \interp{\Gamma}
-          \\
-          e \in \interp{e'}^L_\rho
-        }{\rho \cup \{(x,e)\} \in \interp{\Gamma,x:^L e'}}
-      \end{math}
-      \\
-      & & \\
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule*[]{
-          \Gamma \tvdash{P} e':Type
-          \\
-          \rho \in \interp{\Gamma}
-          \\
-          v \in \interp{e'}^P_\rho
-        }{\rho \cup \{(x,v)\} \in \interp{\Gamma,x:^P e'}}
-      \end{math}
-      & &\\
-    \end{tabular}  
-  \end{center}
-  \caption{Well-formed substitutions}
-\end{figure}
-
-\begin{lemma}[Kinding conversion]
-  \label{lemma:kinding_conversion}
-  If $\Gamma \tvdash{\theta} [a/y]b:Type$ and $\Gamma \tvdash{L} p:a = a'$ then
-  $\Gamma \tvdash{\theta} [a'/y]b:Type$.
-\end{lemma}
-\begin{proof}
-  This is a proof by induction on the form of the assumed kinding derivation.
-  \begin{itemize}
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXType{}$ 
-    \end{center}
-    Trivial.
-    
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXNat{}$
-    \end{center}
-    Trivial.
-    
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXPi{}$
-    \end{center}
-    We first consider when $\theta \equiv P$ and $b \equiv y$ where $y$ is a variable.  Then
-    $[a/y]y \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$ and 
-    $a \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$.  Clearly, if 
-    $\Gamma \tvdash{P} [a/y]y:Type$ then $\Gamma, y:^P Type \tvdash{P} y:^P Type$.  By
-    the substitution lemma, $\Gamma \tvdash{P} [a'/y]y:Type$.
-
-    Now we consider when $\theta$ is arbitrary and 
-    $b \equiv \arrowT{x}{\theta'}{r}{\epsilon}{s}$.
-    Then $[a/y]b \equiv \arrowT{x}{\theta'}{[a/y]r}{\epsilon}{[a/y]s}$.  Here we can see that
-    $e_1 \equiv [a/y]r$ and $e_2 \equiv [a/y]s$ so by the induction 
-    hypothesis, $\Gamma \tvdash{\theta} [a'/y]r:Type$ and 
-    $\Gamma, x:^{\theta'} [a/y]r \tvdash{\theta} [a'/y]s:Type$.  Finally, by applying 
-    $\FSdrulename{K\_Pi}$, 
-    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{[a'/y]r}{\epsilon}{[a'/y]s}:Type$ which is 
-    equivalent to 
-    $\Gamma \tvdash{\theta} [a'/y](\arrowT{x}{\theta'}{r}{\epsilon}{s}):Type$.
-  
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXEq{}$
-    \end{center}
-  \end{itemize}
-  Since we are dealing with a stricly logical type $b$ cannot be a variable.  Hence, 
-  $b \equiv r = s$, $[a/y]b \equiv [a/y]r = [a/y]s$, $e \equiv [a/y]r$ and $e' \equiv [a/y]s$.
-  By assumption we know $\Gamma \tvdash{\theta_1} [a/y]r:e_1$ and 
-  $\Gamma \tvdash{\theta_2} [a/y]s:e_2$.  Using $\FSdrulename{Conv}$ and 
-  $\Gamma \tvdash{L} p:a = a'$ we obtain $\Gamma \tvdash{\theta_1} [a'/y]r:e_1$ and 
-  $\Gamma \tvdash{\theta_2} [a'/y]s:e_2$.  Finally, by applying $\FSdrulename{K\_Eq}$,
-  $\Gamma \tvdash{L} [a'/y]r = [a'/y]s:Type$.  Since $[a'/y]r = [a'/y]s \equiv 
-  [a'/y](r = s) \equiv [a'/y]b$ we can conclude $\Gamma \tvdash{L} [a'/y]b:Type$.
-\end{proof}
-
 \begin{lemma}[Regularity]
   \label{lemma:regularity}
   If $\Gamma \tvdash{\theta} e':e$ then $\Gamma \tvdash{\theta} e:Type$.
@@ -972,6 +654,312 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
     $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{e_1}{+}{e_2}:Type$.
 
   \end{itemize}
+\end{proof}
+% section basic_results (end)
+
+\section{Type Preservation}
+\label{sec:type_preservation}
+
+\begin{thm}[Preservation]
+  \label{thm:preservation}
+  If $\Gamma \tvdash{\theta} e:e_1$ and $e \redto e'$ then $\Gamma \tvdash{\theta} e':e_1$.
+\end{thm}
+\begin{proof}
+  We proceed by induction on the assumed typing derivation and only consider non-vacuous 
+  cases.  We will implicitly assume $e \redto e'$ in each case.
+
+  \begin{itemize}
+  \item[Case.]\ \\
+    \begin{center}
+      $\FSdruleAppPiTerm{}$
+    \end{center}
+    We have two cases to consider either $e \redto e'$ or $e \equiv \lambda x.e'$
+    and $e\ v \redto [v/x]e'$.  Consider the former, by the induction hypothesis, if 
+    $e \redto e'$ then 
+    $\Gamma \tvdash{L} e':\arrowT{x}{\theta}{e_1}{+}{e_2}$.  Now by applying the same
+    rule, $\Gamma \tvdash{L} e'\ v:[v/x]e_2$.
+    
+    \noindent
+    Now suppose the latter, by assumption we know $\Gamma \tvdash{\theta} v:e_1$ and
+    $\Gamma \tvdash{L} \lambda x.e':\arrowT{x}{\theta}{e_1}{+}{e_2}$. By the Inversion Lemma, 
+    $\Gamma,x:^\theta e_1 \tvdash{L} e':e_2$.  Thus, by Lemma~\ref{lemma:substitution},
+    $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
+
+  \item[Case.]\ \\
+    \begin{center}
+      $\FSdruleAppAllTerm{}$
+    \end{center}
+    By the induction hypothesis, if $e \redto e'$ then 
+    $\Gamma \tvdash{L} e':\arrowT{x}{\theta}{e_1}{-}{e_2}$.  Thus, by applying 
+    $\FSdrulename{AppAllTerm}$, $\Gamma \tvdash{L} e':[v/x]e_2$.
+    
+  \item[Case.]\ \\
+    \begin{center}
+      $\FSdruleConv{}$
+    \end{center}
+    By the induction hypothesis, if $e \redto e''$ then $\Gamma \tvdash{\theta} e'':[e_1/x]e_2$.
+    By applying $\FSdrulename{Conv}$, $\Gamma \tvdash{\theta} e'':[e'_1/x]e_2$.
+
+  \item[Case.]\ \\
+    \begin{center}
+      $\FSdruleCoerce{}$
+    \end{center}
+    By the induction hypothesis, if $e \redto e'$ then $\Gamma \tvdash{L} e':e_1$ and by applying
+    $\FSdrulename{Coerce}$, $\Gamma \tvdash{P} e':e_1$.
+    
+  \item[Case.]\ \\
+    \begin{center}
+      $\FSdruleRec{}$
+    \end{center}
+    By the induction hypothesis, if $e \redto e'$ then 
+    $\Gamma, f:^\theta \arrowT{x}{\theta'}{e_1}{+}{e_2},x:^{\theta'} e_1 \tvdash{\theta} e':e_2$ 
+    and by applying $\FSdrulename{Rec}$,
+    $\Gamma \tvdash{P} \rec{f}{x}{e'}:\arrowT{x}{\theta'}{e_1}{+}{e_2}$.
+  \end{itemize}
+\end{proof}
+% section type_preservation (end)
+
+\section{Logical consistency}
+\label{sec:logical_consistency}
+
+\begin{definition}
+  \label{def:FS-interp}
+  Let $J = \{e\ |\ e \join join \vee e \join injdom \vee e \join injran\}$.  We define the 
+interpretation of types as follows:\\
+
+\begin{center}
+  \begin{tabular}{lll}
+    $e \in \interp{\nat}^{L}_\rho$ if and only if\\
+    \begin{tabular}{lll}
+      -- $[[. |- e:Nat L]]$ \\
+      -- $e \in N = \{e'\ |\ e' \normto [[S]]^n\ [[Z]]\ where \ n \in \nat\}$\\
+    \end{tabular}    \\
+    \\
+    $e \in \interp{[[(x : th e1) + -> e2]]}^{L}_\rho$ if and only if \\
+    \begin{tabular}{lll}
+      -- $[[. |- e : (x : th r e1) + -> r e2 L]]$ \\
+      -- $[[. |- r ((x : th e1) + -> e2):Type th]]$ \\
+      -- $e \in V$\\
+      -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$
+    \end{tabular}\\
+    \\
+    $e \in \interp{\arrowT{x}{\theta}{e_1}{-}{e_2}}^{L}_\rho$ if and only if \\
+    \begin{tabular}{lll}
+      -- $[[. |- e : (x : th r e1) - -> r e2 L]]$ \\
+      -- $[[.  |- r ((x : th e1) - -> e2):Type th]]$ \\ 
+      -- $e \in V$ \\
+      -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e \in \interp{e_2}^L_{\rho[x \mapsto e']}$\\
+    \end{tabular}\\
+    \\
+    $e \in \interp{e_1 = e_2}^{L}_\rho$ if and only if \\
+    \begin{tabular}{lll}
+      -- $\cdot \tvdash{L} e:\rho\ e_1 = \rho\ e_2$ \\
+      -- $\cdot \tvdash{\theta} \rho\ (e_1 = e_2):Type$\\
+      -- $e \in J$\\
+      -- $\rho\ e_1 \join \rho\ e_2$\\
+    \end{tabular}\\
+    \\
+    $e \in \interp{e'}^P_\rho$ if and only if \\
+    \begin{tabular}{lll}
+      -- $\cdot \tvdash{P} e:\rho\ e'$ \\
+      -- $\cdot \tvdash{\theta} \rho\ e':Type$\\
+      -- $e \in V$
+    \end{tabular}
+  \end{tabular}
+\end{center}
+\end{definition}
+
+We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
+\ \\
+\begin{lemma}[$\CRI$]
+  \label{lemma:cri}
+  If $t \in \interp{e}^\theta_\rho$ then $t$ is closed and $t \in V$.
+\end{lemma}
+\begin{proof}
+  Trivial.
+\end{proof}
+
+\begin{lemma}[$\CRII$]
+  \label{lemma:crii}
+  If $t \in \interp{e}^\theta_\rho$ and $t \redto t'$ then $t' \in \interp{e}^\theta_\rho$
+\end{lemma}
+\begin{proof}
+  This is a proof by structural induction on $e$.  By assumption we know 
+  $\cdot \tvdash{\theta} \rho\ e:Type$, for each case below.  Hence, we assume this for
+  the remainder of the proof.  In each of the function-type cases below we 
+  assume $t \redto t'$, and $t' \in V$, because in each case $t \in V$.  We have two cases
+  to consider when $\theta = L$ and when $\theta = P$.  The latter is trivial so we only
+  consider the former.
+
+  \begin{itemize}
+  \item[Case.] Let $e \equiv \nat$.  
+    Suppose $t \in \interp{\nat}^L_\rho$.  Then by the definition of the 
+    interpretation of types, $t \in N$ and $t$ is closed.  Since CBV is deterministic,
+    if $t \redto t'$ then $t' \in N$, and $t$ being closed implies $t'$ is closed.  At this
+    point we still need show that $\cdot \tvdash{L} t':\nat$.  This easily follows from
+    type preservation. Thus, $t' \in \interp{\nat}^L_\rho$.
+
+  \item[Case.] Let $e \equiv (x :^\theta e_1)^+ \rightarrow e_2$.    
+    Suppose $t \in \interp{e}^L_\rho$.  By the definition of the interpretation of types we know 
+    for all $e' \in \interp{e_1}^\theta_\rho$, we have 
+    $t\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$.  
+    Let $e'' \in \interp{e_1}^\theta_\rho$.  By the definition of left-to-right CBV, 
+    $t\ e'' \redto t'\ e''$.  By the induction hypothesis, 
+    $t'\ e'' \in \interp{e_2}^L_{\rho[x \mapsto e'']}$.  Now we need to show
+    $\cdot \tvdash{L} t':(x :^\theta \rho\ e_1)^+ \rightarrow \rho\ e_2$.  This easly follows
+    from type preservation.  Thus, by the definition 
+    of the interpretation of types, $t' \in \interp{e}^L_{\rho}$, because $e''$ is arbitrary.
+    
+  \item[Case.] Let $e \equiv (x :^\theta e_1)^- \to e_2$.
+    Suppose $t \in \interp{e}^L_\rho$.  By type preservation we know 
+    $\cdot \tvdash{L} t':(x :^\theta \rho\ e_1)^- \to \rho\ e_2$.
+    Let $u \in \interp{e_1}^\theta_\rho$. Then 
+    $t \in \interp{e_2}^L_{\rho[x \mapsto u]}$.  By the induction hypothesis,
+    $t' \in \interp{e_2}^L_{\rho[x \mapsto u]}$.  Thus, by the definition
+    of the interpretation of types, $t' \in \interp{e}^L_\rho$.
+      
+  \item[Case.] Let $e \equiv e_1 = e_2$ and $t \in \interp{e}^L_\rho$.  
+    By type preservation we know 
+    $\cdot \tvdash{L} t':\rho\ e_1 = \rho\ e_2$.  By the definition of the 
+    interpretation of types, $t \in V$, $\rho\ e_1 \join \rho\ e_2$, hence, 
+    $t' \in V$, because $t \redto t'$.  Thus, again by the definition 
+    of the interpretation of types, $t' \in \interp{e}^L_\rho$.    
+  \end{itemize}
+\end{proof}
+
+\begin{lemma}[$\CRIII$]
+  \label{lemma:criii}
+  If $t \redto t'$, $\cdot \tvdash{L} t:\rho\ e$, and $t' \in \interp{e}^L_\rho$ 
+  then $t \in \interp{e}^L_\rho$.
+\end{lemma}
+\begin{proof}
+  This is a proof by structural induction on $e$.  
+  By assumption we know $\cdot \tvdash{\theta} \rho\ e:Type$, for each case below.  Hence, we 
+  assume this for the remainder of the proof.  In each of the cases below we assume
+  $t \redto t'$, $t$ is closed, and $t' \in \interp{e}^L_\rho$ and in the function-type cases we 
+  assume $t \in V$, because in each case $t' \in V$.  By assumption $t$ has the required type,
+  thus we omit this assumption from the remainder of the proof.
+
+  \begin{itemize}
+  \item[Case.] Let $e \equiv \nat$.  
+    By the definition of the interpretation of types we know
+    $t' \in N$ and $t'$ is closed.  Now since CBV is deterministic and $t \redto t'$ we know
+    $t \in N$.  Thus, $t \in \interp{\nat}^L_\rho$.
+
+  \item[Case.] Let $e \equiv (x :^\theta e_1)^+ \rightarrow e_2$.    
+    By the definition of the interpretation of types,
+    for all $e' \in \interp{e_1}^\theta_\rho$, we have 
+    $t'\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$.
+    Let $e'' \in \interp{e_1}^\theta_\rho$.  By the definition of left-to-right 
+    CBV, $t\ e'' \redto t'\ e''$ and by the induction hypothesis, 
+    $t\ e'' \in \interp{e_2}^L_{\rho[x \mapsto e'']}$.  By the definition of the interpretation of
+    types, $t \in \interp{e}^L_{\rho}$.
+
+  \item[Case.] Let $e \equiv (x :^\theta e_1)^- \to e_2$ and $u \in \interp{e_1}^\theta_\rho$.  
+    Then $t' \in \interp{e_2}^L_{\rho[x \mapsto u]}$.  By the 
+    induction hypothesis, $t \in \interp{e_2}^L_{\rho[x \mapsto u]}$, thus, by
+    the definition of the interpretation of types, $t \in \interp{e}^L_\rho$.
+
+  \item[Case.] Let $e \equiv e_1 = e_2$.
+    By the definition of the interpretation of types, $t' \in V$,
+    $\rho\ e_1 \join \rho\ e_2$, hence, $t \in V$, because 
+    $t \redto t'$.  Therefore, 
+    by the definition of the interpretation of types, $t \in \interp{e}^L_\rho$.
+  \end{itemize}
+\end{proof}
+
+\begin{figure}[t]
+  \begin{center}
+    \begin{tabular}{ccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [] {\ \\}{
+          \emptyset \in \interp{\cdot}
+        }
+      \end{math}
+       & & 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule*[]{
+          \Gamma \tvdash{L} e':Type
+          \\
+          \rho \in \interp{\Gamma}
+          \\
+          e \in \interp{e'}^L_\rho
+        }{\rho \cup \{(x,e)\} \in \interp{\Gamma,x:^L e'}}
+      \end{math}
+      \\
+      & & \\
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule*[]{
+          \Gamma \tvdash{P} e':Type
+          \\
+          \rho \in \interp{\Gamma}
+          \\
+          v \in \interp{e'}^P_\rho
+        }{\rho \cup \{(x,v)\} \in \interp{\Gamma,x:^P e'}}
+      \end{math}
+      & &\\
+    \end{tabular}  
+  \end{center}
+  \caption{Well-formed substitutions}
+\end{figure}
+
+\begin{lemma}[Kinding conversion]
+  \label{lemma:kinding_conversion}
+  If $\Gamma \tvdash{\theta} [a/y]b:Type$ and $\Gamma \tvdash{L} p:a = a'$ then
+  $\Gamma \tvdash{\theta} [a'/y]b:Type$.
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the form of the assumed kinding derivation.
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      $\FSdruleKXXType{}$ 
+    \end{center}
+    Trivial.
+    
+  \item[Case.] \ \\
+    \begin{center}
+      $\FSdruleKXXNat{}$
+    \end{center}
+    Trivial.
+    
+  \item[Case.] \ \\
+    \begin{center}
+      $\FSdruleKXXPi{}$
+    \end{center}
+    We first consider when $\theta \equiv P$ and $b \equiv y$ where $y$ is a variable.  Then
+    $[a/y]y \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$ and 
+    $a \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$.  Clearly, if 
+    $\Gamma \tvdash{P} [a/y]y:Type$ then $\Gamma, y:^P Type \tvdash{P} y:^P Type$.  By
+    the substitution lemma, $\Gamma \tvdash{P} [a'/y]y:Type$.
+
+    Now we consider when $\theta$ is arbitrary and 
+    $b \equiv \arrowT{x}{\theta'}{r}{\epsilon}{s}$.
+    Then $[a/y]b \equiv \arrowT{x}{\theta'}{[a/y]r}{\epsilon}{[a/y]s}$.  Here we can see that
+    $e_1 \equiv [a/y]r$ and $e_2 \equiv [a/y]s$ so by the induction 
+    hypothesis, $\Gamma \tvdash{\theta} [a'/y]r:Type$ and 
+    $\Gamma, x:^{\theta'} [a/y]r \tvdash{\theta} [a'/y]s:Type$.  Finally, by applying 
+    $\FSdrulename{K\_Pi}$, 
+    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{[a'/y]r}{\epsilon}{[a'/y]s}:Type$ which is 
+    equivalent to 
+    $\Gamma \tvdash{\theta} [a'/y](\arrowT{x}{\theta'}{r}{\epsilon}{s}):Type$.
+  
+  \item[Case.] \ \\
+    \begin{center}
+      $\FSdruleKXXEq{}$
+    \end{center}
+  \end{itemize}
+  Since we are dealing with a stricly logical type $b$ cannot be a variable.  Hence, 
+  $b \equiv r = s$, $[a/y]b \equiv [a/y]r = [a/y]s$, $e \equiv [a/y]r$ and $e' \equiv [a/y]s$.
+  By assumption we know $\Gamma \tvdash{\theta_1} [a/y]r:e_1$ and 
+  $\Gamma \tvdash{\theta_2} [a/y]s:e_2$.  Using $\FSdrulename{Conv}$ and 
+  $\Gamma \tvdash{L} p:a = a'$ we obtain $\Gamma \tvdash{\theta_1} [a'/y]r:e_1$ and 
+  $\Gamma \tvdash{\theta_2} [a'/y]s:e_2$.  Finally, by applying $\FSdrulename{K\_Eq}$,
+  $\Gamma \tvdash{L} [a'/y]r = [a'/y]s:Type$.  Since $[a'/y]r = [a'/y]s \equiv 
+  [a'/y](r = s) \equiv [a'/y]b$ we can conclude $\Gamma \tvdash{L} [a'/y]b:Type$.
 \end{proof}
 
 \begin{lemma}[Computational Semantic Conversion]
@@ -1927,5 +1915,9 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
   $\interp{\arrowT{x}{L}{\nat}{-}{e_2}}^L_\rho$.
 \end{itemize}
 \end{proof}
-% subsection type_soundness (end)
-% subsection logical_consistency (end)
+% section logical_consistency (end)
+
+%%% Local Variables: ***
+%%% mode: latex ***
+%%% TeX-master: "thesis.tex" ***
+%%% End: ***
