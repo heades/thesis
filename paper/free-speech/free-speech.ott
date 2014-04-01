@@ -13,7 +13,7 @@ sgn, ep {{tex \varepsilon}} :: 'sgn_' ::= {{ com compile time versus run time }}
   | + :: :: Plus
   | - :: :: Minus
 
-exp, e :: 'e_' ::=
+exp, e, t :: 'e_' ::=
   | x                    ::   :: Var
   | Type                 ::   :: Type {{ tex [[Type]] }}
   | ( x : th e1 ) ep -> e2  ::   :: arrow (+ bind x in e2 +)
