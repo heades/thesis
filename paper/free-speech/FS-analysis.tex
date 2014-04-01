@@ -13,14 +13,61 @@ and following this we will prove weak normalization.
 \section{Basic Results}
 \label{sec:basic_results}
 The main results depend on several auxiliary results, and we present
-each of them in this section.  The first is regularity, which
-insures that if an expression has a type, then its type is well typed.
-Recall that in the logical fragment $[[Type]] : [[Type]]$ does not hold, thus
-if $[[e]]$ is joinable with $[[Type]]$, then $[[G |- e' : e L]]$ does
-not imply that $[[G |- e : Type L]]$.  However, this does hold in the
-programmatic fragment.  Therefore, regularity has the following
-statement and proof.
+each of them in this section.  The first basic result is kinding
+conversion.  This is allows the substitution of equals for equals in
+types.  This result is needed in the proof of the second basic result,
+regularity.
+\begin{lemma}[Kinding conversion]
+  \label{lemma:kinding_conversion}
+  If $\Gamma \tvdash{\theta} [a/y]b:[[Type]]$ and $\Gamma \tvdash{L} p:a = a'$ then
+  $\Gamma \tvdash{\theta} [a'/y]b:[[Type]]$.
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the form of the assumed typing
+  derivation; we only give non-trivial cases.
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      $\FSdruleKXXPi{}$
+    \end{center}
+    We first consider when $\theta \equiv P$ and $b \equiv y$ where $y$ is a variable.  Then
+    $[a/y]y \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$ and 
+    $a \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$.  Clearly, if 
+    $\Gamma \tvdash{P} [a/y]y:[[Type]]$ then $\Gamma, y:^P [[Type]] \tvdash{P} y:^P [[Type]]$.  By
+    the substitution lemma, $\Gamma \tvdash{P} [a'/y]y:[[Type]]$.
 
+    Now we consider when $\theta$ is arbitrary and 
+    $b \equiv \arrowT{x}{\theta'}{r}{\epsilon}{s}$.
+    Then $[a/y]b \equiv \arrowT{x}{\theta'}{[a/y]r}{\epsilon}{[a/y]s}$.  Here we can see that
+    $e_1 \equiv [a/y]r$ and $e_2 \equiv [a/y]s$ so by the induction 
+    hypothesis, $\Gamma \tvdash{\theta} [a'/y]r:[[Type]]$ and 
+    $\Gamma, x:^{\theta'} [a/y]r \tvdash{\theta} [a'/y]s:[[Type]]$.  Finally, by applying 
+    $\FSdrulename{K\_Pi}$, 
+    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{[a'/y]r}{\epsilon}{[a'/y]s}:[[Type]]$ which is 
+    equivalent to 
+    $\Gamma \tvdash{\theta} [a'/y](\arrowT{x}{\theta'}{r}{\epsilon}{s}):[[Type]]$.
+  
+  \item[Case.] \ \\
+    \begin{center}
+      $\FSdruleKXXEq{}$
+    \end{center}
+  \end{itemize}
+  Since we are dealing with a stricly logical type $b$ cannot be a variable.  Hence, 
+  $b \equiv r = s$, $[a/y]b \equiv [a/y]r = [a/y]s$, $e \equiv [a/y]r$ and $e' \equiv [a/y]s$.
+  By assumption we know $\Gamma \tvdash{\theta_1} [a/y]r:e_1$ and 
+  $\Gamma \tvdash{\theta_2} [a/y]s:e_2$.  Using $\FSdrulename{Conv}$ and 
+  $\Gamma \tvdash{L} p:a = a'$ we obtain $\Gamma \tvdash{\theta_1} [a'/y]r:e_1$ and 
+  $\Gamma \tvdash{\theta_2} [a'/y]s:e_2$.  Finally, by applying $\FSdrulename{K\_Eq}$,
+  $\Gamma \tvdash{L} [a'/y]r = [a'/y]s:[[Type]]$.  Since $[a'/y]r = [a'/y]s \equiv 
+  [a'/y](r = s) \equiv [a'/y]b$ we can conclude $\Gamma \tvdash{L} [a'/y]b:[[Type]]$.
+\end{proof} 
+The second result is regularity, which insures that if an expression has a
+type, then its type is well typed.  Recall that in the logical
+fragment $[[Type]] : [[Type]]$ does not hold, thus if $[[e]]$ is
+joinable with $[[Type]]$, then $[[G |- e' : e L]]$ does not imply that
+$[[G |- e : Type L]]$.  However, this does hold in the programmatic
+fragment.  Therefore, regularity has the following statement and
+proof.
 \begin{lemma}[Regularity]
   \label{lemma:regularity}
   \begin{itemize}
@@ -205,8 +252,8 @@ statement and proof.
   \end{itemize}
 \end{proof}
 
-The second basic result is substitution for typing.  This states that
-if we know a term $[[e]]$ is well typed in an environment with a free
+Substitution for typing is the next result.  This states that if we
+know a term $[[e]]$ is well typed in an environment with a free
 variable $[[x]]$, and given a value $[[v]]$ with the same type as the
 free variable, then $[[ [v/x]e]]$ has the same type as $[[e]]$.  This
 is an important result for type preservation, because we want to
@@ -1000,62 +1047,6 @@ substitutions which are defined in Figure~\ref{fig:fs-wf-subs}.
     $t \redto t'$.  Therefore, 
     by the definition of the interpretation of types, $t \in \interp{e}^L_\rho$.
   \end{itemize}
-\end{proof}
-
-\begin{lemma}[Kinding conversion]
-  \label{lemma:kinding_conversion}
-  If $\Gamma \tvdash{\theta} [a/y]b:[[Type]]$ and $\Gamma \tvdash{L} p:a = a'$ then
-  $\Gamma \tvdash{\theta} [a'/y]b:[[Type]]$.
-\end{lemma}
-\begin{proof}
-  This is a proof by induction on the form of the assumed kinding derivation.
-  \begin{itemize}
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXType{}$ 
-    \end{center}
-    Trivial.
-    
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXNat{}$
-    \end{center}
-    Trivial.
-    
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXPi{}$
-    \end{center}
-    We first consider when $\theta \equiv P$ and $b \equiv y$ where $y$ is a variable.  Then
-    $[a/y]y \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$ and 
-    $a \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$.  Clearly, if 
-    $\Gamma \tvdash{P} [a/y]y:[[Type]]$ then $\Gamma, y:^P [[Type]] \tvdash{P} y:^P [[Type]]$.  By
-    the substitution lemma, $\Gamma \tvdash{P} [a'/y]y:[[Type]]$.
-
-    Now we consider when $\theta$ is arbitrary and 
-    $b \equiv \arrowT{x}{\theta'}{r}{\epsilon}{s}$.
-    Then $[a/y]b \equiv \arrowT{x}{\theta'}{[a/y]r}{\epsilon}{[a/y]s}$.  Here we can see that
-    $e_1 \equiv [a/y]r$ and $e_2 \equiv [a/y]s$ so by the induction 
-    hypothesis, $\Gamma \tvdash{\theta} [a'/y]r:[[Type]]$ and 
-    $\Gamma, x:^{\theta'} [a/y]r \tvdash{\theta} [a'/y]s:[[Type]]$.  Finally, by applying 
-    $\FSdrulename{K\_Pi}$, 
-    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{[a'/y]r}{\epsilon}{[a'/y]s}:[[Type]]$ which is 
-    equivalent to 
-    $\Gamma \tvdash{\theta} [a'/y](\arrowT{x}{\theta'}{r}{\epsilon}{s}):[[Type]]$.
-  
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXEq{}$
-    \end{center}
-  \end{itemize}
-  Since we are dealing with a stricly logical type $b$ cannot be a variable.  Hence, 
-  $b \equiv r = s$, $[a/y]b \equiv [a/y]r = [a/y]s$, $e \equiv [a/y]r$ and $e' \equiv [a/y]s$.
-  By assumption we know $\Gamma \tvdash{\theta_1} [a/y]r:e_1$ and 
-  $\Gamma \tvdash{\theta_2} [a/y]s:e_2$.  Using $\FSdrulename{Conv}$ and 
-  $\Gamma \tvdash{L} p:a = a'$ we obtain $\Gamma \tvdash{\theta_1} [a'/y]r:e_1$ and 
-  $\Gamma \tvdash{\theta_2} [a'/y]s:e_2$.  Finally, by applying $\FSdrulename{K\_Eq}$,
-  $\Gamma \tvdash{L} [a'/y]r = [a'/y]s:[[Type]]$.  Since $[a'/y]r = [a'/y]s \equiv 
-  [a'/y](r = s) \equiv [a'/y]b$ we can conclude $\Gamma \tvdash{L} [a'/y]b:[[Type]]$.
 \end{proof}
 
 \begin{lemma}[Computational Semantic Conversion]
