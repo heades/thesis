@@ -777,55 +777,134 @@ of type preservation.
 \section{Logical consistency}
 \label{sec:logical_consistency}
 
+One recurring statement throughout this thesis is that if we are to
+consider a type theory or programming language, or even a fragment of
+one as a logic, then that logic must be proven consistent.  We have to
+believe what it is telling us is true!  If consistency has not been
+shown, then neither the designer nor the programmer has the right to
+consider any part of the language as containing proofs or formulas.
+We have claimed that there is a logical fragment of freedom of speech,
+thus we must show that this fragment is consistent.  The proof of
+logical consistency is the topic of this section.
+
+We prove logical consistency using reducibility candidates first
+proposed by Girard.  For an overview of the reducibility method see
+Section~\ref{sec:tait-griard_reduciblity}.  We begin with the
+definition of the interpretation of types.
+
 \begin{definition}
   \label{def:FS-interp}
-  Let $J = \{e\ |\ e \join join \vee e \join injdom \vee e \join injran\}$.  We define the 
-interpretation of types as follows:\\
-
-\begin{center}
-  \begin{tabular}{lll}
-    $e \in \interp{\nat}^{L}_\rho$ if and only if\\
+  Let $J = \{e\ |\ e \join join \vee e \join injdom \vee e \join
+  injran\}$ be the set of all the proofs of equations and $V$ be the
+  set of terms such that $t \normto v$, where $v$ is a value.  We
+  define the interpretation of types as follows:
+  \begin{center}
     \begin{tabular}{lll}
-      -- $[[. |- e:Nat L]]$ \\
-      -- $e \in N = \{e'\ |\ e' \normto [[S]]^n\ [[Z]]\ where \ n \in \nat\}$\\
-    \end{tabular}    \\
-    \\
-    $e \in \interp{[[(x : th e1) + -> e2]]}^{L}_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $[[. |- e : (x : th r e1) + -> r e2 L]]$ \\
-      -- $[[. |- r ((x : th e1) + -> e2):Type th]]$ \\
-      -- $e \in V$\\
-      -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$
-    \end{tabular}\\
-    \\
-    $e \in \interp{\arrowT{x}{\theta}{e_1}{-}{e_2}}^{L}_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $[[. |- e : (x : th r e1) - -> r e2 L]]$ \\
-      -- $[[.  |- r ((x : th e1) - -> e2):Type th]]$ \\ 
-      -- $e \in V$ \\
-      -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e \in \interp{e_2}^L_{\rho[x \mapsto e']}$\\
-    \end{tabular}\\
-    \\
-    $e \in \interp{e_1 = e_2}^{L}_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $\cdot \tvdash{L} e:\rho\ e_1 = \rho\ e_2$ \\
-      -- $\cdot \tvdash{\theta} \rho\ (e_1 = e_2):[[Type]]$\\
-      -- $e \in J$\\
-      -- $\rho\ e_1 \join \rho\ e_2$\\
-    \end{tabular}\\
-    \\
-    $e \in \interp{e'}^P_\rho$ if and only if \\
-    \begin{tabular}{lll}
-      -- $\cdot \tvdash{P} e:\rho\ e'$ \\
-      -- $\cdot \tvdash{\theta} \rho\ e':[[Type]]$\\
-      -- $e \in V$
+      \begin{tabular}{lll}
+        $e \in \interp{\nat}^{L}_\rho$ if and only if\\
+        \begin{tabular}{lll}
+          -- $[[. |- e:Nat L]]$ \\
+          -- $e \in N = \{e'\ |\ e' \normto [[S]]^n\ [[Z]]\ where \ n \in \nat\}$\\
+          \ \\
+          \ \\
+        \end{tabular}\\ 
+      \end{tabular}
+      &
+      \begin{tabular}{lll}         
+        $e \in \interp{[[(x : th e1) + -> e2]]}^{L}_\rho$ if and only if \\
+        \begin{tabular}{lll}
+          -- $[[. |- e : (x : th r e1) + -> r e2 L]]$ \\
+          -- $[[. |- r ((x : th e1) + -> e2):Type th]]$ \\
+          -- $e \in V$\\
+          -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e\ e' \in \interp{e_2}^L_{\rho[x \mapsto e']}$
+        \end{tabular}
+      \end{tabular}\\
+      \\
+      \begin{tabular}{lll}          
+        $e \in \interp{\arrowT{x}{\theta}{e_1}{-}{e_2}}^{L}_\rho$ if and only if \\
+        \begin{tabular}{lll}
+          -- $[[. |- e : (x : th r e1) - -> r e2 L]]$ \\
+          -- $[[.  |- r ((x : th e1) - -> e2):Type th]]$ \\ 
+          -- $e \in V$ \\
+          -- $\forall e' \in \interp{e_1}^{\theta}_{\rho} . e \in \interp{e_2}^L_{\rho[x \mapsto e']}$\\
+        \end{tabular}                  
+      \end{tabular}
+      &
+      \begin{tabular}{lll}
+        $e \in \interp{e_1 = e_2}^{L}_\rho$ if and only if \\
+        \begin{tabular}{lll}
+          -- $\cdot \tvdash{L} e:\rho\ e_1 = \rho\ e_2$ \\
+          -- $\cdot \tvdash{\theta} \rho\ (e_1 = e_2):[[Type]]$\\
+          -- $e \in J$\\
+          -- $\rho\ e_1 \join \rho\ e_2$\\
+        \end{tabular}
+      \end{tabular}\\
+      \\
+      \begin{tabular}{lll}          
+        $e \in \interp{e'}^P_\rho$ if and only if \\
+        \begin{tabular}{lll}
+          -- $\cdot \tvdash{P} e:\rho\ e'$ \\
+          -- $\cdot \tvdash{\theta} \rho\ e':[[Type]]$\\
+          -- $e \in V$
+        \end{tabular}
+      \end{tabular}
     \end{tabular}
-  \end{tabular}
-\end{center}
+  \end{center}
 \end{definition}
+The interpretation of types consists of two parts, a deep
+interpretation and a shallow one.  We give a deep interpretation of
+the logical fragment where we characterize the termination behavior of
+the programs, while we give a shallow interpretation of the programs
+of the programmatic fragment.  The only property we can guarantee of
+programmatic programs is that the terminating programs are well typed.
+Note that the interpretation of types depend heavily on the typing
+judgment, this is the dependency mentioned in the previous section on
+type preservation.  Thus, the proofs of the critical properties
+especially CR-Pres depend on type preservation.  Finally, the
+interpretation of types depend on the notion of well-formed
+substitutions which are defined in Figure~\ref{fig:fs-wf-subs}.
 
-We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
-\ \\
+\begin{figure}[t]  
+  \begin{center}
+    \begin{tabular}{ccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [] {\ \\}{
+          \emptyset \in \interp{\cdot}
+        }
+      \end{math}
+       & & 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule*[]{
+          \Gamma \tvdash{L} e':[[Type]]
+          \\
+          \rho \in \interp{\Gamma}
+          \\
+          e \in \interp{e'}^L_\rho
+        }{\rho \cup \{(x,e)\} \in \interp{\Gamma,x:^L e'}}
+      \end{math}
+      \\
+      & & \\
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule*[]{
+          \Gamma \tvdash{P} e':[[Type]]
+          \\
+          \rho \in \interp{\Gamma}
+          \\
+          v \in \interp{e'}^P_\rho
+        }{\rho \cup \{(x,v)\} \in \interp{\Gamma,x:^P e'}}
+      \end{math}
+      & &\\
+    \end{tabular}  
+  \end{center}
+  \caption{Well-formed substitutions}
+  \label{fig:fs-wf-subs}
+\end{figure}
+
+
+
 \begin{lemma}[$\CRI$]
   \label{lemma:cri}
   If $t \in \interp{e}^\theta_\rho$ then $t$ is closed and $t \in V$.
@@ -922,44 +1001,6 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
     by the definition of the interpretation of types, $t \in \interp{e}^L_\rho$.
   \end{itemize}
 \end{proof}
-
-\begin{figure}[t]
-  \begin{center}
-    \begin{tabular}{ccc}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [] {\ \\}{
-          \emptyset \in \interp{\cdot}
-        }
-      \end{math}
-       & & 
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule*[]{
-          \Gamma \tvdash{L} e':[[Type]]
-          \\
-          \rho \in \interp{\Gamma}
-          \\
-          e \in \interp{e'}^L_\rho
-        }{\rho \cup \{(x,e)\} \in \interp{\Gamma,x:^L e'}}
-      \end{math}
-      \\
-      & & \\
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule*[]{
-          \Gamma \tvdash{P} e':[[Type]]
-          \\
-          \rho \in \interp{\Gamma}
-          \\
-          v \in \interp{e'}^P_\rho
-        }{\rho \cup \{(x,v)\} \in \interp{\Gamma,x:^P e'}}
-      \end{math}
-      & &\\
-    \end{tabular}  
-  \end{center}
-  \caption{Well-formed substitutions}
-\end{figure}
 
 \begin{lemma}[Kinding conversion]
   \label{lemma:kinding_conversion}

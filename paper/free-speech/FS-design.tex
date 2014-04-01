@@ -105,7 +105,7 @@ Figure~\ref{fig:FS-syn-red}.
         \begin{array}{rllllllllllllllll}
           \text{(Classifiers)}  & [[th]] & ::= & [[L]]\,|\,[[C]]\\
           \text{(Stages)}       & [[ep]] & ::= & [[+]]\,|\,[[-]]\\
-          \text{(Expressions)}  & [[e]]  & ::= & 
+          \text{(Expressions)}  & [[e]],[[t]]  & ::= & 
           [[Type]]\,|\,[[Nat]]\,|\,[[x]]\,|\,[[(x : th e1) ep -> e2]]\,|\,[[e1 = e2]]\,|\,
           [[S]]\,|\,[[Z]]\,|\,\\
           & & & [[\x.e]]\,|\,[[rec f x e]]\,|\,[[rec - f e]]\,|\,[[e1 e2]]\,|\,
@@ -153,7 +153,8 @@ where all programs marked as compile time will be erased before run
 time.  We now give a brief overview of the syntax of Freedom of
 Speech.
 
-Expressions denoted $[[e]]$,$[[e_1]],\ldots,[[e_i]]$ consist of
+Expressions are denoted $[[t]]$,$[[t_1]],\ldots,[[t_i]]$ and
+$[[e]]$,$[[e_1]],\ldots,[[e_i]]$, and consist of
 $[[Type]]$ which is the type of all types, $[[Nat]]$ the type of
 natural numbers, variables denoted $[[x]]$,$[[y]]$,$[[z]]$, $\ldots$,
 dependent function types denoted $[[(x : th e1) ep -> e2]]$ -- note that
