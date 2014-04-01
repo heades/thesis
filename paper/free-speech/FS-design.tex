@@ -373,13 +373,14 @@ We begin introducing the type system with the kinding rules:
 \end{center}
 The expression $[[Type]]$ is a universe containing all of the
 expressions that can be considered well-defined types with respect to
-an environment.  Hence, we call an expression $[[e]]$ a type if and
-only if $[[G |- e : Type th]]$ for some environment $[[G]]$.  If
-$[[th]]$ is $[[L]]$, then $[[e]]$ is can be considered a formula
-otherwise $[[e]]$ is simply a type.  The rules above tell us that
-there are four types: the type $[[Type]]$, which is only a
-programmatic type (for the explanation why see
-Section~\ref{sec:martin-lofs_type_theory}), the type of natural
+an environment.  Throughout the sequel we sometimes denote expressions
+of type $[[Type]]$ as $[[A]]$ instead of $[[e]]$ for readability. We
+call an expression $[[e]]$ a type if and only if $[[G |- e : Type
+th]]$ for some environment $[[G]]$.  If $[[th]]$ is $[[L]]$, then
+$[[e]]$ is can be considered a formula otherwise $[[e]]$ is simply a
+type.  The rules above tell us that there are four types: the type
+$[[Type]]$, which is only a programmatic type (for the explanation why
+see Section~\ref{sec:martin-lofs_type_theory}), the type of natural
 numbers, dependent product types, and equations between well typed
 expressions.  These are the only expressions that will be considered
 types.
