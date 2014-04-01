@@ -13,8 +13,13 @@ and following this we will prove weak normalization.
 \section{Basic Results}
 \label{sec:basic_results}
 The main results depend on several auxiliary results, and we present
-each of them in this section.  The first is regularity.  This results
+each of them in this section.  The first is regularity, which
 insures that if an expression has a type, then its type is well typed.
+Recall that in the logical fragment $[[Type]] : [[Type]]$ does not hold, thus
+if $[[e]]$ is joinable with $[[Type]]$, then $[[G |- e' : e L]]$ does
+not imply that $[[G |- e : Type L]]$.  However, this does hold in the
+programmatic fragment.  Therefore, regularity has the following
+statement and proof.
 
 \begin{lemma}[Regularity]
   \label{lemma:regularity}
@@ -25,52 +30,54 @@ insures that if an expression has a type, then its type is well typed.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the form of the assumed typing
-  derivation.  The most interesting cases are presented below.  If it
-  is not the case that $[[e \v/ Type]]$, then both proofs can be given
-  simultaneously.  In fact, the proof of part ii when $[[e \v/ Type]]$
-  holds is trivial, thus we do not present it here.
+  derivation.  The most interesting cases are presented below; all
+  other cases are either similar to the cases given here or are
+  trivial.  If it is not the case that $[[e \v/ Type]]$, then both
+  proofs can be given simultaneously.  In fact, the proof of part ii
+  when $[[e \v/ Type]]$ holds is trivial, thus we do not present it
+  here.
   
   \begin{itemize}
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleVar{}$
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleVar{}$
+  %   \end{center}
+  %   Trivial.
 
   \item[Case.] \ \\
     \begin{center}
       $\FSdruleLam{}$
     \end{center}
-    By assumption we know $\Gamma \tvdash{\theta} e_1:Type$ and by the induction hypothesis,
-    $\Gamma,x:^\theta e_1 \tvdash{\theta'} e_2:Type$. Finally by applying 
-    $\FSdrulename{K\_Pi}$, $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{+}{e_2}:Type$.
+    By assumption we know $\Gamma \tvdash{\theta} e_1:[[Type]]$ and by the induction hypothesis,
+    $\Gamma,x:^\theta e_1 \tvdash{\theta'} e_2:[[Type]]$. Finally by applying 
+    $\FSdrulename{K\_Pi}$, $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{+}{e_2}:[[Type]]$.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleILam{}$
-    \end{center}
-    Similar to the previous case.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleILam{}$
+  %   \end{center}
+  %   Similar to the previous case.
 
   \item[Case.] \ \\
     \begin{center}
       $\FSdruleAppPiTerm{}$
     \end{center}
-    By the induction hypothesis, $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{+}{e_2}:Type$
-    and by inversion of $\FSdrulename{K\_Pi}$, $\Gamma, x:^\theta e_1 \tvdash{\theta'} e_2:Type$.
-    Finally, by the subsitution lemma $\Gamma \tvdash{\theta'} [v/x]e_2:Type$.
+    By the induction hypothesis, $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{+}{e_2}:[[Type]]$
+    and by inversion of $\FSdrulename{K\_Pi}$, $\Gamma, x:^\theta e_1 \tvdash{\theta'} e_2:[[Type]]$.
+    Finally, by the subsitution lemma $\Gamma \tvdash{\theta'} [v/x]e_2:[[Type]]$.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleAppAllTerm{}$ 
-    \end{center}
-    Similar to the previous case.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleAppAllTerm{}$ 
+  %   \end{center}
+  %   Similar to the previous case.
 
   \item[Case.] \ \\
     \begin{center}
       $\FSdrulejoin{}$
     \end{center}
     By assumption $\Gamma \tvdash{\theta_1} e:e_1$ and $\Gamma \tvdash{\theta_2} e':e_2$.  
-    Therefore, by $\FSdrulename{K\_Eq}$ $\Gamma \tvdash e = e':Type$.
+    Therefore, by $\FSdrulename{K\_Eq}$ $\Gamma \tvdash e = e':[[Type]]$.
 
   \item[Case.] \ \\
     \begin{center}
@@ -78,14 +85,14 @@ insures that if an expression has a type, then its type is well typed.
     \end{center}
     By the induction hypothesis, 
     $\Gamma \tvdash{L} (\arrowT{x}{\theta}{e_1}{\epsilon}{e_2}) = 
-    (\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}):Type$, hence by inversion of 
+    (\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}):[[Type]]$, hence by inversion of 
     $\FSdrulename{K\_Eq}$ we know
-    $\Gamma \tvdash{\theta_1} \arrowT{x}{\theta}{e_1}{\epsilon}{e_2}:Type$ and
-    $\Gamma \tvdash{\theta_2} \arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}:Type$ for some $\theta_1$
+    $\Gamma \tvdash{\theta_1} \arrowT{x}{\theta}{e_1}{\epsilon}{e_2}:[[Type]]$ and
+    $\Gamma \tvdash{\theta_2} \arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}:[[Type]]$ for some $\theta_1$
     and $\theta_2$.  We can apply inversion one more time, but this time to 
-    $\FSdrulename{K\_Pi}$ to obtain $\Gamma \tvdash{\theta} e_1:Type$ and 
-    $\Gamma \tvdash{\theta} e'_1:Type$.  Now by 
-    $\FSdrulename{K\_Eq}$, $\Gamma \tvdash{L} e_1 = e'_1:Type$.
+    $\FSdrulename{K\_Pi}$ to obtain $\Gamma \tvdash{\theta} e_1:[[Type]]$ and 
+    $\Gamma \tvdash{\theta} e'_1:[[Type]]$.  Now by 
+    $\FSdrulename{K\_Eq}$, $\Gamma \tvdash{L} e_1 = e'_1:[[Type]]$.
 
   \item[Case.] \ \\
     \begin{center}
@@ -94,15 +101,15 @@ insures that if an expression has a type, then its type is well typed.
     We first apply $\FSdrulename{InjDom}$ to obtain $\Gamma \tvdash{L} injdom:e_1 = e'_1$.
     By the induction hypothesis, 
     $\Gamma \tvdash{L} (\arrowT{x}{\theta}{e_1}{\epsilon}{e_2}) = 
-    (\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}):Type$, hence by inversion of 
+    (\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}):[[Type]]$, hence by inversion of 
     $\FSdrulename{K\_Eq}$ we know
-    $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{\epsilon}{e_2}:Type$ and
-    $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}:Type$ for some $\theta'$
+    $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{\epsilon}{e_2}:[[Type]]$ and
+    $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}:[[Type]]$ for some $\theta'$
     and $\theta'$.  We can apply inversion one more time, but this time to 
-    $\FSdrulename{K\_Pi}$ to obtain $\Gamma,x:^\theta e_1 \tvdash{\theta'} e_2:Type$ and 
-    $\Gamma,x:^\theta e'_1 \tvdash{\theta} e'_1:Type$.  By assumption we know
+    $\FSdrulename{K\_Pi}$ to obtain $\Gamma,x:^\theta e_1 \tvdash{\theta'} e_2:[[Type]]$ and 
+    $\Gamma,x:^\theta e'_1 \tvdash{\theta} e'_1:[[Type]]$.  By assumption we know
     $\Gamma \tvdash{\theta} v:e_1$, hence by the substitution lemma 
-    $\Gamma \tvdash{\theta'}[v/x]e_2:Type$.  Now by applying $\FSdrulename{Conv}$ using
+    $\Gamma \tvdash{\theta'}[v/x]e_2:[[Type]]$.  Now by applying $\FSdrulename{Conv}$ using
     $\Gamma \tvdash{\theta} v:e_1$ and $\Gamma \tvdash{L} injdom:e_1 = e'_1$ we obtain
     $\Gamma \tvdash{\theta} v:e'_1$.  Again by the substitution lemma, 
     $\Gamma \tvdash{\theta'} [v/x]e'_2$.  Finally, we apply $\FSdrulename{K\_Eq}$ to conclude
@@ -112,60 +119,60 @@ insures that if an expression has a type, then its type is well typed.
     \begin{center}
       $\FSdruleConv{}$
     \end{center}
-    By the induction hypothesis, $\Gamma \tvdash{\theta} [e_1/x]e_2:Type$ and by the kinding 
-    conversion lemma, $\Gamma \tvdash{\theta} [e'_1/x]e_2:Type$.
+    By the induction hypothesis, $\Gamma \tvdash{\theta} [e_1/x]e_2:[[Type]]$ and by the kinding 
+    conversion lemma, $\Gamma \tvdash{\theta} [e'_1/x]e_2:[[Type]]$.
 
   \item[Case.] \ \\
     \begin{center}
       $\FSdruleSucc{}$
     \end{center}
-    By $\FSdrulename{K\_Nat}$, $\Gamma \tvdash{L} \nat:Type$ and 
-    $\Gamma,x:^L \nat \tvdash{L} \nat:Type$.  Finally, by $\FSdrulename{K\_Pi}$,
+    By $\FSdrulename{K\_Nat}$, $\Gamma \tvdash{L} \nat:[[Type]]$ and 
+    $\Gamma,x:^L \nat \tvdash{L} \nat:[[Type]]$.  Finally, by $\FSdrulename{K\_Pi}$,
     $\Gamma \tvdash{L} \arrowT{x}{L}{\nat}{+}{\nat}$.
     
     
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleZero{}$
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleZero{}$
+  %   \end{center}
+  %   Trivial.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleAbort{}$  
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleAbort{}$  
+  %   \end{center}
+  %   Trivial.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleContra{}$
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleContra{}$
+  %   \end{center}
+  %   Trivial.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleContraAbort{}$
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleContraAbort{}$
+  %   \end{center}
+  %   Trivial.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleContraPiTh{}$
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleContraPiTh{}$
+  %   \end{center}
+  %   Trivial.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleContraPiEp{}$
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleContraPiEp{}$
+  %   \end{center}
+  %   Trivial.
 
   \item[Case.] \ \\
     \begin{center}
       $\FSdruleCoerce{}$
     \end{center}
-    By the induction hypothesis, $\Gamma \tvdash{L} e_1:Type$ and by applying 
-    $\FSdrulename{Coerce}$, $\Gamma \tvdash{P} e_1:Type$.
+    By the induction hypothesis, $\Gamma \tvdash{L} e_1:[[Type]]$ and by applying 
+    $\FSdrulename{Coerce}$, $\Gamma \tvdash{P} e_1:[[Type]]$.
 
   \item[Case.] \ \\
     \begin{center}
@@ -173,87 +180,96 @@ insures that if an expression has a type, then its type is well typed.
     \end{center}
     By the induction hypothesis, 
     $\Gamma, x:^L \nat,
-    f:^L \arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}} \tvdash{L} e_2:Type$.  Since
-    $f$ is not free in $e_2$ we know $\Gamma, x:^L \nat \tvdash{L} e_2:Type$.  Finally,
-    by $\FSdrulename{K\_Pi}$ using $\Gamma, x:^L \nat \tvdash{L} e_2:Type$ and
-    $\FSdrulename{K\_Nat}$, $\Gamma \tvdash{L} \arrowT{x}{L}{\nat}{+}{e_2}:Type$.
+    f:^L \arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}} \tvdash{L} e_2:[[Type]]$.  Since
+    $f$ is not free in $e_2$ we know $\Gamma, x:^L \nat \tvdash{L} e_2:[[Type]]$.  Finally,
+    by $\FSdrulename{K\_Pi}$ using $\Gamma, x:^L \nat \tvdash{L} e_2:[[Type]]$ and
+    $\FSdrulename{K\_Nat}$, $\Gamma \tvdash{L} \arrowT{x}{L}{\nat}{+}{e_2}:[[Type]]$.
 
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleRecNatComp{}$
-    \end{center}
-    Similar to the previous case.
+  % \item[Case.] \ \\
+  %   \begin{center}
+  %     $\FSdruleRecNatComp{}$
+  %   \end{center}
+  %   Similar to the previous case.
 
   \item[Case.] \ \\
     \begin{center}
       $\FSdruleRec{}$
     \end{center}
-    By assumption $\Gamma \tvdash{\theta'} e_1:Type$ and by the induction hypothesis
-    $\Gamma, f:^\theta \arrowT{x}{\theta'}{e_1}{+}{e_2},x:^{\theta'} e_1 \tvdash{\theta} e_2:Type$.
+    By assumption $\Gamma \tvdash{\theta'} e_1:[[Type]]$ and by the induction hypothesis
+    $\Gamma, f:^\theta \arrowT{x}{\theta'}{e_1}{+}{e_2},x:^{\theta'} e_1 \tvdash{\theta} e_2:[[Type]]$.
     Now by $\FSdrulename{K\_Pi}$, $\Gamma, f:^\theta \arrowT{x}{\theta'}{e_1}{+}{e_2} 
-    \tvdash{\theta} \arrowT{x}{\theta'}{e_1}{+}{e_2}:Type$. Clearly, $f$ is not free in
+    \tvdash{\theta} \arrowT{x}{\theta'}{e_1}{+}{e_2}:[[Type]]$. Clearly, $f$ is not free in
     $\arrowT{x}{\theta'}{e_1}{+}{e_2}$, thus, 
-    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{e_1}{+}{e_2}:Type$.
+    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{e_1}{+}{e_2}:[[Type]]$.
 
   \end{itemize}
 \end{proof}
 
-\begin{lemma}[Substitution]
+The second basic result is substitution for typing.  This states that
+if we know a term $[[e]]$ is well typed in an environment with a free
+variable $[[x]]$, and given a value $[[v]]$ with the same type as the
+free variable, then $[[ [v/x]e]]$ has the same type as $[[e]]$.  This
+is an important result for type preservation, because we want to
+insure that for any $[[(\x.e) v]]$ that has type $[[e']]$ the
+contractum of $[[(\x.e) v]]$, $[[ [v/x]e]]$, has type $[[e']]$.
+
+\begin{lemma}[Substitution for Typing]
   \label{lemma:substitution}
-  \begin{itemize}
-  \item[]
-  \item[i.] If $\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e:Type$ and 
-    $\Gamma \tvdash{\theta} v:e_1$ 
-    then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:Type$.
-  \item[ii.] If $\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:e_1$ and 
-    $\Gamma \tvdash{\theta} v:e_2$ 
-    then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]e_1$.
-  \end{itemize}
+  % \begin{itemize}
+  % \item[i.] If $\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e:[[Type]]$ and 
+  %   $\Gamma \tvdash{\theta} v:e_1$ 
+  %   then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[[Type]]$.
+  % \item[ii.]
+  If $\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:e_1$ and 
+  $\Gamma \tvdash{\theta} v:e_2$, 
+  then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]e_1$.
+  % \end{itemize}
 \end{lemma}
 \begin{proof}
-  This is a proof by induction on the form of the first assumed typing derivation.
-  First we prove part i.
+  This is a proof by induction on the form of the assumed typing
+  derivation. We only give the non-trivial cases.  All other cases are
+  either similar to the cases given here or are trivial.
   \begin{itemize}
-  \item[Case.] \ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=K\_Type] {
-          \ 
-        }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{P} Type:Type}
-      \end{math}
-    \end{center}
-    Trivial.
+  % \item[Case.] \ \\
+    % \begin{center}
+    %   \begin{math}
+    %     $$\mprset{flushleft}
+    %     \inferrule* [right=$K\_[[Type]]$ ] {
+    %       \ 
+    %     }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{P} [[Type]]:[[Type]]}
+    %   \end{math}
+    % \end{center}
+    % Trivial.
 
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=K\_Nat] {
-          \ 
-        }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{L} \nat:Type}
-      \end{math}
-    \end{center}
-    Trivial.
+  % \item[Case.]\ \\
+  %   \begin{center}
+  %     \begin{math}
+  %       $$\mprset{flushleft}
+  %       \inferrule* [right=K\_Nat] {
+  %         \ 
+  %       }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{L} \nat:[[Type]]}
+  %     \end{math}
+  %   \end{center}
+  %   Trivial.
 
   \item[Case.]\ \\
     \begin{center}
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=K\_Pi] {
-          \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta''} e'_1:Type
+          \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta''} e'_1:[[Type]]
           \\\\
-          \Gamma,x:^\theta e_1,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} e_2:Type
-   }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{e'_1}{\epsilon}{e_2}:Type}
+          \Gamma,x:^\theta e_1,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} e_2:[[Type]]
+   }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{e'_1}{\epsilon}{e_2}:[[Type]]}
       \end{math}
     \end{center}
-    By part one of the induction hypothesis, 
-    $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:Type$ and
-    $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e_2:Type$.  Now we can
+    By the induction hypothesis, 
+    $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and
+    $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e_2:[[Type]]$.  Now we can
     apply $\FSdrulename{K\_Pi}$ to obtain, 
- $\Gamma,[v/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[v/x]e'_1}{\epsilon}{[v/x]e_2}:Type$,
+ $\Gamma,[v/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[v/x]e'_1}{\epsilon}{[v/x]e_2}:[[Type]]$,
     which is equivalent to
-  $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e_2}):Type$.
+  $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e_2}):[[Type]]$.
     
     \item[Case.]\ \\
       \begin{center}
@@ -263,31 +279,28 @@ insures that if an expression has a type, then its type is well typed.
             \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta_1} e:e'_1
             \\\\
             \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta_2} e':e_2
-          }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{L} e = e':Type}
+          }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{L} e = e':[[Type]]}
         \end{math}
       \end{center}
-      By part two of the induction hypothesis, 
+      By the induction hypothesis we know 
       $\Gamma,[v/x]\Gamma' \tvdash{\theta_1} [v/x]e:[v/x]e'_1$ and
       $\Gamma,[v/x]\Gamma' \tvdash{\theta_2} [v/x]e':[v/x]e'_2$.  We can now apply 
-      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e = [v/x]e':Type$,
-      which is equivalent to $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x](e = e'):Type$.
-  \end{itemize}
+      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e = [v/x]e':[[Type]]$,
+      which is equivalent to $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x](e = e'):[[Type]]$.
 
-  We now prove part ii.
-  \begin{itemize}
   \item[Case.]\ \\
      \begin{center}
        \begin{math}
          $$\mprset{flushleft}
          \inferrule* [right=\FSdrulename{Var}]{
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e_1:Type
+           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e_1:[[Type]]
            \\\\
            y:^{\theta'} e_1 \in (\Gamma,x:^\theta e_2,\Gamma')
          }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} y:^{\theta'} e_1}
        \end{math}
      \end{center}
-     By part one of the induction hypothesis, 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e_1:Type$.  Clearly, if 
+     By the induction hypothesis we know
+     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e_1:[[Type]]$.  Clearly, if 
      $y:^{\theta'} e_1 \in (\Gamma,x:^\theta e_2,\Gamma')$ then
      $y:^{\theta'} [v/x]e_1 \in (\Gamma,[v/x]\Gamma')$.  Thus,
      by applying $\FSdrulename{Var}$, 
@@ -298,30 +311,28 @@ insures that if an expression has a type, then its type is well typed.
        \begin{math}
          $$\mprset{flushleft}
          \inferrule* [right=\FSdrulename{Lam}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta'} e'_1:Type
+           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta'} e'_1:[[Type]]
            \\\\
            \Gamma, x:^\theta e_2,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} e:e''_1
          }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta'} 
            \lambda y.e:\arrowT{y}{\theta''}{e'_1}{+}{e''_1}}
        \end{math}
      \end{center}
-     By part one of the induction hypothesis, 
-     $\Gamma, [v/x]\Gamma' \tvdash{\theta'} [v/x]e'_1:Type$, and by part two of the induction
-     hypothesis, 
+     By the induction hypothesis we know 
+     $\Gamma, [v/x]\Gamma' \tvdash{\theta'} [v/x]e'_1:[[Type]]$ and 
      $\Gamma, [v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e:[v/x]e''_1$. Finally,
      by applying $\FSdrulename{Lam}$, 
      $\Gamma, [v/x]\Gamma' \tvdash{\theta'} 
      \lambda y.[v/x]e:\arrowT{y}{\theta''}{[v/x]e'_1}{+}{[v/x]e''_1}$, which is equivalent to
      $\Gamma, [v/x]\Gamma' \tvdash{\theta'} 
-     [v/x](\lambda y.e):[v/x](\arrowT{y}{\theta''}{e'_1}{+}{e''_1})$.
-     
+     [v/x](\lambda y.e):[v/x](\arrowT{y}{\theta''}{e'_1}{+}{e''_1})$.     
 
    \item[Case.]\ \\
      \begin{center}
        \begin{math}
          $$\mprset{flushleft}
          \inferrule* [right=\FSdrulename{ILam}] {
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e'_1:Type
+           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e'_1:[[Type]]
            \\\\
            \Gamma,x:^\theta e_2,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} v':e''_1
            \\\\
@@ -329,8 +340,8 @@ insures that if an expression has a type, then its type is well typed.
          }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} v':\arrowT{y}{\theta''}{e'_1}{-}{e''_1}}
        \end{math}
      \end{center}
-     By part one of the induction hypothesis, 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:Type$ and by part two
+     By the induction hypothesis we know 
+     $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and
      $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]v':[v/x]e''_1$.  Finally,
      by applying $\FSdrulename{ILam}$, 
    $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]v':\arrowT{y}{\theta''}{[v/x]e'_1}{-}{[v/x]e''_1}$
@@ -348,7 +359,7 @@ insures that if an expression has a type, then its type is well typed.
          }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e\ v':[v'/y]e''_1}
        \end{math}
      \end{center}
-     By part two of the induction hypothesis, 
+     By the induction hypothesis we know 
      $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:\arrowT{y}{\theta''}{[v/x]e'_1}{+}{[v/x]e''_1}$
      and
      $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]v':[v/x]e''_1$.  By applying 
@@ -366,7 +377,7 @@ insures that if an expression has a type, then its type is well typed.
          }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:[v'/y]e''_1}
        \end{math}
      \end{center}
-     By part two of the induction hypothesis,
+     By the induction hypothesis we know 
      $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:\arrowT{y}{\theta''}{[v/x]e'_1}{-}{[v/x]e''_1}$
      and
      $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]v':[v/x]e''_1$.  Lastly by applying 
@@ -401,24 +412,24 @@ insures that if an expression has a type, then its type is well typed.
          }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} injdom : e'_1 = e''_1}
        \end{math}
      \end{center}
-     By part two of the induction of hypothesis, \\
+     By the induction of hypothesis, \\
      $\Gamma,[v/x]\Gamma \tvdash{L} [v/x]e':(\arrowT{x}{\theta}{[v/x]e'_1}{+}{[v/x]e'_2}) = 
      (\arrowT{x}{\theta}{[v/x]e''_1}{+}{[v/x]e''_2})$.  Now by applying $\FSdrulename{InjDom}$,
      $\Gamma,[v/x]\Gamma' \tvdash{L} injdom : [v/x](e'_1 = e''_1)$.
 
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{InjRan}] {
-           \Gamma \tvdash{L} e':(\arrowT{x}{\theta}{e_1}{+}{e_2}) = 
-           (\arrowT{x}{\theta}{e'_1}{+}{e'_2})
-           \\\\
-           \Gamma \tvdash{\theta} v:e_1
-         }{\Gamma \tvdash{L} injran : [v/x]e_2 = [v/x]e'_2}
-       \end{math}
-     \end{center}
-     Similar to the previous case.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{InjRan}] {
+   %         \Gamma \tvdash{L} e':(\arrowT{x}{\theta}{e_1}{+}{e_2}) = 
+   %         (\arrowT{x}{\theta}{e'_1}{+}{e'_2})
+   %         \\\\
+   %         \Gamma \tvdash{\theta} v:e_1
+   %       }{\Gamma \tvdash{L} injran : [v/x]e_2 = [v/x]e'_2}
+   %     \end{math}
+   %   \end{center}
+   %   Similar to the previous case.
 
    \item[Case.]\ \\
      \begin{center}
@@ -431,79 +442,79 @@ insures that if an expression has a type, then its type is well typed.
          }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:[e''/y]e'_1}
        \end{math}
      \end{center}
-     By part two of the induction hypothesis 
+     By the induction hypothesis we know 
      $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]([e'/y]e'_1)$ and
      $\Gamma,[v/x]\Gamma' \tvdash{L} p:[v/x]e' = [v/x]e''$.  By applying $\FSdrulename{Conv}$,
      $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]([e''/y]e'_1)$.
 
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Succ}] {
-           \ 
-         }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} S:\arrowT{y}{L}{\nat}{+}{\nat}}
-       \end{math}
-     \end{center}
-     Trivial.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{Succ}] {
+   %         \ 
+   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} S:\arrowT{y}{L}{\nat}{+}{\nat}}
+   %     \end{math}
+   %   \end{center}
+   %   Trivial.
 
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Zero}] {
-           \ 
-         }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} Z:\nat}
-       \end{math}
-     \end{center}
-     Trivial.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{Zero}] {
+   %         \ 
+   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} Z:\nat}
+   %     \end{math}
+   %   \end{center}
+   %   Trivial.
      
    \item[Case.]\ \\
      \begin{center}
        \begin{math}
          $$\mprset{flushleft}
          \inferrule* [right=\FSdrulename{Abort}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:Type
+           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:[[Type]]
          }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} abort:e_1}
        \end{math}
      \end{center}
-     By part one of the induction hypothesis,
-     $\Gamma, [v/x]\Gamma' \tvdash{\theta} [v/x]e_1:Type$ and by applying
-     $\FSdrulename{Abort}$ 
+     By the induction hypothesis we know 
+     $\Gamma, [v/x]\Gamma' \tvdash{\theta} [v/x]e_1:[[Type]]$ and by applying
+     $\FSdrulename{Abort}$ we obtain 
      $\Gamma, [v/x]\Gamma' \tvdash{P} abort:[v/x]e_1$.
 
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Contra}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:Type
-           \\\\
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:Z = S\ e'
-         }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} contra:e_1}
-       \end{math}
-     \end{center}
-     Similar to the previous case.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{Contra}] {
+   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:[[Type]]
+   %         \\\\
+   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:Z = S\ e'
+   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} contra:e_1}
+   %     \end{math}
+   %   \end{center}
+   %   Similar to the previous case.
 
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{ContraAbort}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:Type
-           \\\\
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:v = abort
-         }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} contra:e_1}
-       \end{math}
-     \end{center}
-     Similar to the previous case.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{ContraAbort}] {
+   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:[[Type]]
+   %         \\\\
+   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:v = abort
+   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} contra:e_1}
+   %     \end{math}
+   %   \end{center}
+   %   Similar to the previous case.
 
    \item[Case.]\ \\
      \begin{center}
        \begin{math}
      $$\mprset{flushleft}
          \inferrule* [right=\FSdrulename{ContraPiTh}] {
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e:Type
+           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e:[[Type]]
            \\\\
      \Gamma,x:^\theta e_2,\Gamma' \tvdash{L} e':(\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}) = 
      (\arrowT{x}{\theta'}{e''_1}{\epsilon'}{e''_2})
@@ -512,38 +523,37 @@ insures that if an expression has a type, then its type is well typed.
      }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} contra : e}
        \end{math}
      \end{center}
-     By part one of the induction hypothesis, $\Gamma,[v/x]\Gamma' \tvdash{\theta} [v/x]e:Type$ 
-     and by part two of the induction hypothesis,
-    $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e':[v/x]((\arrowT{x}{\theta}{e'_1}{+}{e'_2}) = 
+     By the induction hypothesis we know $\Gamma,[v/x]\Gamma' \tvdash{\theta} [v/x]e:[[Type]]$ 
+     and $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e':[v/x]((\arrowT{x}{\theta}{e'_1}{+}{e'_2}) = 
      (\arrowT{x}{\theta}{e''_1}{+}{e''_2}))$ and by applying $\FSdrulename{ContrapiTh}$,
      $\Gamma,[v/x]\Gamma' \tvdash{L} contra : [v/x]e$.
 
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{ContraPiEp}] {
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e:Type
-           \\\\
-     \Gamma,x:^\theta e_2,\Gamma' \tvdash{L} e':(\arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}) = 
-     (\arrowT{x}{\theta}{e'_1}{\epsilon'}{e'_2})
-     \\\\
-     \epsilon \neq \epsilon'
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} contra : e}
-       \end{math}
-     \end{center}
-     Similar to the previous case.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{ContraPiEp}] {
+   %         \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e:[[Type]]
+   %         \\\\
+   %   \Gamma,x:^\theta e_2,\Gamma' \tvdash{L} e':(\arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}) = 
+   %   (\arrowT{x}{\theta}{e'_1}{\epsilon'}{e'_2})
+   %   \\\\
+   %   \epsilon \neq \epsilon'
+   %       }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} contra : e}
+   %     \end{math}
+   %   \end{center}
+   %   Similar to the previous case.
 
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Coerce}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:e_1
-         }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} e:e_1}
-       \end{math}
-     \end{center}
-     Similar to the previous case.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{Coerce}] {
+   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:e_1
+   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} e:e_1}
+   %     \end{math}
+   %   \end{center}
+   %   Similar to the previous case.
 
    \item[Case.]\ \\
      \begin{center}
@@ -552,7 +562,7 @@ insures that if an expression has a type, then its type is well typed.
          $$\mprset{flushleft}
          \inferrule* [right=\FSdrulename{RecNat}] {
            \Gamma, x:^\theta e_2,\Gamma',y:^L \nat \tvdash{L} 
-           \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}}:Type
+           \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}}:[[Type]]
            \\\\
            \Gamma, x:^\theta e_2,\Gamma',y:^L \nat,
            f:^L \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}} \tvdash{L}
@@ -563,12 +573,12 @@ insures that if an expression has a type, then its type is well typed.
          {\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} \rec{f}{y}{v'}:\arrowT{y}{L}{\nat}{+}{e_2}}
        \end{math}
      \end{center}
-     By part one of the induction hypothesis, 
+     By the induction hypothesis we know 
      $\Gamma, [v/x]\Gamma',y:^L \nat \tvdash{L} 
-     \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}}:Type$ and by part two
+     \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}}:[[Type]]$ and
      $\Gamma,[v/x]\Gamma',y:^L \nat,
      f:^L \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}} \tvdash{L} 
-     [v/x]v':[v/x]e_2$.  Clearly, $f,p \not \in FV([v/x]e_2)$.  Finally, by applying 
+     [v/x]v':[v/x]e_2$.  Clearly, $f,p \not \in \mathsf{FV}([v/x]e_2)$.  Finally, by applying 
      $\FSdrulename{RecNat}$, 
      $\Gamma, [v/x]\Gamma' \tvdash{L} [v/x](\rec{f}{y}{v'}):[v/x](\arrowT{y}{L}{\nat}{+}{e_2})$.
 
@@ -579,7 +589,7 @@ insures that if an expression has a type, then its type is well typed.
          $$\mprset{flushleft}
          \inferrule* [right=\FSdrulename{RecNatComp}] {
            \Gamma, x:^\theta e_2,\Gamma',y:^L \nat \tvdash{L} 
-           \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}}:Type
+           \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}}:[[Type]]
            \\\\
            \Gamma, x:^\theta e_2,\Gamma',y:^L \nat,
            f:^L \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}} \tvdash{L}
@@ -590,32 +600,43 @@ insures that if an expression has a type, then its type is well typed.
          {\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} \recc{f}{x}{v'}:\arrowT{y}{L}{\nat}{-}{e_2}}
        \end{math}
      \end{center}
-     By part one of the induction hypothesis, 
+     By the induction hypothesis we know 
      $\Gamma, [v/x]\Gamma',y:^L \nat \tvdash{L} 
-     \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}}:Type$ and by part two
+     \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}}:[[Type]]$ and
      $\Gamma, [v/x]\Gamma',y:^L \nat,
      f:^L \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}} \tvdash{L}
      [v/x]v':[v/x]e_2$.  Now by applying $\FSdrulename{RecnatComp}$,
      $\Gamma, [v/x]\Gamma' \tvdash{L} [v/x](\recc{f}{x}{v'}):[v/x](\arrowT{y}{L}{\nat}{-}{e_2})$.
      
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Rec}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta''} e'_1:Type
-           \\\\
-          \Gamma, x:^\theta e_2,\Gamma',
-          f:^{\theta'} \arrowT{z}{\theta''}{e'_1}{+}{e''_1},y:^{\theta''} e'_1 \tvdash{\theta'}
-          e:e''_1
-         }
-         {\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} 
-           \rec{f}{y}{e}:\arrowT{y}{\theta''}{e'_1}{+}{e''_1}}
-       \end{math}
-     \end{center}
-     Similar to the previous case.
+   % \item[Case.]\ \\
+   %   \begin{center}
+   %     \begin{math}
+   %       $$\mprset{flushleft}
+   %       \inferrule* [right=\FSdrulename{Rec}] {
+   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta''} e'_1:[[Type]]
+   %         \\\\
+   %        \Gamma, x:^\theta e_2,\Gamma',
+   %        f:^{\theta'} \arrowT{z}{\theta''}{e'_1}{+}{e''_1},y:^{\theta''} e'_1 \tvdash{\theta'}
+   %        e:e''_1
+   %       }
+   %       {\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} 
+   %         \rec{f}{y}{e}:\arrowT{y}{\theta''}{e'_1}{+}{e''_1}}
+   %     \end{math}
+   %   \end{center}
+   %   Similar to the previous case.
   \end{itemize}
 \end{proof}
+
+Inversion says that if we know the conclusion of a typing rule is
+true, then we know its premises.  The analysis in this section depends
+on two inversion principles.  The first, is inversion for kinding, is
+if we know $[[G |- e : Type th]]$, then we know the premises of the
+kinding rules matching $[[e]]$, but this trivial result, and hence, we
+do not state it here.  The second inversion principle is needed to
+prove the case for \FSdrulename{AppPiTerm} in the proof of type
+preservation.  This principle states that if we know that some
+$\lambda$-abstractions type is a dependent product, then we know the
+primise of the \FSdrulename{Lam} rule holds.
 
 \begin{lemma}[Inversion]
   \label{lemma:inversion}
@@ -633,7 +654,7 @@ insures that if an expression has a type, then its type is well typed.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{Lam}] {
-          \Gamma \tvdash{\theta} e_1:Type
+          \Gamma \tvdash{\theta} e_1:[[Type]]
           \\\\
           \Gamma,x:^{\theta} e_1 \tvdash{\theta'} e:e_2
         }{\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}}
@@ -669,7 +690,31 @@ insures that if an expression has a type, then its type is well typed.
 
 \section{Type Preservation}
 \label{sec:type_preservation}
+We are now in a position to prove type preservation.  The proof is
+straightforward, and holds by induction on the typing derivation.
+Type preservation is definately a result that should be proven for any
+type theory or programming language being designed, implemented, or
+studied.  This result insures that reduction does not wonder outside
+the bounds of the type system.  If type preservation did not hold,
+then one could start with a proof $[[e]]$ of some type, and then use
+reduction to obtain that $[[e]]$ is a proof of some other type or that
+$[[e]]$ is not a proof at all, or if one starts with the application
+of some program to a series of arguments that is supposed to return a
+natural number, but then after reduction ends up with some other type,
+would result in reasoning about the correctness of the program
+impossible!
 
+It turned out that for freedom of speech logical consistency actually
+depends on type preservation, which is quite unusual.  It is usually
+the case that they are important, but distinct results.  In the next
+section we will define an interpretation of types to prove weak
+normalization.  Due to the collapsed nature of the freedom of speech
+language these interpretations depend heavily on the typing
+relation. It is this dependency that results in the proofs of the
+critical properties of the interpretation of types to depend on type
+preservation.  We conclude this section with the statement and proof
+of type preservation.
+ 
 \begin{thm}[Preservation]
   \label{thm:preservation}
   If $\Gamma \tvdash{\theta} e:e_1$ and $e \redto e'$ then $\Gamma \tvdash{\theta} e':e_1$.
@@ -764,7 +809,7 @@ interpretation of types as follows:\\
     $e \in \interp{e_1 = e_2}^{L}_\rho$ if and only if \\
     \begin{tabular}{lll}
       -- $\cdot \tvdash{L} e:\rho\ e_1 = \rho\ e_2$ \\
-      -- $\cdot \tvdash{\theta} \rho\ (e_1 = e_2):Type$\\
+      -- $\cdot \tvdash{\theta} \rho\ (e_1 = e_2):[[Type]]$\\
       -- $e \in J$\\
       -- $\rho\ e_1 \join \rho\ e_2$\\
     \end{tabular}\\
@@ -772,7 +817,7 @@ interpretation of types as follows:\\
     $e \in \interp{e'}^P_\rho$ if and only if \\
     \begin{tabular}{lll}
       -- $\cdot \tvdash{P} e:\rho\ e'$ \\
-      -- $\cdot \tvdash{\theta} \rho\ e':Type$\\
+      -- $\cdot \tvdash{\theta} \rho\ e':[[Type]]$\\
       -- $e \in V$
     \end{tabular}
   \end{tabular}
@@ -795,7 +840,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
 \end{lemma}
 \begin{proof}
   This is a proof by structural induction on $e$.  By assumption we know 
-  $\cdot \tvdash{\theta} \rho\ e:Type$, for each case below.  Hence, we assume this for
+  $\cdot \tvdash{\theta} \rho\ e:[[Type]]$, for each case below.  Hence, we assume this for
   the remainder of the proof.  In each of the function-type cases below we 
   assume $t \redto t'$, and $t' \in V$, because in each case $t \in V$.  We have two cases
   to consider when $\theta = L$ and when $\theta = P$.  The latter is trivial so we only
@@ -844,7 +889,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
 \end{lemma}
 \begin{proof}
   This is a proof by structural induction on $e$.  
-  By assumption we know $\cdot \tvdash{\theta} \rho\ e:Type$, for each case below.  Hence, we 
+  By assumption we know $\cdot \tvdash{\theta} \rho\ e:[[Type]]$, for each case below.  Hence, we 
   assume this for the remainder of the proof.  In each of the cases below we assume
   $t \redto t'$, $t$ is closed, and $t' \in \interp{e}^L_\rho$ and in the function-type cases we 
   assume $t \in V$, because in each case $t' \in V$.  By assumption $t$ has the required type,
@@ -891,7 +936,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule*[]{
-          \Gamma \tvdash{L} e':Type
+          \Gamma \tvdash{L} e':[[Type]]
           \\
           \rho \in \interp{\Gamma}
           \\
@@ -903,7 +948,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule*[]{
-          \Gamma \tvdash{P} e':Type
+          \Gamma \tvdash{P} e':[[Type]]
           \\
           \rho \in \interp{\Gamma}
           \\
@@ -918,8 +963,8 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
 
 \begin{lemma}[Kinding conversion]
   \label{lemma:kinding_conversion}
-  If $\Gamma \tvdash{\theta} [a/y]b:Type$ and $\Gamma \tvdash{L} p:a = a'$ then
-  $\Gamma \tvdash{\theta} [a'/y]b:Type$.
+  If $\Gamma \tvdash{\theta} [a/y]b:[[Type]]$ and $\Gamma \tvdash{L} p:a = a'$ then
+  $\Gamma \tvdash{\theta} [a'/y]b:[[Type]]$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the form of the assumed kinding derivation.
@@ -943,19 +988,19 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
     We first consider when $\theta \equiv P$ and $b \equiv y$ where $y$ is a variable.  Then
     $[a/y]y \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$ and 
     $a \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$.  Clearly, if 
-    $\Gamma \tvdash{P} [a/y]y:Type$ then $\Gamma, y:^P Type \tvdash{P} y:^P Type$.  By
-    the substitution lemma, $\Gamma \tvdash{P} [a'/y]y:Type$.
+    $\Gamma \tvdash{P} [a/y]y:[[Type]]$ then $\Gamma, y:^P [[Type]] \tvdash{P} y:^P [[Type]]$.  By
+    the substitution lemma, $\Gamma \tvdash{P} [a'/y]y:[[Type]]$.
 
     Now we consider when $\theta$ is arbitrary and 
     $b \equiv \arrowT{x}{\theta'}{r}{\epsilon}{s}$.
     Then $[a/y]b \equiv \arrowT{x}{\theta'}{[a/y]r}{\epsilon}{[a/y]s}$.  Here we can see that
     $e_1 \equiv [a/y]r$ and $e_2 \equiv [a/y]s$ so by the induction 
-    hypothesis, $\Gamma \tvdash{\theta} [a'/y]r:Type$ and 
-    $\Gamma, x:^{\theta'} [a/y]r \tvdash{\theta} [a'/y]s:Type$.  Finally, by applying 
+    hypothesis, $\Gamma \tvdash{\theta} [a'/y]r:[[Type]]$ and 
+    $\Gamma, x:^{\theta'} [a/y]r \tvdash{\theta} [a'/y]s:[[Type]]$.  Finally, by applying 
     $\FSdrulename{K\_Pi}$, 
-    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{[a'/y]r}{\epsilon}{[a'/y]s}:Type$ which is 
+    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{[a'/y]r}{\epsilon}{[a'/y]s}:[[Type]]$ which is 
     equivalent to 
-    $\Gamma \tvdash{\theta} [a'/y](\arrowT{x}{\theta'}{r}{\epsilon}{s}):Type$.
+    $\Gamma \tvdash{\theta} [a'/y](\arrowT{x}{\theta'}{r}{\epsilon}{s}):[[Type]]$.
   
   \item[Case.] \ \\
     \begin{center}
@@ -968,8 +1013,8 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
   $\Gamma \tvdash{\theta_2} [a/y]s:e_2$.  Using $\FSdrulename{Conv}$ and 
   $\Gamma \tvdash{L} p:a = a'$ we obtain $\Gamma \tvdash{\theta_1} [a'/y]r:e_1$ and 
   $\Gamma \tvdash{\theta_2} [a'/y]s:e_2$.  Finally, by applying $\FSdrulename{K\_Eq}$,
-  $\Gamma \tvdash{L} [a'/y]r = [a'/y]s:Type$.  Since $[a'/y]r = [a'/y]s \equiv 
-  [a'/y](r = s) \equiv [a'/y]b$ we can conclude $\Gamma \tvdash{L} [a'/y]b:Type$.
+  $\Gamma \tvdash{L} [a'/y]r = [a'/y]s:[[Type]]$.  Since $[a'/y]r = [a'/y]s \equiv 
+  [a'/y](r = s) \equiv [a'/y]b$ we can conclude $\Gamma \tvdash{L} [a'/y]b:[[Type]]$.
 \end{proof}
 
 \begin{lemma}[Computational Semantic Conversion]
@@ -981,11 +1026,11 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
 \begin{proof}
   Let $\theta = P$.  We know that $a \in \interp{[e/x]A}^P_\rho$
   iff $\cdot \tvdash{P} a:\rho\ [e/x]A$ and $a\ is\ a\ value$ and $
-  \cdot \tvdash{P} \rho\ [e/x]A:Type$ 
+  \cdot \tvdash{P} \rho\ [e/x]A:[[Type]]$ 
   by the definition of the interpretation of types.
   By $\FSdrulename{Join}$, $\Gamma \tvdash{L} join:e = e'$. Finally, by 
   $\FSdrulename{Conv}$, 
-  $\cdot \tvdash{P} a:\rho\ [e'/x]A$.  Now by regularity $\cdot \tvdash{P} \rho\ [e'/x]A:Type$.
+  $\cdot \tvdash{P} a:\rho\ [e'/x]A$.  Now by regularity $\cdot \tvdash{P} \rho\ [e'/x]A:[[Type]]$.
   Thus, $a \in \interp{[e'/x]A}^P_\rho$ and
   $\interp{[e/x]A}^P_\rho \subseteq \interp{[e'/x]A}^P_\rho$.
 \end{proof}
@@ -997,7 +1042,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
 \end{lemma}
 \begin{proof}
   We proceed by induction on the form of $A$.  In each case we must show 
-  $\cdot \tvdash{L} a:\rho[e'/x]A$ and $\cdot \tvdash{L} \rho[e'/x]A:Type$.  The former is easly 
+  $\cdot \tvdash{L} a:\rho[e'/x]A$ and $\cdot \tvdash{L} \rho[e'/x]A:[[Type]]$.  The former is easly 
   accomplished by first applying $\FSdrulename{Join}$ to obtain $\cdot \tvdash{L} join:e = e'$ 
   and then applying $\FSdrulename{Conv}$ to obtain the desired result.  The latter is obtained
   by regularity.
@@ -1075,7 +1120,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
   \item[Case.] Let $e \equiv e_1 = e_2$.  Suppose $a \in \interp{e}^\theta_{\rho[x \mapsto e']}$.
     By the definition of the interpretation of types, 
     $\cdot \tvdash{L} a:\rho[x \mapsto e']\ e_1 = \rho[x \mapsto e']\ e_2$, 
-    $\cdot \tvdash{L} \rho[x \mapsto e']\ e_1 = \rho[x \mapsto e']\ e_2:Type$,
+    $\cdot \tvdash{L} \rho[x \mapsto e']\ e_1 = \rho[x \mapsto e']\ e_2:[[Type]]$,
     $a \in V$, 
     and $\rho[x \mapsto e']\ e_1 \join \rho[x \mapsto e']\ e_2$.  Clearly, if 
     $\cdot \tvdash{L} a:\rho[x \mapsto e']\ e_1 = \rho[x \mapsto e']\ e_2$ then
@@ -1091,10 +1136,10 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
   \begin{itemize}
   \item[Case.] Assume $a \in \interp{e}^P_{\rho[x \mapsto e']}$.  By the definition of the 
     interpretation of types, $\cdot \tvdash{P} a:\rho[x \mapsto e']\ e$,
-    $\cdot \tvdash{P} \rho[x \mapsto e']\ e:Type$ and $a$ is a value.
+    $\cdot \tvdash{P} \rho[x \mapsto e']\ e:[[Type]]$ and $a$ is a value.
     Just as in the previous case if $\cdot \tvdash{P} a:\rho[x \mapsto e']\ e$ and
-    $\cdot \tvdash{P} \rho[x \mapsto e']\ e:Type$ then
-    $\cdot \tvdash{P} a:\rho\ [e'/x]e$ and $\cdot \tvdash{P} \rho\ [e'/x]e:Type$.  Therefore, by 
+    $\cdot \tvdash{P} \rho[x \mapsto e']\ e:[[Type]]$ then
+    $\cdot \tvdash{P} a:\rho\ [e'/x]e$ and $\cdot \tvdash{P} \rho\ [e'/x]e:[[Type]]$.  Therefore, by 
     the definition of the interpretation of
     types, $\interp{e}^L_{\rho[x \mapsto e']} \subseteq \interp{[e'/x]e}^L_\rho$.
   \end{itemize}
@@ -1104,8 +1149,8 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
   \label{lemma:substitution_kinding_typing}
   \begin{itemize}
   \item[]
-  \item[i.]   If $\rho \in \interp{\Gamma}$ and $\Gamma \tvdash{\theta} e:Type$ then 
-    $\cdot \tvdash{\theta} \rho\ e:Type$.
+  \item[i.]   If $\rho \in \interp{\Gamma}$ and $\Gamma \tvdash{\theta} e:[[Type]]$ then 
+    $\cdot \tvdash{\theta} \rho\ e:[[Type]]$.
   \item[ii.]   If $\rho \in \interp{\Gamma}$ and $\Gamma \tvdash{\theta} v:e$ then 
     $\cdot \tvdash{\theta} \rho\ v:\rho\ e$.
   \end{itemize}
@@ -1119,9 +1164,9 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
     \begin{center}
       \begin{math}
         $$\mprset{flushleft}
-        \inferrule* [right=K\_Type] {
+        \inferrule* [right=$K\_[[Type]]$ ] {
           \ 
-        }{\Gamma \tvdash{P} Type:Type}
+        }{\Gamma \tvdash{P} [[Type]]:[[Type]]}
       \end{math}
     \end{center}
     Trivial.
@@ -1132,7 +1177,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
           $$\mprset{flushleft}
           \inferrule* [right=K\_Nat] {
             \ 
-          }{\Gamma \tvdash{L} \nat:Type}
+          }{\Gamma \tvdash{L} \nat:[[Type]]}
         \end{math}
       \end{center}
       Trivial.
@@ -1142,18 +1187,18 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
         \begin{math}
           $$\mprset{flushleft}
           \inferrule* [right=K\_Pi] {
-            \Gamma \tvdash{\theta'} e_1:Type
+            \Gamma \tvdash{\theta'} e_1:[[Type]]
             \\\\
-            \Gamma,x:^{\theta'} e_1 \tvdash{\theta} e_2:Type
-          }{\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}:Type}
+            \Gamma,x:^{\theta'} e_1 \tvdash{\theta} e_2:[[Type]]
+          }{\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}:[[Type]]}
         \end{math}
       \end{center}
-      By part one of the induction hypothesis, $\cdot \tvdash{\theta'} \rho\ e_1:Type$ and
-      $\cdot,x:^{\theta'} \rho\ e_1 \tvdash{\theta} \rho\ e_2:Type$.  Thus, by applying 
+      By part one of the induction hypothesis, $\cdot \tvdash{\theta'} \rho\ e_1:[[Type]]$ and
+      $\cdot,x:^{\theta'} \rho\ e_1 \tvdash{\theta} \rho\ e_2:[[Type]]$.  Thus, by applying 
       $\FSdrulename{K\_Pi}$ 
-      $\cdot \tvdash{\theta} \arrowT{x}{\theta'}{\rho\ e_1}{\epsilon}{\rho\ e_2}:Type$, which
+      $\cdot \tvdash{\theta} \arrowT{x}{\theta'}{\rho\ e_1}{\epsilon}{\rho\ e_2}:[[Type]]$, which
       is equivalent to 
-      $\cdot \tvdash{\theta} \rho\ (\arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}):Type$.
+      $\cdot \tvdash{\theta} \rho\ (\arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}):[[Type]]$.
       
     \item[Case.]\ \\
       \begin{center}
@@ -1163,13 +1208,13 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
             \Gamma \tvdash{\theta_1} e:e_1
             \\\\
             \Gamma \tvdash{\theta_2} e':e_2
-          }{\Gamma \tvdash{L} e = e':Type}
+          }{\Gamma \tvdash{L} e = e':[[Type]]}
         \end{math}
       \end{center}
       By part two of the induction hypothesis, $\cdot \tvdash{\theta_1} \rho\ e:\rho e_1$ and
       $\cdot \tvdash{\theta_2} \rho\ e':\rho\ e_2$.  Thus, by applying $\FSdrulename{K\_Eq}$
-      $\cdot \tvdash{L} \rho\ e = \rho\ e':Type$, which is equivalent to
-      $\cdot \tvdash{L} \rho\ (e = e'):Type$.
+      $\cdot \tvdash{L} \rho\ e = \rho\ e':[[Type]]$, which is equivalent to
+      $\cdot \tvdash{L} \rho\ (e = e'):[[Type]]$.
   \end{itemize}
   
   We now prove part ii.
@@ -1179,13 +1224,13 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{Var}]{
-          \Gamma \tvdash{\theta} e:Type
+          \Gamma \tvdash{\theta} e:[[Type]]
           \\\\
           x:^{\theta} e \in \Gamma
         }{\Gamma \tvdash{\theta} x:^{\theta} e}
       \end{math}
     \end{center}
-    By part one of the induction hypothesis, $\cdot \tvdash{\theta} \rho\ e:Type$.  Since
+    By part one of the induction hypothesis, $\cdot \tvdash{\theta} \rho\ e:[[Type]]$.  Since
     $x:^{\theta} e \in \Gamma$ then there exists a $x \mapsto e' \in \rho$ such that 
     $e' \in \interp{e}^\theta_\rho$.  By the definition of the interpretation of types
     $\cdot \tvdash{\theta} e':\rho\ e$, which is equivalent to 
@@ -1197,14 +1242,14 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{Lam}] {
-          \Gamma \tvdash{\theta} e_1:Type
+          \Gamma \tvdash{\theta} e_1:[[Type]]
           \\\\
           \Gamma,x:^{\theta} e_1 \tvdash{\theta'} e:e_2
         }{\Gamma \tvdash{\theta'} 
           \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}}
       \end{math}
     \end{center}
-    By part one of the induction hypothesis, $\cdot \tvdash{\theta} \rho\ e_1:Type$ and
+    By part one of the induction hypothesis, $\cdot \tvdash{\theta} \rho\ e_1:[[Type]]$ and
     by part two, $\cdot,x:^{\theta} \rho\ e_1 \tvdash{\theta'} \rho\ e:\rho\ e_2$.  Thus, by
     applying $\FSdrulename{Lam}$ 
     $\cdot \tvdash{\theta'} \lambda x.\rho\ e:\arrowT{x}{\theta}{\rho\ e_1}{+}{\rho\ e_2}$, which
@@ -1216,7 +1261,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{ILam}] {
-          \Gamma \tvdash{\theta} e_1:Type
+          \Gamma \tvdash{\theta} e_1:[[Type]]
           \\\\
           \Gamma,x:^{\theta} e_1 \tvdash{\theta'} v:e_2
           \\\\
@@ -1339,7 +1384,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{RecNat}] {
           \Gamma,x:^L \nat \tvdash{L} 
-          \arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}}:Type
+          \arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}}:[[Type]]
           \\\\
           \Gamma, x:^L \nat,
           f:^L \arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}} \tvdash{L}
@@ -1352,7 +1397,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
     \end{center}
     By part one of the induction hypothesis, 
     $\cdot,x:^L \nat \tvdash{L} 
-    \rho\ (\arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}}):Type$ and by part two
+    \rho\ (\arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}}):[[Type]]$ and by part two
     $\cdot, x:^L \nat,
     f:^L \rho\ (\arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}}) \tvdash{L}
     \rho\ v:\rho\ e_2$.  Now by applying $\FSdrulename{RecNat}$,
@@ -1365,7 +1410,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{RecNatComp}] {
           \Gamma,x:^L \nat \tvdash{L} 
-          \arrowT{y}{L}{\nat}{-}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}}:Type
+          \arrowT{y}{L}{\nat}{-}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}}:[[Type]]
           \\\\
           \Gamma,x:^L \nat,
           f:^L \arrowT{y}{L}{\nat}{-}{\arrowT{p}{L}{x=S\ y}{-}{[y/x]e_2}} \tvdash{L} v:e_2
@@ -1382,7 +1427,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{Rec}] {
-          \Gamma \tvdash{\theta'} e_1:Type
+          \Gamma \tvdash{\theta'} e_1:[[Type]]
           \\\\
           \Gamma, f:^{\theta} \arrowT{x}{\theta'}{e_1}{+}{e_2},x:^{\theta'} e_1 \tvdash{\theta}
           e:e_2
@@ -1390,7 +1435,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
         {\Gamma \tvdash{P} \rec{f}{x}{e}:\arrowT{x}{\theta'}{e_1}{+}{e_2}}
       \end{math}
     \end{center}
-    By part one of the induction hypothesis, $\cdot \tvdash{\theta'} \rho\ e_1:Type$ and by 
+    By part one of the induction hypothesis, $\cdot \tvdash{\theta'} \rho\ e_1:[[Type]]$ and by 
     part two,
     $\cdot, f:^{\theta} \rho\ (\arrowT{x}{\theta'}{e_1}{+}{e_2}),x:^{\theta'} \rho\ e_1 
     \tvdash{\theta} \rho\ e:\rho\ e_2$.  Thus, by applying $\FSdrulename{Rec}$
@@ -1407,9 +1452,9 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
 \end{thm}
 \begin{proof}
   Throughout this proof we implicitly assume an arbitrary $\rho \in \interp{\Gamma}$ and
-  that $\cdot \tvdash{L} \rho\ e':Type$.  The latter holds by first applying regularity to obtain
-  $\Gamma \tvdash{L} e:Type$ and then applying Lemma~\ref{lemma:substitution_kinding_typing} to
-  obtain $\cdot \tvdash{L}\rho\ e:Type$.
+  that $\cdot \tvdash{L} \rho\ e':[[Type]]$.  The latter holds by first applying regularity to obtain
+  $\Gamma \tvdash{L} e:[[Type]]$ and then applying Lemma~\ref{lemma:substitution_kinding_typing} to
+  obtain $\cdot \tvdash{L}\rho\ e:[[Type]]$.
   
   \begin{itemize}
   \item[]\ \\
@@ -1419,7 +1464,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{Var}]{
-          \Gamma \tvdash{L} e:Type
+          \Gamma \tvdash{L} e:[[Type]]
           \\\\
           x:^{L} e \in \Gamma
         }{\Gamma \tvdash{L} x:^{L} e}
@@ -1434,7 +1479,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{Lam}] {
-          \Gamma \tvdash{\theta} e_1:Type
+          \Gamma \tvdash{\theta} e_1:[[Type]]
           \\\\
           \Gamma,x:^\theta e_1 \tvdash{L} e:e_2
         }{\Gamma \tvdash{L} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}}
@@ -1469,7 +1514,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{ILam}] {
-          \Gamma \tvdash{\theta} e_1:Type
+          \Gamma \tvdash{\theta} e_1:[[Type]]
           \\\\
           \Gamma,x:^\theta e_1 \tvdash{L} v:e_2
           \\\\
@@ -1657,7 +1702,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{ContraPiTh}] {
-          \Gamma \tvdash{\theta''} e:Type
+          \Gamma \tvdash{\theta''} e:[[Type]]
           \\\\
           \Gamma \tvdash{L} e':(\arrowT{x}{\theta}{e_1}{\epsilon}{e_2}) = 
           (\arrowT{x}{\theta'}{e'_1}{\epsilon'}{e'_2})
@@ -1677,7 +1722,7 @@ We define $V$ as the set of terms such that $t \normto v$, where $v$ is a value.
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=\FSdrulename{ContraPiEp}] {
-          \Gamma \tvdash{\theta''} e:Type
+          \Gamma \tvdash{\theta''} e:[[Type]]
           \\\\
           \Gamma \tvdash{L} e':(\arrowT{x}{\theta}{e_1}{\epsilon}{e_2}) = 
           (\arrowT{x}{\theta'}{e'_1}{\epsilon'}{e'_2})
