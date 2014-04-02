@@ -6,6 +6,72 @@
 % See the seppp.tex file for reminders of the motivation of the
 % design.
 
+The previous chapter introduced the freedom of speech
+dependently-typed functional programming language. This language
+contained two fragments, the logical fragment and the programmatic
+fragment.  However, these fragments are judgmentally kept separate.
+That is the syntax was the same for both fragments, even more so the
+syntax for programs and types are collapsed into a single syntactic
+category.  Thus, the fragments are not strictly separate, but rather,
+weakly so.  This particular design is very appealing because it has an
+elegant definition, but this elegance comes at a cost.  The type
+system suffers from many value restrictions, and as we have said
+above, this makes programming very hard.
+
+Consider a design where instead of a weak separation of the two
+fragments -- logical and programmatic -- we insist on a strict one.
+That is the logical fragment and the programmatic fragment have
+completely distinct languages for types and programs, and then the two
+fragments are related using freedom of speech by typing rules.  So we
+go from a picture that looks like this:
+\begin{center}
+  \begin{tikzpicture}[scale=2.5,cap=round,>=latex]    
+    \draw[thick] (2.8cm,0cm) circle(1cm);
+    \draw (2.78cm,0cm) node {Programmatic};
+    \draw[thick] (3cm,0.51cm) circle(0.3cm);
+    \draw (3cm,0.5cm) node {Logical};
+  \end{tikzpicture}
+\end{center}
+To the following picture:
+\begin{center}
+  \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=5 cm, scale = 1, transform shape]
+    \node[state, minimum size=83.1pt] (A)              {Logical};
+    \node[state] (B) [right of=A] {Programmatic};
+
+    \path[->] (A) edge [bend left] (B)
+              (B) edge [bend left] (A);
+  \end{tikzpicture}    
+\end{center}
+We have seen this diagram before in the previous chapter, but there it
+was used to give an intuitive understanding of the free speech
+property, but the two fragments are not strictly separate.  Now we
+insist that they are in fact strictly separate, and the first diagram
+above is no long applicable unlike the freedom of speech language.  We
+will see that this separation allows for the lifting of all value
+restrictions from the typing rules.  
+
+The freedom of speech language is not a very expressive programming
+language.  For example, we did not show how to construct full
+programs, nor did freedom of speech contain any notion of abstract
+data types or pattern matching.  Thus, it is rather difficult to
+consider freedom of speech as a real-world programming language.  In
+this chapter we introduce the design of a new programming language
+called Separation of Proof from Program ($\Sep$) that contains all of
+these new features.  The logical and programmatic fragments are
+strictly separate, and $\Sep$ is a full real-world programming
+language complete with abstract datatypes and pattern matching.  There
+are also additional features that we will introduce below.  The
+definition of $\Sep$ is very large with over a hundred typing rules
+and a large amount of syntax.  Therefore, we do not have the space to
+introduce the complete definition in the same style as we did for
+freedom of speech, but instead concentrate on the most important
+aspects of the design.  If the reader wishes to wade through the
+entire definition please see
+Appendix~\ref{sec:annotated_separation_of_proof_from_program} and
+Appendix~\ref{sec:unannotated_separation_of_proof_from_program}, but
+the reader may wish to read this chapter first to understand the need
+for two appendices.
+
 \begin{center}
   \small
   \begin{math}
