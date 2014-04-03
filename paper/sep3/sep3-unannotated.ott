@@ -799,7 +799,7 @@ Jtyp :: '' ::=
   -------------------------------------------- :: Forall2
   D , G |- Forall x : t . P : Formula max(1,i) 
 
-  D , G |- t : Type (i+1)
+  D , G |- t : Type i
   D , G , x : t |- P : Formula j
   -------------------------------------------- :: Forall3
   D , G |- Forall x : t . P : Formula max(i+1,j) 
@@ -820,7 +820,7 @@ Jtyp :: '' ::=
   -------------------------------------------- :: Ext2
   D , G |- Exists x : t . P : Formula max(1,i) 
 
-  D , G |- t : Type (i+1)
+  D , G |- t : Type i
   D , G , x : t |- P : Formula j
   ---------------------------------------------- :: Ext3
   D , G |- Exists x : t . P : Formula max(i+1,j) 
