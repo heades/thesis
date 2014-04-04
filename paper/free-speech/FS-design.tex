@@ -634,7 +634,11 @@ Lastly, we have the rule for general recursion:
 This rule is -- expectedly -- restricted to the programmatic fragment.
 The things to note about this rule are that $[[f]]$ has the exact same
 type as $[[rec f x e]]$, and that there are no proofs requiring any
-arguments to decrease.
+arguments to decrease.  Lastly, notice that the recursive function we
+are defining, that is $[[f]]$, has a general type. Furthermore, notice
+that $[[e2]]$ can itself be $[[Type]]$, thus we can define types by
+recursion. These are known as large eliminations and facilitate
+generic programming.
 
 Throughout this chapter we have introduced the complete design of a
 new dependently typed functional programming language where proofs and
