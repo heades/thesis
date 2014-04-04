@@ -86,7 +86,7 @@ primary goal of the unannotated language is computation.
 
 The reader may suspect that the unannotated language most likely
 consists primarily of the programmatic fragment, because if the proof
-language is removed and has no computational content then why keep it
+language is removed and has no computational content, then why keep it
 around?  This is precisely correct, and an implementation of $\Sep$
 would indeed do this, but we define an additional eraser function to
 essentially translate the proof language of $\Sep$ into the
@@ -97,14 +97,101 @@ pursue this strand of thought further, but wanted to simply comment on
 this notion. We do not define the eraser functions here, but the
 interested reader can find their complete definitions at the end of
 Appendix~\ref{sec:unannotated_separation_of_proof_from_program}.
+Throughout the remainder of this chapter we will concentrate solely on
+the annotated $\Sep$ language which we will just call $\Sep$.
+
+\textbf{The overall picture.}  $\Sep$ consists of four main judgments:
+\begin{center}
+  \begin{tikzpicture}
+    \matrix (m) [matrix of nodes,
+                 row sep=3pt,
+                 column 1/.style={anchor=base west},
+                 column 2/.style={anchor=base},
+                 column 3/.style={anchor=base east}
+    ]
+    {
+      $[[D, G |- LK : Logical i]]$ & Super kinding.\\
+      $[[D, G |- P : LK]]$         & Kinding.\\
+      $[[D, G |- p : P]]$          & Proof typing.\\
+      $[[D, G |- t : t']]$         & Program typing.\\ 
+    };
+
+    \draw [decoration={brace,amplitude=0.5em},decorate,ultra thick,gray]
+        (m-1-1.north -| m.east) -- (m-3-1.south -| m.east);
+
+        \draw [decoration={brace,amplitude=0.5em},decorate,ultra thick,gray]
+        (m-4-1.north -| m.east) -- (m-4-1.south -| m.east);
+
+    \node[draw=none] at (160pt,10.6pt) {Logical Fragment};
+    \node[draw=none] at (177.8pt,-33.6pt) {Programmatic Fragment};
+  \end{tikzpicture}  
+\end{center}
+As the previous table indicates the logical fragment is broken up into
+three judgments.  This is because the language of the logical fragment
+is no longer collapsed.  There are distinct languages for proofs,
+predicates (types), kinds, and a new category we call super kinds.
+Each of these will be discussed further below.  Now the programmatic
+fragment consists of only a single judgment, because it has a
+collapsed syntax very much like the freedom of speech language.  In
+fact, the programmatic fragment is basically an extension of the
+freedom of speech language, and so is not really that different. For
+this reason we do not discuss the programmatic fragment in detail, but
+only discuss a few important aspects of the fragment.  
+
+In the freedom of speech language the connection between the two
+fragments is very explicit.  The connection from the logical fragment
+to the programmatic fragment is modeled by the $\Sepdrulename{Coerce}$
+rule, and the connection from the programmatic fragment was modeled by
+the dependent product types, which allowed arguments to functions to be
+programs from the programmatic fragment.  However, $\Sep$ does not
+have a coercion rule from the logical fragment to the programmatic
+fragment.  Instead both fragments are related via the dependent
+product types.  Logical programs are allowed to have programmatic
+inputs, and programmatic programs are allowed to have logical
+inputs.  
+
+\textbf{The programmatic fragment.} The programmatic fragment can be
+thought of as an extension of the programmatic fragment of the freedom
+of speech language.  The extensions include datatypes, and pattern
+matching.  There is one significant improvement to the programmatic
+fragment over the freedom of speech language, and that is the lifting
+of the value restrictions.  For example, the following are the
+$\lambda$-abstraction and function application rules from the
+programmatic fragment of $\Sep$:
+\begin{center}
+  \begin{mathpar}
+    \SepdruleTRMXXLamPL{}  \and
+    \SepdruleTRMXXLamMI{}  \and
+    \SepdruleTRMXXApp{}    
+  \end{mathpar}
+\end{center}
+We can see that these rules look very much like the rules of freedom
+of speech, but there are some small differences.  First, we annotate
+bound variables by their stage annotations.  This facilitates
+reasoning as well as the definitions of the eraser
+functions. Secondly, in the $\Sepdrulename{TRM\_LamPL}$ we annotate the
+free variable $[[x]]$ in the context of the premise with the
+$\mathsf{val}$ annotation.  This indicates that $[[x]]$ ranges over
+programmatic values, and this is used to enforce call by
+value. Compare this to the rule $\Sepdrulename{TRM\_LamMI}$ where
+$[[x]]$ does not only range over values, but also over diverging
+terms.
+
+These rules include the freedom of speech property.  The type $[[A]]$
+is an alias for one of $[[t]]$, $[[P]]$, or $[[LK]]$, which means
+compile-time functions -- using $\Sepdrulename{TRM\_LamMI}$ -- can
+take in programmatic arguments, proof arguments, or even predicates.
+
+Finally, the application rule $\Sepdrulename{TRM\_App}$ does not
+contain any value restriction.  The argument $[[a]]$ ranges over
+general terms, proofs, and predicates.  Thus, we have successfully
+lifted the value restriction in the programmatic fragment.
 
 \textbf{The logical fragment.}
-
-\textbf{The termination prediate.}
-
-\textbf{Structural ordering.}
-
-\textbf{The programmatic fragment, and value restrictions.}
+We would now like to introduce the logical fragment in a bit of
+detail so the reader can get an idea of how different it is from the
+logical fragment of the freedom of speech language.  The syntax of the
+logical fragment of $\Sep$ is defined as follows:
 
 \begin{center}  
   \begin{math}
@@ -175,22 +262,50 @@ Appendix~\ref{sec:unannotated_separation_of_proof_from_program}.
     \end{array}
   \end{math}
 \end{center}
+Super kinds are the types of logical kinds, which are themselves the
+types of predicates.  Finally, predicates are the types of proofs.
+The definition of the logical fragment is very reminiscent of the
+definition of system $\text{F}^\omega$ -- see
+Section~\ref{sec:moderen_type_theory} for an introduction of $\Fw$.
+In fact, predicates can be computed using $[[x]]$, $[[\ L x : A
+. P]]$, $[[P a]]$, $[[let x = p in P]]$, $[[let x = P in P']]$, and
+$[[let x = t [ p ] in P]]$; we have three different let expressions,
+because of the strict separation of the various languages.  This
+implies that the logical fragment is indeed a higher order language,
+but a predicative one.  We have stratified the super kinds and logical
+kinds into an infinite hierarchy of kinds.  We denote this by
+$[[Logical i]]$ and $[[Formula i]]$.  This stratification is similar
+to levels in SSF -- see Section~\ref{sec:moderen_type_theory} for more
+information on SSF.  
 
+Now in comparison with the freedom of speech language we can see that
+$\Sep$ has three new predicates: $[[t !]]$, $[[P1 + P2]]$, $[[Exists x
+: A . P]]$, and $[[t < t']]$.  The first is called the termination
+predicate and we will discuss this further below.  The second is the
+type of sum types or, logically, the type for disjunction, and the third
+is the type for existential quantification.  Note that we can
+existentially quantify over logical kinds, predicates, proofs, and
+terms.  Thus, the existential type makes use of the freedom of speech
+property similar to the dependent product type.  The final new
+predicate is the structural ordering type $[[t < t']]$ which says that
+$[[t]]$ is structurally smaller than $[[t']]$.  The structural
+ordering type will be discussed further below.
+
+The proof language is fairly straightforward, and is very similar to
+the freedom of speech language with the addition of the necessary
+proofs of the new predicates just discussed.  Thus, we do not go over
+each proof construct.  The typing rules for logical kinds, predicates,
+and proofs can be found in Figure~\ref{fig:logk-ty},
+Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
 \begin{figure}
+  \scriptsize
   \begin{mathpar}
-    \SepdruleVXXVar{} \and
-    \SepdruleVXXType{} \and
-    \SepdruleVXXPi{} \and
-    \SepdruleVXXLamPlus{} \and
-    \SepdruleVXXLamMinus{} \and
-    \SepdruleVXXRec{} \and
-    \SepdruleVXXCtor{} \and
-    \SepdruleVXXtCast{}
+    \SepdruleLKXXFormula{} \and
+    \SepdruleLKXXPredicate{}
   \end{mathpar}
-  \caption{Semantic Values}
-  \label{fig:sem-val}
+  \caption{Type-checking Rules for Logical Kinds}
+  \label{fig:logk-ty}
 \end{figure}
-
 \begin{figure}
   \scriptsize
   \begin{mathpar}
@@ -217,7 +332,6 @@ Appendix~\ref{sec:unannotated_separation_of_proof_from_program}.
   \caption{Type-checking Rules for Predicates}
   \label{fig:pred-ty}
 \end{figure}
-
 \begin{figure}
   \scriptsize
   \begin{mathpar}
@@ -250,30 +364,84 @@ Appendix~\ref{sec:unannotated_separation_of_proof_from_program}.
   \caption{Type-checking Rules for Proofs}
   \label{fig:proofs-ty}
 \end{figure}
+The read may wish to look over the typing rules for proofs to get an
+idea of which proof construct introduces each of the new predicates.
 
+\textbf{The termination prediate.}  In the freedom of speech language
+if one wanted to prove that a programmatic program is terminating one
+simply had to define it in the logical fragment, but this is not
+possible in $\Sep$, because of the strict separation of the logical
+and programmatic fragments.  The termination predicate adds the
+ability to prove programmatic programs terminating.  The termination
+predicate is denoted $[[t !]]$, and can be read as the program $[[t]]$
+terminates at a value.  We prove $[[t !]]$ using the rule
+$\Sepdrulename{PRF\_Val}$:
+\[ \SepdrulePRFXXVal{} \] This rule says, that if we can show $[[D, G
+|- val t]]$, then we can prove $[[t !]]$.  We call the judgment $[[D,
+G |- val t]]$ the semantic value judgment.  If it holds, then $[[t]]$
+is either an actual syntactic value, a free variable annotated in the
+context as ranging over values, or a termination cast.  See
+Figure~\ref{fig:sem-val} for the definition of the semantic value
+judgment.
 \begin{figure}
-  \scriptsize
   \begin{mathpar}
-    \SepdruleTRMXXTYZero{} \and
-    \SepdruleTRMXXTYi{} \and
-    \SepdruleTRMXXPi{} \and
-    \SepdruleTRMXXPiPRD{} \and
-    \SepdruleTRMXXPiLK{} \and
-    \SepdruleTRMXXVar{} \and
-    \SepdruleTRMXXtCast{} \and
-    \SepdruleTRMXXGD{} \and
-    \SepdruleTRMXXDC{} \and
-    \SepdruleTRMXXLamPL{} \and
-    \SepdruleTRMXXLamMI{} \and
-    \SepdruleTRMXXApp{} \and
-    \SepdruleTRMXXLetPRF{} \and
-    \SepdruleTRMXXLetPRD{} \and
-    \SepdruleTRMXXLet{} \and
-    \SepdruleTRMXXConv{} \and
-    \SepdruleTRMXXRec{} \and
-    \SepdruleTRMXXAbort{} \and
-    \SepdruleTRMXXCase{}
+    \SepdruleVXXVar{} \and
+    \SepdruleVXXType{} \and
+    \SepdruleVXXPi{} \and
+    \SepdruleVXXLamPlus{} \and
+    \SepdruleVXXLamMinus{} \and
+    \SepdruleVXXRec{} \and
+    \SepdruleVXXCtor{} \and
+    \SepdruleVXXtCast{}
   \end{mathpar}
-  \caption{Type-Checking Rules for Terms}
-  \label{fig:}
+  \caption{Semantic Values}
+  \label{fig:sem-val}
 \end{figure}
+One may feel that the rule $\Sepdrulename{PRF\_Val}$ is a bit
+restrictive.  This rule is supposed to allow the proof that a
+terminating program is indeed terminating, but on the noise it seems
+as if they only things we can prove are terminating on semantics
+values which are trivially terminating.  However, this is not the
+case.  If one can prove that $[[t]]$ is terminating for some non-value
+$[[t]]$, then one must have constructed the value of $[[t]]$, say
+$[[v]]$.  Now it is trivially the case that $[[t]]$ and $[[v]]$ are
+joinable, thus using $\Sepdrulename{PRF\_Join}$ we can prove $[[t =
+v]]$.  In addition, since we know $[[v]]$ is a value, then we can
+prove that it is a semantic value trivially.  Thus, using these two
+proofs we can then prove $[[D, G |- valax v : t !]]$ using the rules
+$\Sepdrulename{PRF\_Val}$ and $\Sepdrulename{PRF\_Conv}$.
+
+The termination cast is a means of casting programs to values if they
+can be proven to be terminating.  That is, any terminating program may
+be treated as a value. Lets consider the introduction rule for
+the termination cast:
+\[ 
+\SepdruleTRMXXtCast{}
+\]
+This rules states that if we have a well-typed $[[t]]$ of type
+$[[t']]$, and a proof $[[p]]$ that $[[t]]$ terminates, that is of type
+$[[t !]]$, then we may cast $[[t]]$ to a value denoted $[[tcast t by
+p]]$ which is also of type $[[t']]$.  
+
+There is one final component of the termination predicate called the
+termination case expression.  This is an expression that amounts to
+computationally case splitting over the termination behavior of a
+program.  Now do not be alarmed!  This does not imply that this is a
+proof of the halting problem.  Consider the typing rule for the
+termination case expression: \[ \SepdrulePRFXXTCase{} \] This rule
+status that if $[[t]]$ terminates then execute the second branch
+$[[p2]]$, which is allowed to use the proof showing that $[[t]]$
+terminates, otherwise if $[[t]]$ is diverges -- here we model
+divergence using $[[abort t']]$ -- then execute the first branch
+$[[p1]]$ which is allowed to use the proof showing $[[t]]$ is
+equivalent to $[[abort t']]$.  Now computationally speaking this rule
+is undecidable.  It is impossible to take an arbitrary program and
+decide whether it diverges or not, but adding this axiom is not
+inconsistent, because it simply captures the notion that either a
+program terminates or it diverges, and this is no more inconsistent
+then adding the law-of-excluded middle to our logic.  In fact, one
+might expect that adding termination case could imply the
+law-of-excluded middle making our logic classical, but this is an open
+problem.
+
+\textbf{Structural ordering.}
