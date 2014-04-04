@@ -274,7 +274,7 @@ because of the strict separation of the various languages.  This
 implies that the logical fragment is indeed a higher order language,
 but a predicative one.  We have stratified the super kinds and logical
 kinds into an infinite hierarchy of kinds.  We denote this by
-$[[Logical i]]$ and $[[Formula i]]$.  This stratification is similar
+$[[Logical i]]$ and $\mathsf{Formula}_{i}$.  This stratification is similar
 to levels in SSF -- see Section~\ref{sec:moderen_type_theory} for more
 information on SSF.  
 
@@ -444,4 +444,51 @@ might expect that adding termination case could imply the
 law-of-excluded middle making our logic classical, but this is an open
 problem.
 
-\textbf{Structural ordering.}
+\textbf{Structural ordering.}  There is one final interesting feature
+that sets $\Sep$ apart from the freedom of speech language, and many
+others.  Recall that in the freedom of speech language the logical
+fragment contained a terminating recursor, but the recursive argument
+had to be a natural number.  $\Sep$ relaxes this requirement to an
+arbitrary datatype by introducing a new predicate called the
+structural order denoted $[[t < t']]$.  Intuitively, if $[[t]]$ is a
+well-defined strict subexpression of $[[t']]$, then we may conclude
+$[[t < t']]$.  The rule for introducing the structural order predicate
+is as follows: \[ \SepdrulePRFXXOrd{} \] This rule is very much like
+the rule for introducing the termination predicate in that it is
+defined for values only, however, when mixed with equality it can be
+very powerful.  The judgment $[[t subexpp t']]$ is the subexpression
+ordering on datatype constructors.  See
+Appendix~\ref{sec:annotated_separation_of_proof_from_program} for the
+complete definition.  
+
+The structural order predicate is then used in the definition of
+induction in the logical fragment: \[ \SepdrulePRFXXInd{} \] As we can
+see the inductive call must be given a proof that the argument we are
+inducting over has structurally decreased.  This means that we can now
+do induction on many different types of data, for example, lists,
+trees, natural numbers, and any other inductively defined data.
+
+Throughout this chapter we have seen only the positive perspective of
+the design of $\Sep$.  So now we briefly discuss one major lesson
+learned from this design.  Relaxing the value restrictions was
+achieved by a strict separation of the logical and programmatic
+fragments.  In addition, the proof language has been separated into
+several different languages.  This strict separation prevents code
+reuse.  That is, there are functions that can be written in both the
+programmatic fragment and the logical fragment, but these have to be
+written twice.  Thus, through the strict separation we have gained no
+value restrictions, but lost code reuse.  This is the major drawback
+of the $\Sep$ design.  
+
+In this chapter we introduced a new dependently-typed functional
+programming language called Separation of Proof from Program.  $\Sep$
+is a large advancement over the freedom of speech language.  It has
+several new predicates for disjunction, existential quantification,
+termination, and structural ordering.  In addition $\Sep$ contains the
+freedom of speech property, but is designed so as to prevent the need
+for the value restrictions we have in the freedom of speech language.
+Thus, programming in $\Sep$ is more enjoyable.  Lastly, $\Sep$
+contains inductive datatypes with pattern matching.  Therefore,
+real-world programming examples can be carried out in $\Sep$; in fact,
+several examples can be found in the paper \cite{Kimmel:2012}.
+
