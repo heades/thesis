@@ -1,0 +1,360 @@
+\section{Normalization of Stratified System $\Fw$}
+\label{subsec:normalization_stratified_system_fw}
+In this section we do something a bit different from the previous
+sections.  Here we show that if we combine the type theories STLC and
+SSF that we can use the previous normalization results to conclude
+normalization of this new language.  First we define the new language.
+
+\subsection{The Language}
+\label{subsec:the_language}
+J. Girard defined a well known type-theory where the types not only
+consist of type variables, function types, and universal
+quantification, but also contain $\lambda$-abstractions and
+application.  This type theory is called System $\Fw$
+\cite{barendregt92}. Now these new $\lambda$-abstractions represent
+functions from types to types.  Logically these correspond to
+predicates which means this language corresponds to a restricted form
+of second-order intuitionistic logic with only implication as a
+primitive and no quantification over predicates.  System $\Fw$
+contains impredicativity, but this adds a lot of complexity to the
+language so we restrict the theory just as we did for SSF to obtain
+a more less expressive theory called Stratified System $\Fw$ (SS$\Fw$).
+Lets define the language.  The following definition defines the syntax
+for SS$\Fw$.
+\begin{definition}
+  \label{def:syntax_ssfw}
+  The syntax for terms, types, and kinds:
+  \begin{center}
+    \begin{tabular}{lll}
+      $K$ & $:=$ & $K \to K$ $|$ $*_0$ $|$ $*_1$ $|$ $\ldots$\\
+      $\phi$ & $:=$ & $X$   $|$ $\phi \rightarrow \phi$ $|$ $\forall X:K.\phi$ $|$ $\lambda X:*_l.\phi$ $|$ $\phi\ \phi$\\
+      $t$ & $:=$ & $x$   $|$ $\lambda x:\phi.t$   $|$ $t\ t$ $|$ $\Lambda X:K.t$ $|$ $t[\phi]$\\
+    \end{tabular}
+  \end{center}
+\end{definition}
+\noindent Now we define our operational semantics for SS$\Fw$ in the following definition.
+\begin{definition}
+  \label{def:reduction_rules_ssf}
+  Full $\beta$-reduction for SS$\Fw$:
+  \begin{center}
+    \begin{tabular}{lll}
+      $(\Lambda X:K.t)[\phi]$     & $\rightsquigarrow$ & $[\phi/X]t$\\
+      $(\lambda x:\phi.t)\ t'$      & $\rightsquigarrow$ & $[t'/x]t$\\
+      $(\lambda X:*_l.\phi)\ \phi'$ & $\rightsquigarrow$ & $[\phi'/x]\phi$
+    \end{tabular}
+  \end{center}
+\end{definition}
+
+We can see that this system is almost the same as SSF except we have
+added essentially STLC to the type level of the theory, and we now
+allow quantification over predicates.  That is take
+STLC where the terms are types and the types are kinds and that is
+essentially what we have added to the type level of SSF to obtain
+SS$\Fw$.  This allows us to compute types, so in terms of programming we
+are able to write very generic programs where the type of the program
+may need to be computed.  Next we define the kinding and typing rules for this
+system.  Now the rules for well-formed contexts do not change from SSF so we
+do not define them here.
+
+\begin{definition}
+  \label{def:l_kinding_rules_ssfw}
+  The kind assignment rules for SS$\Fw$ are defined as follows:
+  \begin{center}
+    \begin{tabular}{cccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash \phi_1 : *_p
+          \\
+          \Gamma \vdash \phi_2 : *_q
+        }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
+      \end{math}
+      & 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,X : *_q \vdash \phi : *_p
+        }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma(X) = *_p
+          \\
+          p \leq q
+          \\
+          \Gamma\ Ok
+        }{\Gamma \vdash X : *_q}
+      \end{math} \\
+      \\
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,X:K_1 \vdash \phi:K_2
+        }{\Gamma \vdash \lambda X:K_1.\phi:K_1 \to K_2}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash \phi_1:K_1 \to K_2
+          \\
+          \Gamma \vdash \phi_2:K_1
+        }{\Gamma \vdash \phi_1\ \phi_2:K_2}
+      \end{math}
+    \end{tabular}	
+  \end{center}
+\end{definition}
+\noindent
+To obtain SS$\Fw$ from SSF all we have to do is add the kinding rules
+for type-level $\lambda$-abstractions and type-level application.  The
+typing rules are the exactly same as SSF.  We state them next.
+\begin{definition}
+  \label{fig:typing_rules_ssfw}
+  Type assignment rules for SS$\Fw$:
+  \begin{center}
+    \begin{tabular}{cccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma(x) = \phi
+          \\
+          \Gamma\ Ok
+        }{\Gamma \vdash x : \phi}
+      \end{math}  
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,x : \phi_1 \vdash t : \phi_2
+        }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
+      \end{math} 
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
+          \\
+          \Gamma \vdash t_2 : \phi_1
+        }{\Gamma \vdash t_1\ t_2 : \phi_2}
+      \end{math}  \\
+      \\ 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma, X : *_p \vdash t : \phi
+        }{\Gamma \vdash \Lambda X:*_p.t:\forall X : *_p.\phi}
+      \end{math} 
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t:\forall X:*_l.\phi_1
+          \\
+          \Gamma \vdash \phi_2:*_l
+        }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+      \end{math} 
+      & \\
+    \end{tabular}
+  \end{center}
+\end{definition}  
+\noindent
+Now all the basic syntactic lemmas proved for SSF in
+Section~\ref{subsec:properties_of_the_hereditary_substitution_function}
+hold for SS$\Fw$ so we do not state them here.
+% subsection the_language (end)
+
+\subsection{Concluding Normalization}
+\label{subsec:concluding_normalization_ssfw}
+Concluding normalization of SS$\Fw$ is a little bit tricky, because
+the type level no longer consists of just constant types.  We conduct
+the proof similarly to how H. Barendregt proves normalization of
+System $\Fw$ in \cite{barendregt92} except we use hereditary
+substitution where he uses a technique called reducibility.  Since
+types contain computation we first must prove normalization of the
+type level and then using this result we prove normalization for the
+term (program) level.  
+
+Now the type level is exactly STLC with constructors for function
+types and universal types.  So all we have to do is define the
+hereditary substitution function and then use the results from
+Section~\ref{sec:normalization_the_simply_typed_lambda-calculus} to
+obtain normalization.  Similarly, the term level of SS$\Fw$ is exactly
+SSF so we do not need to define the hereditary substitution for
+SS$\Fw$.  We can just use the results from
+Section~\ref{subsec:normalization_stratified_system_f} to conclude
+normalization.  Lets move onto defining the hereditary substitution
+functions for the type level.  First we have to define the construct
+kind function.  Note that $ckind_K$ is
+the exact same as $ctype_\phi$ except at the type level.  Now all the
+properties of $ctype_\phi$ are also properties of $ckind_K$ so we do
+not prove them again here.  The construct type function is exactly the
+same as SSF so we do not redefine it here.  Also the kind $K$ is
+called the cut kind and is used in the exact same way as the cut type
+$\phi$.
+
+\begin{definition}
+  \label{def:ctype_stlc}
+  The $ckind_K$ function is defined with respect to a fixed kind $K$
+  and has two arguments, a free variable $X$, and a type $\phi$ where $X$
+  may be free in $\phi$.  We define $ckind_K$ by induction on the form of $\phi$.
+\begin{itemize}
+\item[] $ckind_K(X,X) = K$
+  \item[]
+  \item[] $ckind_K(X,\phi_1\ \phi_2) = K'$
+  \item[] \ \ \ \ Where $ckind_K(X,\phi_1) = K'' \to K'$.
+  \end{itemize}
+\end{definition}
+\noindent
+Now we defined the type-level hereditary substitution function.
+\begin{definition}
+  \label{def:hereditary_substitution_function__type_level_ssfw}
+  The following defines the hereditary substitution function for the type level of SS$\Fw$.  It
+  is defined by recursion on the form of the term being substituted
+  into and the cut kind $K$.
+  \begin{itemize}
+  \item[] $\{\phi/X\}^K X = \phi$
+  \item[] $\{\phi/X\}^K Y = Y$
+  \item[] \ \ \ \ Where $Y$ is a variable distinct from $X$.
+  \item[] $\{\phi/X\}^K (\phi_1 \to \phi_2) = (\{\phi/X\}^K \phi_1) \to (\{\phi/X\}^K \phi_2)$
+  \item[] $\{\phi/X\}^K (\forall Y:*_l.\phi') = \forall Y:*_l.\{\phi/X\}^K \phi'$
+  \item[] $\{\phi/X\}^K (\lambda Y:K_1.\phi') = \lambda Y:K_1.(\{\phi / X\}^K \phi')$
+  \item[] $\{\phi/X\}^K (\phi_1\ \phi_2) = (\{\phi/X\}^K \phi_1)\ (\{\phi/X\}^K \phi_2)$
+  \item[] \ \ \ \ Where $(\{\phi/X\}^K \phi_1)$ is not a $\lambda$-abstraction, or both $(\{\phi/X\}^K \phi_1)$
+    and $\phi_1$ are $\lambda$-abstractions,
+  \item[] \ \ \ \ or $ckind_K(X,\phi_1)$ is undefined.
+  \item[] $\{\phi/X\}^{K} (\phi_1\ \phi_2) = \{(\{\phi/X\}^{K} \phi_2)/y\}^{K''} \phi'_1$
+  \item[] \ \ \ \ Where $(\{\phi/X\}^{K} \phi_1) \equiv \lambda Y:K''.\phi'_1$ 
+    for some $Y$, $\phi'_1$, and $K''$ and $ckind_K(X,\phi_1) = K'' \to K'$.
+  \end{itemize}
+\end{definition}
+Now all the properties of the hereditary substitution function from
+Section~\ref{subsec:properties_of_the_hereditary_substitution_function}
+are easily modified to obtain the exact same results for the function
+just defined.  The statements of the properties do not change except
+where there are terms we use types and where there are types we use
+kinds so we do not repeat the properties here.  We now prove
+normalization for the type-level of SS$\Fw$.  The following defines
+the interpretation of types and the main substitution lemma.
+
+\begin{definition}
+  \label{def:interpretation_of_types_ssfw}
+  First we define when a normal form is a member of the interpretation of type $\phi$ in context $\Gamma$
+  \begin{center}
+    \begin{math}
+      \psi \in \interp{K}_\Gamma \iff \Gamma \vdash \phi:K,
+  \end{math}
+  \end{center}
+  and this definition is extended to non-normal forms in the following way
+  \begin{center}
+    \begin{math}
+      \phi \in \interp{K}_\Gamma \iff \phi \normto \psi \in \interp{K}_\Gamma,
+  \end{math}
+  \end{center}
+ where we use $\psi$ to denote a normal form at the type level.
+\end{definition}
+
+\noindent 
+Next we show that the definition of the interpretation of types is closed under
+hereditary substitutions.  
+
+\begin{lemma}[Substitution for the Interpretation of Types]
+  If $\phi' \in \interp{K'}_{\Gamma,X:*_l,\Gamma'}$, $\phi \in \interp{K}_\Gamma$, then 
+  $\{\phi/X\}^K \phi' \in \interp{K'}_{\Gamma,\Gamma'}$.
+  
+  \label{lemma:interpretation_of_types_closed_substitution_ssfw}
+\end{lemma}
+
+\noindent
+Finally, by the definition of the interpretation of types the following result implies that the type-level
+of SS$\Fw$ is normalizing.
+\begin{thm}[Type Soundness]
+  If $\Gamma \vdash \phi:K$ then $\phi \in \interp{K}_\Gamma$.
+  \label{thm:soundness_ssfw}
+\end{thm}
+
+\begin{corollary}[Normalization]
+  \label{coro:normalization_type_level_ssfw}
+  If $\Gamma \vdash \phi:K$ then $\phi \normto \psi$.
+\end{corollary}
+
+Now we have to use the fact that we know the type level of SS$\Fw$ is
+normalizing to conclude normalization of the term level.  First we
+define the interpretation of types for the term level.
+
+\begin{definition}
+  \label{def:interpretation_of_types_stlc}
+  First we define when a normal form is a member of the interpretation of normal type $\phi$ in context $\Gamma$
+  \begin{center}
+    \begin{math}
+    n \in \interp{\phi}_\Gamma \iff \Gamma \vdash n:\phi,
+  \end{math}
+  \end{center}
+  and this definition is extended to non-normal forms in the following way
+  \begin{center}
+    \begin{math}
+    t \in \interp{\phi}_\Gamma \iff t \normto n \in \interp{\phi}_\Gamma.
+  \end{math}
+  \end{center}
+\end{definition}
+
+\noindent 
+Next we show that the definition of the interpretation of types is closed under
+hereditary substitutions.  
+
+\begin{lemma}[Substitution for the Interpretation of Types]
+  If $n' \in \interp{\phi'}_{\Gamma,x:\phi,\Gamma'}$, $n \in \interp{\phi}_\Gamma$, then 
+  $[n/x]^\phi n' \in \interp{\phi'}_{\Gamma,\Gamma'}$.
+  
+  \label{lemma:interpretation_of_types_closed_substitution_stlc}
+\end{lemma}
+
+At this point we have to show that for any term $t$ of some type
+$\phi$ no matter if $\phi$ is normal or not then $t$ reduces to a
+normal form. We have to do this in two steps.  We first show that for
+all typeable terms where their types are normal they reduces to a
+normal form.  Then knowing this we show that for all typeable terms
+where their types are not necessarily normal they reduce to a normal
+form.  We first show the former.
+\begin{thm}[Type Soundness Normal Types]
+  If $\Gamma \vdash t:\phi$ and $\phi$ is normal then $t \in \interp{\phi}_\Gamma$.
+  \label{thm:soundness__normal_ssfw}
+\end{thm}
+\noindent
+The following lemmas are used in the proof of the type soundness lemma
+which shows that all typeable terms are in the interpretation of the
+normal form of their type.
+\begin{lemma}[Preservation of Types]
+  \label{lemma:preservation_for_kinding_ssfw}
+  \begin{itemize}
+  \item[]
+  \item[i.] If $(\Gamma,x:\phi,\Gamma')\ Ok$ and $\phi \redto \phi'$ then $(\Gamma,x:\phi',\Gamma')\ Ok$.
+  \item[ii.] If $\Gamma \vdash \phi:K$ and $\phi \redto \phi'$ then there exists a $\Gamma'$ such that $\Gamma' \vdash \phi':K$.
+  \end{itemize}
+\end{lemma}
+
+\begin{lemma}
+  \label{lemma:preservation_2}
+  If $\Gamma \vdash t:\phi$ and $\phi \redto \phi'$ then there exists a $\Gamma'$ such that $\Gamma' \vdash t:\phi'$.
+\end{lemma}
+
+\noindent
+Finally, we conclude normalization by showing type soundness.
+\begin{thm}[Type Soundness]
+  If $\Gamma \vdash t:\phi$ then $\phi \normto \psi$, and there exists a $\Gamma'$ such that $t \in \interp{\psi}_{\Gamma'}$.
+  \label{thm:soundness_term_ssfw}
+\end{thm}
+\begin{proof}
+  By regularity we know $\Gamma \vdash \phi:K$ for some kind $K$ and by Corollary~\ref{coro:normalization_type_level_ssfw}
+  there exists a normal type $\psi$ such that $\phi \normto \psi$.  Finally,
+  by Lemma~\ref{lemma:preservation_2} there exists a $\Gamma'$ such that $\Gamma' \vdash t:\psi$.  Thus, by Theorem~\ref{thm:soundness__normal_ssfw} 
+  $t \in \interp{\psi}_{\Gamma'}$.
+\end{proof}
+
+\begin{corollary}[Normalization]
+  If $\Gamma \vdash t:\phi$ then $t \normto n$.
+\end{corollary}
+% subsection concluding_normalization (end)
+% subsection normalization_stratified_system_fw (end)
+% section normalization_by_hereditary_substitution (end)

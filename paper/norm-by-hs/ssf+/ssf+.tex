@@ -1,0 +1,698 @@
+\newcommand{\ccon}[4]{\mbox{case}\ #1\ \text{of}\ #2\text{.}#3\text{,}#2\text{.}#4}
+\newcommand{\rcase}[5]{\mbox{rcase}_{#1}\ #2\ #3\ #4\ #5}
+\newcommand{\F}[0]{\mbox{F}^{=}}
+\newcommand{\Fp}[0]{\mbox{F}^{+}}
+\newcommand{\STLCeq}[0]{\textnormal{STLC}^=}
+\newcommand{\A}[0]{\mbox{\textbf{A}}}
+\newcommand{\bredto}[0]{\rightsquigarrow_\beta}
+\newcommand{\hlmn}[2]{
+  \marginpar{
+    \small
+    {\color{blue}{
+        \tiny #2
+    }}}
+    {\color{red}{
+        #1
+    }}
+}
+
+\section{Stratified System $\Fp$ (SS$\Fp$)}
+\label{sec:stratified_system_f_with_sum_types}
+Stratified System $\Fp$ is a predicative polymorphic type theory.
+Stratified polymorphism is used in predicative type theories for
+universe hierarchies.  SS$\Fp$ also has sum types $\phi_1 + \phi_2$,
+whose elimination form
+$\textit{case}\ t\ \textit{of}\ x_1.t_1,x_2.t_2$ is used to case split
+on a whether or not term $t$ with a sum type is truly $x_1$ of type
+$\phi_1$, or else $x_2$ of type $\phi_2$.  We consider sum types with
+so-called commuting conversions, which allow independent cases to be
+permuted past each other (see Fig~\ref{fig:syntax_ssfp}
+below).  Commuting conversions are well-known to pose technical
+difficulties for normalization proofs based on reducibility
+(see~\cite{tatsuta+05} and Chapter 10 of~\cite{Girard:1989}).  We will
+see that they can be handled straightforwardly with hereditary
+substitution.
+
+The syntax, reduction rules, and commuting conversions for SS$\Fp$ can
+be found in Fig.~\ref{fig:syntax_ssfp}.  This extension of SSF is
+based on the version of SSF used in \cite{Eades:2010}.  The
+kind-assignment rules are defined in Fig.~\ref{fig:kinding_rules_ssfp}
+and the type-assignment rules in defined in
+Fig.~\ref{fig:typing_rules_ssfp}. The kinding/typing relations
+depend on well-formed contexts which are defined in
+Fig.~\ref{fig:well-formed_ssfp}.  To ensure substitutions over
+contexts behave in an expected manner, we rename variables as
+necessary to ensure contexts have at most one declaration per
+variable.  Lastly, throughout this paper we use various basic
+meta-theoretic results for each system.  
+
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{l}
+      Syntax:\\
+      \begin{tabular}{lll}
+        $K$ & $:=$ & $*_0$ $|$ $*_1$             $|$ $\ldots$\\
+        $T$ & $:=$ & $X$   $|$ $T \rightarrow T$ $|$ $\forall X:K.T$  $|$ $T + T$\\
+        $t$ & $:=$ & $x$   $|$ $\lambda x:T.t$   $|$ $t\ t$ $|$ 
+        $\Lambda X:K.t$ $|$ $t[T]$ $|$ $inl(t)$ $|$ $inr(t)$ $|$ $\ccon{t}{x}{t}{t}$\\
+      \end{tabular}
+      \\ \\
+      Reduction Rules:\\
+      \begin{tabular}{cc}
+        \begin{tabular}{lll}
+          $(\Lambda X:*_p.t)[\phi]$ & $\rightsquigarrow$ & $[\phi/X]t$\\
+          $(\lambda x:\phi.t)t'$    & $\rightsquigarrow$ & $[t'/x]t$\\
+        \end{tabular}
+        &
+        \begin{tabular}{lll}
+          $\ccon{inl(t)}{x}{t_1}{t_2}$ & $\rightsquigarrow$ & $[t/x]t_1$\\
+          $\ccon{inr(t)}{x}{t_1}{t_2}$ & $\rightsquigarrow$ & $[t/x]t_2$
+        \end{tabular}
+      \end{tabular}
+      \\ \\
+      Commuting Conversions:\\
+      \begin{tabular}{lll}
+        $(\ccon{t}{x}{t_1}{t_2})\ t'$ & $\rightsquigarrow$ & 
+        $\ccon{t}{x}{(t_1\ t')}{(t_2\ t')}$\\
+        $\ccon{(\ccon{t}{x}{t_1}{t_2})}{y}{s_1}{s_2}$ & $\rightsquigarrow$ & 
+        $\mbox{case}\ t\ \mbox{of}\ $\\
+        &                    & \ \ \ $x.(\ccon{t_1}{y}{s_1}{s_2}),$\\
+        &                    & \ \ \ $x.(\ccon{t_1}{y}{s_1}{s_2})$
+      \end{tabular}
+    \end{tabular}
+  \end{center}
+  
+  \caption[]{Syntax, Reduction Rules, Commuting Conversions for SS$\Fp$}
+  \label{fig:syntax_ssfp}
+\end{figure}
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{tabular}{ccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \ 
+        }{\cdot\ Ok}
+      \end{math}
+      & 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma\ Ok
+        }{\Gamma,X:*_p\ Ok}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash \phi:*_p
+          \\
+          \Gamma\ Ok
+        }{\Gamma,x :\phi\ Ok}
+      \end{math} 
+    \end{tabular}	
+    
+    \caption{Well-formedness of Contexts for SS$\Fp$}
+    \label{fig:well-formed_ssfp}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \setlength{\tabcolsep}{1pt}
+    \begin{tabular}{cccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash \phi_1 : *_p
+          \\
+          \Gamma \vdash \phi_2 : *_q
+        }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
+      \end{math}      
+      & 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,X : *_q \vdash \phi : *_p
+        }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash \phi_1 : *_p
+          \\
+          \Gamma \vdash \phi_2 : *_q
+        }{\Gamma \vdash \phi_1 + \phi_2 : *_{max(p,q)}}
+      \end{math}
+      & 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma(X) = *_p
+          \\\\
+          \Gamma\ Ok
+          \\
+          p \leq q
+        }{\Gamma \vdash X : *_q}
+      \end{math}
+    \end{tabular}	
+    
+    \caption[]{SS$\Fp$ Kinding Rules}
+    \label{fig:kinding_rules_ssfp}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \setlength{\tabcolsep}{1pt}
+    \begin{tabular}{cccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma(x) = \phi
+          \\\\
+          \Gamma\ Ok
+        }{\Gamma \vdash x : \phi}
+      \end{math}  
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,x : \phi_1 \vdash t : \phi_2
+        }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
+      \end{math} 
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
+          \\\\
+          \Gamma \vdash t_2 : \phi_1
+        }{\Gamma \vdash t_1t_2 : \phi_2}
+      \end{math}  
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma, X : *_l \vdash t : \phi
+        }{\Gamma \vdash \Lambda X:*_l.t:\forall X : *_l.\phi}
+      \end{math} 
+      \\ \\
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t:\forall X:*_l.\phi_1
+          \\\\
+          \Gamma \vdash \phi_2:*_l
+        }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+      \end{math} 
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t:\phi_1
+          \\\\
+	  \Gamma \vdash \phi_2:*_p
+        }{\Gamma \vdash inl(t): \phi_1+\phi_2}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t:\phi_2
+          \\\\
+	  \Gamma \vdash \phi_1:*_p
+        }{\Gamma \vdash inr(t): \phi_1+\phi_2}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t:\phi_1 + \phi_2
+          \\\\
+	  \Gamma,x:\phi_1 \vdash t_1:\psi
+          \\\\
+	  \Gamma,x:\phi_2 \vdash t_2:\psi
+        }{\Gamma \vdash \ccon{t}{x}{t_1}{t_2}: \psi}
+      \end{math}
+    \end{tabular}
+    
+    \caption[]{SS$\Fp$ Type-Assignment Rules}
+    \label{fig:typing_rules_ssfp}
+  
+\end{figure}
+
+\subsection{Ordering on Types}
+\label{subsec:ordering_on_types_ssfp}
+In this section we define an ordering on types.  This ordering is
+curcial for the hereditary substitution method.  We will see in
+Section~\ref{sec:properties_of_the_hereditary_substitution_function_ssfp}
+that we prove several properties of the hereditary substitution
+function defined in
+Section~\ref{sec:the_hereditary_substitution_function_ssfp}.  The
+ordering used in these proofs is the lexicographic ordering consisting
+of the the ordering we are about to define and the strict
+subexpression ordering on terms.  In fact if no ordering on types exists then
+one cannot prove the necessary properties of the hereditary
+substitution function needed to conclude normalization.
+
+\begin{definition}
+  The ordering $>_\Gamma$ is defined as the least relation satisfying the universal closures of 
+  the following formulas:\\
+  \begin{center}
+    \begin{tabular}{lll}
+      \begin{tabular}{lll}
+        $\phi_1 \rightarrow \phi_2$ & $>_\Gamma$ & $\phi_1$\\
+        $\phi_1 \rightarrow \phi_2$ & $>_\Gamma$ & $\phi_2$\\
+        & & \\
+      \end{tabular}
+      &
+      \ \ \ \ \ \ \ \ \ \ \ \
+      \begin{tabular}{lll}
+        $\phi_1 + \phi_2$           & $>_\Gamma$ & $\phi_1$\\
+        $\phi_1 + \phi_2$           & $>_\Gamma$ & $\phi_2$\\
+        $\forall X:*_l.\phi$        & $>_\Gamma$ & $[\phi'/X]\phi$ where 
+        $\Gamma \vdash \phi':*_l$.\\
+      \end{tabular}
+    \end{tabular}
+  \end{center}
+  \label{def:ordering_ssfp}
+\end{definition}
+
+\begin{thm}[Well-Founded Ordering]
+  The ordering $>_\Gamma$ is well-founded on types $\phi$ such that 
+  $\Gamma \vdash \phi:*_l$ for some $l$.
+  \label{thm:well-founded_ordering_ssfp}
+\end{thm}
+
+\noindent
+We need transitivity in a number of places in the proof of the main
+substitution lemma.  
+
+\begin{lemma}[Transitivity of $>_\Gamma$]
+  Let $\phi$, $\phi'$, and $\phi''$ be kindable types.  If $\phi >_\Gamma \phi'$ and 
+  $\phi' >_\Gamma \phi''$ then $\phi >_\Gamma \phi''$.
+  \label{lemma:transitivity_ssfp}
+\end{lemma}
+% subsection ordering_on_types_ssfp (end)
+
+\subsection{The Hereditary Substitution Function}
+\label{sec:the_hereditary_substitution_function_ssfp}
+We will work through the hereditary substitution method in more detail
+for this first example system than for the other two.  The difference
+between ordinary capture avoiding substitution and hereditary substitution
+is if as a result of substitution a new redex is created, then
+that redex is recursively reduced.  The hereditary substitution
+function is denoted $[t/x]^\phi t'$ where $\phi$ is called the cut
+type, due to the relation of the hereditary substitution function and
+cut elimination, and $t'$ is called the principle term of
+substitution.  The purpose of the cut type is that it is used to
+ensure that the definition of the function is well founded.  We will
+see this connection below.  We now turn to defining this function for
+SS$\Fp$.
+
+The definition of the hereditary substitution function for SS$\Fp$ is
+in Fig.~\ref{fig:hereditary_substitution_function_part1} and
+Fig.~\ref{fig:hereditary_substitution_function_part2}.  First, one
+should read this definition as a mutually recursive function in terms
+of the hereditary substitution function $[t/x]^\phi t'$,
+the application reduction function $app_\phi\ t_1\ t_2$, and 
+case construct reduction function $rcase_\phi\ t_0\ x\ t_1\ t_2$.  The
+definitions of all these functions depend on a partial function called
+$ctype_\phi(x, t)$ which returns the type of a term $t$ if that term
+is in weak-head normal form.  This function is equivalent to the
+$treduce$ function used in \cite{Watkins:2004}.
+%
+A brief explanation of the definition of the hereditary substitution
+function is the following.  One should read the
+``where''-conditions below some of the cases of the definitions of
+each function as preconditions.  The definition of $ctype_\phi$ is
+straightforward.  Now the definition of the hereditary substitution
+function has the form one would expect for a substitution function.
+In fact the only difference between the definition of the hereditary
+substitution function and capture avoiding substitution is really
+present in the cases for applications, type instantiation, and case
+constructs.  These are the locations where new redexes can be created
+by substitution.  
+
+Consider application.  Based on the definition of the reduction rules
+we have two forms of redexes: either a $\beta$-redex or a commuting
+coversion where a case construct is applied to an argument.  In order
+to create a new $\beta$-redex as a result of substitution we must be
+substituting into a term of the form $x\ t_1 \cdots t_n$.  The
+hereditary substitution function detects this by using the
+$ctype_\phi$ function.  We will show that if this function is defined
+then the head of the input term must be a variable $x$ thus implying
+that the input term is of the form we expect.  Next we apply the
+hereditary substitution to the head of the application and if that
+results in a $\lambda$-abstraction then we know that a new redex will
+be created by substitution.  Thus, we recursively reduce this redex
+using the hereditary substitution function.  We will see that the
+result of the $ctype_\phi$ function is in fact a subexpression of the
+cut type $\phi$.  This tells us that the cut type in the case for
+creation of a new $\beta$-redex has reduced in the recursive call to
+the hereditary substitution function.
+
+Now in the definition of the hereditary substitution function where a
+new redex in the form of the commuting conversion is created -- in
+this case a case construct is applied to an argument -- we again know
+by the $ctype_\phi$ function that the head of the application is in
+the form $x\,t_1 \cdots t_2$.  Furthermore, we know applying the
+hereditary substitution function to the head of the application
+results in a case construct.  So we recursively reduce the created
+redex in the same way the reduction rules do, but when we push the
+argument into the branches of the resulting case construct more
+redexes may be created.  So to handle recursively reducing all of the
+newly created redexes in the branches we call the application
+reduction function $app_\phi$.  This function reduces redexes by
+recursively calling itself and the hereditary substitution function.
+The remaining cases where new redexes are potentially created are
+similar to these cases.  The function $rcase_\phi$ handles reducing 
+case constructs.
+\begin{figure}[t]
+  \small
+  \begin{itemize}
+  \item[] $ctype_\phi(x,x) = \phi$
+  \item[] $ctype_\phi(x,t_1\ t_2) = \phi''$\\
+    \begin{tabular}{lll}
+      & Where $type_\phi(x,t_1) = \phi' \to \phi''$.
+    \end{tabular}    
+  \end{itemize}
+  
+  \begin{itemize}
+  \item[] $app_\phi\ t_1\ t_2 = t_1\ t_2$\\
+    \begin{tabular}{lll}
+      & Where $t_1$ is not a $\lambda$-abstraction or a case construct.
+    \end{tabular}
+  \item[] $app_\phi\ (\lambda x:\phi'.t_1)\ t_2 = [t_2/x]^{\phi'} t_1$
+  \item[] $app_\phi\ (\ccon{t_0}{x}{t_1}{t_2})\ t = 
+    \ccon{t_0}{x}{(app_\phi\ t_1\ t)}{(app_\phi\ t_2\ t)}$
+  \end{itemize}
+  
+  \begin{itemize}
+  \item[] $rcase_{\phi}\ t_0\ y\ t_1\ t_2 = \ccon{t_0}{y}{t_1}{t_2}$\\
+    \begin{tabular}{lll}
+      & Where $t_0$ is not an inject-left or an inject-right term or a case construct.
+    \end{tabular}
+  \item[] $rcase_{\phi}\ inl(t')\ y\ t_1\ t_2 = [t'/y]^{\phi_1}\ t_1$
+  \item[] $rcase_{\phi}\ inr(t')\ y\ t_1\ t_2 = [t'/y]^{\phi_2}\ t_2$
+  \item[] $rcase_{\phi}\ (\ccon{t'_0}{x}{t'_1}{t'_2})\ y\ t_1\ t_2 = 
+    \ccon{t'_0}{x}{(rcase_{\phi}\ t'_1\ y\ t_1\ t_2)}{(rcase_{\phi}\ t'_2\ y\ t_1\ t_2)}$
+  \end{itemize}
+  \caption{Hereditary Substitution Function for Stratified System $\Fp$}
+  \label{fig:hereditary_substitution_function_part1}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{itemize}
+  \item[] $[t/x]^\phi x = t$
+  \item[] $[t/x]^\phi y = y$\\
+    \begin{tabular}{lll}
+      & Where $y$ is a variable distinct from $x$.\\
+    \end{tabular}
+  \item[] $[t/x]^\phi (\lambda y:\phi'.t') = \lambda y:\phi'.([t/x]^\phi t')$
+  \item[] $[t/x]^\phi (\Lambda X:*_l.t') = \Lambda X:*_l.([t/x]^\phi t')$
+  \item[] $[t/x]^\phi inr(t') = inr([t/x]^\phi t')$
+  \item[] $[t/x]^\phi inl(t') = inl([t/x]^\phi t')$
+  \item[] $[t/x]^\phi (t_1\ t_2) = ([t/x]^\phi t_1)\ ([t/x]^\phi t_2)$\\
+    \begin{tabular}{lll}
+      & Where $([t/x]^\phi t_1)$ is not a $\lambda$-abstraction or a case construct, or both 
+        $([t/x]^\phi t_1)$\\
+      & and $t_1$ are $\lambda$-abstractions or case constructs, or $ctype_\phi(x,t_1)$ is 
+        undefined.
+    \end{tabular}
+  \item[] $[t/x]^{\phi} (t_1\ t_2) = [([t/x]^{\phi} t_2)/y]^{\phi''} s'_1$\\
+    \begin{tabular}{lll}
+      & Where $([t/x]^{\phi} t_1) = \lambda y:\phi''.s'_1$ 
+      for some $y$, $s'_1$, and $\phi''$ and $ctype_\phi(x,t_1) = \phi'' \to \phi'$.\\
+    \end{tabular}
+  \item[] $[t/x]^{\phi} (t_1\ t_2) = 
+    \ccon{w}{y}{(app_\phi\ r\ ([t/x]^{\phi} t_2))}{(app_\phi\ s\ ([t/x]^{\phi} t_2))}$\\
+    \begin{tabular}{ll}
+      & Where $[t/x]^{\phi} t_1 = \ccon{w}{y}{r}{s}$ for some terms $w$, $r$, $s$ 
+      and variable $y$, and \\
+      & $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
+    \end{tabular}
+  \item[] $[t/x]^\phi (t'[\phi']) = ([t/x]^\phi t')[\phi']$\\
+    \begin{tabular}{lll}
+      & Where $[t/x]^\phi t'$ is not a type abstraction or
+      $t'$ and $[t/x]^\phi t'$ are type abstractions.
+    \end{tabular}
+    \item[] $[t/x]^{\phi} (t'[\phi']) = [\phi'/X]s'_1$\\
+      \begin{tabular}{lll}
+        & Where $[t/x]^{\phi} t' = \Lambda X:*_l.s'_1$,
+        for some $X$, $s'_1$ and $\Gamma \vdash \phi':*_q$, such that, $q \leq l$ and\\
+	& $t'$ is not a type abstraction.
+      \end{tabular}
+    \item[] $[t/x]^{\phi} (\ccon{t_0}{y}{t_1}{t_2}) = 
+      \ccon{([t/x]^{\phi} t_0)}{y}{([t/x]^{\phi} t_1)}{([t/x]^{\phi} t_2)}$\\
+      \begin{tabular}{lll}
+        & Where $([t/x]^{\phi} t_0)$ is not an inject-left or an inject-right term or a case 
+        construct, or\\
+        & $([t/x]^{\phi} t_0)$ and $t_0$ are both inject-left or inject-right terms or case 
+        constructs, or\\
+        & $ctype_\phi(x,t_0)$ is undefined.
+      \end{tabular}
+    \item[] $[t/x]^{\phi} (\ccon{t_0}{y}{t_1}{t_2}) = 
+      rcase_{\phi}\ ([t/x]^{\phi} t_0)\ y\ 
+      ([t/x]^{\phi} t_1)\ ([t/x]^{\phi} t_2)$\\
+      \begin{tabular}{lll}
+        & Where $([t/x]^{\phi} t_0)$ is an inject-left or an inject-right term or 
+        a case construct and\\
+        & $ctype_\phi(x,t_0) = \phi_1+\phi_2$.
+      \end{tabular}
+  \end{itemize}
+  \caption{Hereditary Substitution Function for Stratified System $\Fp$ Continued}
+  \label{fig:hereditary_substitution_function_part2}
+\end{figure}
+% subsection the_hereditary_substitution_function_ssfp (end)
+
+\subsection{Properties of The Hereditary Substitution Function}
+\label{sec:properties_of_the_hereditary_substitution_function_ssfp}
+We now turn to proving several properites of the hereditary
+substitution function.  Since the various functions involved in the
+definition of the hereditary substitution function including the
+hereditary substitution function itself depends on the $ctype_\phi$
+function we first establish its main properties.  The major property of
+this function is that its output is a subexpression of
+the cut type $\phi$.  This is stated in part one of the next lemma.
+Part two is a sanity check which shows that the type
+returned by $ctype_\phi$ is the right type.  In other words it is the
+type of the second argument of the function.  The remaining parts of
+the lemma are used in the proofs of the other properties of the
+hereditary substitution function.  Recall in certain parts of the
+definition of the hereditary substitution function it must be the case
+that $ctype_\phi$ is defined so the remaining parts of the properties
+lemma ensure this is the case.
+
+\begin{lemma}[Properties of $ctype_\phi$]
+  \label{lemma:ctype_props_ssfp}
+
+  \begin{itemize}
+  \small
+  \item[]
+  \item[i.] If $ctype_\phi(x,t) = \phi'$ then $head(t) = x$ and $\phi'$ 
+    is a subexpression of $\phi$.
+    
+  \item[ii.] If $\Gamma,x:\phi,\Gamma' \vdash t:\phi'$ and $ctype_\phi(x,t) = \phi''$ then
+    $\phi' \equiv \phi''$.
+
+  \item[iii.] If $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$, $\Gamma \vdash t:\phi$,
+    $[t/x]^\phi t_1 = \lambda y:\phi_1.q$, and $t_1$ is not then there exists a type
+    $\psi$ such that $ctype_\phi(x,t_1) = \psi$.
+
+  \item[iv.] If $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$, $\Gamma \vdash t:\phi$,
+    $[t/x]^\phi t_1 = \ccon{t'_0}{y}{t'_1}{t'_2}$, and $t_1$ is not then there exists a type
+    $\psi$ such that $ctype_\phi(x,t_1) = \psi$.
+
+  \item[v.] If $\Gamma,x:\phi,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:\phi'$, 
+    $\Gamma \vdash t:\phi$, $[t/x]^\phi t_0 = \ccon{t'_0}{z}{t'_1}{t'_2}$, and 
+    $t_0$ is not then there exists a type $\psi$ such that $ctype_\phi(x,t_0) = \psi$.
+
+  \item[vi.] If $\Gamma,x:\phi,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:\phi'$, 
+    $\Gamma \vdash t:\phi$, $[t/x]^\phi t_0 = inl(t')$, and $t_0$ is not then there 
+    exists a type $\psi$ such that $ctype_\phi(x,t_0) = \psi$.
+
+  \item[vii.] If $\Gamma,x:\phi,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:\phi'$, 
+    $\Gamma \vdash t:\phi$, $[t/x]^\phi t_0 = inr(t')$, and $t_0$ is not then 
+    there exists a type $\psi$ such that $ctype_\phi(x,t_0) = \psi$.
+  \end{itemize}
+\end{lemma}
+We now move on to proving the main properties of the hereditary
+substitution function.  First, we show that for typeable terms it is a
+total function and the output maintains the same type as the principle
+term of substitution.
+\begin{lemma}[Total and Type Preserving]
+  \label{lemma:total_ssfp}
+  Suppose $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$. Then
+  there exists a term $t''$ such that $[t/x]^\phi t' = t''$ and 
+  $\Gamma,\Gamma' \vdash t'':\phi'$.
+\end{lemma}
+The next result we show is that the hereditary substitution function cannot 
+create new redexes.  The following example shows when a particular redex is destroyed
+by hereditary substitution.
+\begin{example}
+  \label{ex:commuting_conv_example_ssfp}
+  Let $t \equiv inl(a)$ for some variable $a$ and $t' \equiv \ccon{(\ccon{x}{y}{y}{y})}{z}{z}{z}$
+  where $\Gamma \vdash t : (\phi_1 + \phi_2) + \phi$, $\Gamma \vdash a : \phi_1 + \phi_2$, and 
+  $\Gamma, x : (\phi_1 + \phi_2) + \phi \vdash t' : \phi'$.  Now lets trace the definition of 
+  the hereditary substitution function on the input $t$, $x$, and $t'$ and compute what the 
+  image of $[t/x]^{(\phi_1 + \phi_2) + \phi} t'$ will be.
+  Well the first thing the hereditary substitution function does is apply itself to all the 
+  parts of the case construct. So we must calculute the following results:
+  \begin{itemize}
+  \item[i.] First we have to compute $[t/x]^{(\phi_1 + \phi_2) + \phi} (\ccon{x}{y}{y}{y})$.  This 
+    requires us to compute $[t/x]^{(\phi_1 + \phi_2) + \phi} x = t$.  Now the hereditary 
+    substitution functions checks to see if $t$ is an inject-left term
+    or an inject-right term, if it is then we have created a new redex.  It happens that 
+    $t$ is so we know 
+    $[t/x]^{(\phi_1 + \phi_2) + \phi} (\ccon{x}{y}{y}{y}) = [a/y]^{\phi_1 + \phi_2} y = a$.
+
+  \item[ii.] Second we must compute $[t/x]^{(\phi_1 + \phi_2) + \phi} y = y$.
+  \end{itemize}
+  Now putting these pieces together we obtain 
+  $[t/x]^{(\phi_1 + \phi_2) + \phi} t' = \ccon{a}{z}{z}{z}$.  Clearly,
+  we no longer have the right-hand side of the commuting conversion for case constructs.
+\end{example}
+Showing redex preservation for the hereditary substitution function
+depends on the following function which contructs the set of redexes
+in a term.
+\begin{definition}
+  \label{def:rset_ssfp}
+  The following function constructs the set of redexes within a term:
+
+  \begin{center}
+    \begin{itemize}
+    \item[] $rset(x) = \emptyset$\\
+    \item[] $rset(\lambda x:\phi.t) = rset(t)$\\
+    \item[] $rset(\Lambda X:*_l.t) = rset(t)$\\
+    \item[] $rset(t_1\ t_2)$\\
+      \begin{math}
+        \begin{array}{lll}
+          = & rset(t_1, t_2) & \text{if } t_1 \text{ is not a } \lambda \text{-abstraction.}\\
+          = & \{t_1\ t_2\} \cup rset(t'_1, t_2)\ & \text{if } t_1 \equiv \lambda x:\phi.t'_1.\\
+        \end{array}
+      \end{math}
+    \item[] $rset(t''[\phi''])$\\
+      \begin{math}
+        \begin{array}{lll}
+          = & rset(t'') & \text{if } t'' \text{ is not a type absraction.}\\
+          = & \{t''[\phi'']\} \cup rset(t''') & \text{if } t'' \equiv \Lambda X:*_l.t'''.
+        \end{array}
+      \end{math}
+    \item[] $rset(inl(t)) = rset(t)$\\
+    \item[] $rset(inr(t)) = rset(t)$\\
+    \item[] $rset(\ccon{t_0}{x}{t_1}{t_2})$\\
+      \begin{math}
+        \begin{array}{lll}
+          = & rset(t_0) \cup rset(t_1,t_2) & \text{if } t_1 \text{ is not an inject-left term 
+            or an inject-right term.}\\
+          = & \{\ccon{t_0}{x}{t_1}{t_2}\} \cup rset(t_0) \cup rset(t_1,t_2) & \text{if } t_1 
+          \text{ is an inject-left term or an inject-right term.}
+        \end{array}
+      \end{math}
+    \end{itemize}
+  \end{center}
+  \ \\
+  The extention of $rset$ to multiple arguments is defined as follows:
+  \begin{center}
+    $rset(t_1, \ldots, t_n) =^{def} rset(t_1) \cup \cdots \cup rset(t_n)$.
+  \end{center}
+\end{definition}
+
+\begin{lemma}[Redex Preserving]
+  \label{lemma:redex_preserving_ssfp}
+  \small
+  If $\Gamma \vdash t : \phi$, $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$, and
+  $t'$ then $|rset(t', t)| \geq |rset([t/x]^\phi t')|$.
+\end{lemma}
+It is easy to see that the previous lemma can be used to show that if
+the input to the hereditary substitution function contains no redexes
+then the result will contain no redexes.  That is, the function is
+normality preserving.  This is the key result when using the
+hereditary substitution function in normalization proofs.
+\begin{lemma}[Normality Preserving]
+  \label{corollary:normalization_preserving_ssfp}
+  If $\Gamma \vdash n:\phi$ and $\Gamma, x:\phi' \vdash n':\phi'$ then there exists 
+  a normal term $n''$ such that $[n/x]^\phi n' = n''$.
+\end{lemma}
+The final property of the hereditary substitution that needs to be
+proven is a safety property.  Which is that the hereditary substitution
+function does not deviate from the reduction rules.  We call
+this soundness with respect to reduction.  We will see this property
+come into play in the proof of type soundness.
+\begin{lemma}[Soundness with Respect to Reduction]
+  \label{lemma:soundness_reduction_ssfp}
+  If $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$ then
+  $[t/x]t' \redto^* [t/x]^\phi t'$.
+\end{lemma}
+At this point we are ready to move on to concluding normalization.
+% subsection properties_of_the_hereditary_substitution_function_ssfp (end)
+
+\subsection{Concluding Normalization}
+\label{subsec:concluding_normalization_ssfp}
+We now define the interpretation $\interp{\phi}_\Gamma$ of types $\phi$ in typing context 
+$\Gamma$.  
+\begin{definition}
+  \label{def:interpretation_types_ssfp}
+  The interpretation of types $\interp{\phi}$ is defined by:
+  \begin{center}
+    $n \in \interp{\phi}_\Gamma \iff \Gamma \vdash n:\phi$
+  \end{center}
+  We extend this definition to non-normal terms $t$ in the following way:
+  \begin{center}
+    $t \in \interp{\phi}_\Gamma \iff \exists n.t$ $\normto n \in \interp{\phi}_\Gamma$
+  \end{center}
+\end{definition}
+We define $t \normto t'$ to be $t \redto^{*} t'$ and $t'$ is normal.
+
+In the introduction we defined semantic inversion and asserted that it
+must hold with respect to any interpretation of types used in a proof
+by hereditary substitution.  It is easy to see that syntactic
+inversion holds for every form of the SS$\Fp$ typing relation
+trivially.  This fact yields semantic inversion by definition of the
+interpretation of types.  In this paper we will freely use syntactic
+and semantic inversion lemmas without explicit reference.
+
+Before moving on to proving soundness of typing and concluding
+normalization we need a basic result about the interpretation of
+types: type substitution.  It is used in the proof of the type
+soundness theorem (Theorem~\ref{thm:soundness_ssfp}).
+
+\begin{lemma}[Type Substitution for the Interpretation of Types]
+  If $n \in \interp{\phi'}_{\Gamma,X:*_l,\Gamma'}$ and 
+  $\Gamma \vdash \phi:*_l$ then 
+  $[\phi/X]n \in \interp{[\phi/X]\phi'}_{\Gamma,[\phi/X]\Gamma'}$.
+  \label{lemma:type_sub_ssfp}
+\end{lemma}
+
+Substitution for the interpretation of types is as we have been
+calling it the main substitution lemma.  It is a crucial result,
+because it is needed in the proof of type soundness and it depends on
+the hereditary substitution substitution function.
+
+\begin{lemma}[Hereditary Substitution for the Interpretation of Types]
+  If $n' \in \interp{\phi'}_{\Gamma,x:\phi,\Gamma'}$, $n \in \interp{\phi}_\Gamma$, then 
+  $[n/x]^\phi n' \in \interp{\phi'}_{\Gamma,\Gamma'}$.
+  \label{lemma:interpretation_of_types_closed_substitution_ssfp}
+\end{lemma}
+\begin{proof}
+  By Lemma~\ref{lemma:total_ssfp} we know there exists a term $\hat{n}$ 
+  such that $[n/x]^\phi n' = \hat{n}$ and $\Gamma,\Gamma' \vdash \hat{n}:\phi'$ and by 
+  Lemma~\ref{corollary:normalization_preserving_ssfp} $\hat{n}$ is normal.  Therefore,
+  $[n/x]^\phi n' = \hat{n} \in \interp{\phi'}_{\Gamma,\Gamma'}$.
+\end{proof}
+\noindent
+We are now ready to present our main result.
+
+\begin{thm}[Type Soundness]
+  If $\Gamma \vdash t:\phi$ then $t \in \interp{\phi}_\Gamma$.
+  \label{thm:soundness_ssfp}
+\end{thm}
+
+\begin{corollary}[Normalization]
+  If $\Gamma \vdash t:\phi$ then $t \normto n$.
+\end{corollary}
+% subsubsection concluding_normalization_ssfp (end)
+% section stratified_system_f_with_sum_types (end)

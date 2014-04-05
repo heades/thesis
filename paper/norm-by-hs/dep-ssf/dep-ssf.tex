@@ -1,0 +1,388 @@
+\section{Dependent Stratified System $\F$ (DSS$\F$)}
+\label{sec:dependent_ssf_with_type_equality}
+DSS$\F$ is SSF extended with dependent types and equations between
+terms.  Equations between terms are an important concept in
+Martin-L\"of type theory~\cite{hofmann+94,nps90}, and play a central
+role also in dependently typed programming languages, such as the
+second author's \textsc{Guru} language~\cite{stump+09}.  The syntax
+and reduction rules are defined in Fig.~\ref{fig:syntax_ssfe}.  The
+kind-assignment rules are defined in
+Fig.~\ref{fig:kinding_rules_ssfe}.  One thing to note regarding the
+kind-assignment rules is that the level of an equation is the same
+level as the type of the terms in the equation.  The terms used in an
+equation must have the same type.  Finally, the type-assignment rules
+are defined in Fig.~\ref{fig:typing_rules_ssfe}.  Note that $t_1 \join t_2$ denotes
+there exists a term $t$ such that $t_1 \redto^* t$ and $t_2 \redto^* t$.
+
+\begin{figure}[t]
+  \begin{center}
+    \begin{tabular}{lll}
+      \begin{tabular}{lll}
+        $t$ & $:=$ & $x$   $|$ $\lambda x:\phi.t$   $|$ $t\ t$ $|$  
+        $\Lambda X:K.t$ $|$ $t[\phi]$ $|$ $join$\\
+        $\phi$ & $:=$ & $X$   $|$ $\Pi x:\phi.\phi$ $|$ $\forall X:K.\phi$ $|$ $t = t$\\
+        $K$ & $:=$ & $*_0$ $|$ $*_1$ $|$ $\ldots$
+      \end{tabular}
+      \\ \\
+      \begin{tabular}{lll}
+        $(\Lambda X:*_p.t)[\phi]$ & $\rightsquigarrow$ & $[\phi/X]t$\\
+        $(\lambda x:\phi.t)t'$    & $\rightsquigarrow$ & $[t'/x]t$\\
+      \end{tabular}
+    \end{tabular}
+    \end{center}
+  \caption[]{Syntax of Terms, Types, and Kinds and Reduction Rules for DSS$\F$}
+  \label{fig:syntax_ssfe}
+  \label{fig:reduction_rules_ssfe}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{center}
+    \setlength{\tabcolsep}{1pt}
+    \begin{tabular}{cccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma(X) = *_p
+          \\\\
+          \Gamma\ Ok
+          \\
+          p \leq q
+        }{\Gamma \vdash X : *_q}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash \phi_1 : *_p
+          \\\\
+          \Gamma,x:\phi_1 \vdash \phi_2 : *_q
+        }{\Gamma \vdash \Pi x:\phi_1.\phi_2 : *_{max(p,q)}}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,X : *_q \vdash \phi : *_p
+        }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+	  \Gamma \vdash t_1:\phi
+          \\\\
+	  \Gamma \vdash t_2:\phi
+          \\
+          \Gamma \vdash \phi:*_p
+        }{\Gamma \vdash t_1 = t_2 : *_p}
+      \end{math}
+    \end{tabular}	
+    \caption[]{DSS$\F$ Kinding Rules}
+    \label{fig:kinding_rules_ssfe}
+  \end{center}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{center}
+    \setlength{\tabcolsep}{1pt}
+    \begin{tabular}{cccc}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma\ Ok
+          \\\\
+          \Gamma(x) = \phi
+        }{\Gamma \vdash x : \phi}
+      \end{math}  
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,x : \phi_1 \vdash t : \phi_2
+        }{\Gamma \vdash \lambda x : \phi_1.t : \Pi x:\phi_1.\phi_2}
+      \end{math} 
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t_2 : \phi_1
+          \\\\
+          \Gamma \vdash t_1 : \Pi x:\phi_1.\phi_2 
+        }{\Gamma \vdash t_1\ t_2 : [t_2/x]\phi_2}
+      \end{math}  
+      \\ \\
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma, X : *_l \vdash t : \phi
+        }{\Gamma \vdash \Lambda X:*_l.t:\forall X : *_l.\phi}
+      \end{math} 
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t:\forall X:*_l.\phi_1
+          \\\\
+          \Gamma \vdash \phi_2:*_l
+        }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+      \end{math} 
+      & 
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          t_1 \join t_2
+          \\
+	  \Gamma \vdash t_1:\phi
+          \\\\
+          \Gamma\ Ok
+          \\\
+          \ \Gamma \vdash t_2:\phi
+        }{\Gamma \vdash join : t_1 = t_2}
+      \end{math}
+      \\ \\
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t_0:t_1 = t_2
+          \\\\
+          \Gamma \vdash t:[t_1/x]\phi
+        }{\Gamma \vdash t:[t_2/x]\phi}
+      \end{math}\\
+    \end{tabular}
+    
+    \caption[]{DSS$\F$ Type-Assignment Rules}
+    \label{fig:typing_rules_ssfe}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{lll}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=$\text{TE}_{\text{Q}_1}$] {
+          \Gamma \vdash p:t_1 = t_2
+        }{\Gamma \vdash [t_1/x]\phi \approx [t_2/x]\phi}
+      \end{math}
+      &
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=$\text{TE}_{\text{Q}_2}$] {
+          \Gamma \vdash [t_1/x]\phi \approx [t_1/x]\phi'
+          \\
+          \Gamma \vdash p:t_1 = t_2
+        }{\Gamma \vdash [t_1/x]\phi \approx [t_2/x]\phi'}
+      \end{math}
+    \end{tabular}
+  \end{center}
+  \caption{DSS$\F$ Type Syntactic Equality}
+  \label{fig:type_equality_ssfe}
+\end{figure}
+
+\subsection{Syntactic Inversion}
+\label{subsec:basic_syntactic_lemmas_ssfe}
+This section covers syntactic inversion of the typing relation.  In
+Sect.~\ref{subsec:concluding_normalization_ssfe} we define the
+interpretation of types and semantic inversion must hold for this
+definition.  Since the interpretation of types is simply the
+restriction of the typing relation to normal forms syntactic inversion
+implies semantic inversion.  Hence, we only need to show syntactic
+inversion.  Syntactic inversion depends on a judgment called type
+syntactic equality.  It is defined in
+Fig.~\ref{fig:type_equality_ssfe}.  We show that syntactic
+conversion holds for syntactic type equality in
+Lemma~\ref{lemma:type_syntactic_conversion_ssfe}.  We only state the
+syntactic inversion lemma for the typing relation, because syntactic
+inversion for the kinding relation is trivial.  Note that we use
+syntactic inversion for kinding throughout the paper without
+indication.  First we define some convenient syntax used in the
+statement of the following lemma.  We write $\exists
+(a_1,a_2,\ldots,a_n)$ for $\exists a_1.\exists a_2\ldots\exists a_n$.
+Note that the proofs of the following lemmas depend on a number of
+other auxiliary lemmas.  They can also be found in the companion
+report.
+
+The first lemma is type syntactic conversion which states that if a
+term $t$ inhabits a type $\phi$ then it inhabits all types equivalent
+to $\phi$.  Following this is injectivity of $\Pi$-types which is
+needed in the proof of syntactic inversion.  Finally, we conclude
+syntactic inversion.
+\begin{lemma}[Type Syntactic Conversion]
+  \label{lemma:type_syntactic_conversion_ssfe}
+  If $\Gamma \vdash t:\phi$ and $\Gamma \vdash \phi \approx \phi'$ then $\Gamma \vdash t:\phi'$.
+\end{lemma}
+
+\begin{lemma}[Injectivity of $\Pi$-Types for Type Equality]
+  \label{lemma:injectivity_of_pi-types_for_type_equality_ssfe}
+  If $\Gamma \vdash \Pi y:\phi_1.\phi_2 \approx \Pi y:\phi'_1.\phi'_2$ then
+  $\Gamma \vdash \phi_1 \approx \phi'_1$ and $\Gamma,y:\phi_1 \vdash \phi_2 \approx \phi'_2$.
+\end{lemma}
+
+\begin{lemma}[Syntactic Inversion]
+  \label{lemma:inversion_ssfe}
+  \begin{itemize}\itemsep2pt
+  \item[]
+  \item[i.] If $\Gamma \vdash \lambda x:\phi_1.t:\phi$
+    then $\exists \phi_2.\ \Gamma,x:\phi_1 \vdash t:\phi_2 \land 
+    \Gamma \vdash \Pi x:\phi_1.\phi_2 \approx \phi$.
+
+  \item[ii.] If $\Gamma \vdash t_1\ t_2:\phi$ then $\exists (x,\phi_1, \phi_2).$\\
+    $\Gamma \vdash t_1:\Pi x:\phi_1.\phi_2 \land
+    \Gamma \vdash t_2:\phi_1 \land \Gamma \vdash \phi \approx
+     [t_2/x]\phi_2$.
+
+  \item[iii.] If $\Gamma \vdash \Lambda X:*_l.t:\phi$
+    then $\exists \phi'.\ \Gamma,X:*_l \vdash t:\phi'\ \land $
+    $\Gamma \vdash \phi \approx \forall X:*_l.\phi'$.
+
+  \item[iv.] If $\Gamma \vdash t[\phi_2]:\phi$ then 
+    $\exists (\phi_1, \phi_2)$. \\
+    $\Gamma \vdash t:\forall X:*_l.\phi_1$ $\land$
+    $\Gamma \vdash \phi_2:*_l$ $\land$ 
+    $\Gamma \vdash \phi \approx [\phi_2/X]\phi_1$.
+
+  \item[v.] If $\Gamma \vdash join:\phi$ then
+    $\exists (t_1,t_2,\phi')$.\\
+    $t_1 \join t_2$ $\land$
+    $\Gamma \vdash t_1:\phi'$ $\land$
+    $\Gamma \vdash t_2:\phi'$ $\land$
+    $\Gamma \vdash \phi \approx t_1 = t_2$ $\land$
+    $\Gamma\ Ok$.
+  \end{itemize}
+\end{lemma}
+% subsection basic_syntactic_lemmas (end)
+
+\subsection{The Ordering on Types and The Hereditary Substitution Function}
+\label{sec:the_hereditary_substitution_function_ssfe}
+The ordering on types is defined as follows:
+\begin{definition}
+  The ordering $>_\Gamma$ is defined as the least relation satisfying the universal closure
+  of the following formulas:
+  \begin{center}
+    \begin{tabular}{lll}
+      $\Pi x:\phi_1.\phi_2$ & $>_\Gamma$ & $\phi_1$\\
+      $\Pi x:\phi_1.\phi_2$ & $>_{\Gamma}$ & $[t/x]\phi_2$, where $\Gamma \vdash t:\phi_1$.\\
+      $\forall X:*_l.\phi$  & $>_\Gamma$ & $[\phi'/X]\phi$, where $\Gamma \vdash \phi':*_l$.\\
+    \end{tabular}
+  \end{center}
+  \label{def:ordering_ssfe}
+\end{definition}
+Just as we seen before this is the ordering used in the proofs of the
+properties of the hereditary substitution function which will be
+defined next.  As one might have expected this is a well-founded
+ordering.
+\begin{thm}[Well-Founded Ordering]
+  The ordering $>_\Gamma$ is well-founded on types $\phi$ such that 
+  $\Gamma \vdash \phi:*_l$ for some $l$.
+  \label{thm:well-founded_ordering_ssfe}
+\end{thm}
+The type-syntactic-equality relation respects this ordering.
+\begin{lemma}[]
+  \label{lemma:typeq_ordering_ssfe}
+  If $\Gamma \vdash \phi' \approx \phi''$ and $\phi >_{\Gamma} \phi'$ then $\phi >_\Gamma \phi''$.
+\end{lemma}
+The following lemma is used in the proof of totality of the hereditary substitution function.
+\begin{lemma}[]
+  \label{lemma:A_prop_ssfe}
+  If $\Gamma \vdash \psi \approx \Pi y:\phi_1.\phi_2$ and $\psi$ is a subexpression of $\phi''$ then
+  $\phi'' >_\Gamma \phi_1$ and $\phi'' >_{\Gamma,y:\phi_1} \phi_2$.
+\end{lemma}
+
+We now define the hereditary substitution function for DSS$\F$.  The
+function is fully defined in
+Fig.~\ref{fig:hereditary_substitution_function_ssfe}.  We do not
+repeat the definition of $ctype_\phi$ for DSS$\F$, because it is
+exactly the same as the previous system. The definition is rather
+straight forward.  Due to space constraints and the fact that all of
+the properties of the hereditary substitution function are so similar
+to the previous type theory they can be found in the companion report.
+\begin{figure}[t]
+  \small
+  \begin{itemize}
+  \item[] $[t/x]^\phi x = t$
+
+  \item[] $[t/x]^\phi y = y$\\
+    \begin{tabular}{lll}
+      & Where $y$ is a variable distinct from $x$.\\
+    \end{tabular}
+
+  \item[] $[t/x]^\phi join = join$
+
+  \item[] $[t/x]^\phi (\lambda y:\phi'.t') = \lambda y:\phi'.([t/x]^\phi t')$
+
+  \item[] $[t/x]^\phi (\Lambda X:*_l.t') = \Lambda X:*_l.([t/x]^\phi t')$
+
+  \item[] $[t/x]^\phi (t_1\ t_2) = ([t/x]^\phi t_1)\ ([t/x]^\phi t_2)$\\
+    \begin{tabular}{lll}
+      & Where $([t/x]^\phi t_1)$ is not a $\lambda$-abstraction, 
+      $([t/x]^\phi t_1)$ and $t_1$ are $\lambda$-abstractions,\\ 
+      & or $ctype_\phi(x,t_1)$ is undefined.
+    \end{tabular}
+
+  \item[] $[t/x]^{\phi} (t_1\ t_2) = [([t/x]^{\phi} t_2)/y]^{\phi''} s'_1$\\
+    \begin{tabular}{lll}
+      & Where $([t/x]^{\phi} t_1) \equiv \lambda y:\phi''.s'_1$ 
+        for some $y$ and $s'_1$ and $t_1$ is not a $\lambda$-abstraction, and \\
+      & $ctype_\phi(x,t_1) = \Pi y:\phi''.\phi'$.\\
+    \end{tabular}
+
+  \item[] $[t/x]^\phi (t'[\phi']) = ([t/x]^\phi t')[\phi']$\\
+    \begin{tabular}{lll}
+      & Where $[t/x]^\phi t'$ is not a type abstraction or
+      $t'$ and $[t/x]^\phi t'$ are type abstractions.
+    \end{tabular}
+
+    \item[] $[t/x]^{\phi} (t'[\phi']) = [\phi'/X]s'_1$\\
+      \begin{tabular}{lll}
+        & Where $[t/x]^{\phi} t' \equiv \Lambda X:*_l.s'_1$,
+        for some $X$, $s'_1$ and $\Gamma \vdash \phi':*_q$, such that, $q \leq l$ and\\
+	& $t'$ is not a type abstraction.
+      \end{tabular}
+  \end{itemize}
+  \caption{Hereditary Substitution Function for Stratified System $\F$}
+  \label{fig:hereditary_substitution_function_ssfe}
+\end{figure}
+% subsection the_hereditary_substitution_function (end)
+
+\subsection{Concluding Normalization}
+\label{subsec:concluding_normalization_ssfe}
+We are now ready to conlcude normalization.  We will accomplish this
+by first defining the interpretation of types, then proving the
+interpretation of types are closed under hereditary substitutions, and
+finally proving type soundness.  The interpretation of types are
+defined exactly the same way as they were for SS$\Fp$.  We do not
+repeat that definition here.  Just as in the previous type system
+semantic inversion must hold for the previous definition.  This is
+implied by syntactic inversion, which we proved in the previous
+section.  The next two lemmas are used in the proof of the type
+soundness theorem.
+
+\begin{corollary}[Type Substitution for the Interpretation of Types]
+  If $n \in \interp{\phi'}_{\Gamma,X:*_l,\Gamma'}$ and 
+  $\Gamma \vdash \phi:*_l$ then 
+  $[\phi/X]n \in \interp{[\phi/X]\phi'}_{\Gamma,[\phi/X]\Gamma'}$.
+  \label{lemma:type_sub_ssfe}
+\end{corollary}
+
+\begin{lemma}[Semantic Equality]
+  \label{lemma:equality_of_interpretation_of_types_ssfe}
+  If $\Gamma \vdash p:t_1 = t_2$ then $\interp{[t_1/x]\phi}_\Gamma = \interp{[t_2/x]\phi}_\Gamma$.
+\end{lemma}
+We now conclude type soundness for SS$\F$, and hence, normalization.  
+
+\begin{lemma}[Hereditary Substitution for the Interpretation of Types]
+  If $n' \in \interp{\phi'}_{\Gamma,x:\phi,\Gamma'}$, $n \in \interp{\phi}_\Gamma$,
+  then $[n/x]^\phi n' \in \interp{[n/x]\phi'}_{\Gamma,[n/x]\Gamma'}$.
+  \label{lemma:interpretation_of_types_closed_substitution_ssfe}
+\end{lemma}
+
+\begin{thm}[Type Soundness]
+  If $\Gamma \vdash t:\phi$ then $t \in \interp{\phi}_\Gamma$.
+  \label{thm:soundness_ssfe}
+\end{thm}
+
+\begin{corollary}[Normalization]
+  If $\Gamma \vdash t:\phi$ then $t \normto n$.
+\end{corollary}
+% subsection concluding_normalization_ssfp (end)
+% section dependent_ssf_with_type_equality_(dss$\f$) (end)
