@@ -409,9 +409,46 @@ is defined as for all $[[t]] \in [[Th 3]]$ the typing judgment $[[G |-
 t : T]]$ holds.  Finally, we denote terms in $[[Th 3]]$ being normal
 as $[[norm(Th 3)]]$.
 
-All of the following properties will depend on a few more 
+All of the following properties will depend on a few 
 properties of the $[[ctype]]$ function.  They are listed in 
 the following lemma.
+\begin{lemma}[Properties of $[[ctype]]$]
+  \label{lemma:ctype_props}
+  \begin{itemize}
+  \item[i.] If $[[ctype T (x,t)]] = [[T']]$ then $[[head(t)]] = [[x]]$ and $[[T']] \leq [[T]]$.
+    
+  \item[ii.] If $[[G,x:T,G' |- t:T']]$ and $[[ctype T (x,t)]] = [[T'']]$ then
+    $[[T']] \equiv [[T'']]$.    
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+  We prove part one first. This is a proof by induction on the structure of $t$.
+
+  \begin{itemize}
+  \item[Case.] Suppose $[[t]] \equiv [[x]]$.  Then $[[ctype T (x,x)]] = [[T]]$.  Clearly,
+    $[[head(x)]] = [[x]]$ and $[[T]]$ is a subexpression of itself.
+    
+  \item[Case.] Suppose $[[t]] \equiv [[t1 t2]]$.  Then $[[ctype T (x,t1 t2)]] = [[T'']]$
+    when $[[ctype T (x,t1)]] = [[T' -> T'']]$.  Now $[[t]] > [[t1]]$ so by the induction
+    hypothesis $[[head(t1)]] = [[x]]$ and $[[T' -> T'']]$ is a subexpression of $[[T]]$.
+    Therefore, $[[head(t1 t2)]] = [[x]]$ and certainly $[[T'']]$ is a subexpression of $[[T]]$.
+  \end{itemize}
+
+  \ \\
+  We now prove part two.  This is also a proof by induction on the structure of $t$.
+
+  \begin{itemize}
+  \item[Case.] Suppose $[[t]] \equiv [[x]]$.  Then $[[ctype T (x,x)]] = [[T]]$.  Clearly,
+    $[[T]] \equiv [[T]]$.
+    
+  \item[Case.] Suppose $[[t]] \equiv [[t1 t2]]$.  Then $[[ctype T (x,t1 t2)]] = [[T2]]$
+    when $[[ctype T (x,t1)]] = [[T1 -> T2]]$.  By inversion on the assumed typing
+    derivation we know there exists type $[[T'']]$ such that $[[G,x:T,G' |- t1:T'' -> T']]$.
+    Now $[[t]] > [[t1]]$ so by the induction hypothesis $[[T1 -> T2]] \equiv [[T'' -> T']]$.
+    Therefore, $[[T1]] \equiv [[T'']]$ and $[[T2]] \equiv [[T']]$.
+  \end{itemize}
+\end{proof}
+
 \begin{lemma}[Properties of $[[ctype]]$ Continued]
   \label{lemma:ctype_props_cont}
   \begin{itemize}
@@ -428,10 +465,32 @@ the following lemma.
   \end{itemize}
 \end{lemma}
 \begin{proof}
-  Both parts can be shown by induction on the structure of $[[t1 t2]]$.  
-  See Appendix~\ref{subsec:proof_of_ctype_props_cont}.
+  We prove part one first. This is a proof by induction on the structure of $[[t1 t2]]$.
+
+  \ \\
+  The only possibilities for the form of $[[t1]]$ is $[[x]]$ or $[[s1 s2]]$.  All other 
+  forms would not result in $[[ [t/x] T t1]]$ being a $\lambda$-abstraction and $[[t1]]$ not.
+  If $[[t1]] \equiv [[x]]$ then there exist a type $[[T'']]$ such that $[[T]] \equiv [[T'' -> T']]$ and
+  $[[ctype T (x,x t2)]] = [[T']]$ when $[[ctype T (x,x)]] = [[T]] \equiv [[T'' -> T']]$ in this case.  We know
+  $[[T'']]$ to exist by inversion on $[[G,x:T,G' |- t1 t2:T']]$.
+
+  \ \\
+  Now suppose $[[t1]] \equiv [[s1 s2]]$.  Now knowing $[[t1]]$ to not a $\lambda$-abstraction
+  implies that $[[s1]]$ is also not a $\lambda$-abstraction or $[[ [t/x] T t1]]$ would be an application
+  instead of a $\lambda$-abstraction.  So it must be the case that $[[ [t/x] T s1]]$ is a $\lambda$-abstraction
+  and $[[s1]]$ is not.  Since $[[s1]] < [[t1]]$ we can apply the induction hypothesis to obtain there exists
+  a type $[[A]]$ such that $[[ctype T (x,s1)]] = [[A]]$.  
+  Now by inversion on $[[G,x:T,G' |- t1 t2:T']]$ we know there exists a type $[[T'']]$ such that
+  $[[G,x:T,G' |- t1:T'' -> T']]$.  We know $[[t1]] \equiv [[s1 s2]]$ so by inversion on
+  $[[G,x:T,G' |- t1:T'' -> T']]$ we know there exists a type $[[A'']]$ such that
+  $[[G,x:T,G' |- s1:A'' -> (T'' -> T')]]$.
+  By part two of Lemma~\ref{lemma:ctype_props} we know $[[A]] \equiv [[A'' -> (T'' -> T')]]$ and
+  $[[ctype T (x,t1)]] = [[ctype T (x,s1 s2)]] = [[T'' -> T']]$ 
+  when $[[ctype T (x,s1)]] = [[A'' -> (T'' -> A')]]$, because we know $[[ctype T (x,s1)]] = [[A]]$.
+
+  \ \\
+  The proof of part two is similar to the proof of part one.
 \end{proof}
-These are all similar to the properties in Lemma~\ref{lemma:ctype_props_cont1}.
 The first two properties of the hereditary substitution function are
 totality and type preservation.  The latter is similar to substitution
 for typing using the hereditary substitution function.
@@ -447,11 +506,139 @@ for typing using the hereditary substitution function.
   \end{itemize}
 \end{lemma}
 \begin{proof}
-  This can be shown by mutual induction using the lexicographic
-  combination $([[A]], f,[[t']])$ of our ordering on types, the
-  natural number ordering where $f \in \{0,1\}$, and the strict
-  subexpression ordering on terms. See
-  Appendix~\ref{subsec:proof_of_totality_and_type_preservation}.
+  This is a mutually inductive proof using the lexicographic combination
+  $([[A]], f,[[t']])$ of our ordering on types,
+  the natural number ordering where $f \in \{0,1\}$, and
+  the strict subexpression ordering on terms. We first prove part one
+  and then part two.  In both parts we case split on $[[t']]$.
+
+  \ \\
+  \noindent Part One.
+  \begin{itemize}
+  \item[Case.] Suppose $[[t']]$ is a variable $[[x]]$.  Then either there exists
+    a term $[[a]]$ such that $[[(x,z,a)]] \in [[Th]]$ or not.  Suppose so. Then 
+    $[[<Th,A,A'>x]] = [[\y:A->A'.(z (y a))]]$ where $[[y]]$ is fresh in $[[x]]$, $[[z]]$ and $[[a]]$.
+    Now suppose there does not exist any term $[[a]]$ or $[[z]]$ such that $[[(x,z,a)]] \in [[Th]]$.  Then
+    $[[<Th,A,A'>x]] = [[x]]$. Typing clearly holds, because if $[[(x,z,a)]] \in [[Th]]$ then 
+    $[[B]] \equiv [[{-(A->A')}]]$ and we know $[[G,Th 2:{-A'} |- \y:A->A'.(z (y a)) : B]]$ or
+    $[[x]] \not\in [[Th 1]]$ then it must be the case that $[[x:B]] \in [[G]]$, hence,
+    by assumption and weakening for typing $[[G,Th 2:{-A'} |- x : B]]$.
+
+  \item[Case.] It must be the case that $[[B]] \equiv [[B1 -> B2]]$ for some types $[[B1]]$ and
+    $[[B2]]$.  Suppose $[[t']] \equiv [[\y:B1.t'1]]$. Then 
+    $[[<Th,A,A'>t']] = [[<Th ,A,A'>(\y:B1.t'1)]] = [[\y:B1.<Th,A,A'>t'1]]$.  Now sense
+    $([[A]],1,[[t']]) > ([[A]],1,[[t'1]])$ we may apply the induction hypothesis to obtain
+    that there exists a term $[[s]]$ such that $[[<Th,A,A'>t'1]] = [[s]]$, and $[[G,Th 2:{-A'},y:B1 |- s : B2]]$.
+    Thus, by definition and the typing rule for $\lambda$-abstractions we obtain $[[<Th,A,A'>t']] = [[\y:B1.s]]$
+    and $[[G,Th 2:{-A'} |- \y:B1.s:B1 -> B2]]$.
+
+  \item[Case.] Suppose $[[t']] \equiv [[\m y:{-B}.t'1]]$. Similar to the previous case.
+
+  \item[Case.] Suppose $[[t']] \equiv [[t'1 t'2]]$. We have two cases to consider.
+    \begin{itemize}
+    \item[Case.] Suppose $[[t'1]] \equiv [[x]]$ for some variable $[[x]]$.  In each
+      case $[[B]] \equiv [[_|_]]$.
+      \begin{itemize}
+      \item[Case.] Suppose $[[t'2]] \equiv [[\y:A.t''2]]$, for some $[[y]]$ and $[[t''2]]$,
+        $[[(x,z,t)]] \in [[Th]]$. Since 
+        $(A,1,[[t']]) > (A,1,[[t''2]])$ and the typing assumptions
+        hold by inversion we can apply the induction
+        hypothesis to obtain $[[<Th,A,A'>t''2]] = [[s]]$ for some term $[[s]]$ and
+        $[[G,Th 2:{-A'},y:A |- s : A']]$.
+        Furthermore, sense $(A,1,t') > (A,0,s)$, the previous typing condition and
+        the typing assumptions we also know from the induction hypothesis that 
+        $[[ [t/y] A s = s' ]]$ for some term $[[s']]$ and
+        $[[G,Th 2:{-A'} |- s' : A']]$. Finally, by definition we know 
+        $[[<Th, A, A'>t']] = [[z ([t/y] A s)]] = [[z s']]$ and 
+        by using the application typing rule that $[[G,Th 2:{-A'} |- z s' : B]]$.
+
+      \item[Case.] Suppose $[[t'2]] \equiv [[\m y:{-(A->A')}.t''2]]$, for some $[[y]]$ and 
+        $[[t''2]]$, $[[(x,z,t)]] \in [[Th]]$. Since $(A,1,t') > (A,1,[[t''2]])$ we know from the 
+        induction hypothesis that $[[<Th,(y,z2,t),A,A'>t''2]] = [[s]]$ for some fresh variable $[[z]]$
+        and term $[[s]]$, and $[[G,Th 2:{-A'},z2:{-A'} |- s : _|_ ]]$.
+        Finally, $[[<Th, A,A'>t']] = [[z (\m z2:{-A'}.s)]]$ by definition, and by
+        using the application typing rule 
+        $[[G,Th 2:{-A'} |- z (\m z2:{-A'}.s) : B ]]$.
+
+      \item[Case.] Suppose $[[t'2]]$ is not an abstraction, and $[[(x,z,t)]] \in [[Th]]$.  
+        Since $(A,1,t') > (A,1,[[t'2]])$ we know from the 
+        induction hypothesis that $[[<Th,A,A'>t'2]] = [[s]]$ for some term $[[s]]$
+        and $[[G,Th 2:{-A'} |- s : A -> A' ]]$.  Finally,
+        $[[<Th, A,A'>t']] = [[z s]]$ by definition, and by
+        using the application typing rule 
+        $[[G,Th 2:{-A'} |- z s : B ]]$.
+
+      \item[Case.] Suppose $[[(x,z,t'')]] \not \in [[Th]]$ for any term $[[t'']]$ and $[[z]]$.  
+        Since $(A,1,t') > (A,1,[[t'2]])$ we know from the 
+        induction hypothesis that $[[<Th,A,A'>t'2]] = [[s]]$ for some term $[[s]]$
+        and $[[G,Th 2:{-A'} |- s : A -> A' ]]$.  Finally,
+        $[[<Th, A,A'>t']] = [[x s]]$ by definition, and by
+        using the application typing rule 
+        $[[G,Th 2:{-A'} |- x s : B ]]$.
+      \end{itemize}
+    \item[Case.] Suppose $[[t'1]]$ is not a variable.  This case follows easily from
+      the induction hypothesis.
+    \end{itemize}
+
+  \end{itemize}
+
+  \ \\
+  \noindent Part two.
+  \begin{itemize}
+  \item[Case.] Suppose $[[t']]$ is either $[[x]]$ or a variable $[[y]]$ distinct from $[[x]]$.  
+    Trivial in both cases.
+
+  \item[Case.] Suppose $[[t']] \equiv [[\ y:A1.t'1]]$.  By inversion 
+    we know there exists a type $[[A2]]$ such that
+    $[[G,x:A,G',y:A1 |- t'1:A2]]$.
+    We also know that $[[t'_1]]$ is a strict subexpression of $[[t']]$, hence we can apply the second part of the
+    induction hypothesis to obtain
+    $[[ [t/x] A t'1]] = [[s1]]$ and $[[G,G',y:A1 |- s1:A2]]$
+    for some term $[[s1]]$.  By the definition of the hereditary substitution function 
+    \begin{center}
+      \begin{math}
+        \begin{array}{lll}
+          [[ [t/x] A t']] & = & [[\ y:A1.[t/x] A t'_1]] \\
+          & = & [[\y:A1.s1]].
+        \end{array}
+      \end{math}
+    \end{center}
+    It suffices to show that $[[G,G' |- \y:A1.s1:A1 -> A2]]$.  
+    By simply applying the typing rule $\LamDeltadrulename{Lam}$ using
+    $[[G,G',y:A1 |- s1:A2]]$ we obtain $[[G,G' |- \y:A1.s1:A1 -> A2]]$.
+    
+  \item[Case.] Suppose $[[t']] \equiv [[\m y:{-B}.t'1]]$.  Similar to the previous case.
+
+  \item[Case.] Suppose $[[t']] \equiv [[t'1 t'2]]$.  By inversion we know
+    $[[G, x:A, G' |- t'1 : B' -> B]]$ and
+    $[[G, x:A, G' |- t'2 : B']]$ for some type $[[B']]$.
+    Clearly, $[[t'1]]$ and $[[t'2]]$ are strict subexpressions of $[[t']]$.  Thus, by the second part of the
+    induction hypothesis there exists terms $[[s1]]$ and $[[s2]]$ such that $[[ [t/x] A t'1]] = [[s1]]$ and
+    $[[ [t/x] A t'2]] = [[s2]]$, and $[[G, G' |- s1 : B' -> B']]$ and
+    $[[G, G' |- s2 : B']]$.  We case split on whether or not $[[s1]]$ is a $\lambda$-abstraction or
+    a $\Delta$-abstraction and $[[t'1]]$ is not, or $[[s1]]$ and $[[t'1]]$ are both a $\lambda$-abstraction or
+    a $\Delta$-abstraction.
+    We only consider the non-trivial cases when $[[s1]] \equiv [[\y:B'.s'1]]$ and $[[t'1]]$ is not a 
+    $\lambda$-abstraction, and $[[s1]] \equiv [[\m y:{-(B'->B)}.s'1]]$ and $[[t'1]]$ is not a 
+    $\Delta$-abstraction.  Consider the former.
+
+    \ \\
+    Now by Lemma~\ref{lemma:ctype_props} it is the case that 
+    there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, 
+    $[[B'']] \equiv [[B' -> B]]$, and $[[B]]$ is a subexpression of $[[A]]$, hence
+    $[[A]] > [[B']]$.  By the definition of the hereditary substitution function
+    $[[ [t/x] A (t'1 t'2)]] = [[ [s2/y] B' s'1]]$. Therefore, by the induction hypothesis there exists a 
+    term $[[s]]$ such that $[[ [s2/y] A s'1]] = [[s]]$ and $[[G,G' |- s:B]]$.
+
+    \ \\
+    At this point consider when $[[s1]] \equiv [[\m y:{-(B'->B)}.s'1]]$ and $[[t'1]]$ is not a 
+    $\Delta$-abstraction.  Again, by Lemma~\ref{lemma:ctype_props} it is the case that 
+    there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'']] \equiv [[B' -> B]]$ and
+    $[[B' -> B]]$ is a subexpression of $[[A]]$.  Hence, $[[A]] > [[B']]$. Let $[[r]]$ be a fresh variable of type $[[{-B}]]$.    
+    Then by the induction hypothesis, there exists a term $s''$, such that, $[[<(y,r,s2),B',B>s'1]] = s''$ and 
+    $[[G,r:{-B} |- s'' : _|_]]$.  Therefore, $[[ [t/x] A (t'1 t'2)]] = [[\m r:{-B}.<(y,r,s2),B',B>s'1]] = [[\m r:{-B}.s'']]$,
+    and by the $\Delta$-abstraction typing rule $[[G |- \m r:{-B}.s'' : B]]$.
+  \end{itemize}
 \end{proof}
 The next property shows that the hereditary substitution function is
 normality preserving.  That is, if the input to the hereditary
@@ -464,13 +651,24 @@ preservation depends on the following auxiliary result.
   $[[head (<Th,A,A'>(n1 n2))]]$ is a variable.
 \end{lemma}
 \begin{proof}
-  This proof is by induction on the form of $[[n1 n2]]$. See
-  Appendix~\ref{subsec:proof_of_ssub_var_head}.
+  This is a proof by induction on the form of $[[n1 n2]]$.
+In every case where $[[n1]]$ is a variable and $([[n1]],[[z]],[[t]]) \in [[Th]]$ for some 
+term $[[t]]$ and variable $[[z]]$, we know by definition
+that $[[<Th,A,A'>(n1 n2)]] = [[z t2]]$ for some variable $[[z]]$ 
+and term $[[t2]]$.  In the case where $[[n1]]$ is a variable and 
+$([[n1]],[[z]],[[t]]) \not\in [[Th]]$ for some 
+term $[[t]]$ and variable $[[z]]$, we know by definition
+that $[[<Th,A,A'>(n1 n2)]] = [[(<Th,A,A'>n1) (<Th,A,A'>n2)]]$.  Now
+by hypothesis and definition $[[<Th,A,A'>n1]] = [[n1]]$.  Thus,
+$[[(<Th,A,A'>n1) (<Th,A,A'>n2)]] = [[n1 (<Th,A,A'>n2)]]$ and we know $[[n1]]$ is
+a variable.  The final case is when $[[n1]]$ is not a variable.  Then it must
+be the case that $[[n1]]$ is a normal application.  So by the induction hypothesis
+$[[head (<Th,A,A'>n1)]]$ is a variable.  Therefore,
+$[[head (<Th,A,A'>(n1 n2))]] = [[head ((<Th,A,A'> n1) (<Th,A,A'> n2))]] = [[head (<Th,A,A'> n1)]]$ is a variable.
 \end{proof}
 \begin{lemma}[Normality Preservation]
   \label{lemma:normality_preservation}
   \begin{itemize}
-    \item[]
   \item[i.] If $[[norm (Th 3)]]$, $[[G |- Th 3 : A]]$ and $[[G, Th 1:{-(A->A')} |- n' : B]]$, 
     then there exists a normal form $[[m]]$ such that $[[<Th,A,A'>n']] = [[m]]$.
     
@@ -479,11 +677,122 @@ preservation depends on the following auxiliary result.
   \end{itemize} 
 \end{lemma}
 \begin{proof}
-  This can be shown by mutual induction using the lexicographic
-  combination $([[A]], f,[[t']])$ of our ordering on types, the
-  natural number ordering where $f \in \{0,1\}$, and the strict
-  subexpression ordering on terms.
-  See Appendix~\ref{subsec:proof_of_normality_preservation}.
+  This is a mutually inductive proof using the lexicographic combination
+  $([[A]], f,[[n']])$ of our ordering on types,
+  the natural number ordering where $f \in \{0,1\}$, and
+  the strict subexpression ordering on terms. We first prove part one
+  and then part two.  In both parts we case split on $[[n']]$.
+
+  \ \\
+  \noindent Part One.
+  \begin{itemize}
+  \item[Case.] Suppose $[[n']]$ is a variable $[[x]]$.  Then either there exists
+    a normal form $[[m]]$ and variable $[[z]]$, such that, $[[(x,z,m)]] \in [[Th]]$ or not.  
+    Suppose so. Then 
+    $[[<Th,A,A'>x]] = [[\y:A->A'.(z (y m))]]$ where $[[y]]$ is fresh in $[[x]]$, $[[z]]$ and 
+    $[[m]]$.  Clearly, $[[\y:A->A'.(z (y m))]]$ is normal.
+    Now suppose there does not exist any term $[[m]]$ or $[[z]]$ such that 
+    $[[(x,z,m)]] \in [[Th]]$.  Then $[[<Th,A,A'>x]] = [[x]]$ which is clearly normal.
+
+  \item[Case.] Suppose $[[n']] \equiv [[\y:B1.n'1]]$.  Then 
+    $[[<Th,A,A'>n']] = [[<Th ,A,A'>(\y:B1.n'1)]] = [[\y:B1.<Th,A,A'>n'1]]$.  Now sense
+    $([[A]],1,[[n']]) > ([[A]],1,[[n'1]])$ we may apply the induction hypothesis to obtain
+    that there exists a term $[[m]]$ such that $[[<Th,A,A'>n'1]] = [[m]]$.  
+    Thus, by definition we obtain $[[<Th,A,A'>n']] = [[\y:B1.m]]$.
+
+  \item[Case.] Suppose $[[n']] \equiv [[\m y:{-B}.n'1]]$. Similar to the previous case.
+
+  \item[Case.] Suppose $[[n']] \equiv [[n'1 n'2]]$. We have two cases to consider.
+    \begin{itemize}
+    \item[Case.] Suppose $[[n'1]] \equiv [[x]]$ for some variable $[[x]]$.     
+      \begin{itemize}
+      \item[Case.] Suppose $[[n'2]] \equiv [[\y:A.n''2]]$, for some $[[y]]$ and $[[n''2]]$,
+        $[[(x,z,n)]] \in [[Th]]$. Since 
+        $(A,1,[[n']]) > (A,1,[[n''2]])$ and the typing assumptions
+        hold by inversion we can apply the induction
+        hypothesis to obtain $[[<Th,A,A'>n''2]] = [[m]]$ for some term $[[m]]$.
+        We know from Lemma~\ref{lemma:normality_preservation} that 
+        $[[G,Th 2:{-A'},y:A |- m : A']]$.
+        Furthermore, sense $(A,1,n') > (A,0,m)$, the previous typing condition and
+        the typing assumptions we also know from the induction hypothesis that 
+        $[[ [t/y] A m = m' ]]$ for some term $[[m']]$. Finally, by definition we know 
+        $[[<Th, A, A'>n']] = [[z ([n/y] A m)]] = [[z m']]$.  It is easy to see that
+        $[[z m']]$ is normal.      
+
+      \item[Case.] Suppose $[[n'2]] \equiv [[\m y:{-(A->A')}.n''2]]$, for some $[[y]]$ and 
+        $[[n''2]]$, $[[(x,z,n)]] \in [[Th]]$. Since $(A,1,n') > (A,1,[[n''2]])$ we know from the 
+        induction hypothesis that $[[<Th,(y,z2,n),A,A'>n''2]] = [[m]]$ for some normal form 
+        $[[m]]$, and $[[G,Th 2:{-A'},z2:{-A'} |- m : _|_ ]]$.
+        Finally, $[[<Th, A,A'>n']] = [[z (\m z2:{-A'}.m)]]$ by definition.
+
+      \item[Case.] Suppose $[[n'2]]$ is not an abstraction, and $[[(x,z,n)]] \in [[Th]]$.  
+        Since $(A,1,n') > (A,1,[[n'2]])$ we know from the 
+        induction hypothesis that $[[<Th,A,A'>n'2]] = [[m]]$ for some normal form $[[m]]$.  Finally,
+        $[[<Th, A,A'>n']] = [[z m]]$ by definition.      
+
+      \item[Case.] Suppose $[[(x,z,n'')]] \not \in [[Th]]$ for any term $[[n'']]$ and $[[z]]$.  
+        Since $(A,1,n') > (A,1,[[n'2]])$ we know from the 
+        induction hypothesis that $[[<Th,A,A'>n'2]] = [[m]]$ for some term $[[m]]$.  Finally,
+        $[[<Th, A,A'>n']] = [[x m]]$ by definition.      
+      \end{itemize}
+    \item[Case.] Suppose $[[n'1]]$ is not a variable.  This case follows easily from
+      the induction hypothesis and Lemma~\ref{lemma:ssub_var_head}.
+    \end{itemize}
+  \end{itemize}
+
+  \ \\
+  \noindent Part two.
+  \begin{itemize}
+  \item[Case.] Suppose $[[n']]$ is either $[[x]]$ or a variable $[[y]]$ distinct from $[[x]]$.  
+    Trivial in both cases.
+
+  \item[Case.] Suppose $[[n']] \equiv [[\ y:B1.n'1]]$.  
+    We also know that $[[n'_1]]$ is a strict subexpression of $[[n']]$, hence we can apply the second part of the
+    induction hypothesis to obtain
+    $[[ [n/x] A n'1]] = [[m1]]$ for some normal form $[[m1]]$.  
+    By the definition of the hereditary substitution function 
+    \begin{center}
+      \begin{math}
+        \begin{array}{lll}
+          [[ [n/x] A n']] & = & [[\ y:A1.[n/x] A n'_1]] \\
+          & = & [[\y:B1.m1]].
+        \end{array}
+      \end{math}
+    \end{center}
+    Clearly, $[[\y:B1.m1]]$ is normal.
+    
+  \item[Case.] Suppose $[[n']] \equiv [[\m y:{-B}.n'1]]$.  Similar to the previous case.
+
+  \item[Case.] Suppose $[[t']] \equiv [[t'1 t'2]]$.
+    Clearly, $[[n'1]]$ and $[[n'2]]$ are strict subexpressions of $[[n']]$.  Thus, by the 
+    induction hypothesis there exists normal forms $[[n1]]$ and $[[n2]]$ such that 
+    $[[ [n/x] A n'1]] = [[m1]]$ and
+    $[[ [n/x] A n'2]] = [[m2]]$.
+    We case split on whether or not $[[m1]]$ is a $\lambda$-abstraction or
+    a $\Delta$-abstraction and $[[n'1]]$ is not, or $[[m1]]$ and $[[n'1]]$ are both a 
+    $\lambda$-abstraction or a $\Delta$-abstraction.  
+    We only consider the non-trivial cases when $[[m1]] \equiv [[\y:B'.m'1]]$ and 
+    $[[n'1]]$ is not a 
+    $\lambda$-abstraction, and $[[m1]] \equiv [[\m y:{-(B'->B)}.m'1]]$ and $[[n'1]]$ is not a 
+    $\Delta$-abstraction.  Consider the former.
+
+    \ \\
+    Now by Lemma~\ref{lemma:ctype_props} it is the case that 
+    there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, 
+    $[[B'']] \equiv [[B' -> B]]$, and $[[B]]$ is a subexpression of $[[A]]$, hence
+    $[[A]] > [[B']]$.  By the definition of the hereditary substitution function
+    $[[ [n/x] A (n'1 n'2)]] = [[ [m2/y] B' m'1]]$. Therefore, by the induction hypothesis there 
+    exists a 
+    normal form $[[m]]$ such that $[[ [m2/y] A m'1]] = [[m]]$.
+
+    \ \\
+    At this point consider when $[[m1]] \equiv [[\m y:{-(B'->B)}.m'1]]$ and $[[n'1]]$ is not a 
+    $\Delta$-abstraction.  Again, by Lemma~\ref{lemma:ctype_props} it is the case that 
+    there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'']] \equiv [[B' -> B]]$ and
+    $[[B' -> B]]$ is a subexpression of $[[A]]$.  Hence, $[[A]] > [[B']]$. Let $[[r]]$ be a fresh variable of type $[[{-B}]]$.    
+    Then by the induction hypothesis, there exists a term $m''$, such that, $[[<(y,r,m2),B',B>m'1]] = m''$ and 
+    Therefore, $[[ [n/x] A (n'1 n'2)]] = [[\m r:{-B}.<(y,r,m2),B',B>m'1]] = [[\m r:{-B}.m'']]$.
+  \end{itemize}
 \end{proof}
 \noindent
 The final correctness property of the hereditary substitution function is
@@ -504,11 +813,201 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
   \end{itemize}  
 \end{lemma}
 \begin{proof}
-  This can be shown by mutual induction using the lexicographic
-  combination $([[A]], f,[[t']])$ of our ordering on types, the
-  natural number ordering where $f \in \{0,1\}$, and the strict
-  subexpression ordering on terms.
-  See Appendix~\ref{subsec:soundness_with_respect_to_reduction}.
+  This is a mutually inductive proof using the lexicographic combination
+  $([[A]], f,[[t']])$ of our ordering on types,
+  the natural number ordering where $f \in \{0,1\}$, and
+  the strict subexpression ordering on terms. We first prove part one
+  and then part two.  In both parts we case split on $[[t']]$.
+
+  \ \\
+  \noindent Part One.
+  \begin{itemize}
+  \item[Case.] Suppose $[[t']]$ is a variable $[[x]]$.  Then either there exists
+    a term $[[a]]$ such that $[[(x,z,a)]] \in [[Th]]$ or not.  Suppose so. 
+    Then by definition we know $[[lift Th A A' x]] = [[\y:A->A'.(z (y a))]]$,
+    for some fresh variable $[[y]]$.  Now $[[<Th,A,A'>x]] = [[\y:A->A'.(z (y a))]]$,
+    where we choose the same $[[y]]$.  Thus, $[[lift Th A A' x ~*> <Th,A,A'>x]]$.
+    Now suppose there does not exist any term $[[a]]$ or $[[z]]$ such that $[[(x,z,a)]] \in [[Th]]$.
+    Then $[[<Th,A,A'>x]] = [[lift Th A A' x]] = x$. Thus, $[[lift Th A A' x ~*> <Th,A,A'>x]]$.
+
+  \item[Case.] Suppose $[[t']] \equiv [[\y:B1.t'1]]$. This case follows from the
+    induction hypothesis.
+
+  \item[Case.] Suppose $[[t']] \equiv [[\m y:{-B}.t'1]]$. Similar to the previous case.
+
+  \item[Case.] Suppose $[[t']] \equiv [[t'1 t'2]]$. We have two cases to consider.
+    \begin{itemize}
+    \item[Case.] Suppose $[[t'1]] \equiv [[x]]$ for some variable $[[x]]$. 
+      \begin{itemize}
+      \item[Case.] Suppose $[[t'2]] \equiv [[\y:A.t''2]]$, for some $[[y]]$ and $[[t''2]]$,
+        $[[(x,z,t)]] \in [[Th]]$. 
+        Now
+        \begin{center}
+          \begin{math}
+            \begin{array}{lll}
+              [[lift Th A A' (x (\y:A.t''2))]] & = & [[(\y:A->A'.(z (y t))) (\y:A.(lift Th A A' t''2))]]\\
+              & \redto & [[z ((\y:A.(lift Th A A' t''2)) t)]]\\
+              & \redto & [[z ([t/y](lift Th A A' t''2))]]\\
+            \end{array}
+          \end{math}
+        \end{center}
+        Since 
+        $(A,1,[[t']]) > (A,1,[[t''2]])$ we can apply the induction
+        hypothesis to obtain $[[lift Th A A' t''2 ~*> <Th,A,A'>t''2]]$. Hence,
+        \begin{center}
+          \begin{math}
+            \begin{array}{lll}
+              [[z ([t/y](lift Th A A' t''2))]] & \redto^* & [[z ([t/y](<Th,A,A'>t''2))]]\\
+            \end{array}
+          \end{math}
+        \end{center}
+        Furthermore, sense $(A,1,t') > (A,0,[[<Th,A,A'>t''2]])$, we also know from the induction hypothesis that 
+        \begin{center}
+          \begin{math}
+            \begin{array}{lll}
+              [[z ([t/y](<Th,A,A'>t''2))]] & \redto^* & [[z ([t/y] A (<Th,A,A'>t''2))]]\\
+              & =        & [[<Th,A,A'>t']]\\
+            \end{array}
+          \end{math}
+        \end{center}
+
+      \item[Case.] Suppose $[[t'2]] \equiv [[\m y':{-(A->A')}.t''2]]$, for some $[[y]]$ and 
+        $[[t''2]]$, $[[(x,z,t)]] \in [[Th]]$. 
+        Now using a fresh variable $[[z2]]$ we know 
+        \begin{center}
+          \small
+          \begin{math}
+            \begin{array}{lll}
+              [[lift Th A A' (x (\m y':{-(A->A')}.t''2))]] \\
+              \ \ \ \ = [[(\y:A->A'.(z (y t))) (\m y':{-(A->A')}.(lift Th A A' t''2))]]\\ 
+              \ \ \ \ \redto [[z ((\m y':{-(A->A')}.(lift Th A A' t''2)) t)]] \\
+              \ \ \ \ \redto [[z (\m z2:{-A'}.([\y:A->A'.(z2 (y t))/y'](lift Th A A' t''2)))]] \\
+              \ \ \ \ = [[z (\m z2:{-A'}.(lift Th,(y',z2,t) A A' t''2))]]\\
+            \end{array}
+          \end{math}
+        \end{center}
+        Since $(A,1,t') > (A,1,[[t''2]])$ we know from the 
+        induction hypothesis that $[[lift Th,(y',z2,t) A A' t''2 ~*> <Th,(y',z2,t),A,A'>t''2]]$.
+        Thus, 
+        \begin{center}
+          \small
+          \begin{math}
+            \begin{array}{lll}
+              [[z (\m z2:{-A'}.(lift Th,(y',z2,t) A A' t''2))]] & \redto^* & [[z (\m z2:{-A'}.(<Th,(y',z2,t),A,A'>t''2))]]\\
+              & = & [[<Th,A,A'>t']].
+            \end{array}
+          \end{math}
+        \end{center}
+        
+      \item[Case.] Suppose $[[t'2]]$ is not an abstraction, and $[[(x,z,t)]] \in [[Th]]$. 
+        Since $([[A]],1,[[t']]) > (A,1,[[t'2]])$ we know from the 
+        induction hypothesis that $[[lift Th A A' t'2 ~*> <Th,A,A'>t'2]]$.  Thus,
+        \begin{center}
+          \begin{math}
+            \begin{array}{lll}
+              [[lift Th A A' t']] & = & [[lift Th A A' (x t'2)]]\\ 
+              & = & [[z (lift Th A A' t'2)]]\\ 
+              & \redto^* & [[z (<Th,A,A'>t'2)]]\\
+              & = & [[<Th,A,A'> (x t'2)]] = [[<Th,A,A'>t']].
+            \end{array}
+          \end{math}
+        \end{center}
+
+      \item[Case.] Suppose $[[(x,z,t'')]] \not \in [[Th]]$ for any term $[[t'']]$ and $[[z]]$.  
+        Since $(A,1,t') > (A,1,[[t'2]])$ we know from the 
+        induction hypothesis that $[[lift Th A A' t'2 ~*> <Th,A,A'>t'2]]$.  Thus,
+        \begin{center}
+          \begin{math}
+            \begin{array}{lll}
+              [[lift Th A A' t']] & = & [[lift Th A A' (x t'2)]]\\ 
+              & = & [[x (lift Th A A' t'2)]]\\ 
+              & \redto^* & [[x (<Th,A,A'>t'2)]]\\
+              & = & [[<Th,A,A'> (x t'2)]] = [[<Th,A,A'>t']].
+            \end{array}
+          \end{math}
+        \end{center}
+      \end{itemize}
+    \item[Case.] Suppose $[[t'1]]$ is not a variable.  This case follows easily from
+      the induction hypothesis.
+    \end{itemize}
+  \end{itemize}
+
+  \ \\
+  \noindent Part two\\
+  \begin{itemize}
+  \item[Case.] Suppose $[[t']]$ is a variable $[[x]]$ or $[[y]]$ distinct from $[[x]]$.  
+    Trivial in both cases.
+    
+  \item[Case.] Suppose $[[t']] \equiv [[\y:B1.s]]$.  Then
+    $[[ [t/x] (\ y:B1.s) = \y:B1.([t/x] s)]]$. 
+    Now $[[s]]$ is a strict subexpression of $[[t']]$ so we can apply the second part of the induction hypothesis to obtain 
+    $[[ [t/x]s ~*> [t/x] A s]]$.  At this point we can see that since 
+    $[[\y:B1.[t/x]s == [t/x](\ y:B1.s)]]$ we may
+    conclude that $[[\ y:B1.[t/x]s ~*> \y:B1.[t/x] A s]]$.
+
+  \item[Case.] Suppose $[[t']] \equiv [[\m y:{-B}.s]]$.  Similar to the previous case.
+
+  \item[Case.] Suppose $[[t' == t'1 t'2]]$.  By Lemma~\ref{lemma:totality_and_type_preservation}
+    there exists terms $[[s1]]$ and $[[s2]]$
+    such that $[[ [t/x] A t'1 = s1]]$ and $[[ [t/x] A t'2 = s2]]$.  Since
+    $[[t'1]]$ and $[[t'2]]$ are strict subexpressions of $[[t']]$ we can apply the second part of the induction hypothesis to obtain
+    $[[ [t/x]t'1 ~*> s1]]$ and $[[ [t/x]t'2 ~*> s2]]$.  Now we case
+    split on whether or not $[[s1]]$ is a $\lambda$-abstraction and $[[t'1]]$ is not,
+    a $\Delta$-abstraction and $[[t'1]]$ is not, or $[[s1]]$ is not a $\lambda$-abstraction or a $\Delta$-abstraction.  If
+    $[[s1]]$ is not a $\lambda$-abstraction or a $\Delta$-abstraction then 
+    $[[ [t/x] A t' = ([t/x] A t'1) ([t/x] A t'2) == s1 s2]]$. Thus, by two applications of the
+    induction hypothesis, $[[ [t/x]t' ~*> [t/x] A t']]$, because $[[ [t/x]t' = ([t/x] t'1) ([t/x] t'2)]]$.
+
+    \ \\
+    Suppose $[[s1 == \ y:B'.s'1]]$ and $[[t'1]]$ is not a $\lambda$-abstraction.  
+    By Lemma~\ref{lemma:ctype_props} there exists a type $[[B'']]$ such that
+    $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'' == B' -> B]]$, and $[[B'']]$ is a subexpression
+    of $[[A]]$.  Then by the definition of the hereditary substitution function 
+    $[[ [t/x] A (t'1 t'2) = [s2/y] B' s'1]]$.
+    Now we know $[[A > B']]$ so we can apply the second part of the induction hypothesis to obtain 
+    $[[ [s2/y] s'1 ~*> [s2/y] B' s'1]]$. By knowing that 
+    $[[((\ y:B'.s'1) s2) ~> ([s2/y] s'1)]]$ and
+    by the previous fact we know $[[(\y:B'.s'1) s2 ~*> [s2/y] B' s'1]]$.
+    We now make use of the well known result of full $\beta$-reduction.  The
+    result is stated as
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          [[a ~*> a']]
+          \\\\
+          [[b ~*> b']]
+          \\
+          [[a' b' ~*> c]]
+        }{[[a b ~*> c]]}
+      \end{math}
+    \end{center}
+    where $[[a]]$, $[[a']]$, $[[b]]$, $[[b']]$, and $[[c]]$ are all terms.  We apply this
+    result by instantiating $[[a]]$, $[[a']]$, $[[b]]$, $[[b']]$, and $[[c]]$ with
+    $[[ [t/x] t'1]]$, $[[s1]]$, $[[ [t/x] t'2]]$, $[[s2]]$, and $[[ [s2/y] B' s'1]]$ 
+    respectively.  Therefore, $[[ [t/x](t'1 t'2) ~*> [s2/y] B' s'1]]$.        
+
+    \ \\
+    Suppose $[[s1 == \m y:{-(B'->B)}.s'1]]$ and $[[t'1]]$ is not a $\Delta$-abstraction.
+    By Lemma~\ref{lemma:ctype_props} there exists a type $[[B'']]$ such that
+    $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'' == B' -> B]]$, and $[[B'']]$ is a subexpression
+    of $[[A]]$.  Then by the definition of the hereditary substitution function
+    $[[ [t/x] A (t'1 t'2) = \m z:{-B}.<(y,z,s2),B',B>s'1]]$, where $[[z]]$ is fresh variable.
+    Now
+    \begin{center}
+      \begin{math}
+        \begin{array}{lll}
+          [[ [t/x] (t'1 t'2)]] & = & [[([t/x] t'1) ([t/x] t'2)]]\\
+          & \redto^* & [[s1 s2]]\\
+          & \equiv & [[(\m y:{-(B'->B)}.s'1) s2]]\\
+          & \redto & [[\m z:{-B}.[\y':B'->B.(z (y' s2))/y]s'1]]\\
+          & = & [[\m z:{-B}.(lift (y,z,s2) B' B s'1)]]
+        \end{array}
+      \end{math}
+    \end{center}
+    It suffices to show that $[[\m z:{-B}.(lift (y,z,s2) B' B s'1) ~*> \m z:{-B}.<(y,z,s2),B',B>s'1]]$,
+    but this follows from the induction hypothesis, because $([[A]],0,[[t']]) > ([[B']],1,[[s'1]])$.
+  \end{itemize} 
 \end{proof}
 Using these properties it is now possible to conclude normalization for the $\lambda\Delta$-calculus.
 % subsection properties_of_the_hereditary_substitution_function (end)
@@ -557,29 +1056,50 @@ substitution function we can now prove type soundness.
   \label{theorem:type_soundness}
   If $[[G |- t : T]]$ then $[[t]] \in \interp{[[T]]}_[[G]]$.
 \end{thm}
-The only hard case in the proof of the type soundness theorem is the
-case for applications. Using the previous lemma and the properties of
-the hereditary substitution function, however, it goes through with
-ease.  Consider the application case of the proof of type soundness.
-Note that the proof is by induction on the assumed typing derivation (See Appendix~\ref{subsec:proof_of_type_soundness}).
-\begin{center}
-  \begin{math}
-    \LamDeltadruleApp{}{}
-  \end{math}
-\end{center}
-By the induction hypothesis we know $[[t1]] \in \interp{[[A -> B]]}_[[G]]$ and $[[t2]] \in \interp{[[A]]}_[[G]]$.
-  So by the definition of the interpretation of types we know there exists normal forms $[[n1]]$ and $[[n2]]$
-  such that $[[t1 ~*> n1]] \in \interp{[[A -> B]]}_[[G]]$ and $[[t2 ~*> n2]] \in \interp{[[A]]}_[[G]]$. Assume $[[y]]$ is a fresh
-  variable in $[[n1]]$ and $[[n2]]$ of type $[[A]]$.    
-  Then by hereditary 
-  substitution for the interpretation of types (Lemma~\ref{lemma:substitution_for_the_interpretation_of_types}) 
-  $[[ [n1/y] A (y n2)]] \in \interp{[[B]]}_[[G]]$.  
-  It suffices to show that $[[t1 t2 ~*> [n1/y] A (y n2)]]$.  This is an easy consequence of soundness with respect
-  to reduction (Lemma~\ref{lemma:soundness_reduction}), that is, $[[t1 t2 ~*> n1 n2]] = [[ [n1/y](y n2)]]$ 
-  and by soundness with respect to reduction $[[ [n1/y](y n2) ~*> [n1/y] A (y n2)]]$.  Therefore, 
-  $[[t1 t2]] \in \interp{[[B]]}_[[G]]$.  
-
-\ \\
+\begin{proof}
+  This is a proof by induction on the assumed typing derivation.
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      $\LamDeltadruleAx{}$
+    \end{center}
+    Trivial.
+    
+  \item[Case.] \ \\
+    \begin{center}
+      $\LamDeltadruleLam{}$
+    \end{center}
+    By the induction hypothesis $[[t]] \in \interp{[[B]]}_{[[G,x:A]]}$.  By the definition of the
+    interpretation of types $[[t]] \normto [[n]] \in \interp{[[B]]}_{[[G,x:A]]}$ and 
+    $[[G, x:A |- n:B]]$.  Thus, by applying the $\lambda$-abstraction type-checking
+    rule, $[[G |- \x:A.n:A -> B]]$, hence by the definition of the 
+    interpretation of types $[[\x:A.n]] \in \interp{[[A -> B]]}_[[G]]$.  Therefore,
+    $[[\x:A.t]] \normto [[\x:A.n]] \in \interp{[[A -> B]]}_[[G]]$.
+    
+  \item[Case.] \ \\
+    \begin{center}
+      $\LamDeltadruleDelta{}$
+    \end{center}
+    Similar to the previous case.
+    
+  \item[Case.] \ \\
+    \begin{center}
+      $\LamDeltadruleApp{}$
+    \end{center}
+    
+    By the induction hypothesis we know $[[t1]] \in \interp{[[A -> B]]}_[[G]]$ and $[[t2]] \in \interp{[[A]]}_[[G]]$.
+    So by the definition of the interpretation of types we know there exists normal forms $[[n1]]$ and $[[n2]]$
+    such that $[[t1 ~*> n1]] \in \interp{[[A -> B]]}_[[G]]$ and $[[t2 ~*> n2]] \in \interp{[[A]]}_[[G]]$. Assume $[[y]]$ is a fresh
+    variable in $[[n1]]$ and $[[n2]]$ of type $[[A]]$.    
+    Then by hereditary 
+    substitution for the interpretation of types (Lemma~\ref{lemma:substitution_for_the_interpretation_of_types}) 
+    $[[ [n1/y] A (y n2)]] \in \interp{[[B]]}_[[G]]$.  
+    It suffices to show that $[[t1 t2 ~*> [n1/y] A (y n2)]]$.  This is an easy consequence of soundness with respect
+    to reduction (Lemma~\ref{lemma:soundness_reduction}), that is, $[[t1 t2 ~*> n1 n2]] = [[ [n1/y](y n2)]]$ 
+    and by soundness with respect to reduction $[[ [n1/y](y n2) ~*> [n1/y] A (y n2)]]$.  Therefore, 
+    $[[t1 t2]] \in \interp{[[B]]}_[[G]]$.  
+  \end{itemize}
+\end{proof}
 \noindent
 Finally, we conclude normalization for the $\lambda\Delta$-calculus using hereditary substitution.
 \begin{corollary}[Normalization]
