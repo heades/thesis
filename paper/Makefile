@@ -36,6 +36,15 @@ SEP3_FILES := sep3/Makefile \
 	      sep3/sep3-unannotated.ott \
               sep3/sep3.tex
 
+LD_FILES := norm-by-hs/lam-delta/lam-delta.tex \
+	    norm-by-hs/lam-delta/Makefile \
+	    norm-by-hs/lam-delta/lam_Delta.ott
+
+SSF_FILES := norm-by-hs/ssf/ssf.tex \
+	     norm-by-hs/ssf+/ssf+.tex \
+	     norm-by-hs/dep-ssf/dep-ssf.tex \
+	     norm-by-hs/ssf-omega/ssf-omega.tex
+
 all : pdf
 
 pdf : Makefile thesis.pdf
@@ -49,7 +58,10 @@ FS : $(FS_FILES)
 SEP : $(SEP3_FILES)
 	cd sep3; $(MAKE)
 
-thesis.pdf : background.tex FS SEP thesis.tex thesis.bib
+LDT : $(LD_FILES)
+	cd norm-by-hs/lam-delta; $(MAKE)
+
+thesis.pdf : background.tex FS SEP LDT thesis.tex thesis.bib $(SSF_FILES)
 ifndef QUICKPROC
 	$(PDFLATEX) thesis.tex
 	$(PDFLATEX) thesis.tex
@@ -73,3 +85,4 @@ clean-all : clean
 	cd background; $(MAKE) clean
 	cd free-speech; $(MAKE) clean
 	cd sep3; $(MAKE) clean
+	cd norm-by-hs/lam-delta; make

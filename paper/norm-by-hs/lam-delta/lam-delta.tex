@@ -1,0 +1,689 @@
+\input{lam-delta-ott}
+
+\renewcommand{\LamDeltadrulename}[1]{\textsc{\scriptsize #1}}
+
+\section{The $\lambda\Delta$-Calculus}
+\label{sec:the_lambda_delta-calculus}
+The $\lambda\Delta$-calculus is a straightforward extension of the
+simply typed $\lambda$-calculus.  The syntax is defined in
+Figure~\ref{fig:syntax_mu}.
+\begin{figure}[h]
+    \begin{center}
+      \begin{tabular}{lll}
+        \begin{math}
+          \begin{array}{rrll}
+            \text{(Types)} & [[T]],[[A]],[[B]],[[C]] & ::= & 
+              [[_|_]]\,|\,[[b]]\,|\,[[A->B]]\\
+            \text{(Terms)} & [[t]] & ::= & 
+              [[x]]\,|\,[[\ x:T.t]]\,|\,[[\m x:T.t]]\,|\,[[t1 t2]]\\
+            \text{(Normal Forms)} & [[n]],[[m]] & ::= & 
+              [[x]]\,|\,[[\ x:T.n]]\,|\,[[\m x:T.n]]\,|\,[[h n]]\\
+            \text{(Heads)} & [[h]] & ::= & [[x]]\,|\,[[h n]]\\
+            \text{(Contexts)} & [[G]] & ::= & [[.]]\,|\,[[x:A]]\,|\,[[G1,G2]]\\
+          \end{array}
+        \end{math}
+      \end{tabular}
+    \end{center}
+    \caption{Syntax for Types and Terms}
+    \label{fig:syntax_mu}
+\end{figure}
+The type $[[b]]$ is an arbitrary base type.  Negation is defined as it
+is in intuitionistic type theory, that is, $[[{-A}]] =^{def} [[A ->
+_|_]]$, where $[[_|_]]$ is absurdity.  Arbitrary syntactically defined
+normal forms will be denoted by the meta-variables $[[n]]$ and
+$[[m]]$, and arbitrary typing contexts will be denoted by the
+meta-variable $[[G]]$.  We assume at all times that all variables in
+the domain of $[[G]]$ are unique.  In addition we rearrange the
+objects in $[[G]]$ freely without indication.
+
+The typing rules are defined in Figure~\ref{fig:typing}.  The
+operational semantics are the compatible closure of the rules in
+Figure~\ref{fig:opsem}.
+\begin{figure}[h]
+  \begin{center}
+    \begin{math}
+      \begin{array}{ccc}
+        \LamDeltadruleAx{} & \LamDeltadruleLam{} \\
+        & \\
+        \LamDeltadruleApp{} & \LamDeltadruleDelta{} \\
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \caption[]{Typing Rules}
+  \label{fig:typing}
+\end{figure}
+\begin{figure}[h]
+    \begin{center}
+    \begin{math}
+      \begin{array}{ccc}
+        \LamDeltadruleBeta{} \\
+        & \\
+        \LamDeltadruleStructRed{}
+      \end{array}
+    \end{math}
+  \end{center}
+
+  \caption{Operational Semantics}
+  \label{fig:opsem}
+\end{figure}
+It is easy to see based on the typing rules that the
+$\Delta$-abstraction is the introduction form for double negation.  We
+annotate the $\Delta$-abstraction with the type of the bound variable
+to make the definition of the hereditary substitution function a
+little less complicated.  Removing this annotation should not cause
+any significant problems.  On a more programmatic front the
+$\Delta$-abstraction is a control operator.  It can simulate
+Felleisen's control operators; see \cite{Rehof:1994} for more
+information on this.  N. Rehof and M. S\o rensen also extend the
+operational semantics with a structural reduction rule for the
+$\Delta$-abstraction (\LamDeltadrulename{StructRed} in
+Figure~\ref{fig:opsem}). This rule is called structural because it
+does not amount to a computational step, rather pushes the application
+into the body of the $\Delta$-abstraction potentially creating
+additional redexes.  We denote the reflexive and transitive closure of
+$[[~>]]$ as $[[~*>]]$. We also define $[[t ~!> t']]$ to mean that $[[t
+~*> t']]$ and $[[t']]$ is normal.  Now that we have defined the
+$\lambda\Delta$-calculus we state several well-known meta-results that
+will be needed throughout the sequel.
+% section the_lambda_delta-calculus (end) 
+
+\section{Basic Syntactic Lemmas}
+\label{sec:basic_syntactic_lemmas}
+The following meta-results are well-known so we omit their proofs.  We
+do not always explicitly state the use of these results.  The first
+two properties are weakening and substitution for the typing relation.
+
+\begin{lemma}[Weakening for Typing]
+  \label{lemma:weakening_for_typing}
+  If $[[G |- t : T]]$ then $[[G,x:T' |- t : T]]$ for any fresh variable $[[x]]$ and
+  type $[[T']]$.
+\end{lemma}
+\begin{proof}
+  Straightforward induction on the assumed typing derivation.
+\end{proof}
+
+\begin{lemma}[Substitution for Typing]
+  \label{lemma:substitution_for_typing}
+  If $[[G |- t : T]]$ and $[[G,x:T,G' |- t':T']]$ then $[[G |- [t/x]t':T']]$.
+\end{lemma}
+\begin{proof}
+  Straightforward induction on the second assumed typing derivation.
+\end{proof}
+\noindent
+The final three properties are, confluence, type preservation and inversion of the typing
+relation. The proof of the confluence and type preservation can be found in \cite{Rehof:1994}
+and the proof of the latter is trivial.
+
+\begin{thm}[Confluence]
+  \label{thm:confluence}
+  If $[[t1 ~*> t2]]$ and $[[t1 ~*> t3]]$, then there exists a term $[[t4]]$, such that,
+  $[[t2 ~*> t4]]$ and $[[t3 ~*> t4]]$.
+\end{thm}
+
+\begin{thm}[Preservation]
+  \label{thm:preservation}
+  If $[[G |- t : T]]$ and $[[t]] \redto [[t']]$ then $[[G |- t' : T]]$.
+\end{thm}
+
+\begin{thm}[Inversion]
+  \label{theorem:inversion}
+  \begin{itemize}
+  \item[]
+  \item[i.] If $[[G |- x : T]]$ then $[[x]] \in [[G]]$.
+  \item[ii.] If $[[G |- \x:T1.t:T1->T2]]$ then $[[G, x:T1 |- t:T2]]$.
+  \item[iii.] If $[[G |- \m x:{-T}.t:T]]$ then $[[G, x:{-T} |- t: _|_]]$.
+  \end{itemize}
+\end{thm}
+\begin{proof}
+  This can be shown by straightforward induction on the assumed typing derivations.
+\end{proof}
+\noindent
+At this point we have everything we need to state and prove correct
+the hereditary substitution function.
+% section basic_syntactic_lemmas (end)
+
+\section{Extending The Hereditary Substitution Function to the $\lambda\Delta$-Calculus}
+\label{sec:the_hereditary_substitution_function_for_the_ld-calculus}
+Since the $\lambda\Delta$-calculus is an extension of STLC, we might expect that 
+the hereditary substitution function for the $\lambda\Delta$-calculus is also an extension of the
+hereditary substitution function for STLC.  In this section we show that this extension is
+non-trivial by first considering the naive extension, and then discussing why it does not work.
+Following this, we give the final extension and prove it correct.
+
+\subsection{Problems with a Naive Extension}
+\label{subsec:the_naive_extension}
+Lets consider the definition of the hereditary substitution function
+for STLC extended with two new cases. The first case for the $\Delta$-abstraction
+whose definition parallels the definition for the
+$\lambda$-abstraction.  The second is a new application case which
+handles newly created structural redexes and is defined following the
+same pattern as the case which handles $\beta$-redexes.  We use the same termination
+metric we previously used. 
+\begin{definition}
+  \label{def:hereditary_substitution_function}
+  The naive hereditary substitution function is defined as follows:
+  \small
+  \begin{itemize}
+  \item[] $[[ [t/x] A x]] = [[t]]$
+  \item[] $[[ [t/x] A y]] = [[y]]$\\
+
+  \item[] $[[ [t/x] A (\ y:A'.t')]] = [[\y:A'.([t/x ] A t')]]$
+  \item[] $[[ [t/x] A (\m y:A'.t')]] = [[\m y:A'.([t/x] A t')]]$\\
+
+  \item[] $[[ [t/x] A (t1 t2)]] = [[([t/x] A t1) ([t/x] A t2)]]$\\
+    \begin{tabular}{lll}
+      & Where $[[([t/x] A t1)]]$ is not a $\lambda$-abstraction or $\Delta$-abstraction,  or both $[[([t/x] A t1)]]$ \\
+      & and  $[[t1]]$ are $\lambda$-abstractions or $\Delta$-abstractions.\\
+      & \\
+    \end{tabular}
+
+  \item[] $[[ [t/x] A (t1 t2)]] = [[ [s'2/y] A'' s'1]]$\\
+    \begin{tabular}{lll}
+      & Where $[[([t/x] A t1)]] = [[\ y:A''.s'1]]$ for some $[[y]]$, $[[s'1]]$ and $[[A'']]$, \\
+      & $[[ [t/x] A t2]] = [[s'2]]$, and $[[ctype A (x,t1)]] = [[A'' -> A']]$. \\
+      & \\
+    \end{tabular}
+
+  \item[] $[[ [t/x] A (t1 t2)]] = \Delta z:[[{-A'}]].[ [[\y:A'' -> A'.(z (y s2))]]/[[y]] ]^{[[{-(A''->A')}]]} [[s]]$\\
+    \begin{tabular}{lll}
+      & Where $[[([t/x] A t1)]] = [[\m y:{-(A''->A')}.s]]$ for some, $[[y]]$ $[[s]]$, 
+      and $[[A'' -> A']]$, \\      
+      & $[[([t/x] A t2)]] = [[s2]]$ for some $[[s2]]$, $[[ctype A (x,t1)]] = [[A'' -> A']]$, and $[[z]]$ is completely fresh.\\
+      & \\
+    \end{tabular}  
+  \end{itemize}
+\end{definition}
+
+There is one glaring issue with this definition and it lies in the final case.  
+We know from Lemma~\ref{lemma:ctype_props} and Lemma~\ref{lemma:ctype_props_cont} 
+that $[[ctype A (x,t1)]] = [[A'' -> A']]$ 
+implies that $[[A]] \geq [[A'' -> A']] < [[{-(A'' ->  A')}]]$. Thus, this 
+definition is not well founded!  To fix this issue instead of naively following 
+the structural reduction rule we immediately simultaneously hereditarily reduce 
+all redexes created by replacing $[[y]]$ with the linear $\lambda$-abstraction
+$[[\y:A'' ->A'.(z (y s2))]]$.  To accomplish this we will define mutually with
+the hereditary substitution function a new function called the hereditary
+structural substitution function.
+% subsection the_naive_extension (end)
+
+\subsection{A Correct Extension of Hereditary Substitution}
+\label{subsec:the_final_extension}
+In order to reduce structural redexes in the definition of the
+hereditary substitution we will define by induction mutually with
+the hereditary substitution function  a function called the
+hereditary structural substitution function.  This function will
+use the notion of a multi-substitution.  These are
+given by the following grammar:
+\begin{center}
+  \begin{math}
+    [[Th]] ::= [[.]]\,|\,[[Th,(y,z,t)]]
+  \end{math}
+\end{center}
+We denote the hereditary structural substitution function by $[[<Th ,
+A, A'>t']]$ and hereditary substitution by $[[ [t/x] A t']]$.  The
+type of all the first projections of the elements of $[[Th]]$ is
+$[[{-(A->A')}]]$ and the type of the second projections is $[[{-A'}]]$.
+Both functions are defined by mutual induction using the metric
+$([[A]],f,[[t']])$, where $f \in \{0,1\}$, in lexicographic
+combination with the ordering on types, the natural number ordering,
+and the strict subexpression on terms.  The meta-variable $f$ labels
+each function and is equal to $0$ in the definition of the hereditary
+substitution function and is equal to $1$ in the definition of the
+hereditary structural substitution function.  Again, in the definitions of
+the hereditary substitution and hereditary structural substitution
+function it is assumed that all variables have been renamed as to
+prevent variable capture.  The following is the final definition of the
+hereditary substitution function for the $\lambda\Delta$-calculus.
+
+\begin{definition}
+  \label{def:hereditary_substitution_function}
+  The hereditary substitution function is defined as follows:
+  \small
+  \begin{itemize}
+  \item[] $[[<Th,A1,A2>x]] = [[\y:A1 -> A2.(z (y t))]]$\\
+    \begin{tabular}{lll}
+      & Where $[[(x,z,t)]] \in [[Th]]$, for some $[[z]]$ and $[[t]]$, and $[[y]]$ is fresh in $[[x]]$, $[[z]]$, and $[[t]]$.\\
+      & \\
+    \end{tabular}
+  \item[] $[[<Th,A1,A2>x]] = x$\\
+    \begin{tabular}{lll}
+      & Where $[[(x,z,t)]] \not\in [[Th]]$ for any $[[z]]$ or $[[t]]$.\\
+      & \\
+    \end{tabular}
+  \item[] $[[<Th,A1,A2>(\y:A.t)]] = [[\y:A.<Th, A1, A2>t]]$\\
+  \item[] $[[<Th,A1,A2>(\m y:A.t)]] = [[\m y:A.<Th, A1, A2>t]]$\\
+
+  \item[] $[[<Th,A1,A2>(x t')]] = [[z [t/y] A1 s]]$\\
+    \begin{tabular}{lll}
+      & Where $[[(x,z,t)]] \in [[Th]]$, $t' \equiv [[\y:A1.t'']]$, for some $[[y]]$ and
+      $[[t'']]$, and $[[<Th,A1,A2>t'']] = [[s]]$.\\
+      & \\
+    \end{tabular}
+  \item[] $[[<Th,A1,A2>(x t')]] = [[z (\m z2:{-A2}.s)]]$\\
+    \begin{tabular}{lll}
+      & Where $[[(x,z,t)]] \in [[Th]]$, $t' \equiv [[\m y:{-(A1 -> A2)}.t'']]$, for some $[[y]]$ and $[[t'']]$, and \\
+      & $[[<Th,(y,z2,t),A1,A2>t'']] = [[s]]$, for some fresh $[[z2]]$.\\
+      & \\
+    \end{tabular}
+  \item[] $[[<Th,A1,A2>(x t')]] = [[z s']]$\\
+    \begin{tabular}{lll}
+      & Where $[[(x,z,t)]] \in [[Th]]$, $[[t']]$ is not an abstraction, and $[[<Th,A1,A2>t']] = [[s']]$.\\
+      & \\
+    \end{tabular}
+  \item[] $[[<Th,A1,A2>(t1 t2)]] = [[s1 s2]]$\\
+    \begin{tabular}{lll}
+      & Where $[[t1]]$ is either not a variable, or it is both a variable
+      and $([[t1]],[[z']],[[t']]) \not \in [[Th]]$ for any \\
+      & $[[t']]$ and $[[z']]$, $[[<Th,A1,A2>t1]] = [[s1]]$, and $[[<Th,A1,A2>t2]] = [[s2]]$.\\
+      & \\
+    \end{tabular}
+
+  \item[] $[[ [t/x] A x]] = [[t]]$
+  \item[] $[[ [t/x] A y]] = [[y]]$\\
+
+  \item[] $[[ [t/x] A (\ y:A'.t')]] = [[\y:A'.([t/x ] A t')]]$
+  \item[] $[[ [t/x] A (\m y:A'.t')]] = [[\m y:A'.([t/x] A t')]]$\\
+
+  \item[] $[[ [t/x] A (t1 t2)]] = [[([t/x] A t1) ([t/x] A t2)]]$\\
+    \begin{tabular}{lll}
+      & Where $[[([t/x] A t1)]]$ is not a $\lambda$-abstraction or $\Delta$-abstraction,  or both $[[([t/x] A t1)]]$ \\
+      & and  $[[t1]]$ are $\lambda$-abstractions or $\Delta$-abstractions.\\
+      & \\
+    \end{tabular}
+
+  \item[] $[[ [t/x] A (t1 t2)]] = [[ [s'2/y] A'' s'1]]$\\
+    \begin{tabular}{lll}
+      & Where $[[([t/x] A t1)]] = [[\ y:A''.s'1]]$ for some $[[y]]$, $[[s'1]]$ and $[[A'']]$, \\
+      & $[[ [t/x] A t2]] = [[s'2]]$, and $[[ctype A (x,t1)]] = [[A'' -> A']]$. \\
+      & \\
+    \end{tabular}
+
+  \item[] $[[ [t/x] A (t1 t2)]] = \Delta z:[[{-A'}]].[[<(y,z,s2),A'',A'>s]]$\\
+    \begin{tabular}{lll}
+      & Where $[[([t/x] A t1)]] = [[\m y:{-(A''->A')}.s]]$ for some $[[y]]$ $[[s]]$, 
+      and $[[A'' -> A']]$, \\      
+      & $[[([t/x] A t2)]] = [[s2]]$ for some $[[s2]]$, $[[ctype A (x,t1)]] = [[A'' -> A']]$, and $[[z]]$ is fresh.\\
+      & \\
+    \end{tabular}  
+  \end{itemize}
+\end{definition}
+We can see in the final case of the hereditary substitution function that the cut type has decreased.  Hence, this
+case is now well founded. Lets consider an example which illustrates how our new definition operates. 
+\begin{example}
+  \label{ex:struct_reduction}
+  \small
+  Consider the terms $[[t]] \equiv [[\m f:{-(base->base)}.(f (\m f':{-(base -> base)}.(f' (\z:base.z))))]]$ and $[[t']] \equiv [[x u]]$,
+  where $[[u]]$ is a free variable of type $[[base]]$.  Again, our goal is to compute $[[ [t/x] (base -> base) t']]$ using
+  the definition of the hereditary substitution function in Definition~\ref{def:hereditary_substitution_function}.
+  Now
+  \begin{center}
+    $[[ [t/x] (base->base) (x u) ]] = [[\m z1:{-base}.(z1 (\m z2:{-base}.(z2 u)))]]$,
+  \end{center} 
+  because 
+  \begin{center}
+    \begin{tabular}{llllll}
+      $[[ctype (base -> base) (x,x)]] = [[(base -> base)]]$, &
+      &
+      $[[ [t/x] (base->base) x]] = [[t]]$,
+      &
+      $[[ [t/x] (base->base) u]] = [[u]]$,
+    \end{tabular}
+  \end{center}
+  and for some fresh variable $[[z1]]$ of type $[[{-base}]]$
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[\m z1:{-base}.<(f,z1,u),base,base>(f (\m f':{-(base->base)}.(f' (\z:base.z))))]]  & = & \\
+        [[\m z1:{-base}.(z1 (\m z2:{-base}.(z2 u)))]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+  where
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[<(f,z1,u),base,base>(f (\m f':{-(base->base)}.(f' (\z:base.z))))]]  & = & \\
+        [[z1 (\m z2:{-base}.<(f,z1,u),(f',z2,u),base,base>(f' (\z:base.z)))]]
+      \end{array}
+    \end{math}
+    \end{center}
+  because
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[(f,z1,u)]] \in \langle[[(f,z1,u)]]\rangle, [[\m f':{-(base->base)}.(f' (\z:base.z))]] \equiv [[\m f':{-(base->base)}.(f' (\z:base.z))]],
+      \end{array}
+    \end{math}
+  \end{center}
+    and for some fresh variable $[[z2]]$ of type $[[{-base}]]$
+    \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[<(f,z1,u),(f',z2,u),base,base>(f' (\z:base.z))]]  & = & [[z2 u]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+  because
+  \begin{center}
+    \begin{math}
+      \begin{array}{llllll}
+        [[(f',z2,u)]] \in \langle[[(f,z1,u),(f',z2,u)]]\rangle, &
+        &
+        [[\z:base.z]] \equiv [[\z:base.z]],
+        &
+        [[<(f,z1,u),base,base>z]] = z
+      \end{array}
+    \end{math}
+  \end{center}
+\end{example}
+In the next section we prove the definition of the hereditary substitution function correct.
+% subsection the_final_extension (end)
+
+\subsection{Properties of the Hereditary Substitution Function}
+\label{subsec:properties_of_the_hereditary_substitution_function}
+There are two main ways the hereditary substitution function is used.
+It either replaces capture-avoiding substitution in ones' type theory
+or it is used in some other way.  For example, in Canonical LF
+hereditary substitution replaces capture-avoiding substitution
+\cite{Watkins:2004,Adams:2004}.  However, in \cite{Abel:2008} it is
+used only as a normalization function.  No matter how it is used there
+are three correctness results which must be proven.  These are
+totality, type preservation, and normality preservation.  There is an
+additional correctness property we feel one must prove when hereditary
+substitution is used as a normalization function.  This property is
+called soundness with respect to reduction.  It shows that hereditary
+substitution does nothing more than what capture-avoiding substitution
+and $\beta$-reduction can do.
+
+We introduce some notation to make working with multi-substitutions a
+bit easier.  The sets of all first, second, and third projections of
+the triples in $[[Th]]$ are denoted $[[Th 1]]$, $[[Th 2]]$, and $[[Th
+3]]$ respectively.  We denote the assumption of all elements of
+$[[Th]]^i$ having the type $[[T]]$ as $[[Th]]^i : [[T]]$. This latter
+notation is used in typing contexts to indicate the addition of all the
+variables in $[[Th]]^j$ for $j \in \{1,2\}$ to the context with the
+specified type.  We denote this as $[[G]],[[Th]]^j : [[T]],[[G']]$ for
+some contexts $[[G]]$ and $[[G']]$.  The notation $[[G |- Th 3 : T]]$
+is defined as for all $[[t]] \in [[Th 3]]$ the typing judgment $[[G |-
+t : T]]$ holds.  Finally, we denote terms in $[[Th 3]]$ being normal
+as $[[norm(Th 3)]]$.
+
+All of the following properties will depend on a few more 
+properties of the $[[ctype]]$ function.  They are listed in 
+the following lemma.
+\begin{lemma}[Properties of $[[ctype]]$ Continued]
+  \label{lemma:ctype_props_cont}
+  \begin{itemize}
+    \item[]
+  \item[i.] If $[[G,x:T,G' |- t1 t2:T']]$, $[[G |- t:T]]$, 
+    $[[ [t/x] T t1]] = [[\y:T1.t']]$, and $[[t1]]$ is not a
+    $\lambda$-abstraction, then $t_1$ is in head normal form and
+    there exists a type $[[A]]$ such that $[[ctype T (x,t1)]] = [[A]]$.
+    
+  \item[ii.] If $[[G,x:T,G' |- t1 t2:T']]$, $[[G |- t:T]]$, 
+    $[[ [t/x] T t1]] = [[\m y:{-(T''->T')}.t']]$, and $[[t1]]$ is not a
+    $\Delta$-abstraction, then there exists a type $[[A]]$ such that
+    $[[ctype T (x,t1)]] = [[A]]$.
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+  Both parts can be shown by induction on the structure of $[[t1 t2]]$.  
+  See Appendix~\ref{subsec:proof_of_ctype_props_cont}.
+\end{proof}
+These are all similar to the properties in Lemma~\ref{lemma:ctype_props_cont1}.
+The first two properties of the hereditary substitution function are
+totality and type preservation.  The latter is similar to substitution
+for typing using the hereditary substitution function.
+\begin{lemma}[Totality and Type Preservation]
+  \label{lemma:totality_and_type_preservation}
+  \begin{itemize}
+  \item[]
+  \item[i.] If $[[G |- Th 3 : A]]$ and $[[G, Th 1:{-(A->A')} |- t' : B]]$, then there
+    exists a term $[[s]]$ such that $[[<Th,A,A'>t']] = [[s]]$ and $[[G, Th 2 :{-A'} |- s : B]]$.
+  
+  \item[ii.] If $[[G |- t : A]]$ and $[[G, x:A, G' |- t':B]]$, then there exists a term $[[s]]$ 
+    such that $[[ [t/x] A t']] = [[s]]$ and $[[G,G' |- s:B]]$.
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+  This can be shown by mutual induction using the lexicographic
+  combination $([[A]], f,[[t']])$ of our ordering on types, the
+  natural number ordering where $f \in \{0,1\}$, and the strict
+  subexpression ordering on terms. See
+  Appendix~\ref{subsec:proof_of_totality_and_type_preservation}.
+\end{proof}
+The next property shows that the hereditary substitution function is
+normality preserving.  That is, if the input to the hereditary
+substitution function is normal then so is the output.  This is
+crucial for the normalization argument. The proof of normality
+preservation depends on the following auxiliary result.
+\begin{lemma}
+  \label{lemma:ssub_var_head}
+  For any $[[Th]]$, $[[A]]$ and $[[A']]$, if $[[n1 n2]]$ is normal then 
+  $[[head (<Th,A,A'>(n1 n2))]]$ is a variable.
+\end{lemma}
+\begin{proof}
+  This proof is by induction on the form of $[[n1 n2]]$. See
+  Appendix~\ref{subsec:proof_of_ssub_var_head}.
+\end{proof}
+\begin{lemma}[Normality Preservation]
+  \label{lemma:normality_preservation}
+  \begin{itemize}
+    \item[]
+  \item[i.] If $[[norm (Th 3)]]$, $[[G |- Th 3 : A]]$ and $[[G, Th 1:{-(A->A')} |- n' : B]]$, 
+    then there exists a normal form $[[m]]$ such that $[[<Th,A,A'>n']] = [[m]]$.
+    
+  \item[ii.] If $[[G |- n:A]]$ and $[[G, x:A, G' |- n':B]]$ then there exists a term $[[m]]$ 
+    such that $[[ [n/x] A n']] = [[m]]$. 
+  \end{itemize} 
+\end{lemma}
+\begin{proof}
+  This can be shown by mutual induction using the lexicographic
+  combination $([[A]], f,[[t']])$ of our ordering on types, the
+  natural number ordering where $f \in \{0,1\}$, and the strict
+  subexpression ordering on terms.
+  See Appendix~\ref{subsec:proof_of_normality_preservation}.
+\end{proof}
+\noindent
+The final correctness property of the hereditary substitution function is
+soundness with respect to reduction.  We need one last piece of notation.
+Suppose $[[Th]] = ([[x1]],[[z1]],[[t1]]),\ldots,([[xi]],[[zi]],[[ti]])$ for
+some natural number $[[i]]$.
+Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([ [[\y:A -> A'.(z1 (y t1))]]/[[x1]] ][[t1]])\cdots)$.
+
+\begin{lemma}[Soundness with Respect to Reduction]
+  \label{lemma:soundness_reduction}  
+  \begin{itemize}
+  \item[]
+  \item[i.] If $[[G |- Th 3 : A]]$ and $[[G, Th 1:{-(A->A')} |- t' : B]]$, then
+    $[[lift Th A A' t' ~*> <Th,A,A'>t']]$.
+  
+  \item[ii.] If $[[G |- t : A]]$ and $[[G, x:A, G' |- t':B]]$ then 
+    $[[ [t/x]t' ~*> [t/x] A t']]$.   
+  \end{itemize}  
+\end{lemma}
+\begin{proof}
+  This can be shown by mutual induction using the lexicographic
+  combination $([[A]], f,[[t']])$ of our ordering on types, the
+  natural number ordering where $f \in \{0,1\}$, and the strict
+  subexpression ordering on terms.
+  See Appendix~\ref{subsec:soundness_with_respect_to_reduction}.
+\end{proof}
+Using these properties it is now possible to conclude normalization for the $\lambda\Delta$-calculus.
+% subsection properties_of_the_hereditary_substitution_function (end)
+% section the_hereditary_substitution_function_for_the_ld-calculus (end)
+
+\section{Concluding Normalization}
+\label{sec:concluding_normalization}
+We now define the interpretation $\interp{[[T]]}_[[G]]$ of types
+$[[T]]$ in typing context $[[G]]$.  This is in fact the same
+interpretation of types that was used to show normalization using
+hereditary substitution of Stratified System F in \cite{Eades:2010}.
+\begin{definition}
+  \label{def:semantics}
+  The interpretation of types $\interp{[[T]]}_[[G]]$ is defined by:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[n]] \in \interp{[[T]]}_[[G]] & \iff & [[G |- n : T]]
+      \end{array}
+    \end{math}
+  \end{center}
+  We extend this definition to non-normal terms $t$ in the following way:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[t]] \in \interp{[[T]]}_[[G]] & \iff & \exists [[n]].[[t]] \normto [[n]] \in \interp{[[T]]}_[[G]]
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+Type soundness depends on the following lemma. It shows that the
+interpretation of types is closed under hereditary substitution.
+\begin{lemma}[Hereditary Substitution for the Interpretation of Types]
+  \label{lemma:substitution_for_the_interpretation_of_types}
+  If $[[n]] \in \interp{[[T]]}_[[G]]$ and $[[n']] \in \interp{[[T']]}_{[[G,x:T,G']]}$, then
+  $[[ [n/x] T n']] \in \interp{[[T']]}_{[[G,G']]}$.
+\end{lemma}
+\begin{proof}
+  We know by Lemma~\ref{lemma:totality_and_type_preservation} that there exists a term $[[s]]$ such that
+  $[[ [n/x] T n' = s]]$ and $[[G,G' |- s:T']]$, and by Lemma~\ref{lemma:normality_preservation} $[[s]]$ is
+  normal.  Therefore, $[[s]] \in \interp{[[T']]}_{[[G,G']]}$.
+\end{proof}
+Using the previous lemma and the properties of the hereditary
+substitution function we can now prove type soundness.
+\begin{thm}[Type Soundness]
+  \label{theorem:type_soundness}
+  If $[[G |- t : T]]$ then $[[t]] \in \interp{[[T]]}_[[G]]$.
+\end{thm}
+The only hard case in the proof of the type soundness theorem is the
+case for applications. Using the previous lemma and the properties of
+the hereditary substitution function, however, it goes through with
+ease.  Consider the application case of the proof of type soundness.
+Note that the proof is by induction on the assumed typing derivation (See Appendix~\ref{subsec:proof_of_type_soundness}).
+\begin{center}
+  \begin{math}
+    \LamDeltadruleApp{}{}
+  \end{math}
+\end{center}
+By the induction hypothesis we know $[[t1]] \in \interp{[[A -> B]]}_[[G]]$ and $[[t2]] \in \interp{[[A]]}_[[G]]$.
+  So by the definition of the interpretation of types we know there exists normal forms $[[n1]]$ and $[[n2]]$
+  such that $[[t1 ~*> n1]] \in \interp{[[A -> B]]}_[[G]]$ and $[[t2 ~*> n2]] \in \interp{[[A]]}_[[G]]$. Assume $[[y]]$ is a fresh
+  variable in $[[n1]]$ and $[[n2]]$ of type $[[A]]$.    
+  Then by hereditary 
+  substitution for the interpretation of types (Lemma~\ref{lemma:substitution_for_the_interpretation_of_types}) 
+  $[[ [n1/y] A (y n2)]] \in \interp{[[B]]}_[[G]]$.  
+  It suffices to show that $[[t1 t2 ~*> [n1/y] A (y n2)]]$.  This is an easy consequence of soundness with respect
+  to reduction (Lemma~\ref{lemma:soundness_reduction}), that is, $[[t1 t2 ~*> n1 n2]] = [[ [n1/y](y n2)]]$ 
+  and by soundness with respect to reduction $[[ [n1/y](y n2) ~*> [n1/y] A (y n2)]]$.  Therefore, 
+  $[[t1 t2]] \in \interp{[[B]]}_[[G]]$.  
+
+\ \\
+\noindent
+Finally, we conclude normalization for the $\lambda\Delta$-calculus using hereditary substitution.
+\begin{corollary}[Normalization]
+  \label{corollary:normalization}
+  If $[[G |- t : T]]$ then there exists a term $[[n]]$ such that $[[t]] \normto [[n]]$.
+\end{corollary}
+% section concluding_normalization (end)
+
+\section{Related Work}
+\label{sec:related_work}
+We first compare the proof method normalization using hereditary
+substitution with other known proof methods.  The
+$\lambda\Delta$-calculus could have been proven weakly and strongly
+normalizing by translation to $\lambda\mu$-calculus.  It is true that
+this is not as complicated as the proof method here, but a proof by
+translation does not yield a direct proof.  
+
+A direct proof of weak and strong normalization could have been given
+using the Tait-Girard reducibility method.  However, we claim that the
+proof method used here is less complicated.  The statement of the type
+soundness theorem is qualitatively less complex due to the fact that
+there is no need to universally quantify over the set of well-formed
+substitutions.  We are able to prove type soundness on open terms
+directly.  Additionally, the formalization of normalization using
+hereditary substitution does not require recursive types to define the
+semantics of types which are required when formalizing a proof using
+reducibility.  
+
+R. David and K. Nour give a short proof of normalization of the
+$\lambda\Delta$-calculus in \cite{David:2003}.  There they use a
+rather complicated lexicographic combination to give a completely
+arithmetical proof of strong normalization.  While they show strong
+normalization their proof method is comparable to using hereditary
+substitution.  As we mentioned in the introduction hereditary
+substitution is the constructive content of normalization proofs using
+the lexicographic combination of an ordering on types and the strict
+subexpression ordering on terms.  It is currently unknown if
+hereditary substitution can be extended to show strong normalization,
+but we conjecture that the constructive content of the proof of Lemma
+3..6 in David and Nour's work would yield a hereditary substitution
+like function.  Furthermore, for simply typed theories we believe it
+is enough to show weak normalization and never need to show strong
+normalization.  It is well-known due to the work of G. Barthe et
+al. in \cite{Barthe:2001} that for the entire left hand side of the
+$\lambda$-cube weak normalization implies strong normalization.  We
+conjecture that this result would extend to the left hand side of the
+classical $\lambda$-cube given in \cite{Barthe:1997}.  Thus, showing
+normalization using hereditary substitution is less complicated than
+the work of David and Nour's.
+
+Similar to the work of David and Nour is the work of F. Joachimski and
+R. Matthes.  In \cite{Joachimski:1999} they prove weak and strong
+normalization of various simply typed theories.  The proof method used
+is induction on various lexicographic combinations similar to
+hereditary substitution.  After proving weak normalization of each
+type theory they extract the constructive content of the proof
+yielding a normalization function which depends on a substitution
+function similar to the hereditary substitution function.  In contrast
+once hereditary substitution is defined for a type theory we can easily
+define a normalization function. Note that the following function is 
+the computational content of the type-soundness theorem 
+(Theorem~\ref{theorem:type_soundness}).
+\begin{definition}
+  \label{def:norm_fun_hs}
+  We define a normalization function for the $\lambda\Delta$-calculus using hereditary
+  substitution as follows:
+  \begin{center}
+    \begin{itemize}
+    \item[] $[[ norm_fun x ]] = [[x]]$\\
+    \item[] $[[norm_fun (\x:A.t)]] = [[\x:A.(norm_fun t)]]$\\
+    \item[] $[[norm_fun (\m x:A.t)]] = [[\m x:A.(norm_fun t)]]$\\
+    \item[] $[[norm_fun (t1 t2)]] = [[ [n1/r] A (r n2)]]$\\
+      \begin{tabular}{lll}
+      & Where $[[norm_fun t1]] = [[n1]]$, $[[norm_fun t2]] = [[n2]]$, $[[A]]$ is
+      the type of $[[t1]]$, and $[[r]]$ is fresh in $[[t1]]$\\
+      &  and $[[t2]]$.\\
+    \end{tabular}
+    \end{itemize}
+  \end{center}
+\end{definition}
+
+This function is similar to the normalization functions in Joachimski 
+and Matthes' work.  We could use the above normalization function to
+decide $\beta\eta$-equality for the $\lambda\Delta$-calculus.  Indeed
+this one of the main application of hereditary substitution.
+
+A. Abel in 2006 shows how to implement a normalizer using sized
+heterogeneous types which is a function similar to the hereditary
+substitution function in \cite{Abel:2006}.  He then uses hereditary
+substitution to prove normalization of the type level of a type theory
+with higher-order subtyping in \cite{Abel:2008}.  This results in a
+purely syntactic metatheory.  C. Keller and T. Altenkirch recently
+implemented hereditary substitution as a normalization function for
+the simply typed $\lambda$-calculus in Agda \cite{Keller:2010}.  Their
+results show that hereditary substitution can be used to decide $\beta
+\eta$-equality.  They found hereditary substitution to be convenient
+to use in a total type theory, because it can be implemented without a
+termination proof.  This is because the hereditary-substitution
+function can be recognized as structurally recursive, and hence
+accepted directly by Agda's termination checker.
+
+One point which sets the current work apart from all of the related
+work just considered is that they were all concerned with
+intuitionistic type theories.  Here we apply hereditary substitution
+on a classical type theory.  To our knowledge this is the first time
+this has been done.
+% section defining_a_normalization_function (end)
