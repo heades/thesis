@@ -179,6 +179,310 @@ there exists a term $t$ such that $t_1 \redto^* t$ and $t_2 \redto^* t$.
   \label{fig:type_equality_ssfe}
 \end{figure}
 
+\section{Miscellaneous Results}
+\label{sec:micellanious_results}
+This section contains definitions and lemmas that were omitted from
+the main part of the paper due to space constraints. First are a few
+basic syntactic lemmas.
+\begin{lemma}[Type Equality Context Conversion]
+  \label{lemma:type_equality_context_conversion}
+  If $\Gamma,x:[\phi_1/X]\phi,\Gamma' \vdash t:\phi'$ and $\Gamma \vdash p:\phi_1 = \phi_2$ then
+  $\Gamma,x:[\phi_2/X]\phi,\Gamma' \vdash t:\phi'$.
+\end{lemma}
+\begin{proof}
+  This hold by straightforward induction on the assumed typing derivation.
+\end{proof}
+
+\begin{lemma}[Syntactic Inversion]
+  \label{lemma:inversion_stlceq}
+  \begin{itemize}
+  \item[]
+  \item[i.] If $\Gamma \vdash \lambda x:\phi_1.t:\phi_1 \to \phi_2$ then 
+    $\Gamma, x:\phi_1 \vdash t:\phi_2$.
+
+  \item[ii.] If $\Gamma \vdash t_1\ t_2:\phi_2$ then there exists a type $\phi_1$, such that, 
+    $\Gamma \vdash t_1:\phi_1 \to \phi_2$ and $\Gamma \vdash t_2:\phi_1$.
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the form of the assumed typing derivation.
+\begin{itemize}
+\item[Part i.]  We have two cases to consider.\\
+\begin{itemize}
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=Lam] {
+        \Gamma \vdash \phi_1 
+        \\
+          \Gamma,x : \phi_1 \vdash t : \phi_2 
+      }{\Gamma \vdash \lambda x.t : \phi_1 \rightarrow \phi_2}
+    \end{math}
+  \end{center}
+  Trivial.
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=Conv] {
+        \Gamma \vdash \lambda x.t:[\phi'_1/X](\phi_1 \rightarrow \phi_2)
+        \\
+        \Gamma \vdash t' : \phi_1 = \phi'_2
+      }{\Gamma \vdash \lambda x.t: [\phi'_2/X](\phi_1 \rightarrow \phi_2)}
+    \end{math} 
+  \end{center}
+  By the induction hypothesis we know $\Gamma,x:[\phi'_1/X]\phi_1 \vdash t:[\phi'_1/X]\phi_2$ and by an
+  application of the above rule we obtain $\Gamma,x:[\phi'_1/X]\phi_1 \vdash t:[\phi'_2/X]\phi_2$.  It
+  suffices to show that $\Gamma,x:[\phi'_2/X]\phi_1 \vdash t:[\phi'_2/X]\phi_2$.  This is a simply consequence 
+  of applying Lemma~\ref{lemma:type_equality_context_conversion_stlceq} to $\Gamma,x:[\phi'_2/X]\phi_1 \vdash t:[\phi'_2/X]\phi_2$ using
+  $\Gamma \vdash t' : \phi_1 = \phi'_2$.
+\end{itemize}
+
+\item[Part ii.]  Again, we have two cases to consider.
+  \begin{itemize}
+  \item[Case.]\ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=App] {
+          \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
+          \\
+          \Gamma \vdash t_2 : \phi_1
+        }{\Gamma \vdash t_1\ t_2 : \phi_2}
+      \end{math}  
+    \end{center}
+    Trivial.
+    
+  \item[Case.]\ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=Conv] {
+          \Gamma \vdash t:[\phi_1/X]\phi
+          \\
+          \Gamma \vdash t' : \phi_1 = \phi_2
+        }{\Gamma \vdash t: [\phi_2/X]\phi}
+      \end{math} 
+    \end{center}
+    By the induction hypothesis there exists a type 
+    $\phi'_1$, such that, $\Gamma \vdash t_1:\phi'_1 \to [\phi_1/X]\phi$ and 
+    $\Gamma \vdash t_2:\phi'_1$.  At this point all we have to do is apply the rule above to 
+    $\Gamma \vdash t_1:\phi'_1 \to [\phi_1/X]\phi$ to obtain 
+    $\Gamma \vdash t_1:\phi'_1 \to [\phi_2/X]\phi$.
+  \end{itemize}
+\end{itemize}
+\end{proof}
+The depth function, defined in the following definition, is used in
+the proof of Lemma~\ref{lemma:well-founded_measure_ssfe} and is used
+to show that our ordering on types is well founded.
+
+\begin{definition}
+  The depth of a type $\phi$ is defined as follows:
+  \begin{center}
+    \begin{tabular}{lll}
+      $depth(t)$                  & $=$ & $0$, where $t$ is any term.\\
+      $depth(X)$                  & $=$ & $1$\\
+      $depth(\Pi x:\phi.\phi')$   & $=$ & $depth(\phi) + depth(\phi')$\\
+      $depth(\forall X:*_l.\phi)$ & $=$ & $depth(\phi) + 1$\\
+    \end{tabular}
+  \end{center}
+\end{definition}
+
+\noindent
+We use the metric $(l,d)$ in lexicographic combination, where $l$ is the level of
+a type $\phi$, and $d$ is the depth of $\phi$ in the proof of the next lemma.  
+
+\begin{lemma}[Well-Founded Measure]
+  \label{lemma:well-founded_measure_ssfe}
+  If $\phi >_\Gamma \phi'$ then $(l,d) > (l',d')$, where $\Gamma \vdash \phi:*_l$, 
+  $depth(\phi) = d$,  $\Gamma \vdash \phi:*_{l'}$, and $depth(\phi') = d'$.
+\end{lemma}
+\begin{proof}
+  Similar to the proof of the same lemma for SS$\Fp$. 
+\end{proof}
+The next few lemmas are results about the kinding and typing relations as
+well as well-formed contexts.  The first lemma states that every
+kindable type is kindable within a well-formed environment.  
+
+\begin{lemma}
+  If $\Gamma \vdash \phi:*_p$ then $\Gamma\ Ok$.
+  \label{lemma:kinding_ok_ssfe}
+\end{lemma}
+\begin{proof}
+  Similar to the proof of the same lemma for SS$\Fp$.
+\end{proof}
+\noindent
+The Type Substitution for the Interpretation of Types lemma is needed in the proof of
+the Type Substitution for Kinding, Typing, Context-Ok lemma, which is needed in the proof
+of the main substitution lemma.
+
+\begin{lemma}[Type Substitution for Kinding, Typing, and Context-Ok]
+  Suppose $\Gamma \vdash \phi':*_p$.  Then
+  \begin{itemize}
+  \item[i.] if $\Gamma,X:*_p,\Gamma' \vdash \phi:*_q$ with a
+    derivation of depth $d$, then $\Gamma,[\phi'/X]\Gamma' \vdash
+    [\phi'/X]\phi:*_q$ with a derivation of depth $d$,
+    
+  \item[ii.] if $\Gamma, X:*_l,\Gamma' \vdash t:\phi$ with a
+    derivation of depth $d$, then $\Gamma,[\phi'/X]\Gamma' \vdash
+    [\phi'/X]t:[\phi'/X]\phi$ with a derivation of depth $d$, and
+    
+  \item[iii.] if $\Gamma,X:*_p,\Gamma'\ Ok$ with a derivation of depth $d$, then 
+    $\Gamma,[\phi'/X]\Gamma'\ Ok$ with a derivation of depth $d$.
+  \end{itemize}
+  \label{lemma:substitution_for_kinding_ssfe}
+\end{lemma}
+\begin{proof}
+  Similar to the proof of the same lemma for SS$\Fp$.
+\end{proof}
+\noindent
+Next we show that the kinding and typing relations are
+closed under term substitutions.
+
+\begin{lemma}[Term Substitution for Kinding, Typing, and Context-Ok]
+  \label{lemma:term_substitution_for_kinding_context_ok_ssfe}
+  Suppose $\Gamma \vdash t':\phi'$.  Then
+  \begin{itemize}
+  \item[i.] if $\Gamma,x:\phi',\Gamma' \vdash \phi:*_l$ with a
+    derivation of depth $d$, then $\Gamma,[t'/x]\Gamma' \vdash
+    [t'/x]\phi:*_l$ with a derivation of depth $d$,
+  \item[ii.] if $\Gamma, x:\phi',\Gamma' \vdash t:\phi$ with a 
+    derivation of depth $d$, then $\Gamma,[t'/x]\Gamma' \vdash [t'/x]t:[t'/x]\phi$ 
+    with a derivation of depth $d$, and
+  \item[iii.] if $\Gamma,x:\phi',\Gamma'\ Ok$ with a derivation of depth $d$, then 
+    $\Gamma,[t'/x]\Gamma'\ Ok$ with a derivation of depth $d$.
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+  All cases hold by straightforward induction on the $d$.
+\end{proof}
+\noindent
+Context weakening for the kinding and typing relations is defined by
+Lemma~\ref{lemma:context_weakening_for_kinding_and_typing_ssfe}, and
+is used by the proof of the main substitution lemma.
+
+\begin{lemma}[Context Weakening for Kinding and Typing]
+  \label{lemma:context_weakening_for_kinding_and_typing_ssfe}
+  Assume $\Gamma,\Gamma'',\Gamma'\ Ok$, $\Gamma,\Gamma' \vdash \phi:*_p$ and 
+  $\Gamma,\Gamma' \vdash t:\phi$.  Then i. $\Gamma,\Gamma'',\Gamma' \vdash \phi:*_p$ and
+  ii. $\Gamma,\Gamma'',\Gamma' \vdash t:\phi$. 
+\end{lemma}
+\begin{proof}
+  Similar to the proof of the same lemma for SS$\Fp$.
+\end{proof}
+\noindent
+Finally, we have regularity which is used by the proof of type
+soundness.  These are all the results about the kinding relation and
+well-formed contexts that we will need to conclude normalization, but
+we need syntactic inversion for the typing relation, because it is not a 
+trivial result like it is for SS$\Fp$.
+
+\begin{lemma}[Regularity]
+  If $\Gamma \vdash t:\phi$ then $\Gamma \vdash \phi:*_p$ for some $p$.
+  \label{lemma:regularity_ssfe}
+\end{lemma}
+\begin{proof}
+  This holds by straightforward induction on the form of the assumed
+  typing derivation.
+\end{proof}
+\begin{lemma}[Transitivity of Type Equality]
+  \label{lemma:transitivity_of_type_equality_ssfe}
+  If $\Gamma \vdash \phi_1 \approx \phi_2$ and $\Gamma \vdash \phi_2 \approx \phi_3$ then
+  $\Gamma \vdash \phi_1 \approx \phi_3$.
+\end{lemma}
+\begin{proof}
+  This holds by straightforward induction on the form of the assumed
+  type equality derivation.
+\end{proof}
+\begin{lemma}[Symmetry of Type Equality]
+  \label{lemma:symmetry_of_type_equality}
+  If $\Gamma \vdash \phi \approx \phi'$ then $\Gamma \vdash \phi' \approx \phi$.
+\end{lemma}
+\begin{proof}
+  This holds by straightforward induction on the form of the assumed
+  type equality derivation.
+\end{proof}
+\begin{lemma}[Substitution for Type Equality]
+  \label{lemma:substitution_for_type_equality_ssfe}
+  If $\Gamma,x:\phi,\Gamma' \vdash \phi' \approx \phi''$ and $\Gamma \vdash t:\phi$ then
+  $\Gamma,[t/x]\Gamma' \vdash [t/x]\phi' \approx [t/x]\phi''$.
+\end{lemma}
+\begin{proof}
+  This holds by straightforward induction on the form of the assumed
+  type equality derivation.
+\end{proof}
+\begin{lemma}[]
+  \label{lemma:pis_are_equal_to_pis_ssfe}
+  If $\Gamma \vdash \phi \approx \Pi j:\phi_1.\phi_2$ then there exists a term $h$ and types $\phi'_1$ and $\phi'_2$
+  such that $\phi \equiv \Pi h:\phi'_1.\phi'_2$.
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the form of the assume type-equality derivation.
+
+\begin{itemize}
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=$\text{TE}_{\text{Q}_1}$] {
+        \Gamma \vdash p:t_1 = t_2
+      }{\Gamma \vdash [t_1/x](\Pi j:\phi'_1.\phi'_2) \approx [t_2/x](\Pi j:\phi'_1.\phi'_2)}
+    \end{math}
+  \end{center}
+  Trivial, because $\phi$ must also be a $\Pi$-type.
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=$\text{TE}_{\text{Q}_2}$] {
+        \Gamma \vdash [t_1/x]\phi' \approx [t_1/x](\Pi j:\phi'_1.\phi'_2)
+        \\
+        \Gamma \vdash p:t_1 = t_2
+      }{\Gamma \vdash [t_1/x]\phi' \approx [t_2/x](\Pi j:\phi'_1.\phi'_2)}
+    \end{math}
+  \end{center}
+  By the induction hypothesis $\phi \equiv [t_1/x]\phi' \equiv \Pi h:\psi_1.\psi_2$ for some term
+  $h$ and types $\psi_1$ and $\psi_2$.  
+\end{itemize}
+\end{proof}
+\begin{definition}
+  \label{def:rset_ssfe}
+  The following function constructs the set of redexes within a term:
+
+  \begin{center}
+    \begin{itemize}
+    \item[] $rset(x) = \emptyset$\\
+    \item[] $rset(join) = \emptyset$
+    \item[] $rset(\lambda x:\phi.t) = rset(t)$\\
+    \item[] $rset(\Lambda X:*_l.t) = rset(t)$\\
+    \item[] $rset(t_1\ t_2)$\\
+      \begin{math}
+        \begin{array}{lll}
+          = & rset(t_1, t_2) & \text{if } t_1 \text{ is not a } \lambda \text{-abstraction.}\\
+          = & \{t_1\ t_2\} \cup rset(t'_1, t_2)\ & \text{if } t_1 \equiv \lambda x:\phi.t'_1.\\
+        \end{array}
+      \end{math}
+    \item[] $rset(t''[\phi''])$\\
+      \begin{math}
+        \begin{array}{lll}
+          = & rset(t'') & \text{if } t'' \text{ is not a type absraction.}\\
+          = & \{t''[\phi'']\} \cup rset(t''') & \text{if } t'' \equiv \Lambda X:*_l.t'''.
+        \end{array}
+      \end{math}
+    \end{itemize}
+  \end{center}
+  \ \\
+  The extention of $rset$ to multiple arguments is defined as follows:
+  \begin{center}
+    $rset(t_1, \ldots, t_n) =^{def} rset(t_1) \cup \cdots \cup rset(t_n)$.
+  \end{center}
+\end{definition}
+% section micellanious_results (end)
+
+
 \subsection{Syntactic Inversion}
 \label{subsec:basic_syntactic_lemmas_ssfe}
 This section covers syntactic inversion of the typing relation.  In
@@ -211,13 +515,50 @@ syntactic inversion.
   \label{lemma:type_syntactic_conversion_ssfe}
   If $\Gamma \vdash t:\phi$ and $\Gamma \vdash \phi \approx \phi'$ then $\Gamma \vdash t:\phi'$.
 \end{lemma}
-
+\begin{proof}
+  If $\Gamma \vdash t:\phi$ and $\Gamma \vdash \phi \approx \phi'$ then we know several
+  things: $\phi \equiv [\bar{t}/\bar{x}]\phi''$, $\phi' \equiv [\bar{t'}/\bar{x'}]\phi''$,
+  $\Gamma \vdash \bar{p}:\bar{t} = \bar{t'}$, and $\Gamma \vdash t:[\bar{t}/\bar{x}]\phi''$ for
+  some type $\phi''$.  Suppose each vector has $i$ elements.  Then by applying the conversion
+  type-checking rule $i$ times with the appropriate proof from our vector of proofs we will obtain
+  $\Gamma \vdash t:[\bar{t'}/\bar{x}]\phi''$.  This last result is exactly,
+  $\Gamma \vdash t:\phi'$.
+\end{proof}
 \begin{lemma}[Injectivity of $\Pi$-Types for Type Equality]
   \label{lemma:injectivity_of_pi-types_for_type_equality_ssfe}
   If $\Gamma \vdash \Pi y:\phi_1.\phi_2 \approx \Pi y:\phi'_1.\phi'_2$ then
   $\Gamma \vdash \phi_1 \approx \phi'_1$ and $\Gamma,y:\phi_1 \vdash \phi_2 \approx \phi'_2$.
 \end{lemma}
-
+\begin{proof}
+  This is a proof by induction on the form of the assumed typing derivation.
+\begin{itemize}
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=$\text{TE}_{\text{Q}_1}$] {
+        \Gamma \vdash p:t_1 = t_2
+      }{\Gamma \vdash [t_1/x]\phi' \approx [t_2/x]\phi'}
+    \end{math}
+  \end{center}
+  Trivial, becasue $\phi'$ and $\phi''$ only differ by
+  terms, which do not affect the ordering of types.
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=$\text{TE}_{\text{Q}_2}$] {
+        \Gamma \vdash [t_1/x]\phi' \approx [t_1/x]\phi''
+        \\
+        \Gamma \vdash p:t_1 = t_2
+      }{\Gamma \vdash [t_1/x]\phi' \approx [t_2/x]\phi''}
+    \end{math}
+  \end{center}
+  By the induction hypothesis $\phi >_\Gamma [t_1/x]\phi''$, which implies
+  that $\phi >_\Gamma [t_2/x]\phi''$.
+\end{itemize}
+\end{proof}
 \begin{lemma}[Syntactic Inversion]
   \label{lemma:inversion_ssfe}
   \begin{itemize}\itemsep2pt
@@ -250,6 +591,166 @@ syntactic inversion.
     $\Gamma\ Ok$.
   \end{itemize}
 \end{lemma}
+\begin{proof}
+  We prove all cases by induction on the form of the typing relation.
+
+\begin{itemize}
+\item[Case.] Part i.\\
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma,x : \phi_1 \vdash t : \phi_2
+        }{\Gamma \vdash \lambda x : \phi_1.t : \Pi x:\phi_1.\phi_2}
+      \end{math}
+    \end{center}
+    Trivial.
+  
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash p:t_1 = t_2
+          \\
+          \Gamma \vdash \lambda x : \phi_1.t:[t_1/y]\phi'
+        }{\Gamma \vdash \lambda x : \phi_1.t:[t_2/y]\phi'}
+      \end{math}
+    \end{center}
+    Here $\phi \equiv [t_2/y]\phi'$.  By the induction hypothesis, where $\phi$ is 
+    $[t_1/y]\phi'$, there exists a type $\phi_2$, such that $\Gamma,x:\phi_1 \vdash t:\phi_2$ and
+    $\Gamma \vdash \Pi x:\phi_1.\phi_2 \approx [t_1/y]\phi'$, which implies that 
+    $\Gamma \vdash [t'_1/y](\Pi x:\phi'_1.\phi'_2) \approx [t_1/y]\phi'$ and
+    $\Gamma \vdash p':t'_1 = t_1$ for some terms $t'_1$ and $p'$.  Hence, by $\text{TEq}_2$
+    $\Gamma \vdash [t_1/y](\Pi x:\phi'_1.\phi'_2) \approx [t_1/y]\phi'$ and by applying the same
+    rule a second time, except using the proof $\Gamma \vdash p:t_1 = t_2$ we obtain
+    $\Gamma \vdash [t_1/y](\Pi x:\phi'_1.\phi'_2) \approx [t_2/y]\phi'$.  Finally, using 
+    $\text{TEq}_2$ a third time using $\Gamma \vdash p':t'_1 = t_1$ we obtain
+    $\Gamma \vdash [t'_1/y](\Pi x:\phi'_1.\phi'_2) \approx [t_2/y]\phi'$, which is equivalent to
+    $\Gamma \vdash \Pi x:\phi_1.\phi_2 \approx [t_2/y]\phi'$.
+  \end{itemize}
+  
+\item[Case.] Part ii.\\
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t_1 : \Pi x:\phi_1.\phi_2 
+          \\
+          \Gamma \vdash t_2 : \phi_1
+        }{\Gamma \vdash t_1\ t_2 : [t_2/x]\phi_2}
+      \end{math}  
+    \end{center}
+    Trivial.
+    
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash p:t_1 = t_2
+          \\
+          \Gamma \vdash t_1\ t_2:[t_1/y]\phi
+        }{\Gamma \vdash t_1\ t_2:[t_2/y]\phi}
+      \end{math}
+    \end{center}
+  \end{itemize}
+  Similar to the previous case.
+
+\item[Case.] Part iii.\\
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma, X : *_l \vdash t : \phi
+        }{\Gamma \vdash \Lambda X:*_l.t:\forall X : *_l.\phi}
+      \end{math}
+    \end{center}
+    Trivial.
+    
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash p:t_1 = t_2
+          \\
+          \Gamma \vdash \Lambda X:*_l.t:[t_1/y]\phi''
+        }{\Gamma \vdash \Lambda X:*_l.t:[t_2/y]\phi''}
+      \end{math}
+    \end{center}
+    Similar to the previous case.
+  \end{itemize}
+  
+\item[Case.] Part iv.\\
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash t:\forall X:*_l.\phi_1
+          \\
+          \Gamma \vdash \phi_2:*_l
+        }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+      \end{math} 
+    \end{center}
+    Trivial.
+
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash p:t_1 = t_2
+          \\
+          \Gamma \vdash t[\phi_2]:[t_1/y]\phi'
+        }{\Gamma \vdash t[\phi_2]:[t_2/y]\phi'}
+      \end{math}
+    \end{center}
+  \end{itemize}
+  Similar to the previous case.
+
+\item[Case.] Part v.\\
+  \begin{itemize}
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          t_1 \join t_2
+	  \\
+          \Gamma \vdash t_1:\phi
+          \\
+          \Gamma \vdash t_2:\phi
+          \\
+	  \Gamma\ Ok
+        }{\Gamma \vdash join : t_1 = t_2}
+      \end{math}
+    \end{center}
+    Trivial.
+  
+  \item[Case.] \ \\
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=] {
+          \Gamma \vdash p:t'_1 = t'_2
+          \\
+          \Gamma \vdash join:[t'_1/y]\phi')
+        }{\Gamma \vdash join:[t'_2/y]\phi'}
+      \end{math}
+    \end{center}
+    Similar to the previous case.
+  \end{itemize}
+\end{itemize}
+\end{proof}
 % subsection basic_syntactic_lemmas (end)
 
 \subsection{The Ordering on Types and The Hereditary Substitution Function}
@@ -276,26 +777,110 @@ ordering.
   $\Gamma \vdash \phi:*_l$ for some $l$.
   \label{thm:well-founded_ordering_ssfe}
 \end{thm}
+\begin{proof}
+  This proof is similar to the same proof for SS$\Fp$.
+\end{proof}
 The type-syntactic-equality relation respects this ordering.
 \begin{lemma}[]
   \label{lemma:typeq_ordering_ssfe}
   If $\Gamma \vdash \phi' \approx \phi''$ and $\phi >_{\Gamma} \phi'$ then $\phi >_\Gamma \phi''$.
 \end{lemma}
+\begin{proof}
+  This is a proof by case analysis on the kinding derivation of 
+$\Gamma \vdash \phi:*_p$, with a case analysis on the derivation of 
+$\phi >_\Gamma \phi'$.\\
+
+\begin{itemize}
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma(X) = *_p
+	\\
+	p \leq q
+	\\
+	\Gamma\ Ok
+      }{\Gamma \vdash X : *_q}
+    \end{math}
+  \end{center}
+  This case cannot arise, because we do not have $X >_\Gamma \phi$ for any type 
+  $\phi$.\\
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma \vdash \phi_1 : *_p
+	\\
+	\Gamma \vdash \phi_2 : *_q
+      }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
+    \end{math}
+  \end{center}
+  By analysis of the derivation of the assumed ordering statement, we must have 
+  $\phi' \equiv \phi_1$ or $\phi' \equiv \phi_2$.  If $\phi' \equiv \phi_1$ and 
+  $p \geq q$ then we have the required kind derivation for $\phi'$. If $p < q$ then by 
+  level weakening $\Gamma \vdash \phi_1:*_q$, and we have the required kinding 
+  derivation for $\phi'$.  The case for when $\phi' \equiv \phi_2$ is similar.\\
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma \vdash \phi_1 : *_p
+	\\
+	\Gamma \vdash \phi_2 : *_q
+      }{\Gamma \vdash \phi_1 + \phi_2 : *_{max(p,q)}}
+    \end{math}
+  \end{center}
+  By analysis of the derivation of the assumed ordering statement, we must have 
+  $\phi' \equiv \phi_1$ or $\phi' \equiv \phi_2$.  If $\phi' \equiv \phi_1$ and 
+  $p \geq q$ then we have the required kind derivation for $\phi'$. If $p < q$ then by 
+  level weakening $\Gamma \vdash \phi_1:*_q$, and we have the required kinding 
+  derivation for $\phi'$.  The case for when $\phi' \equiv \phi_2$ is similar.\\
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma,X : *_r \vdash \phi : *_s
+      }{\Gamma \vdash \forall X:*_r.\phi : *_{max(r,s)+1}}
+    \end{math}
+  \end{center}
+  By analysis of the derivation of the assumed ordering statement, we must have 
+  $\phi' \equiv [\phi''/X]\phi$, for some type $\phi''$ with 
+  $\Gamma \vdash \phi'':*_r$.  Let $t = max(r,s) + 1$. Clearly, 
+  $s < t$, hence by level weakening $\Gamma,X:*_r \vdash \phi:*_t$ and by substitution 
+  for kinding $\Gamma \vdash [\phi''/X]\phi:*_t$, and we have the required kinding 
+  derivation for $\phi'$.  
+\end{itemize}
+\end{proof}
 The following lemma is used in the proof of totality of the hereditary substitution function.
 \begin{lemma}[]
   \label{lemma:A_prop_ssfe}
   If $\Gamma \vdash \psi \approx \Pi y:\phi_1.\phi_2$ and $\psi$ is a subexpression of $\phi''$ then
   $\phi'' >_\Gamma \phi_1$ and $\phi'' >_{\Gamma,y:\phi_1} \phi_2$.
 \end{lemma}
+\begin{proof}
+  The possible form for $\psi$ is only a $\Pi$-type.  So it suffices to show that
+  if $\Gamma \vdash \Pi y:\phi'_1.\phi'_2 \approx \Pi y:\phi_1.\phi_2$ and $\psi$ is
+  a subexpression of $\phi''$ then $\phi'' >_\Gamma \phi_1$ and $\phi'' >_{\Gamma,y:\phi_1} \phi_2$.
 
+  \ \\
+  It must be the case that $\phi'' >_\Gamma \phi'_1$ and $\phi'' >_{\Gamma,y:\phi_1} \phi'_2$, because
+  $\phi'_1$ and $\phi'_2$ are both subexpressions of $\phi''$.  By injectivity of $\Pi$-types
+  for typed equality we obtain $\Gamma \vdash \phi'_1 \approx \phi_1$ and $\Gamma,y:\phi_1 \vdash \phi'_2 \approx \phi_2$.
+  Finally, by Lemma~\ref{lemma:typeq_ordering_ssfe} we know $\phi'' >_\Gamma \phi_1$ and $\phi'' >_{\Gamma,y:\phi_1} \phi_2$.
+\end{proof}
 We now define the hereditary substitution function for DSS$\F$.  The
 function is fully defined in
 Fig.~\ref{fig:hereditary_substitution_function_ssfe}.  We do not
 repeat the definition of $ctype_\phi$ for DSS$\F$, because it is
 exactly the same as the previous system. The definition is rather
-straight forward.  Due to space constraints and the fact that all of
-the properties of the hereditary substitution function are so similar
-to the previous type theory they can be found in the companion report.
+straight forward.  
 \begin{figure}[t]
   \small
   \begin{itemize}
@@ -342,6 +927,35 @@ to the previous type theory they can be found in the companion report.
   \caption{Hereditary Substitution Function for Stratified System $\F$}
   \label{fig:hereditary_substitution_function_ssfe}
 \end{figure}
+All of the proofs are similar to the proofs for SS$\Fp$, so we omit
+them here.
+\begin{lemma}[Total, Type Preserving, and Sound with Respect to Reduction]
+  \label{lemma:total_ssfe}
+  Suppose $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$.  Then
+  \begin{itemize}
+  \item[i.] there exists a term $t''$ and a type $\phi''$ such that $[t/x]^\phi t' = t''$, 
+    $\Gamma,[t/x]\Gamma' \vdash t'':\phi''$, and $\Gamma,\Gamma' \vdash \phi'' \approx [t/x]\phi'$, and
+  \item[ii.] $[t/x]t' \redto^* [t/x]^\phi t'$.
+  \end{itemize}
+\end{lemma}
+
+\begin{corollary}[]
+  \label{corollary:type_preserving_ssfe}
+  Suppose $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$. Then
+  $\Gamma,[t/x]\Gamma' \vdash [t/x]^\phi t':[t/x]\phi'$.
+\end{corollary}
+
+\begin{lemma}[Redex Preserving]
+  \label{lemma:redex_preserving_ssfe}
+  If $\Gamma \vdash t : \phi$, $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$
+  then  $|rset(t', t)| \geq |rset([t/x]^\phi t')|$.
+\end{lemma}
+
+\begin{lemma}[Normality Preserving]
+  \label{corollary:normalization_preserving_ssfe}
+  If $\Gamma \vdash n:\phi$ and $\Gamma, x:\phi' \vdash n':\phi'$ then there exists a normal term $n''$ 
+  such that $[n/x]^\phi n' = n''$.
+\end{lemma}
 % subsection the_hereditary_substitution_function (end)
 
 \subsection{Concluding Normalization}
@@ -363,11 +977,27 @@ soundness theorem.
   $[\phi/X]n \in \interp{[\phi/X]\phi'}_{\Gamma,[\phi/X]\Gamma'}$.
   \label{lemma:type_sub_ssfe}
 \end{corollary}
-
+\begin{proof}
+  By the definition of the interpretation of types, $\Gamma,X:*_l,\Gamma' \vdash n:\phi'$ and
+  by Lemma~\ref{lemma:substitution_for_kinding_ssfe}, 
+  $\Gamma,[\phi/X]\Gamma' \vdash [\phi/X]n:[\phi/X]\phi'$.  Finally,
+  by the definition of the interpretation of types, 
+  $[\phi/X]n \in \interp{[\phi/X]\phi'}_{\Gamma,[\phi/X]\Gamma'}$.
+\end{proof}
 \begin{lemma}[Semantic Equality]
   \label{lemma:equality_of_interpretation_of_types_ssfe}
   If $\Gamma \vdash p:t_1 = t_2$ then $\interp{[t_1/x]\phi}_\Gamma = \interp{[t_2/x]\phi}_\Gamma$.
 \end{lemma}
+\begin{proof}
+  We first prove the left to right containment.  Suppose $t \redto^* n
+  \in \interp{[t_1/x]\phi}_\Gamma$. Then by the definition of the
+  interpretation of types, $\Gamma \vdash n:[t_1/x]\phi$.  By assumption
+  we know $\Gamma \vdash p:t_1 = t_2$, hence, by applying the conversion
+  type-checking rule $\Gamma \vdash n:[t_2/x]\phi$.  Finally, by the
+  definition of the interpretation of types, $n \in
+  \interp{[t_2/x]\phi}_\Gamma$.  Therefore, $t \in
+  \interp{[t_2/x]\phi}_\Gamma$.  The opposite direction is similar.
+\end{proof}
 We now conclude type soundness for SS$\F$, and hence, normalization.  
 
 \begin{lemma}[Hereditary Substitution for the Interpretation of Types]
@@ -375,12 +1005,183 @@ We now conclude type soundness for SS$\F$, and hence, normalization.
   then $[n/x]^\phi n' \in \interp{[n/x]\phi'}_{\Gamma,[n/x]\Gamma'}$.
   \label{lemma:interpretation_of_types_closed_substitution_ssfe}
 \end{lemma}
-
+\begin{proof}
+  This proof is similar to the same proof for SS$\Fp$.
+\end{proof}
 \begin{thm}[Type Soundness]
   If $\Gamma \vdash t:\phi$ then $t \in \interp{\phi}_\Gamma$.
   \label{thm:soundness_ssfe}
 \end{thm}
+\begin{proof}
+  This is a proof by induction on the structure of the typing derivation of $t$.
+\begin{itemize}
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma(x) = \phi 
+        \\
+        \Gamma\ Ok
+      }{\Gamma \vdash x:\phi}
+    \end{math}
+  \end{center}
+  By regularity $\Gamma \vdash \phi:*_l$ for some $l$, hence $\interp{\phi}_\Gamma$ is 
+  nonempty.  Clearly, $x \in \interp{\phi}_\Gamma$ by the definition of the interpretation
+  of types.
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma,x:\phi_1 \vdash t:\phi_2
+      }{\Gamma \vdash \lambda x:\phi_1.t : \Pi x:\phi_1.\phi_2}
+    \end{math}
+  \end{center}
+  By the induction hypothesis and the definition of the interpretation of types 
+  $t \in \interp{\phi_2}_{\Gamma,x:\phi_1}$, $t \normto n \in $
+  $ \interp{\phi_2}_{\Gamma,x:\phi_1}$ and $\Gamma,x:\phi_1 \vdash n:\phi_2$.  Thus, by
+  applying the $\lambda$-abstraction type-checking rule, 
+  $\Gamma \vdash \lambda x:\phi_1.n:\Pi x:\phi_1.\phi_2$, hence by the definition of the 
+  interpretation of types 
+  $\lambda x:\phi_1.n \in \interp{\Pi x:\phi_1.\phi_2}_\Gamma$.  Since  
+  $\lambda x:\phi_1.t \normto \lambda x:\phi_1.n \in $
+  $\interp{\Pi x:\phi_1.\phi_2}_\Gamma$ we know by the definition of the interpretation of types
+  $\lambda x:\phi_1.t \in \interp{\Pi x:\phi_1.\phi_2}_\Gamma$.
 
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma \vdash t_1 : \Pi x:\phi_1.\phi_2 
+        \\
+        \Gamma \vdash t_2 : \phi_1 
+      }{\Gamma \vdash t_1\ t_2 : [t_2/x]\phi_2}
+    \end{math}
+  \end{center}
+  It suffices to show that there exists a normal term $n$ such that
+  $t_1\ t_2 \normto n \in \interp{[t_2/x]\phi_2}_\Gamma$.
+  By the induction hypothesis and the definition of the interpretation of
+  types $t_1 \normto n_1 \in $ $\interp{\Pi x:\phi_1.\phi_2}_\Gamma$,  
+  $\Gamma \vdash n_1:\Pi x:\phi_1.\phi_2$, $t_2 \normto n_2 \in \interp{\phi_1}_\Gamma$, 
+  and $\Gamma \vdash n_2:\phi_1$.  Clearly,
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        t_1\ t_2 & \redto^* & n_1\ n_2 \\
+                 & =        & [n_1/z](z\ n_2),
+      \end{array}
+    \end{math}
+  \end{center}
+  for some fresh variable $z \not \in FV(n_1,n_2,\phi_1,\phi_2,x)$.  By Lemma~\ref{lemma:total_ssfe}, Lemma~\ref{corollary:normalization_preserving_ssfe},
+  and Corollary~\ref{corollary:type_preserving_ssfe} $[n_1/x](z\ n_2) \redto^* [n_1/x]^{\phi_1} (z\ n_2)$, $[n_1/x]^{\phi_1} (z\ n_2)$ is normal, and
+  $\Gamma \vdash [n_1/x]^{\phi_1} (z\ n_2):[n_2/x]\phi_2$.  Thus, $t_1\ t_2 \normto [n_1/x]^{\phi_1} (z\ n_2)$.  It suffices to show that 
+  $\Gamma \vdash [n_1/x]^{\phi_1} (z\ n_2):[t_2/x]\phi_2$.  This is justified by the following typing derivation:
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=Conv] {
+        $$\mprset{flushleft}
+        \inferrule* [right=Join] {
+          \Gamma \vdash t_2:\phi_1
+          \\\\
+          \Gamma \vdash n_2:\phi_1
+          \\
+          n_2 \join t_2
+        }{\Gamma \vdash join:n_2 = t_2}
+        \\
+        \Gamma \vdash [n_1/x]^{\phi_1} (z\ n_2):[n_2/x]\phi_2
+      }{\Gamma \vdash [n_1/x]^{\phi_1} (z\ n_2):[t_2/x]\phi_2}
+    \end{math}
+  \end{center}
+  Therefore, $[n_1/x]^{\phi_1} (z\ n_2) \in \interp{[t_2/x]\phi_2}_\Gamma$ which implies that
+  $t_1\ t_2 \in \interp{[t_2/x]\phi_2}_\Gamma$.
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        t_1 \downarrow t_2
+	\\
+	\Gamma\ Ok
+      }{\Gamma \vdash join : t_1 = t_2}
+    \end{math}
+  \end{center}
+  Clearly, $join \in \interp{t_1 = t_2}_\Gamma$ by the definition of the 
+  interpretation of types.
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma \vdash t_0:t_1 = t_2
+        \\
+        \Gamma \vdash t:[t_1/x]\phi
+      }{\Gamma \vdash t:[t_2/x]\phi}
+    \end{math}
+  \end{center}
+  By the induction hypothesis, $t \in \interp{[t_1/x]\phi}_\Gamma$.
+  By the definition of the interpretation of types, $t \normto n \in
+  \interp{[t_1/x]\phi}_\Gamma$.  By assumption we know, $\Gamma \vdash
+  t_0:t_1 = t_2$. Thus, by
+  Lemma~\ref{lemma:equality_of_interpretation_of_types_ssfe},
+  $\interp{[t_1/x]\phi}_\Gamma = \interp{[t_2/x]\phi}_\Gamma$.
+  Therefore, $n \in \interp{[t_2/x]\phi}_\Gamma$, hence, by the
+  definition of the interpretation of types, $t \in
+  \interp{[t_2/x]\phi}_\Gamma$.
+  
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma, X : *_p \vdash t : \phi
+      }{\Gamma \vdash \Lambda X:*_p.t:\forall X:*_p.\phi}
+    \end{math}
+  \end{center}
+  By the induction hypothesis, $t \in \interp{\phi}_{\Gamma,X:*_p}$, so
+  by the definition of the interpretation of types, $t \normto n \in
+  \interp{\phi}_{\Gamma,X:*_p}$ and $\Gamma,X:*_p \vdash n:\phi$.
+  We can apply the $\Lambda$-abstraction type-checking rule to
+  obtain $\Gamma \vdash \Lambda X:*_p.n:\forall X:*_p.\phi$, thus
+  $\Lambda X:*_p.n \in \interp{\forall X:*_p.\phi}_{\Gamma}$.  Since
+  $\Lambda X:*_p.t \normto \Lambda X:*_p.n$ by definition of the
+  interpretation of types 
+  $\Lambda X:*_p.t \in \interp{\forall X:*_p.\phi}_{\Gamma}$.
+
+\item[Case.]\ \\
+  \begin{center}
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=] {
+        \Gamma \vdash t:\forall X:*_l.\phi_1
+        \\
+        \Gamma \vdash \phi_2:*_l
+      }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+    \end{math}
+  \end{center}
+  By the induction hypothesis $t \in \interp{\forall X:*_l.\phi_1}_\Gamma$, so by the 
+  definition of the interpretation of types 
+  $t \normto n \in \interp{\forall X:*_l.\phi_1}_\Gamma$ and
+  $\Gamma \vdash n:\forall X:*_l.\phi_1$.  We do a case 
+  split on whether or not $n$ is a $\Lambda$-abstraction. We can apply the
+  type-instantiation type-checking rule to obtain 
+  $\Gamma \vdash n[\phi_2]:[\phi_2/X]\phi_1$ and by the 
+  definition of the interpretation of types 
+  $n[\phi_2] \in \interp{[\phi_2/X]\phi_1}_\Gamma$. Therefore, 
+  $t \in \interp{[\phi_2/X]\phi_1}_\Gamma$.  Suppose $n \equiv \Lambda X:*_l.n'$.  
+  Then 
+  $t[\phi_2] \rightsquigarrow^{*} (\Lambda X:*_l.n')[\phi_2] \rightsquigarrow $
+  $ [\phi_2/X]n'$.  By semantic inversion
+  $n' \in \interp{\phi_1}_{\Gamma,X:*_l}$. Therefore, by
+  Lemma~\ref{lemma:type_sub_ssfe} $[\phi_2/X]n' \in \interp{[\phi_2/X]\phi_1}_{\Gamma}$ and
+  $t[\phi_2] \in \interp{[\phi_2/X]\phi_1}_{\Gamma}$, since $t[\phi_2] \join [\phi_2/X]n'$.
+\end{itemize}
+\end{proof}
 \begin{corollary}[Normalization]
   If $\Gamma \vdash t:\phi$ then $t \normto n$.
 \end{corollary}
