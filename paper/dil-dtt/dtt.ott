@@ -1,0 +1,439 @@
+% Input variables.
+metavar var, X , Y, x , y , z ::=
+% Worlds
+metavar w ::=
+
+indexvar ivar, i , k , j ::= 
+
+grammar
+
+% Polarities.
+pol, p :: 'polarity_' ::=
+  | +     ::   :: Pos
+  | -     ::   :: Neg
+  | bar p :: M :: Bar {{com invert }} 
+  {{ tex \bar{ [[p]] } }} 
+
+rel :: 'rel_' ::=
+  | <= p :: :: RelTR
+  {{ tex \preccurlyeq^{[[p]]} }}
+
+prel :: 'prel_' ::=
+  | rel :: :: Rel
+  | <= p * :: :: RelTRstar
+  {{ tex \preccurlyeq^*_{[[p]]} }}
+
+node, n , m :: 'node_' ::=
+  | n i + 1  :: :: indexSuc
+  {{tex [[n]]_{[[i]]+1} }}
+  | h( n ) :: :: HParen
+  {{tex [[n]] }}
+  | | Gr | :: M :: Nodes
+  | | G |  :: M :: Nodes2
+
+% Types.
+form, type, A, B, C, E, T :: 'type_' ::=
+  | a :: :: Atom
+  | < p >                ::   :: Unit 
+  {{ tex \langle [[p]]\rangle }} {{ com (co-)unit}}
+  | T -> p T'             ::   :: Imp {{ com (co-)implication}}  
+  {{ tex [[T]] \ndto{[[p]]} [[T']] }} 
+  | T /\ p T'             ::   :: And {{ com (co-)conjunction}}  
+  {{ tex [[T]] \ndwedge{[[p]]} [[T']] }} 
+  | ( T )  :: M :: Parens 
+  | h( T ) :: M :: HiddenParens 
+  {{ tex [[T]] }}
+  | ~ T :: M :: DNeg
+  | T ! d :: M :: Sub 
+  {{ tex [[T]]_{[[d]]} }}
+  | [ T / X ] T' :: M :: Subst
+  | { A } :: M :: Trans
+  {{tex \ulcorner [[A]] \urcorner }}
+  | True :: M :: True
+  {{tex \top }}
+  | False :: M :: False
+  {{tex \perp }}
+
+bit , d :: 'bit_' ::= 
+  | 1 :: :: One
+  | 2 :: :: Two
+  | bar d :: :: Bar 
+  {{ tex \bar{ [[d]] } }} 
+
+term, s , t :: 'term_' ::=
+  | x             ::   :: Var
+  | triv          ::   :: Triv
+  | ( t , t' )    ::   :: Pair
+  | inj d t       ::   :: In 
+  {{ tex \mathbf{in}_{[[d]]}\,[[t]]}}
+  | \ x . t       ::   :: Lam
+  | < t , t' >    ::   :: DPair
+  | nu x . t * t' ::   :: Cut
+  | x [ t ]       ::   :: Brack 
+  | ( t )         :: M :: Parens
+  | h( t )        :: M :: HiddenParens 
+  {{ tex [[t]] }}
+  | t ! d         :: M :: Select 
+  {{ tex [[t]]_{[[d]]} }}
+  | u( t )       :: M :: Underline
+  {{tex \underline{[[t]]} }}
+  | case t of x . t1 , y . t2 :: M :: Case
+  {{tex \mathbf{case}\,[[t]]\,\mathbf{of}\,[[x]].[[t1]],[[y]].[[t2]]}}
+  | sigma t :: M :: Subst
+
+sigma {{ tex \sigma}} :: 'subst_' ::=
+  | sigma [ x to t ] :: :: Extend {{ tex [[sigma]] [ [[x]] \mapsto [[t]] ] }}
+
+canonterm, c :: 'canonterm_' ::=
+  | x             ::   :: Var
+  | triv          ::   :: Triv
+  | ( t , t' )    ::   :: Pair
+  | inj d t       ::   :: In 
+  {{ tex \mathbf{in}_{[[d]]}\,[[t]]}}
+  | \ x . t       ::   :: Lam
+  | < t , t' >    ::   :: DPair
+
+value, u :: 'val_' ::=
+  | x             :: :: Var
+  | \ x . t       :: :: Lam
+  | inj d t   :: :: In 
+  {{ tex \mathbf{in}_{[[d]]}\, [[t]] }}
+  | ( t , t' )    :: :: Pair
+  | < t , t' >    :: :: DPair
+  | triv          :: :: Triv
+
+Gr {{tex G }} :: 'E_' ::= {{com abstract Kripke models}}   
+  | .          ::   :: Empty
+  {{tex \cdot }}
+  | n rel n'   ::   :: El
+  | Gr , Gr'   ::   :: Ex
+  | ( Gr )     ::   :: Paren
+  | ( n , n' ) :: M :: El2
+  | - Gr -     :: M :: Trans
+  {{tex \ulcorner [[Gr]] \urcorner }}
+
+G {{tex \Gamma}}, D {{tex \Delta}} :: 'G_' ::= {{com logical contexts}}
+  | .             ::   :: Empty
+  {{tex \cdot }}
+  | p T @ n       ::   :: El 
+  | G , G'        ::   :: Ext
+  | ( G )         :: S :: Paren
+  | h( G )        :: M :: HiddenParens {{ tex [[G]] }} 
+  | G1 , ... , Gi :: M :: ListCTX
+  | G i + 1       :: M :: CTXPlus1
+  {{tex [[G]]_{[[i]]+1} }}
+  | G p           :: M :: PostiveCtx
+  {{tex [[G]]^{[[p]]} }}
+  | { G } p       :: M :: Trans
+  {{tex \ulcorner [[G]] \urcorner^{[[p]]} }}
+  | Perm G        :: M :: Perm
+  | p1 A1 @ n1 dots p2 A2 @ n2 :: :: HypDots
+  {{tex [[p1]] [[A1]] @ [[n1]] , \ldots , [[p2]] [[A2]] @ [[n2]] }}
+  | p T           :: M :: SL
+
+H {{ tex \Gamma }} :: 'H_' ::= {{com typing contexts}}
+  | .           ::   :: Empty
+  {{tex \cdot }}
+  | x : p T @ n ::   :: El 
+  | H , H'      ::   :: Ext
+  | ( H )       :: S :: Paren
+  | h( H )      :: M :: HiddenParens {{ tex [[H]] }} 
+
+J {{ tex \Gamma }} :: 'J_' ::= {{com classical typing contexts}}
+  | .           ::   :: Empty
+  {{tex \cdot }}
+  | x : p T ::   :: El 
+  | J , J'      ::   :: Ext
+  | ( J )       :: S :: Paren
+  | drop H      :: S :: Erase {{ tex \ulcorner [[H]] \urcorner}}
+  | h( J )      :: M :: HiddenParens {{ tex [[J]] }} 
+
+world :: 'Wrld_' ::=
+  | w :: :: World
+  | N :: :: Node2World2
+  {{tex N }}
+  | N n :: :: Node2World
+  {{tex N\,[[n]] }}
+  | R world1 world2 :: :: R
+  {{tex R\,[[world1]]\,[[world2]] }}
+  | ( world ) :: :: Paren
+
+terminals :: '' ::=
+  | @    :: :: At {{tex \mathbin{@} }}
+  | |-   :: :: turnstile  {{tex \vdash }}
+  | |-c   :: :: turnstilec  {{tex \vdash_c }}
+  | nu   :: :: Nu {{ tex \nu }}
+  | \    :: :: slash  {{ tex \lambda }}
+  | Perm :: :: perm
+  {{tex \pi}}
+  | ~>   :: :: step  {{ tex \redto }}
+  | ~*>   :: :: sstep  {{ tex \redto^* }}
+  | ->   :: :: rightarrow  {{ tex \rightarrow }}
+  | *    :: :: Cut  {{ tex \mathbin{\Cdot[2]} }}
+  | ~    :: :: Tilde  {{tex \mathop{\sim} }}
+  | >>   :: :: LL {{ tex \triangleright }}
+  | mu   :: :: Mu {{ tex \mu }}
+  | !=   :: :: Neq {{tex \neq }}
+  | FV   :: :: FV  {{ tex \mathsf{FV} }}
+  | in   :: :: In {{ tex \in }}
+  | notin   :: :: NotIn {{ tex \not\in }}
+  | <    :: :: Langle {{ tex \langle }}
+  | >    :: :: Rangle {{ tex \rangle }}
+  | raise :: :: Raise
+  {{tex \mathsf{raise} }}
+
+ formula :: 'formula_' ::=
+  | judgement               ::  :: judgement
+  | formula <= formula'     :: M :: PJ
+  | ( formula )             :: M :: ParenF
+  | formula && formula'     ::  :: judgement_list 
+  {{ tex [[formula]] \qquad [[formula']] }}
+  | ( formula )             ::  :: parens
+  | n notin | Gr |    ::  :: FreshName
+  | n in | Gr |       ::  :: In
+  | n notin | Gr | , | G |  ::  :: FreshName2
+  | x notin FV ( t )  ::  :: FreeVars
+  | p X >> T @ n in G :: :: AssumpRec
+  | x : p X >> T @ n in H :: :: AssumpTpRec
+  | world :: :: World
+  | V w a :: :: Evaluation
+  {{tex V\,[[w]]\,[[a]] }}
+  | [| A |] world :: :: interp
+  {{tex \interp{[[A]]}_{[[world]]} }}    
+  | p [| A |] world :: :: interp4
+  {{tex [[p]] \interp{[[A]]}_{[[world]]} }}    
+  | [| Gr |] N :: :: interp2
+  {{tex \interp{[[Gr]]}_{N} }}
+  | [| G |] N :: :: interp3
+  {{tex \interp{[[G]]}_{N} }}
+  | [| judgement |] N :: :: interp5
+  {{tex \interp{[[judgement]]}_{N} }}
+  | A == B :: :: Eq
+  {{tex [[A]] \equiv [[B]]}}
+  | G in Sub ( Gr ; G' ) :: :: Sub
+  {{tex [[G]] \in \mathsf{Sub}([[Gr]]; [[G']]) }}
+  | Sub ( Gr ; G' ) :: :: Sub2
+  {{tex \mathsf{Sub}([[Gr]]; [[G']]) }}
+  | G == G' :: :: Eq2
+  {{tex [[G]] \equiv [[G']] }}
+  | G1 in G2 :: :: SubseteqCtx
+  {{tex [[G1]] \in [[G2]] }}
+  | y != y' && y'' notin FV( t1 ) :: :: DisNotInFV
+  {{tex [[y]] \not \equiv [[y']] \quad [[y'']] \not\in FV([[t1]])}}
+  | n1 rel n2 in Gr :: :: edgeInGr
+  {{tex [[n1]] [[rel]] [[n2]] \in [[Gr]] }}
+ 
+
+subrules
+ u <:: t
+ c <:: t
+
+funs
+sbst ::=
+fun
+  [ t' / x ] t'' :: t :: subst 
+by
+  [ t' / x ] x === t'
+  [ t' / x ] y === y
+  [ t' / x ] triv === triv
+  [ t' / x ] ( t1 , t2 ) === ( [t' / x ] t1 , [ t' / x ] t2 )
+  [ t' / x ] inj d t === inj d [ t' / x ] t 
+  [ t' / x ] < t1 , t2 > === < [t' / x ] t1 , [ t' / x ] t2 >
+  [ t' / x ] nu y . t1 * t2 === nu y . [t'/x]t1 * [t'/x]t2
+  [ t' / x ] y [ t ] === y [ [ t' / x ] t ]
+
+fun
+ raise ( n1 , n2 , Gr' ) :: Gr :: raise
+by
+  raise ( n1 , n2 , . ) === .
+  raise ( n1 , n2 , (n1 <=p m , Gr) ) === n2 <=p m , raise (n1 , n2, Gr)
+  raise ( n1 , n2 , (m <=bar p n1 , Gr )) === m <= bar p n2 , raise (n1 , n2, Gr)
+  raise ( n1 , n2 , (m <=p m' , Gr )) === m <=  p m' , raise (n1 , n2, Gr)
+  raise ( n1 , n2 , (m <=bar p m' , Gr )) === m <=  bar p m' , raise (n1 , n2, Gr)
+ 
+defns
+
+  Jtyp :: '' ::=
+
+defn
+  Gr |- n prel n'    ::  :: WorldinGr :: 'rel_' {{com Reachability in an abstract Kripke model}}
+by
+
+ ----------------------------------- :: ax
+ Gr , n <= p n' , Gr' |- n <= p * n'
+
+ ----------------- :: refl
+ Gr |- n <= p * n
+
+ Gr |- n <= p * n' &&  Gr |- n' <= p * n''
+ ----------------------------------------- :: trans
+ Gr |- n <= p * n''
+
+ Gr |- n' <= bar p * n
+ ------------------- :: flip
+ Gr |- n <= p * n'
+
+defn
+ G |- p T :: :: TS :: 'SL_' {{com Polarized Subtractive Logic }}
+by
+
+ ------------------- :: ax
+ G , p T , G' |- p T 
+
+ ------------- :: unit
+ G |- p < p >
+
+ G |- p T1 && G |- p T2
+ ---------------------- :: and
+ G |- p (T1 /\p T2)
+
+ G , bar p T ! bar d |- p T ! d
+ ------------------------------ :: andBar
+ G |- p (T1 /\ bar p T2)
+
+ G p, p T1 |- p T2
+ ------------------ :: imp
+ G |- p (T1 ->p T2)
+ 
+ G |- bar p T1 &&  G |- p T2
+ --------------------------- :: impBar
+ G |- p (T1 -> bar p T2)
+
+defn
+ Gr ; G |- p A @ n :: :: Tp :: '' {{com Logical validity (no terms)}}
+by
+
+ Gr |- n <= p * n'
+ --------------------------------- :: ax
+ Gr ; G , p A @ n , G' |- p A @ n'
+
+ --------------------- :: unit
+ Gr ; G |- p < p > @ n
+
+ Gr ; G |- p A @ n && Gr ; G |- p B @ n
+ -------------------------------------- :: and
+ Gr ; G |- p (A /\p B) @ n
+
+ Gr ; G , bar p A ! bar d @ n |- p A ! d @ n
+ ------------------------------------------- :: andBar
+ Gr ; G |- p (A1 /\ bar p A2) @ n
+
+ n' notin | Gr | , | G | 
+ (Gr, n <= p n') ; G , p A @ n' |- p B @ n'
+ ------------------------------------------ :: imp
+ Gr ; G |- p (A ->p B) @ n
+ 
+ Gr |- n <= bar p * n'
+ Gr ; G |- bar p A @ n' &&  Gr ; G |- p B @ n'
+ --------------------------------------------- :: impBar
+ Gr ; G |- p (A -> bar p B) @ n
+
+ Gr ; G , bar p A @ n |- + B @ n' && Gr ; G , bar p A @ n |- - B @ n'
+ -------------------------------------------------------------------- :: cut
+ Gr ; G |- p A @ n
+
+ p B @ n' in (G, bar p A @ n) && Gr ; G, bar p A @ n |- bar p B @ n'
+ --------------------------------------------------------------------- :: axCut
+ Gr; G |- p A @ n
+
+ bar p B @ n' in (G , bar p A @ n) && Gr ; G , bar p A @ n |- p B @ n'
+ --------------------------------------------------------------------- :: axCutBar
+ Gr; G |- p A @ n
+
+defn
+ Gr ; H |- t : p A @ n :: :: Log :: '' {{com Typing of terms}}
+by
+
+ Gr |- n <= p * n'
+ ----------------------------------------- :: Ax
+ Gr ; H , x : p A @ n , H' |- x : p A @ n'
+
+ ---------------------------- :: Unit
+ Gr ; H |- triv : p < p > @ n
+
+ Gr ; H |- t1 : p A @ n && Gr ; H |- t2 : p B @ n
+ -------------------------------------------------- :: And
+ Gr ; H |- ( t1 , t2 ) : p (A /\p B) @ n
+
+ Gr ; H |- t : p A ! d @ n
+ ------------------------------------------ :: AndBar
+ Gr ; H |- inj d t : p (A1 /\ bar p A2) @ n
+
+ n' notin | Gr | , | G | 
+ (Gr, n <= p n') ; H , x : p A @ n' |- t : p B @ n'
+ -------------------------------------------------- :: Imp
+ Gr ; H |- \ x . t : p (A ->p B) @ n
+ 
+ Gr |- n <= bar p * n'
+ Gr ; H |- t1 : bar p A @ n'  &&  Gr ; H |- t2 : p B @ n'
+ -------------------------------------------------------- :: ImpBar
+ Gr ; H |- < t1 , t2 > : p (A ->bar p B) @ n
+
+ Gr ; H , x : bar p A @ n |- t1 : + B @ n'
+ Gr ; H , x : bar p A @ n |- t2 : - B @ n'
+ ----------------------------------------- :: Cut
+ Gr ; H |- nu x . t1 * t2 : p A @ n
+
+
+ defn
+  t ~> t' :: :: Red :: 'R'  
+ by
+ 
+  ------------------------------------------------------------ :: Imp
+  nu z. \ x . t * < t1 , t2 > ~> nu z . [t1 / x ] t * t2
+ 
+  ----------------------------------------------------------- :: ImpBar
+  nu z. < t1 , t2 > * \ x . t ~> nu z. t2 * [ t1 / x ] t
+
+  ------------------------------------------- :: And1
+  nu z. ( t1 , t2 ) * inj 1 t ~> nu z. t1 * t
+ 
+  ------------------------------------------- :: And2
+  nu z. ( t1 , t2 ) * inj 2 t ~> nu z. t2 * t
+ 
+  -------------------------------------------- :: AndBar1
+  nu z. inj 1 t * ( t1 , t2 )  ~> nu z. t * t1
+
+  -------------------------------------------- :: AndBar2
+  nu z. inj 2 t * ( t1 ,  t2 ) ~> nu z. t * t2
+ 
+  x notin FV(t)
+  ----------------- :: Ret
+  nu x . t * x ~> t
+
+  --------------------------------------------------- :: BetaR  
+  nu z. c * (nu x. t1 * t2) ~> nu z.[c/x]t1 * [c/x]t2
+
+  ------------------------------------------------- :: BetaL
+  nu z.(nu x.t1 * t2) * t ~> nu z.[t/x]t1 * [t/x]t2
+
+defn
+ J |-c t : p A :: :: Class :: 'Class' {{com Classical typing of terms}}
+by
+
+ ------------------------------------ :: Ax
+ J , x : p A , J'  |-c x : p A 
+
+ ---------------------------- :: Unit
+ J |-c triv : p < p > 
+
+ J |-c t1 : p A  && J |-c t2 : p B 
+ -------------------------------------------------- :: And
+ J |-c ( t1 , t2 ) : p (A /\p B) 
+
+ J |-c t : p A ! d 
+ ------------------------------------------ :: AndBar
+ J |-c inj d t : p (A1 /\ bar p A2) 
+
+ J , x : p A  |-c t : p B 
+ ---------------------------------------------------- :: Imp
+ J |-c \ x . t : p (A ->p B) 
+ 
+ J |-c t1 : bar p A   &&  J |-c t2 : p B 
+ ---------------------------------------------------------- :: ImpBar
+ J |-c < t1 , t2 > : p (A ->bar p B) 
+
+ J , x : bar p A  |-c t1 : + B 
+ J , x : bar p A  |-c t2 : - B 
+ ---------------------------------------------- :: Cut
+ J |-c nu x . t1 * t2 : p A 

@@ -1,0 +1,194 @@
+% Input variables.
+metavar ilabels, a, b, c ::=
+metavar paths , h {{tex \pi}} ::=
+metavar worlds , w ::=
+metavar gindex ,  n , x , y, z::=  % Indexes into the graph.
+
+indexvar ivar, i , k , j ::= 
+
+grammar
+
+
+% Types.
+A, B, C, T :: 'form_' ::=
+  | True    ::   :: True
+  {{tex \top }}
+  | False   ::   :: False
+  {{tex \perp }}
+  | T /\ T' ::   :: Conj
+  {{tex [[T]] \land [[T']] }}
+  | T \/ T' ::   :: Disj
+  {{tex [[T]] \lor [[T']] }}
+  | T -> T' ::   :: Imp
+  {{tex [[T]] \supset [[T']] }}
+  | T - T'  ::   :: Subtrac
+  {{tex [[T]] \prec [[T']] }}
+  | ( T )   :: M :: Parens 
+  | h( T )  :: M :: HiddenParens 
+  {{ tex [[T]] }}
+  | { A }   :: M :: Trans
+  {{tex \ulcorner [[A]] \urcorner }}
+
+Gr {{tex G }} :: 'E_' ::=
+  | .             ::    :: Empty
+  {{tex \cdot }}
+  | { ( x , y ) } ::   :: El
+  | ( x , y )     ::   :: El2
+  | Gr , Gr'      ::   :: Ext
+  | Gr U Gr'      ::   :: Union
+  {{tex [[Gr]] \cup [[Gr']] }}
+  | ( Gr )        ::   :: Paren
+  | h( Gr )       :: M :: HiddenParens 
+  {{ tex [[Gr]] }}
+  | - Gr -   :: M :: Trans
+  {{tex \ulcorner [[Gr]] \urcorner }}
+
+% Polarities.
+pol, p :: 'polarity_' ::=
+  | +     :: M :: Pos
+  | -     :: M :: Neg
+  | bar p :: M :: Bar {{com invert }} 
+  {{ tex \bar{ [[p]] } }} 
+
+G {{tex \Gamma}}, D {{tex \Delta}} :: 'G_' ::=
+  | .           ::   :: Empty
+  {{tex \cdot }}
+  | x : T       ::   :: El
+  | G , G'      ::   :: Ext
+  | ( G )       :: S :: Paren
+  | h( G )      :: M :: HiddenParens 
+  {{ tex [[G]] }}   
+  | { G } p     :: M :: Trans
+  {{tex \ulcorner [[G]] \urcorner^{[[p]]} }}
+
+terminals :: '' ::=
+  | []   :: :: Box  {{ tex \Box }}
+  | |=   :: :: models  {{ tex \models }}
+  | |-   :: :: Turnstyle  {{tex \vdash }}
+  | star :: :: star   {{ tex \mathop{\star} }}
+  | >>   :: :: RR   {{ tex \gg}}
+  | _    :: :: Under   {{tex \Box}}
+  | \    :: :: slash  {{ tex \lambda }}
+  | ~>   :: :: step  {{ tex \redto }}
+  | ~*>   :: :: sstep  {{ tex \redto^* }}
+  | >=   :: :: succeq {{ tex \succeq }}
+  | <=   :: :: preceq {{ tex \preceq }}
+  | ->   :: :: rightarrow  {{ tex \rightarrow }}
+  | <-   :: :: leftarrow  {{ tex \leftarrow }}
+  | -<   :: :: Yleft  {{ tex \Yleft }}
+  | ~*>  :: :: mstep  {{ tex \redto^* }}
+  | =    :: :: Eq
+  | ==   :: :: Equiv  {{ tex \equiv }}
+  | =~   :: :: Cong  {{ tex \cong }}
+  | bot  :: :: Bottom   {{ tex \mathop{\perp} }}
+  | top  :: :: Top   {{ tex \top }}
+  | *    :: :: Cut  {{ tex \bullet}}
+  | ~    :: :: Tilde  {{tex \mathop{\sim} }}
+  | \    :: :: Lam {{ tex \lambda }}
+  | mu   :: :: Mu {{ tex \mu }}
+  | !=   :: :: Neq {{tex \neq }}
+  | FV   :: :: FV  {{ tex \mathsf{FV} }}
+  | in   :: :: In {{ tex \in }}
+
+
+ formula :: 'formula_' ::=
+  | judgement               ::  :: judgement
+  | formula <= formula'     :: M :: PJ
+  | ( formula )             :: M :: ParenF
+  | formula && formula'     ::  :: judgement_list 
+  {{ tex [[formula]] \qquad [[formula']] }}
+  | ( formula )             ::  :: parens
+  | x Gr y                  ::  :: GraphRel
+  {{tex [[x]] [[Gr]] [[y]] }}
+  | x notin Gr , G , D      ::  :: wnotin
+  {{tex [[x]] \not\in [[Gr]],[[G]],[[D]] }}
+  | ( x , y )               :: M :: Edges
+  | n in Nodes ( Gr )       :: M :: Nodes1
+  {{tex [[n]] \in \mathsf{Nodes}([[Gr]]) }}
+  | n in Nodes ( G )        :: M :: Nodes2
+  {{tex [[n]] \in \mathsf{Nodes}([[G]]) }}  
+
+defns
+  Jtyp :: '' ::=
+
+defn
+ G |- Gr D :: :: Log :: '' 
+ {{tex [[G]] \vdash_{[[Gr]]} [[D]] }}
+ by
+
+ G |- h(Gr U {(n,n)}) D
+ ---------------------- :: refl
+ G |- Gr D
+
+ n1 Gr n2
+ n2 Gr n3
+ G |- h(Gr U {(n1,n3)}) D
+ ---------------------- :: trans
+ G |- Gr D
+
+ ------------------------ :: hyp
+ G, n : T |- Gr n : T , D
+
+ n Gr n'
+ G , n : T , n' : T |- Gr D
+ ------------------------- :: monL
+ G , n : T |- Gr D
+
+ n' Gr n
+ G |- Gr n' : T , n : T, D
+ ------------------------- :: monR
+ G |- Gr n : T, D
+
+ G |- Gr D
+ -------------------- :: trueL
+ G , n : True |- Gr D
+
+ ------------------- :: trueR
+ G |- Gr n : True, D
+
+ ------------------- :: falseL
+ G, n : False |- Gr D
+
+ G |- Gr D
+ -------------------- :: falseR
+ G |- Gr n : False, D
+
+ G , n : T1, n : T2 |- Gr D
+ -------------------------- :: andL
+ G , n : T1 /\ T2   |- Gr D
+
+ G |- Gr n : T1, D
+ G |- Gr n : T2, D
+ ----------------------- :: andR
+ G |- Gr n : T1 /\ T2, D
+
+ G, n : T1 |- Gr D
+ G, n : T2 |- Gr D
+ ----------------------- :: disjL
+ G, n : T1 \/ T2 |- Gr D
+
+ G |- Gr n : T1, n : T2, D
+ ------------------------- :: disjR
+ G |- Gr n : T1 \/ T2, D
+
+ n Gr n'
+ G |- Gr n' : T1, D
+ G, n' : T2 |- Gr D
+ ------------------------ :: impL
+ G , n : T1 -> T2 |- Gr D 
+
+ n' notin Gr, G, D
+ G, n' : T1 |- h(Gr U {(n,n')}) n' : T2, D
+ ------------------------------------- :: impR
+ G |- Gr n : T1 -> T2, D
+
+ n' notin Gr, G, D
+ G, n' : T1 |- h(Gr U {(n,n')}) n' : T2, D
+ ------------------------------------- :: subL
+ G, n' : T1 - T2 |- Gr D
+
+ n' Gr n
+ G |- Gr n' : T1 , D
+ G, n' : T2 |- Gr D
+ ---------------------- :: subR
+ G |- Gr n : T1 - T2, D
