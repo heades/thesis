@@ -1,0 +1,705 @@
+\section{Dualized Intuitionistic Logic}
+\label{sec:dualized_intuitionistic_logic}
+
+\subsection{Consistency}
+\label{subsec:consistency_dil}
+In this section we prove consistency of DIL with respect to Rauszer's
+Kripke semantics for BINT logic.  All of the results in this section
+have been formalized in the Agda proof assistant\footnote{Agda source
+  code is available at
+  \url{https://github.com/heades/DIL-consistency}}.  We begin by first
+defining a Kripke frame.
+
+\begin{definition}
+  \label{def:kripke_frame}
+  A \textbf{Kripke frame} is a pair $(W, R)$ of a set of worlds $W$, and
+  a preorder $R$ on $W$.  
+\end{definition}
+Then we extend the notion of a Kripke frame to include an evaluation for atomic
+formulas resulting in a Kripke model.
+\begin{definition}
+  \label{def:kripke_model}
+  A \textbf{Kripke model} is a tuple $(W, R, V)$, such that, $(W, R)$ is
+  a Kripke frame, and $V$ is a binary monotone relation on $W$ and the
+  set of atomic formulas of DIL.
+\end{definition}
+Now we can interpret formulas in a Kripke model as follows:
+\begin{definition}
+  \label{def:interpretation}
+  The interpretation of the formulas of DIL in some Kripke model $(W, R, V)$
+  is defined by recursion on the structure of the formula as follows:
+  \begin{center}
+    \begin{tabular}{lll}
+      \begin{math}
+        \begin{array}{rll}
+          [[ [| < + > |] w]]   & = & [[True]]\\
+          [[ [| < - > |] w]]   & = & [[False]]\\
+          [[ [|a|] w]]         & = & [[V w a]]\\  
+        \end{array}
+      \end{math}
+      &
+      \begin{math}
+        \begin{array}{rll}      
+          [[ [| A /\+ B |] w]] & = & [[ [| A |] w]]  \land [[ [| B |] w]]\\    
+          [[ [| A /\- B |] w]] & = & [[ [| A |] w]]  \lor [[ [| B |] w]]\\    
+          [[ [| A ->+ B |] w]] & = & \forall w' \in W. [[R w w']] \to [[ [| A |] w']] \to [[ [| B |] w']]\\
+          [[ [| A ->- B |] w]] & = & \exists w' \in W. [[R w' w]] \land \lnot [[ [| A |] w']] \land [[ [| B |] w']]\\
+        \end{array}
+      \end{math}
+    \end{tabular}
+  \end{center}
+\end{definition}
+The interpretation of formulas really highlights the fact that implication is dual to coimplication.  Monotonicity
+holds for this interpretation.
+
+\begin{lemma}[Monotonicity]
+  \label{lemma:monotonicity}
+  Suppose $(W, R, V)$ is a Kripke model, $[[A]]$ is some DIL formula, and $w,w' \in W$.
+  Then $[[R w w']]$ and $[[ [| A |] w]]$ imply $[[ [| A |] w']]$.
+\end{lemma}
+
+At this point we must set up the mathematical machinery which allows
+for the interpretation of sequents in a Kripke model.  This will
+require the interpretation of graphs, and hence, nodes.  We interpret
+nodes as worlds in the model using a function we call a node
+interpreter.
+\begin{definition}
+  \label{def:node_interpreter}
+  Suppose $(W, R, V)$ is a Kripke model and $S$ is a set of nodes of
+  an abstract Kripke model $[[Gr]]$.  Then a \textbf{node interpreter} on
+  $S$ is a function from $S$ to $W$.
+\end{definition}
+Now using the node interpreter we can interpret edges as statements
+about the reachability relation in the model.  Thus, the
+interpretation of a graph is just the conjunction of the
+interpretation of its edges.
+\begin{definition}
+  \label{def:graph_interp}
+  Suppose $(W, R, V)$ is a Kripke model, $[[Gr]]$ is an abstract Kripke
+  model, and $[[N]]$ is a node interpreter on the set of nodes of $[[Gr]]$.
+  Then the interpretation of
+  $[[Gr]]$ in the Kripke model is defined by recursion on the structure
+  of the graph as follows:
+  \[
+  \begin{array}{lll}
+    [[ [| . |] N ]]            & = & [[True]]\\
+    [[ [| n1 <=+ n2, Gr |] N]] & = & [[R (N n1) (N n2)]] \land [[ [| Gr |] N]]\\
+    [[ [| n1 <=- n2, Gr |] N]] & = & [[R (N n2) (N n1)]] \land [[ [| Gr |] N]]\\
+  \end{array}
+  \]
+\end{definition}
+Now we can prove that if a particular reachability judgment holds,
+then the interpretation of the nodes are reachable in the model.
+\begin{lemma}[Reachability Interpretation]
+  \label{lemma:reachability_interpretation}
+  Suppose $(W, R, V)$ is a Kripke model, and $[[ [| Gr |] N]]$ for some abstract Kripke graph $[[Gr]]$. Then
+  \begin{itemize}
+  \item[i.] if $[[Gr |- n1 <=+ n2]]$, then $[[R (N n1) (N n2)]]$, and
+  \item[ii.] if $[[Gr |- n1 <=- n2]]$, then $[[R (N n2) (N n1)]]$.
+  \end{itemize}
+\end{lemma}
+
+We now have everything we need to interpret abstract Kripke
+models. The final ingredient to the interpretation of sequents is the
+interpretation of contexts.  
+\begin{definition}
+  \label{def:pol_interp}
+  If $F$ is some meta-logical formula, we define $p\, F$ as follows:
+  \[
+  \begin{array}{lll}
+    [[+]]\, F = F & \text{ and } &
+    [[-]]\, F = \lnot F.\\
+  \end{array}
+  \]
+\end{definition}
+\begin{definition}
+  \label{def:ctx_interp}
+  Suppose $(W, R, V)$ is a Kripke model, $[[G]]$ is a context, 
+  and $[[N]]$ is a node interpreter on the set of nodes in $[[G]]$.
+  The interpretation of
+  $[[G]]$ in the Kripke model is defined by recursion on the structure
+  of the context as follows:
+  \[
+  \begin{array}{lll}
+    [[ [| . |] N ]]        & = & [[True]]\\
+    [[ [| p A @ n, G |] N]] & = & [[ p [| A |] (N n) ]] \land [[ [| G |] N]]\\
+  \end{array}
+  \]
+\end{definition}
+Combining these interpretations results in the following
+definition of validity.
+\begin{definition}
+  \label{def:validity}
+  Suppose $(W, R, V)$ is a Kripke model, $[[G]]$ is a context, 
+  and $[[N]]$ is a node interpreter on the set of nodes in $[[G]]$.
+  The interpretation of sequents is defined as follows:
+  \[
+  \begin{array}{lll}
+    [[ [|Gr ; G |- p A @ n |] N ]] & = & \text{ if } [[ [| Gr |] N ]] \text{ and } [[ [| G |] N]], \text{ then } [[ p [| A |] (N n)]].
+  \end{array}
+  \]
+\end{definition}
+Notice that in the definition of validity the graph $[[Gr]]$ is
+interpreted as a set of constraints imposed on the set of Kripke models, thus
+reinforcing the fact that the graphs on sequents really are abstract
+Kripke models.  Finally, using the previous definition of validity we
+can prove consistency.
+\begin{thm}[Consistency]
+  \label{thm:consistency}
+  Suppose $[[Gr ; G |-p A @ n]]$. 
+  Then for any Kripke model $(W, R, V)$ and node interpreter $N$ on $|[[Gr]]|$, $[[ [|Gr ; G |- p A @ n |] N]]$.
+\end{thm}
+% subsection consistency (end)
+
+\subsection{Completeness}
+\label{subsec:completeness_dil}
+
+% subsection completeness (end)
+
+% section dualized_intuitionistic_logic (end)
+
+\section{Dualized Type Theory}
+\label{sec:dualized_type_theory}
+We now present the basic metatheory of DTT, starting with
+type preservation (proof omitted).  
+\begin{lemma}[Type Preservation]
+  \label{lemma:type_preservation}
+  If $[[Gr ; H |- t : p A@n]]$, and $[[t]] \redto^* [[t']]$, then $[[Gr ; H |- t' : p A@n]]$.
+\end{lemma}
+\begin{proof}
+  This holds by straightforward induction on the form of the assumed
+  derivation $[[t]] \redto^* [[t']]$.
+\end{proof}
+\begin{figure}
+    \begin{mathpar}
+      \dttdruleClassAx{}     \and
+      \dttdruleClassUnit{}   \and
+      \dttdruleClassAnd{}    \and
+      \dttdruleClassAndBar{} \and
+      \dttdruleClassImp{}    \and 
+      \dttdruleClassImpBar{} \and
+      \dttdruleClassCut{}    
+    \end{mathpar}
+\caption{Classical typing of DTT terms}
+\label{fig:classtp}
+\end{figure}
+A more substantial property is strong normalization of reduction for
+typed terms.  To prove this result, we will prove a stronger property,
+namely strong normalization for reduction of terms which are typable
+using the system of classical typing rules in
+Figure~\ref{fig:classtp}.  This is justified by the following easy
+result (proof omitted), where $[[drop H]]$ just drops the world
+annotations from assumptions in $\Gamma$:
+\begin{thm}
+\label{thm:inttoclass}
+If $[[Gr ; H |- t : p A @ n]]$, then $[[ drop H |-c t : p A]]$
+\end{thm}
+
+Let $\SN$ be the set of terms which are strongly normalizing with
+respect to the reduction relation.  Let \textit{Var} be the set of
+term variables, and let us use $x$ and $y$ as metavariables for variables.  We
+will prove strong normalization for classically typed terms using a
+version of Krivine's classical realizability~\cite{krivine09}.  We
+define three interpretations of types in Figure~\ref{fig:classreal}.
+The definition is by mutual induction, and can easily be seen to
+well-founded, as the definition of $\interp{A}^+$ invokes the
+definition of $\interp{A}^-$ with the same type, which in turn invokes
+the definition of $\interp{A}^{+c}$ with the same type; and the
+definition of $\interp{A}^{+c}$ may invoke either of the other
+definitions at a strictly smaller type.  The reader familiar with
+such proofs will also recognize the debt owed to Girard~\cite{gtl90}.
+All missing proofs below may be found in the companion report~\cite{Eades:2014}.
+
+\begin{figure}
+\[
+\begin{array}{lll}
+t \in \interp{A}^+ & \Leftrightarrow & \forall x \in \textit{Var}.\ \forall t'\in\interp{A}^-.\ [[ nu x . t * t' ]] \in \SN\\
+t \in \interp{A}^- & \Leftrightarrow & \forall x \in \textit{Var}.\ \forall t'\in\interp{A}^{+c}.\ [[ nu x . t' * t ]] \in \SN\\
+t \in \interp{[[< + >]]}^{+c} & \Leftrightarrow & t \in \textit{Var}\ \vee\ t \equiv [[triv]] \\
+t \in \interp{[[< - >]]}^{+c} & \Leftrightarrow & t \in \textit{Var}\\
+t \in \interp{[[A ->+ B]]}^{+c} & \Leftrightarrow & t \in \textit{Var}\ \vee\ \exists x, t'. t \equiv \lambda x.\, t'\ \wedge\ \forall t''\in\interp{A}^+.\ [t''/x] t'\in\interp{B}^+\\
+t \in \interp{[[A ->- B]]}^{+c} & \Leftrightarrow & t \in \textit{Var}\ \vee\ \exists t_1\in\interp{A}^-, t_2\in\interp{B}^+.\ t \equiv [[ < t1 , t2 >]] \\
+t \in \interp{[[A /\+ B]]}^{+c} & \Leftrightarrow & t \in \textit{Var}\ \vee\ \exists t_1\in\interp{A}^+, t_2\in\interp{B}^+.\ t \equiv [[ ( t1 , t2 )]] \\
+t \in \interp{[[A1 /\- A2]]}^{+c} & \Leftrightarrow & t \in \textit{Var}\ \vee\ \exists d. \exists t'\in\interp{A_d}^+.\ t \equiv [[ inj d t']] 
+\end{array}
+\]
+\caption{Interpretations of types}
+\label{fig:classreal}
+\end{figure}
+
+\begin{lemma}[Step interpretations]
+\label{lem:stepinterp}
+If $t\in\interp{A}^+$ and $t\leadsto t'$, then
+$t'\in\interp{A}^+$; and similiarly if $t\in\interp{A}^-$ or $t\in\interp{A}^{+c}$.
+\end{lemma}
+\begin{proof}
+The proof is by a mutual well-founded induction.
+Assume $t\in\interp{A}^+$ and $t\leadsto t'$.  We must show $t'\in\interp{A}^+$.
+For this, it suffices to assume $y\in\textit{Var}$ and $t''\in\interp{A}^-$,
+and show $[[nu y . t' * t'']]\in\SN$.  From the assumption that $t\in\interp{A}^+$,
+we have 
+\[
+[[nu y . t * t'']] \in\SN
+\]
+which indeed implies that 
+\[
+[[nu y . t' * t'']] \in\SN
+\]
+A similar argument applies if $t\in\interp{A}^-$.  
+
+For the last part of the lemma, assume $t\in\interp{A}^{+c}$ with
+$t\leadsto t'$, and show $t'\in\interp{A}^{+c}$.  The only possible
+cases are the following, where $t\not\in\textit{Vars}$.
+
+If $A \equiv [[A1 ->+ A2]]$, then $t$ is of the form $\lambda x.t_a$
+for some $x$ and $t_a$, where for all $t_b\in\interp{A_1}^+$, we have
+$[t_b/x]t_a\in\interp{A_2}^+$.  Since $t\leadsto t'$, $t'$ must be
+$\lambda x.t_a'$ for some $t_a'$ with $t_a\leadsto t_a'$.  It suffices
+now to assume an arbitrary $t_b\in\interp{A_1}^+$, and show
+$[t_b/x]t_a'\in\interp{A_2}^+$.  But $[t_b/x]t_a\leadsto [t_b/x]t_a'$
+follows from $t_a\leadsto t_a'$, so by our IH, we have
+$[t_b/x]t_a'\in\interp{A_2}^+$, as required.
+
+If $A\equiv [[A1 ->- A2]]$, then $t$ is of the form $[[< t1 , t2 >]]$
+for some $t_1\in\interp{A_1}^-$ and $t_2\in\interp{A_2}^+$; and
+$t'\equiv [[< t1' , t2' >]]$ where either $t_1'\equiv t_1$ and $t_2\leadsto t_2'$
+or else $t_1\leadsto t_1'$ and $t_2'\equiv t_2$.  Either way, we have
+$t_1'\in\interp{A_1}^-$ and $t_2'\in\interp{A_2}^+$ by our IH, so
+we have $[[< t1' , t2'>]]\in\interp{[[A1 ->- A2]]}^{+c}$ as required.
+
+The other cases for $A\equiv [[A1 /\p A2]]$ are similar to the previous one.
+\end{proof}
+
+\begin{lemma}[SN interpretations]
+\label{lem:sninterp}
+
+\begin{tabular}{llllll}
+1. & $\interp{A}^+ \subseteq \SN$ & \hspace{2cm} & 3. & $\interp{A}^- \subseteq \SN$\\
+2. & $\textit{Vars}\subseteq \interp{A}^-$ & \hspace{2cm} & 4. & $\interp{A}^{+c} \subseteq \SN$
+\end{tabular}
+\end{lemma}
+\begin{proof}
+  For purposes of this proof and subsequent ones, define $\delta(t)$ to be
+  the length of the longest reduction sequence from $t$ to a normal form, for
+  $t\in\SN$.
+
+  The proof of the lemma is by mutual well-founded induction on the
+  pair $(A,n)$, where $n$ is the number of the proposition in the
+  statement of the lemma; the well-founded ordering in question is the
+  lexicographic combination of the structural ordering on types (for $A$) 
+  and the ordering $3 < 2 < 1 < 4$ (for $n$).
+
+  For proposition (1): assume $t\in\interp{A}^+$, and show $t\in\SN$.
+  Let $x$ be a variable.  By IH(2), $x\in\interp{A}^-$, so by the
+  definition of $\interp{A}^+$, we have
+\[
+  [[ nu x . t * x]] \in \SN
+\]
+  This implies $t\in\SN$.
+
+  For proposition (2): assume $x\in\textit{Vars}$, and show
+  $x\in\interp{A}^-$.  For the latter, it suffices to assume arbitrary
+  $y\in\textit{Vars}$ and $t'\in\interp{A}^{+c}$, and show $[[nu y
+  . t' * x]] \in \SN$.  We will prove this by inner induction on
+  $\delta(t')$, which is defined by IH(3).  By the definition of
+  $\interp{A}^{+c}$ for the various cases of $A$, we see that $[[nu y
+  . t' * x]]$ cannot be a redex itself, as $t'$ cannot be a cut.  If
+  $t'$ is a normal form we are done.  If $t\leadsto t''$, then we have
+  $t''\in\interp{A}^{+c}$ by Lemma~\ref{lem:stepinterp}, and we may
+  apply the inner induction hypothesis.
+
+  For proposition (3): assume $t\in\interp{A}^-$, and show $t\in\SN$.
+  By the definition of $\interp{A}^-$ and the fact that $\textit{Vars}\subseteq\interp{A}^{+c}$
+  by definition of $\interp{A}^{+c}$, we have 
+\[
+  [[nu y . y * t]] \in \SN
+\]
+  This implies $t\in\SN$ as required.
+
+  For proposition (4): assume $t\in\interp{A}^{+c}$, and consider the
+  following cases.  If $t\in\textit{Vars}$ or $A\equiv[[< + >]]$, then
+  $t$ is normal and the result is immediate.  So suppose $A \equiv
+  [[A1 ->+ A2]]$.  Then $t\equiv \lambda x.t'$ for some $x$ and $t'$
+  where for all $t''\in\interp{A_1}^+$, $[t''/x]t'\in\interp{A_2}^+$.
+  By IH(2), the variable $x$ itself is in $\interp{A_1}^+$, so
+  we know that $t'\equiv[x/x]t'\in\interp{A_2}^+$.  Then by IH(1)
+  we have $t'\in\SN$, which implies $\lambda x.t'\in\SN$.  If $A\equiv [[A1 ->- A2]]$,
+  then $t\equiv [[< t1 , t2>]]$ for some $t_1\in\interp{A_1}^-$ and
+  $t_2\in\interp{A_2}^+$.  By IH(3) and IH(1), $t_1\in\SN$ and $t_2\in\SN$,
+  which implies $[[< t1 , t2 >]]\in\SN$.  The cases for $A \equiv [[A1 /\p A2]]$
+  are similar to this one.
+\end{proof}  
+
+\begin{definition}[Interpretation of contexts]
+$\interp{\Gamma}$ is the set of substitutions $\sigma$ such that
+for all $[[ x : p A]]\in\Gamma$, $\sigma(x)\in\interp{A}^p$.
+\end{definition}
+
+\begin{lemma}[Canonical positive is positive]
+\label{lem:canonpos}
+$\interp{A}^{+c}\subseteq\interp{A}^+$
+\end{lemma}
+\begin{proof}
+Assume $t\in\interp{A}^{+c}$ and show $t\in\interp{A}^+$.
+For the latter, assume arbitrary $x\in\textit{Vars}$ and $t'\in\interp{A}^-$,
+and show $[[nu x . t * t']]\in\SN$.  This follows immediately
+from the assumption that $t'\in\interp{A}^-$.
+\end{proof}
+
+\begin{thm}[Soundness]
+\label{thm:sndinterp}
+If $[[ J |-c t : p A]]$ then for all $\sigma\in\interp{\Gamma}$, $\sigma t\in\interp{A}^p$.
+\end{thm}
+\begin{proof}
+  We consider one interesting case (see the companion report for all
+  the cases).  Define $\delta(t)$ to be the length of the longest
+  reduction sequence from $t$ to a normal form, for $t\in\SN$.
+
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassCut}] {[[ J , x : + A  |-c t1 : + B ]]  \qquad [[  J , x : + A  |-c t2 : - B ]]}{[[  J |-c nu x . t1 * t2 : - A ]]}
+\end{math}
+\end{center}
+
+It suffices to consider arbitrary $y\in\textit{Vars}$ and
+$t'\in\interp{A}^{+c}$, and show $[[nu y. t' * (nu x . sigma t1 *
+sigma t2)]]\in\SN$.  By the IH and part 2 of Lemma~\ref{lem:sninterp},
+we have $\sigma t_1\in\interp{B}^+$ and $\sigma t_2\in\interp{B}^-$,
+which implies $\sigma t_1\in\SN$ and $\sigma t_2\in\SN$ by
+Lemma~\ref{lem:sninterp} again.  We proceed by inner induction on
+$\delta(t')+\delta(\sigma t_1)+\delta(\sigma t_2)$, using
+Lemma~\ref{lem:stepinterp}, to show that all one-step successors of
+$[[nu y. t' * (nu x . sigma t1 * sigma t2)]]$ are in $\SN$.  If it is
+$t'$, $\sigma t_1$, or $\sigma t_2$ which steps, then the result holds
+by inner IH.  The only other reduction possible is by
+\dttdrulename{RBetaR}, since $t'$ cannot be a cut term by the
+definition of $\interp{A}^{+c}$.  In this case, the IH gives us
+$[t'/x]\sigma t_1\in\interp{B}^+$ and $[t'/x]\sigma
+t_2\in\interp{B}^-$, and we then have $[[nu y . [t'/x]sigma t1 *
+[t'/x]sigma t2]]\in\SN$ by the definition of $\interp{B}^+$.
+
+The proof is by induction on the derivation of $[[ J |-c t : p A]]$.  We consider
+the two possible polarities for the conclusion of the typing judgment separately.
+
+\begin{itemize}
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassAx}] {\ }{[[J , x : p A , J' |-c x : p A]]}
+\end{math}
+\end{center}
+
+Since $\sigma\in\interp{[[J , x : p A, J']]}$, $\sigma(x)\in\interp{A}^p$ as required.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassUnit}] {\ }{[[J |-c triv : + < + >]]}
+\end{math}
+\end{center}
+
+We have $[[triv]]\in\interp{[[<+>]]}^{+c}$ by definition.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassUnit}] {\ }{[[J |-c triv : - < - >]]}
+\end{math}
+\end{center}
+
+To prove $[[triv]]\in\interp{[[<->]]}^{-}$, it suffices to assume
+arbitrary $y\in\textit{Vars}$ and $t\in\interp{[[<->]]}^{+c}$, and
+show $[[nu y . t * triv]]\in\SN$.  By definition of
+$\interp{[[<->]]}^{+c}$, $t\in\textit{Vars}$, and then $[[nu y . t *
+triv]]$ is in normal form.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassAnd}] {[[J |-c t1 : + A]] \qquad [[J |-c t2 : + B]]}{[[J |-c (t1,t2) : + A /\+ B]]}
+\end{math}
+\end{center}
+
+By Lemma~\ref{lem:canonpos}, it suffices to show $(\sigma t_1,\sigma
+t_2)\in\interp{[[A /\+ B]]}^{+c}$.  This follows directly from the
+definition of $\interp{[[A /\+ B]]}^{+c}$, since the IH gives us
+$\sigma t_1\in\interp{A}^+$ and $\sigma t_2\in\interp{B}^+$.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassAnd}] {[[J |-c t1 : - A1]] \qquad [[J |-c t2 : - A2]]}{[[J |-c (t1,t2) : - A1 /\- A2]]}
+\end{math}
+\end{center}
+
+It suffices to assume arbitrary $y\in\textit{Vars}$ and
+$t'\in\interp{[[A1 /\- A2]]}^{+c}$, and show $[[nu y . t' * (sigma t1
+, sigma t2)]]\in\SN$.  If $t'\in\textit{Vars}$, then this follows by
+Lemma~\ref{lem:sninterp} from the facts that $\sigma
+t_1\in\interp{A_1}^+$ and $\sigma t_2\in\interp{A2}^+$, which we have
+by the IH.  So suppose $t'$ is of the form $[[inj d t'']]$ for some
+$d$ and some $t''\in\interp{A_d}^+$.  By the definition of $\SN$, it
+suffices to show that all one-step successors $t_a$ of the term in
+question are $\SN$.  The proof of this is by inner induction on
+$\delta(t'') + \delta(\sigma t_1) + \delta(\sigma t_2)$, which exists
+by Lemma~\ref{lem:sninterp}, using also Lemma~\ref{lem:stepinterp}.
+Suppose that we step to $t_a$ by stepping $t''$, $\sigma t_1$, or
+$\sigma t_2$.  Then the result holds by the inner IH.  So consider the
+step
+\[
+[[nu y . inj d t'' * (sigma t1, sigma t2) ~> nu y . t'' * sigma h(t ! d)]]
+\]
+We then have $[[nu y . t'' * sigma h(t ! d)]]\in\SN$ from the facts
+that $t''\in\interp{A_d}^+$ and $\sigma t_d\in\interp{A_d}^-$, by
+the definition of $\interp{A_d}^+$.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassAndBar}] {[[J |-c t : + A ! d]]}{[[J |-c inj d t : + A1 /\- A2]]}
+\end{math}
+\end{center}
+By Lemma~\ref{lem:canonpos}, it suffices to prove $[[inj d sigma
+t]]\in\interp{[[ A1 /\- A2]]}^+$, but by the definition of $\interp{[[
+  A1 /\- A2]]}^+$, this follows directly from $\sigma
+t\in\interp{A_d}^+$, which we have by the IH.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassAndBar}] {[[J |-c t : - A ! d]]}{[[J |-c inj d t : - A1 /\+ A2]]}
+\end{math}
+\end{center}
+To prove $[[inj d sigma t]]\in\interp{[[A1 /\+ A2]]}^-$, it suffices
+to assume arbitrary $y\in\textit{Vars}$ and $t'\in\interp{[[A1 /\+
+  A2]]}^{+c}$, and show $[[ nu y . t' * inj d sigma t]]\in\SN$.  If
+$t'\in\textit{Vars}$, then this follows from the fact that $\sigma
+t\in\SN$, which we have by Lemma~\ref{lem:sninterp} from $\sigma
+t\in\interp{A_d}^-$ (which the IH gives us).  So suppose $t'$ is of
+the form $(s_1,s_2)$ for some $s_1\in\interp{A_1}^+$ and
+$s_2\in\interp{A_2}^+$.  It suffices to prove that all one-step
+successors of the term in question are in $\SN$, as we did in a
+previous case above.  Lemma~\ref{lem:sninterp} lets us proceed by
+inner induction on $\delta(\sigma t) + \delta(s_1) + \delta(s_2)$,
+using also Lemma~\ref{lem:stepinterp}.  If we step $\sigma t$, $s_1$
+or $s_2$, then the result holds by inner IH.  Otherwise, we have the
+step
+\[
+[[ nu y . (s1,s2) * inj d sigma t ~> nu y . s ! d * sigma t]]
+\]
+And this successor is in $\SN$ by the facts that $s_d\in\interp{A_d}^+$
+and $\sigma t\in\interp{A_d}^-$, from the definition of $\interp{A_d}^+$.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassImp}] {[[J , x : + A |-c t : + B]]}{[[J |-c \ x . t : + A ->+ B]]}
+\end{math}
+\end{center}
+By Lemma~\ref{lem:canonpos}, it suffices to assume arbitrary $y\in\textit{Vars}$ and $t'\in\interp{A}^+$,
+and prove $[t'/x](\sigma t)\in\interp{B}^+$.  But this follows immediately from the IH, since
+$[t'/x](\sigma t)\equiv (\sigma[x\mapsto t']) t$ and $\sigma[x\mapsto t]\in\interp{[[J , x : + A]]}$.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassImp}] {[[J , x : - A |-c t : - B]]}{[[J |-c \ x . t : - A ->- B]]}
+\end{math}
+\end{center}
+It suffices to assume arbitrary $y\in\textit{Vars}$ and
+$t'\in\interp{[[A ->- B]]}^{+c}$, and show $[[ nu y . t' * \ x . sigma
+t]]\in\SN$.  Let us first observe that $[[sigma t]]\in\SN$, because by
+the IH, for all $\sigma'\in\interp{[[J , x : - A]]}$, we have $\sigma'
+t\in\interp{B}^-$, and $\interp{B}^-\subseteq\SN$ by
+Lemma~\ref{lem:sninterp}.  We may instantiate this with
+$\sigma[x\mapsto x]$, since by Lemma~\ref{lem:sninterp},
+$x\in\interp{A}^-$.  Since $[[sigma t]]\in\SN$, we also have $[[\ x
+. sigma t]]\in\SN$.  Now let us consider cases for the assumption
+$t'\in\interp{[[A ->- B]]}^{+c}$.  If $t'\in\textit{Vars}$ then we
+directly have $[[ nu y . t' * \ x . sigma t]]\in\SN$ from $[[\ x
+. sigma t]]\in\SN$.  So assume $t'\equiv[[< t1 , t2>]]$ for some
+$t_1\in\interp{A}^-$ and $t_2\in\interp{B}^+$.  By
+Lemma~\ref{lem:sninterp} again, we may reason by inner induction on
+$\delta(t_1)+\delta(t_2)+\delta(\sigma t)$ to show that all one-step
+successors of $[[ nu y . < t1 , t2 > * \ x . sigma t]]$ are in $\SN$,
+using also Lemma~\ref{lem:stepinterp}.  If $t_1$, $t_2$, or $\sigma t$
+steps, then the result follows by the inner IH.  So suppose we have
+the step
+\[
+[[ nu y . < t1 , t2 > * \ x . sigma t ~>  nu y . t2 * [t1 / x ] (sigma t) ]]
+\]
+Since $t_1\in\interp{A}^-$, the substitution $\sigma[x\mapsto t_1]$ is
+in $\interp{[[J , x : - A]]}$.  So we may apply the IH to obtain $[t_1
+/ x ] (\sigma t) \equiv \sigma[x\mapsto t_1]\in\interp{B}^-$.  Then
+since $t_2\in\interp{B}^+$, we have $[[nu y . t2 * [t1 / x ] (sigma t)
+]]$ by definition of $\interp{B}^+$.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassImpBar}] {[[J |-c t1 : - A]]  \qquad [[ J |-c t2 : + B ]]}{[[ J |-c < t1 , t2 > : + (A ->- B) ]]}
+\end{math}
+\end{center}
+By Lemma~\ref{lem:canonpos}, as in previous cases of positive typing,
+it suffices to prove $[[< sigma t1 , sigma t2>]]\in\interp{[[A ->-
+  B]]}^{+c}$.  By the definition of $\interp{[[A ->- B]]}^{+c}$, this
+follows directly from $\sigma t_1\in\interp{A}^-$ and $\sigma
+t_2\in\interp{B}^+$, which we have by the IH.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassImpBar}] {[[J |-c t1 : + A]]  \qquad [[ J |-c t2 : - B ]]}{[[ J |-c < t1 , t2 > : - (A ->+ B) ]]}
+\end{math}
+\end{center}
+It suffices to assume arbitrary $y\in\textit{Vars}$ and
+$t'\in\interp{[[A ->+ B]]}^{+c}$, and show $[[nu y. t' * < sigma t1 ,
+sigma t2 >]]\in\SN$.  By the IH, we have $\sigma t_1\in\interp{A}^+$
+and $\sigma t_2\in\interp{B}^-$, and hence $\sigma t_1\in\SN$ and
+$\sigma t_2\in\SN$ by Lemma~\ref{lem:sninterp}.  If
+$t'\in\textit{Vars}$, then these facts are sufficient to show the term
+in question is in $\SN$.  So suppose $t'\equiv \lambda x.t_3$, for
+some $x\in\textit{Vars}$ and $t''$ such that for all
+$t_4\in\interp{A}^+$, $[t_4/x]t_3\in\interp{B}^+$.  By similar
+reasoning as in a previous case, we have $t_3\in\SN$.  So we may
+proceed by inner induction on $\delta(t_1)+\delta(t_2)+\delta(t_3)$ to
+show that all one-step successors of $[[nu y. \ x . t3 * < sigma t1 ,
+sigma t2 >]]$ are in $\SN$, using also Lemma~\ref{lem:stepinterp}.  If
+it is $t_3$, $\sigma t_1$, or $\sigma t_2$ which steps, then the
+result follows by the inner IH.  So consider this step:
+\[
+[[nu y. \ x . t3 * < sigma t1 , sigma t2 >  ~>  nu y . [sigma t1 / x] t3 * sigma t2]]
+\]
+Since we have that $\sigma t_1\in\interp{A}^+$, the assumption about substitution
+instances of $t_3$ gives us that $[\sigma t_1/x]t_3\in\interp{B}^+$, which is
+then sufficient to conclude $[[nu y . [sigma t1 / x] t3 * sigma t2]]\in\SN$
+by the definition of $\interp{B}^+$.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassCut}] {[[ J , x : - A  |-c t1 : + B ]]  \qquad [[  J , x : - A  |-c t2 : - B ]]}{[[  J |-c nu x . t1 * t2 : + A ]]}
+\end{math}
+\end{center}
+It suffices to assume arbitrary $y\in\textit{Vars}$ and
+$t'\in\interp{A}^-$, and show $[[nu y . (nu x . sigma t1 * sigma t2) *
+t']]\in\SN$.  By the IH and part 2 of Lemma~\ref{lem:sninterp}, we
+know that $\sigma t_1\in\interp{B}^+$ and $\sigma t_2\in\interp{B}^-$.
+By Lemma~\ref{lem:sninterp} again, we have $t'\in\SN$, $\sigma
+t_1\in\SN$, and $\sigma t_2\in\SN$.  So we may reason by induction on
+$\delta(t')+\delta(\sigma t_1)+\delta(\sigma t_2)$ to show that all
+one-step successors of $[[nu y . (nu x . sigma t1 * sigma t2) * t']]$
+are in $\SN$, using also Lemma~\ref{lem:stepinterp}.  If it is $t'$,
+$\sigma t_1$, or $\sigma t_2$ which steps, then the result follows by
+the inner IH.  The only possible other reduction is by the
+\dttdrulename{RBetaL} reduction rule (Figure~\ref{fig:dtt-red}).  And
+then, since $t'\in\interp{A}^-$, we may apply the IH to conclude that
+$[t'/x](\sigma t_1)\in\interp{B}^+$ and $[t'/x](\sigma t_2)\in\interp{B}^-$.
+By the definition of $\in\interp{B}^+$, this suffices to prove
+$[[nu y . [t'/x] sigma t1 * [t'/x]sigma t2]]\in\SN$, as required.
+
+\item[Case.]\ 
+
+\vspace{-.2cm}
+\begin{center}
+\begin{math}
+\inferrule* [right=\ifrName{ClassCut}] {[[ J , x : - A  |-c t1 : + B ]]  \qquad [[  J , x : - A  |-c t2 : - B ]]}{[[  J |-c nu x . t1 * t2 : - A ]]}
+\end{math}
+\end{center}
+It suffices to consider arbitrary $y\in\textit{Vars}$ and
+$t'\in\interp{A}^{+c}$, and show $[[nu y. t' * (nu x . sigma t1 *
+sigma t2)]]\in\SN$.  By the IH and part 2 of Lemma~\ref{lem:sninterp},
+we have $\sigma t_1\in\interp{B}^+$ and $\sigma t_2\in\interp{B}^-$,
+which implies $\sigma t_1\in\SN$ and $\sigma t_2\in\SN$ by
+Lemma~\ref{lem:sninterp} again.  We proceed by inner induction on
+$\delta(t')+\delta(\sigma t_1)+\delta(\sigma t_2)$, using
+Lemma~\ref{lem:stepinterp}, to show that all one-step successors of
+$[[nu y. t' * (nu x . sigma t1 * sigma t2)]]$ are in $\SN$.  If it is
+$t'$, $\sigma t_1$, or $\sigma t_2$ which steps, then the result holds
+by inner IH.  The only other reduction possible is by
+\dttdrulename{RBetaR}, since $t'$ cannot be a cut term by the
+definition of $\interp{A}^{+c}$.  In this case, the IH gives us
+$[t'/x]\sigma t_1\in\interp{B}^+$ and $[t'/x]\sigma
+t_2\in\interp{B}^-$, and we then have $[[nu y . [t'/x]sigma t1 *
+[t'/x]sigma t2]]\in\SN$ by the definition of $\interp{B}^+$.
+\end{itemize}
+\end{proof}
+
+\begin{corollary}[Strong Normalization]
+  \label{thm:strong_normalization}
+  If $[[Gr;H |- t : p A@n]]$, then $t \in \SN$.
+\end{corollary}
+\begin{proof} This follows easily by putting together Theorems~\ref{thm:inttoclass} and~\ref{thm:sndinterp}, with
+Lemma~\ref{lem:sninterp}.
+\end{proof}
+
+\begin{corollary}[Cut Elimination]
+If $[[Gr;H |- t : p A@n]]$, then there is normal $t'$ with
+$t\leadsto^* t'$ and $t'$ containing only cut terms of the form
+$[[nu x . y * t]]$ or $[[nu x . t * y]]$, for $y$ a variable.
+\end{corollary}
+
+\begin{lemma}[Local Confluence]
+\label{lem:localconf}
+The reduction relation of Figure~\ref{fig:dtt-red} is locally confluent.
+\end{lemma}
+\begin{proof} We may view the reduction rules as higher-order pattern
+  rewrite rules.  It is easy to confirm that all critical pairs (e.g.,
+  between \dttdrulename{RBetaR} and the rules \dttdrulename{RImp},
+  \dttdrulename{RImpBar}, \dttdrulename{RAnd1},
+  \dttdrulename{RAndBar1}, \dttdrulename{RAnd2}, and
+  \dttdrulename{RAndBar2}) are joinable.  Local confluence then
+  follows by the higher-order critical pair lemma~\cite{nipkow91}.
+\end{proof}
+
+\begin{thm}[Confluence for Typable Terms]
+The reduction relation restricted to terms typable in DTT is confluent.
+\end{thm}
+\begin{proof} Suppose $[[ Gr ; H |- t : p A @ n]]$ for some $[[Gr]]$, $[[H]]$, $[[p]]$, and $[[A]]$.
+By Lemma~\ref{lemma:type_preservation}, any reductions in the unrestricted reduction
+relation from $t$ are also in the reduction relation restricted to typable terms.
+The result now follows from Newman's Lemma, using Lemma~\ref{lem:localconf} and
+Theorem~\ref{thm:strong_normalization}.
+\end{proof}
+
+\begin{comment}
+In \cite{crolard01} Crolard introduced the formula 
+$[[(A ->- <->) /\- A]]$.  This formula is equivalent to the
+double-negation translation of the law-of-excluded middle into
+intuitionistic logic.  Its inhabitant in DTT is 
+$[[nu y.y * (inj 1 (\x.triv))]]$.  Note that the previous term is a
+normal form, but contains a cut.  Thus, general canonicity fails for
+DTT, but this is to be expected, because DIL 
+does not have general cut elimination.  We conjecture that the cuts
+present in normal forms should all be axiom cuts.  Now following Stump
+in \cite{Stump:2014:RPD:2541568.2541575} we also conjecture that a
+fragment of DTT can be specified where general canonicity holds.  We
+leave this investigation for future work.  
+% section metatheory_of_dtt (end)
+\end{comment}
+
+% section dualized_type_theory (end)

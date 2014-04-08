@@ -45,6 +45,12 @@ SSF_FILES := norm-by-hs/ssf/ssf.tex \
 	     norm-by-hs/dep-ssf/dep-ssf.tex \
 	     norm-by-hs/ssf-omega/ssf-omega.tex
 
+DTT_FILE := dil-dtt/L.ott \
+	    dil-dtt/dtt.ott \
+	    dil-dtt/design.tex \
+	    dil-dtt/analysis.tex \
+	    dil-dtt/Makefile
+
 all : pdf
 
 pdf : Makefile thesis.pdf
@@ -61,7 +67,10 @@ SEP : $(SEP3_FILES)
 LDT : $(LD_FILES)
 	cd norm-by-hs/lam-delta; $(MAKE)
 
-thesis.pdf : background.tex FS SEP LDT thesis.tex thesis.bib $(SSF_FILES)
+DTT : $(DTT_FILES)
+	cd dil-dtt; $(MAKE)
+
+thesis.pdf : background.tex FS SEP LDT DTT thesis.tex thesis.bib $(SSF_FILES)
 ifndef QUICKPROC
 	$(PDFLATEX) thesis.tex
 	$(PDFLATEX) thesis.tex
@@ -85,4 +94,5 @@ clean-all : clean
 	cd background; $(MAKE) clean
 	cd free-speech; $(MAKE) clean
 	cd sep3; $(MAKE) clean
-	cd norm-by-hs/lam-delta; make
+	cd norm-by-hs/lam-delta; $(MAKE) clean
+	cd dil-dtt; $(MAKE) clean
