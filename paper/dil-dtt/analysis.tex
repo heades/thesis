@@ -153,7 +153,1047 @@ can prove consistency.
 
 \subsection{Completeness}
 \label{subsec:completeness_dil}
+In this section we prove that every derivable sequent in L can be
+translated to a derivable sequent of DIL.  Due to space constraints
+the full definition of L is recalled only in the companion report
+\cite{Eades:2014}. We will call a sequent in L a L-sequent and a
+sequent in DIL a DIL-sequent. Along the way, we will see admissibility
+of the analogs of the rules we mentioned in
+Section~\ref{sec:dualized_intuitionistic_logic_(dil)}.  The proof of
+consistency was with respect to DIL including the cut rule, but we
+prove completeness with respect to DIL where the general cut rule has
+been replaced with the following two inference rules, which can be
+seen as restricted instances of the cut rule:
+\begin{center}
+  \small
+  \begin{math}
+    \begin{array}{c}
+      \dttdruleaxCut{} \\
+      \\
+      \dttdruleaxCutBar{}
+    \end{array}
+  \end{math}
+\end{center}
+These two rules are required for the following crucial lemma.
+\begin{lemma}[Refocus]
+  \label{lemma:refocus}
+  If $[[Gr ; G1 , bar p A @ n , G2 |- bar p' B @ n']]$ is derivable, then \\
+  so is $[[Gr ; G1 , G2 , p' B @ n' |- p A @ n]]$.  
+\end{lemma}
+  \begin{proof}
+  Suppose $[[Gr ; G1 , bar p A @ n , G2 |- bar p' B @ n']]$ is derivable and
+  $[[G3]] =^{\text{def}} [[G1 , bar p A @ n , G2]]$.  Then we derive 
+  $[[Gr ; G1 , G2 , p' B @ n' |- p A @ n]]$ as follows:
+  \begin{center}
+    \footnotesize
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=\footnotesize axCut] {
+        [[p' B @ n' in (G3, p' B @ n')]]
+        \\
+        $$\mprset{flushleft}
+        \inferrule* [right=\footnotesize weakening] {
+          [[Gr ; G3 |- bar p' B @ n']]
+        }{[[Gr ; G3, p' B @ n' |- bar p' B @ n']]}
+      }{[[Gr ; G1 , G2 , p' B @ n' |- p A @ n]]}
+    \end{math}
+  \end{center}
+  Thus, we obtain our result.
+\end{proof}
 
+We mentioned DIL avoids analogs of a number of rules from L.  To be
+able to translate every derivable sequent of L to DIL, we must show
+admissibility of those rules in DIL.
+%% Derived rules.
+\begin{lemma}[Reflexivity]
+  \label{lemma:reflexivity}
+  If $[[Gr, m <=p' m ; G |- p A @ n]]$ is derivable, then so is $[[Gr ; G |- p A @ n]]$.
+\end{lemma}
+  \begin{proof}
+    This holds by a straightforward induction on the form of the assumed derivation.
+  \end{proof}
+
+\begin{lemma}[Transitivity]
+  \label{lemma:transitivity}
+  If $[[Gr, n1 <=p' n3 ; G |- p A @ n]]$ is derivable, $[[n1 <=p' n2 in Gr]]$ and $[[n2 <=p' n3 in Gr]]$, 
+  then $[[Gr ; G |- p A @ n]]$ is derivable.
+\end{lemma}
+  \begin{proof}
+    This holds by a straightforward induction on the form of the assumed derivation.
+  \end{proof}
+
+\begin{lemma}[MonoL]
+  \label{lemma:monol}
+  If $[[Gr ; G , p A @ n1 , p A @ n2,G' |- p' B @ n']]$ is derivable and $[[n1 <=p n2 in Gr]]$, then
+  $[[Gr ; G , p A @ n1,G' |- p' B @ n']]$ is derivable.
+\end{lemma}
+\begin{proof}
+  This result easily follows by part one of Corollary~\ref{coro:mono}, and contraction (Lemma~\ref{lemma:contract}).
+\end{proof}
+
+\begin{lemma}[MonoR]
+  \label{lemma:monor}
+  If $[[Gr ; G, bar p A @ n1, G' |- p A @ n2]]$ and $[[n1 <= p n2]] \in [[Gr]]$, then 
+  $[[Gr ; G, G' |- p A @ n2]]$ is derivable.
+\end{lemma}
+  \begin{proof}
+    Suppose $[[Gr ; G, bar p A @ n1, G' |- p A @ n2]]$ and $[[n1 <= p n2]] \in [[Gr]]$.
+    Then by part one of monotonicity (Corollary~\ref{coro:mono}) we know 
+    $[[Gr ; G, bar p A @ n2, G' |- p A @ n2]]$.  Finally, we know by the 
+    axiom cut rule that $[[Gr ; G, G' |- p A @ n2]]$.    
+  \end{proof}
+There are a number of other derived rules that the results in this
+section depend on, all of which, can be found in the companion report
+\cite{Eades:2014}.
+
+\begin{lemma}[Exchange]
+  \label{lemma:exchange}
+  If $[[Gr ; G |- p A @ n]]$ is derivable and $[[Perm]]$ is a permutation of $[[G]]$, then
+  $[[Gr ; Perm G |- p A @ n]]$ is derivable.
+\end{lemma}
+  \begin{proof}
+    This holds by a straightforward induction on the form of the assumed derivation.
+  \end{proof}
+Note that we often leave the application of exchange implicit for
+readablity.
+
+\begin{lemma}[Weakening]
+  \label{lemma:weakening}
+  If $[[Gr ; G |- p' B @ n']]$, then $[[Gr ; G, p A @ n |- p' B @ n']]$.
+\end{lemma}
+  \begin{proof}
+    This holds by a straightforward induction on the form of the assumed derivation.
+  \end{proof}
+
+\begin{lemma}[Graph Weakening]
+  \label{lemma:graph_weakening}
+  If $[[Gr |- n1 <= p * n2]]$, then $[[Gr, n3 <= p' n4 |- n1 <= p * n2]]$.
+\end{lemma}
+  \begin{proof}
+    This holds by a straightforward induction on the form of the assumed derivation.
+  \end{proof}
+
+\begin{lemma}[Contraction]
+  \label{lemma:contract}
+  If $[[Gr ; G , p A @ n , p A @ n , G' |- p' B @ n']]$, then
+  $[[Gr ; G , p A @ n , G' |- p' B @ n']]$.
+\end{lemma}
+  \begin{proof}
+    This holds by a straightforward induction on the form of the assumed derivation.
+  \end{proof}
+
+  
+\begin{definition}
+  \label{def:raise}
+  We define the function $[[raise]]$ on abstract graphs as follows:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        [[raise ( n1 , n2 , . )]] & = & [[.]]\\
+        [[raise ( n1 , n2 , (n1 <=p  m, Gr))]] & = & [[n2 <=p m , raise (n1 , n2, Gr)]]\\
+        [[raise ( n1 , n2 , ( m <=p n1, Gr))]] & = & [[m <= p n2 , raise (n1 , n2, Gr)]]\\
+        [[raise ( n1 , n2 , (m <=p m' , Gr ))]] & = & [[m <=  p m' , raise (n1 , n2, Gr)]], 
+        \text{where } [[m]] \not\equiv [[n1]] \text{ and } [[m']] \not\equiv [[n1]].\\
+        [[raise ( n1 , n2 , (m <=bar p m' , Gr ))]] & = &[[m <=  bar p m' , raise (n1 , n2, Gr)]],
+        \text{where } [[m]] \not\equiv [[n1]] \text{ and } [[m']] \not\equiv [[n1]].\\
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+
+\begin{lemma}[RelAssumFlip]
+  \label{lemma:relassumflip}
+  If $[[Gr1 , n1 <=p n2, Gr2 |- m <=p' m']]$, then $[[Gr1 , n2 <=bar p n1, Gr2 |- m <=p' m']]$.
+\end{lemma}
+  \begin{proof}
+    This is a proof by induction on the form of the assumed
+    derivation.  We only consider the case of the $\ifrName{ax}$ rule,
+    because the remainder of the cases hold either trivially or by
+    simple applicaitons of the induction hypothesis followed by the
+    rule in the corresponding case.
+
+    
+    \begin{itemize}
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{ax}] {
+            \ 
+          }{[[Gr , n <= p'' n' , Gr' |- n <= p'' * n']]}
+        \end{math}
+      \end{center}
+      We only consider the non-trivial case when $[[Gr , n <= p'' n' , Gr']] \equiv [[Gr1 , n1 <=p n2, Gr2]]$.
+      This implies that $[[n]] \equiv [[m]] \equiv [[n1]]$, $[[n']] \equiv [[m']] \equiv [[n2]]$, and 
+      $[[p'']] \equiv [[p']] \equiv [[p]]$.  
+      It suffices to show $[[Gr1 , n2 <=bar p n1, Gr2 |- n1 <= p * n2]]$.  Clearly, we know by the $\ifrName{rel\_ax}$
+      rule, $[[Gr1 , n2 <=bar p n1, Gr2 |- n2 <=bar p * n1]]$, and then by the $\ifrName{rel\_flip}$ rule we know
+      $[[Gr1 , n2 <=bar p n1, Gr2 |- n1 <=p * n2]]$.    
+    \end{itemize}
+  \end{proof}
+
+\begin{lemma}[Raising the Lower Bound]
+  \label{lemma:raise_lower}
+  If $[[Gr |- n1 <=p* n2]]$ and $[[Gr, Gr1 |- m <=p' * m']]$, then $[[Gr, raise(n1,n2,Gr1) |- m <=p' * m']]$.
+\end{lemma}
+  \begin{proof}
+    This is a proof by induction on the form of $[[Gr, Gr1 |- m <=p' * m']]$.
+    \begin{itemize}
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{ax}] {
+            \ 
+          }{[[Gr' , m <= p' m' , Gr'' |- m <= p' * m']]}
+        \end{math}
+      \end{center}
+      Note that it is the case that $[[Gr' , m <= p' m' , Gr'']] \equiv [[Gr,Gr1]]$.  If $[[m <=p' m']] \in [[Gr]]$,
+      then we obtain our result, so suppose $[[m <=p' m']] \in [[Gr1]]$.  Suppose $[[p]] \equiv [[p']]$. 
+      Now if $[[m]] \not\equiv [[n1]]$, then clearly, we obtain
+      our result.  Consider the case where $[[m]] \equiv [[n1]]$.  Then it suffices to show
+      $[[Gr,raise(n1,n2,Gr1') , n2 <= p m' , raise(n1,n2,Gr1'') |- n1 <= p * m']]$ where $[[Gr1]] \equiv [[Gr1',n1 <=p m',Gr1'']]$. 
+      This holds by the following derivation:
+      \begin{center}
+        \small
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{rel\_trans}] {
+            [[Gr |- n1 <=p* n2]]
+            \\
+              $$\mprset{flushleft}
+            \inferrule* [right=\ifrName{rel\_ax}] {
+              \ 
+            }{[[Gr,raise(n1,n2,Gr1') , n2 <= p m' , raise(n1,n2,Gr1'') |- n2 <=p * m']]}
+          }{[[Gr,raise(n1,n2,Gr1') , n2 <= p m' , raise(n1,n2,Gr1'') |- n1 <= p * m']]}
+        \end{math}
+      \end{center}      
+      Now suppose $[[p']] \equiv [[bar p]]$.  if $[[m']] \not\equiv [[n1]]$, then clearly, we obtain
+      our result.  Consider the case where $[[m']] \equiv [[n1]]$.  Then it suffices to show
+      $[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <= bar p * n1]]$ 
+      where $[[Gr1]] \equiv [[Gr1', m <=bar p n1,Gr1'']]$. This holds by the following derivation:
+      \begin{center}
+        \footnotesize
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{rel\_trans}] {                       
+              $$\mprset{flushleft}
+            \inferrule* [right=\ifrName{rel\_ax}] {
+              \ 
+            }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <=bar p * n2]]}
+            \\
+            $$\mprset{flushleft}
+            \inferrule* [right=\ifrName{rel\_flip}] {
+              [[Gr |- n1 <=p* n2]]
+            }{[[Gr |- n2 <=bar p* n1]]}
+          }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <= bar p * n1]]}
+        \end{math}
+      \end{center}      
+      
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{refl}] {
+            \ 
+          }{[[Gr,Gr1 |- m <= p' * m]]}
+        \end{math}
+      \end{center}
+      Note that in this case $[[m']] \equiv [[m]]$.  Our result follows from simply
+      an application of the $\ifrName{rel\_refl}$ rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{rel\_trans}] {
+            [[Gr,Gr1 |- m <= p' * m'' &&  Gr,Gr1 |- m'' <= p' * m']]
+          }{[[Gr,Gr1 |- m <= p' * m']]}
+        \end{math}
+      \end{center}
+      This case holds by two applications of the induction hypothesis followed by
+      applying the $\ifrName{rel\_trans}$ rule.
+      
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{flip}] {
+            [[Gr,Gr1 |- m' <= bar p' * m]]
+          }{[[Gr,Gr1 |- m <= p' * m']]}
+        \end{math}
+      \end{center}
+      It suffices to show $[[Gr,raise(n1,n2,Gr) |- m <= p' * m']]$.  We know $[[Gr |- n1 <=p* n2]]$, so by 
+      the induction hypothesis we know $[[Gr,raise(n2,n1,Gr) |- m' <= bar p * m]]$.  So it suffices to show that 
+      $[[Gr,raise(n2,n1,Gr) |- m' <= bar p' * m]]$ implies
+      $[[Gr,raise(n1,n2,Gr) |- m <= p' * m']]$, but this easily follows by repeated applications of Lemma~\ref{lemma:relassumflip}.
+    \end{itemize}
+  \end{proof}
+
+\begin{lemma}[Graph Node Containment]
+  \label{lemma:graph_node_containment}
+  If $[[Gr |- n1 <=p * n2]]$ and $[[n1]]$ and $[[n2]]$ are unique, then
+  $[[n1]],[[n2]] \in [[| Gr |]]$.
+\end{lemma}
+  \begin{proof}
+    This holds by straightforward induction on the form of $[[Gr |- n1 <=p * n2]]$.
+  \end{proof}
+
+\begin{lemma}[Raising the Lower Bound Logically]
+  \label{lemma:raising_the_lower_bound_logically}
+  If $[[Gr,Gr1,Gr' ; G |- p A @ n]]$ and $[[Gr,Gr' |- n1 <=p * n2]]$, then
+  $[[Gr,raise(n1,n2,Gr1),Gr' ; G |- p A @ n]]$.
+\end{lemma}
+  \begin{proof}
+    This is a proof by induction on the form of $[[Gr,Gr1,Gr' ; G |- p A @ n]]$.  We assume with out loss of generality that
+    $[[n1 in | Gr1 |]]$, and that $[[n1]] \not\equiv [[n2]]$.  
+    If this is not the case then $[[raise(n1,n2,Gr1)]] = [[Gr1]]$, and the result holds trivially.
+    
+    \begin{itemize}
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{ax}] {
+            [[Gr,Gr1,Gr' |- n' <= p * n]]
+          }{[[Gr,Gr1,Gr' ; G , p A @ n' |- p A @ n]]}
+        \end{math}
+      \end{center}
+      Clearly, if $[[Gr,Gr1,Gr' |- n' <= p * n]]$, then $[[Gr,Gr',Gr1 |- n' <= p * n]]$.
+      Thus, this case follows by raising the lower bound (Lemma~\ref{lemma:raise_lower}), and applying
+      the $\ifrName{ax}$ rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{unit}] {
+            \ 
+          }{[[Gr,Gr1,Gr' ; G |- p < p > @ n]]}
+        \end{math}
+      \end{center}
+      Trivial.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{and}] {
+            [[Gr,Gr1,Gr' ; G |- p A1 @ n && Gr,Gr1,Gr' ; G |- p A2 @ n]]
+          }{[[Gr,Gr1,Gr' ; G |- p (A1 /\p A2) @ n]]}
+        \end{math}
+      \end{center}
+      This case holds by two applications of the induction hypothesis, and then applying
+      the $\ifrName{and}$ rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{andBar}] {
+            [[Gr,Gr1,Gr' ; G , bar p A ! bar d @ n |- p A ! d @ n]]
+          }{[[Gr,Gr1,Gr' ; G |- p (A1 /\ bar p A2) @ n]]}
+        \end{math}
+      \end{center}
+      Similar to the previous case.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{imp}] {
+            [[n' notin | Gr,Gr1,Gr' |, | G | ]]
+            \\\\
+            [[(Gr,Gr1,Gr', n <= p n') ; G , p A1 @ n' |- p A2 @ n']]
+          }{[[Gr,Gr1,Gr' ; G |- p (A1 ->p A2) @ n]]}
+        \end{math}
+      \end{center}
+      Since we know $[[n1]] \not\equiv [[n2]]$, then by Lemma~\ref{lemma:graph_node_containment} we know
+      $[[n1]],[[n2]] \in [[| Gr,Gr' |]]$. Thus, $[[n']] \not\equiv [[n1]] \not\equiv [[n2]]$.  Now by the
+      induction hypothesis we know $[[(Gr,raise(n1,n2,Gr1),Gr', n <= p n') ; G , p A1 @ n' |- p A2 @ n']]$.
+      This case then follows by the application of the $\ifrName{imp}$ rule to the former.
+
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{impBar}] {
+            [[Gr,Gr1,Gr' |- n <= bar p * n']]
+            \\\\
+                [[Gr,Gr1,Gr' ; G |- bar p A1 @ n']]  
+                \\
+                [[Gr,Gr1,Gr' ; G |- p A2 @ n']]
+          }{[[Gr,Gr1,Gr' ; G |- p (A1 -> bar p A2) @ n]]}
+        \end{math}
+      \end{center}
+      Clearly, $[[Gr,Gr1,Gr' |- n <= bar p * n']]$ implies $[[Gr,Gr',Gr1 |- n <= bar p * n']]$, and
+      by raising the lower bound (Lemma~\ref{lemma:raise_lower}) we know $[[Gr,Gr',raise(n1,n2,Gr1) |- n <= bar p * n']]$
+      which implies $[[Gr,raise(n1,n2,Gr1),Gr' |- n <= bar p * n']]$.
+
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{axCut}] {
+            [[p T' @ n' in G && Gr ; G, bar p T @ n |- bar p T' @ n']]
+          }{[[Gr; G |- p T @ n]]}
+        \end{math}
+      \end{center}
+
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{axCutBar}] {
+            [[bar p T' @ n' in G && Gr ; G , bar p T @ n |- p T' @ n']]
+          }{[[Gr; G |- p T @ n]]}
+        \end{math}
+      \end{center}
+
+
+    \end{itemize}
+  \end{proof}
+
+\begin{lemma}[General Monotonicity]
+  \label{lemma:genmono}
+  If $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, $[[Gr |- m <= p * m']]$, and
+  $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]$, then 
+  $[[Gr ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i |- p B @ m']]$.
+\end{lemma}
+\begin{proof}
+    This is a proof by induction on the form of $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]$.
+    We assume without loss of generality that all of $[[n1]], [[n'1]] \ldots , [[ni]], [[n'i]]$ are unique.  Thus, they
+    are all member of $[[|Gr|]]$.
+    
+    \begin{itemize}
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{ax}] {
+            [[Gr |- ni <= bar pi * n']]
+          }{[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- bar pi Ai @ n']]}
+        \end{math}
+      \end{center}
+      It must be the case that $[[p B @ m]] \equiv [[bar pi A @ n']]$.      
+      In addition we know $[[Gr |- ni <= pi * n'i]]$ and $[[Gr |- n' <= bar pi * m']]$.  It suffices to show 
+      $[[Gr ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i |- bar pi Ai @ m']]$.  This is derivable as follows:
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{ax}] {
+            $$\mprset{flushleft}
+            \inferrule* [right=\ifrName{rel\_trans}] {
+              $$\mprset{flushleft}
+              \inferrule* [right=\ifrName{rel\_flip}] {
+                [[Gr |- ni <= pi * n'i]]
+              }{[[Gr |- n'i <= bar pi * ni]]}
+              \\
+              $$\mprset{flushleft}
+              \inferrule* [right=\ifrName{rel\_trans}] {
+                [[Gr |- ni <= bar pi * n']]
+                \\
+                [[Gr |- n' <= bar pi * m']]
+              }{[[Gr |- ni <= bar pi * m']]}
+            }{[[Gr |- n'i <= bar pi * m']]}
+          }{[[Gr ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i |- bar pi Ai @ m']]}
+        \end{math}
+      \end{center}
+      
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{unit}] {
+            \ 
+          }{[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p < p > @ m1]]}
+        \end{math}
+      \end{center}
+      Trivial.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{and}] {
+            [[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B1 @ m]] 
+            \\\\
+            [[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B2 @ m]]
+          }{[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p (B1 /\p B2) @ m]]}
+        \end{math}
+      \end{center}
+      This case follows easily by applying the induction hypothesis to each premise and then
+      applying the $\ifrName{and}$ rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{andBar}] {
+            [[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B ! d @ m]]
+          }{[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p (B1 /\ bar p B2) @ m]]}
+        \end{math}
+      \end{center}
+      This case follows easily by the induction hypothesis and then applying $\ifrName{andBar}$.      
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{imp}] {
+            [[n' notin | Gr |, | bar p1 A1 @ n1 , ... , bar pi Ai @ ni | ]]
+            \\\\
+            [[(Gr, m1 <= p n') ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni, p B1 @ n' |- p B2 @ n']]
+          }{[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p (B1 ->p B2) @ m]]}
+        \end{math}
+      \end{center}
+      
+      We know by assumption $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, and by graph weakening 
+      (Lemma~\ref{lemma:graph_weakening})
+      $[[Gr, m <= p n' |- n1 <= p1 * n'1]]$, \ldots, $[[Gr, m <= p n' |- ni <= pi * n'i]]$.  We also know by
+      applying the $\ifrName{rel\_refl}$ rule that $[[Gr, m <=p n' |- n' <= bar p * n']]$ and 
+      $[[Gr, m <=p n' |- n' <= p * n']]$.  
+      Thus, by the induction hypothesis we know 
+      $[[(Gr, m <= p n') ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, p B1 @ n' |- p B2 @ n']]$.
+      Now we can raise the lower bound logically (Lemma~\ref{lemma:raising_the_lower_bound_logically}) with 
+      $[[Gr1]] \equiv [[m <=p n']]$ and the assumption $[[Gr |- m <=p * m']]$ to obtain \\
+      $[[(Gr, raise(m, m', m <= p n')) ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, p B1 @ n' |- p B2 @ n']]$, but this is
+      equivalent to $[[(Gr, m <= p n') ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, p B1 @ n' |- p B2 @ n']]$.  
+      Finally, using the former, we obtain our result by applying the $\ifrName{imp}$ rule.
+
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{impBar}] {
+            [[Gr |- m <= bar p * n']]
+            \\\\
+                [[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- bar p B1 @ n']] 
+                \\
+                [[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B2 @ n']]
+          }{[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p (B1 -> bar p B2) @ m]]}
+        \end{math}
+      \end{center}
+      We can easily derive $[[Gr |- m' <= bar p * n']]$ as follows:
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{rel\_flip}] {
+            $$\mprset{flushleft}
+            \inferrule* [right=\ifrName{rel\_trans}] {
+              $$\mprset{flushleft}
+              \inferrule* [right=\ifrName{rel\_flip}] {
+                [[Gr |- m <= bar p * n']]
+              }{[[Gr |- n' <= p * m]]}
+              \\
+                [[Gr |- m <=p * m']]
+            }{[[Gr |- n' <= p * m']]}
+          }{[[Gr |- m' <= bar p * n']]}
+        \end{math}
+      \end{center}
+      This case then follows by applying the induction hypothesis twice to both 
+      $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni, bar p B ! bar d @ m |- bar p B1 @ n']]$
+      and
+      $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni, bar p B ! bar d @ m |- p B2 @ n']]$
+      using the assumptions
+      $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, $[[Gr |- m <= p * m']]$,
+      and the fact that we know $[[Gr |- n' <=p * n']]$ and $[[Gr |- n' <=bar p * n']]$.
+      
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{axCut}] {
+            [[bar pj Aj @ nj in (bar p1 A1 @ n1 , ... , bar pi Ai @ ni)]] 
+            \\
+              [[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni, bar p B @ m |- pj Aj @ nj]]
+          }{[[Gr; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]}
+        \end{math}
+      \end{center}
+      We know by assumption that $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, and $[[Gr |- m <= p * m']]$.
+      In particular, we know $[[Gr |- nj <= pj * n'j]]$.  It is also the case that if 
+      $[[bar pj Aj @ nj in (bar p1 A1 @ n1 , ... , bar pi Ai @ ni)]]$, then 
+      $[[bar pj Aj @ n'j in (bar p1 A1 @ n' dots bar pi Ai @ n'i)]]$.  This case then follows by applying the induction
+      hypothesis to $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni, bar p B @ m |- pj Aj @ nj]]$, to obtain,
+      $[[Gr ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, bar p B @ m'1 |- pj Aj @ n'j]]$, followed by applying the
+      $\ifrName{axCut}$ rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{axCutBar}] {
+            [[bar pj Aj @ nj in (bar p1 A1 @ n1 , ... , bar pi Ai @ ni)]] 
+            \\
+            [[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni , bar p B @ m |- pj Aj @ nj]]
+          }{[[Gr; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]}
+        \end{math}
+      \end{center}
+      Similar to the previous case.
+    \end{itemize}
+  \end{proof}
+
+The proofs of the derived rules MonoL and MonoR depend on the
+following monotonicity result.
+\begin{corollary}[Monotonicity]
+  \label{coro:mono}
+  Suppose $[[Gr |- n1 <=p* n2]]$.  Then
+  \begin{itemize}
+  \item[i.]  if $[[Gr ; G , bar p A @ n1 , G' |- p' B @ n']]$, then 
+    $[[Gr ; G , bar p A @ n2 , G' |- p' B @ n']]$, and
+  \item[ii.] if $[[Gr ; G |- p A @ n1]]$, then $[[Gr ; G |- p A @ n2]]$.    
+  \end{itemize}
+\end{corollary}
+\begin{proof}
+  This result follows easily from Lemma~\ref{lemma:genmono}.
+\end{proof}
+
+%% End derived rules.
+We now have everything we need to prove that every derivable sequent
+of L can be translated to a derivable sequent in DIL. The proof
+technique we use here does not provide an algorithm taking a sequent
+of L and yielding a derivable sequent in DIL.  Such an algorithm would
+have to choose a particular focusing, but this is quite difficult.
+Instead we show that all possible focusings in DIL of a sequent L are
+derivable.  
+
+Using the translation of formulas given in
+Definition~\ref{def:L-form-to-DIL-form} we can easily translate
+contexts.  Right contexts $<<G>>$ in L are translated to positive
+hypotheses, while left contexts, not including the formula chosen as
+the focused formula, are translated into negative hypotheses.  The
+following definition defines the translation of both types of contexts
+simultaneously.
+\begin{definition}
+  \label{def:trans-L-ctx-to-DIL-ctx}
+  We extend the translation of formulas to contexts $<<G>>$ and
+  $<<D>>$ with respect to a polarity $<<p>>$ as follows:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        <<{ . } p>> & = & [[.]]\\
+        & \\
+        <<{ n : A , G } p>> & = & [[p{A}@n,{G}p]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+Abstract Kripke models are straightforward to translate.
+\begin{definition}
+  \label{def:trans-L-ctx-to-DIL-ctx}
+  We define the translation of graphs $<<Gr>>$ in L to graphs in DIL
+  as follows:
+  \begin{center}
+    \begin{math}
+      \begin{array}{lll}
+        <<- . ->> & = & [[.]]\\
+        & \\
+        <<- (n1 , n2) , Gr ->> & = & [[n1 <=+ n2, -Gr-]]\\
+      \end{array}
+    \end{math}
+  \end{center}
+\end{definition}
+The translation of a derivable L-sequent is a DIL-sequent which
+requires a particular formula as the focus.  We define such a
+translation in the following definition.
+\begin{definition}
+  \label{def:focusing}
+  A focusing of a derivable L-sequent $<<G |- Gr D>>$ is a DIL-sequent
+  $[[-Gr-;{G}+,{D1,D2}- |- +{A}@n]]$, where $<<D>> = <<D1,n : A,D2>>$.
+\end{definition}
+Finally, the following theorem is the main result showing that any
+focusing of a derivable L-sequent is derivable in DIL.
+\begin{thm}[Containment of L in DIL]
+  \label{thm:completeness}
+  If $[[-Gr- ; G' |- + A @ n]]$ is a focusing of the derivable L-sequent 
+  $<<G |- Gr D>>$, then $[[-Gr- ; G' |- + A @ n]]$ is derivable.
+\end{thm}
+  \begin{proof}
+  This is a proof by induction on the form of the sequent $<<G |- Gr D>>$.
+
+  \begin{itemize}
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{refl}] {
+          <<G |- h(Gr,(n,n)) D>>
+        }{<<G |- Gr D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis that every focusing of $<<G |- h(Gr,(n,n)) D>>$ is derivable.  
+    Suppose that $[[-Gr,(n,n)- ; G' |- + A @ n]]$ is an arbitrary focusing, where
+    $[[{D}-]] \equiv [[{D1}-,-A@n,{D2}-]]$ and $[[G']] \equiv [[{D1}-,{D2}-]]$.
+    This is equivalent to $[[-Gr-, n <=+ n ; G' |- + A @ n]]$, and 
+    by the derived rule for reflexivity (Lemma~\ref{lemma:reflexivity}) we have 
+    $[[-Gr- ; G' |- + A @ n]]$.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{Trans}] {
+          <<n1 Gr n2>>
+          \\\\
+              <<n2 Gr n3>>
+              \\\\
+              <<G |- h(Gr,(n1,n3)) D>>
+        }{<<G |- Gr D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis that every focusing of $<<G |- h(Gr,(n1,n3)) D>>$ is derivable.  
+    Suppose that $[[-Gr,(n1,n3)- ; G' |- + A @ n]]$ is an arbitrary focusing, where
+    $[[{D}-]] \equiv [[{D1}-,-A@n,{D2}-]]$ and $[[G']] \equiv [[{D1}-,{D2}-]]$.  This sequent
+    is equivalent to $[[-Gr-,n1 <=+ n3 ; G' |- + A @ n]]$.  Furthermore, it is clear by definition that
+    if $<<n1 Gr n2>>$ and $<<n2 Gr n3>>$, then $[[n1 <=+ n2 in -Gr-]]$ and $[[n2 <=+ n3 in -Gr-]]$.  Thus,
+    by the derived rule for transitivity (Lemma~\ref{lemma:transitivity}) we have $[[-Gr- ; G' |- + A @ n]]$,
+    and we obtain our result.
+    
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{hyp}] {
+          \ 
+        }{<<G, n : A |- Gr n : A , D>>}
+      \end{math}
+    \end{center}
+    It suffices to show that every focusing of $<<G, n : A |- Gr n : A , D>>$ is derivable.  Clearly,
+    $[[-Gr-; {G}+,+{A}@n,{D}- |- + {A}@n]]$ is a focusing of $<<G, n : A |- Gr n : A , D>>$.  In addition,
+    it is derivable:
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=Exchange] {
+          $$\mprset{flushleft}
+        \inferrule* [right=Ax] {
+          $$\mprset{flushleft}
+          \inferrule* [right=Refl] {
+            \ 
+          }{[[-Gr- |- n <=+* n]]}
+        }{[[-Gr-; {G}+,{D}-,+{A}@n |- + {A}@n]]}
+        }{[[-Gr-; {G}+,+{A}@n,{D}- |- + {A}@n]]}
+      \end{math}
+    \end{center}
+    In the previous derivation we make use of the exchange rule which
+    is derivable by Lemma~\ref{lemma:exchange}.
+
+    Now consider any other focusing $[[-Gr- ; G' |- + B @ n']]$.  It must be the case that 
+    $[[G']] = [[h(h(h({G}+ , + A @ n ) , {D1}-), -{A} @ n ),{D2}-]]$ for some $<<D1>>$ and $<<D2>>$.
+    This sequent is then derivable as follows:
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=Refocus] {
+          $$\mprset{flushleft}
+          \inferrule* [right=Exchange] {
+            $$\mprset{flushleft}
+          \inferrule* [right=Ax] {
+            $$\mprset{flushleft}
+            \inferrule* [right=Refl] {
+              \ 
+            }{[[-Gr- |- n <=+* n]]}
+          }{[[-Gr- ; {G}+ , {D1}- ,{D2}- , - B @ n', + A @ n |- +{A} @ n ]] }
+          }{[[-Gr- ; h(h(h({G}+ , + A @ n ) , {D1}-),{D2}-),- B @ n' |- +{A} @ n ]]}
+        }{[[-Gr- ; h(h(h({G}+ , + A @ n ) , {D1}-), -{A} @ n ),{D2}- |- + B @ n']]}
+      \end{math}
+    \end{center}
+    Thus, we obtain our result.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{monL}] {
+          <<n1 Gr n2>>
+          \\\\
+          <<G , n1 : A , n2 : A |- Gr D>>
+        }{<<G , n1 : A |- Gr D>>}
+      \end{math}
+    \end{center}
+    Certainly, if $<<n1 Gr n2>>$, then $[[n1 <=+ n2]] \in [[-Gr-]]$.
+    We know by the induction hypothesis that all focusings of $<<G , n1 : A , n2 : A |- Gr D>>$ are
+    derivable.  Suppose $[[-Gr- ; G' |- + B @ n]]$ is an arbitrary focusing.  Then it must be the case
+    that $[[G']] \equiv [[{G}+, +A@n1,+A@n2,{D1}-,{D2}-]]$, where $[[{D}-]] \equiv [[{D1}-,-B@n,{D2}-]]$.
+    Now we apply the monoL derived rule (Lemma~\ref{lemma:monol}) to obtain 
+    $[[-Gr- ; {G}+, +A@n1,{D1}-,{D2}- |- + B @ n]]$, which is an arbitrary focusing of 
+    $<<G , n1 : A |- Gr D>>$.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{monR}] {
+          <<n1 Gr n2>>
+          \\\\
+          <<G |- Gr n1 : A , n2 : A, D>>
+        }{<<G |- Gr n2 : A, D>>}
+      \end{math}
+    \end{center}    
+    If $<<n1 Gr n2>>$, then $[[n1 <=+ n2]] \in [[-Gr-]]$.  We know by the induction hypothesis that
+    all focusings of $<<G |- Gr n1 : A , n2 : A, D>>$ are derivable.  In particular, the focusing
+    (modulo exchange (Lemma~\ref{lemma:exchange})) $[[-Gr-; {G}+, {D}-, -A@n1 |- + A @ n2]]$ is
+    derivable.  It suffices to show that $[[-Gr-; {G}+, {D}- |- + A @ n2]]$. This follows from
+    the monoR derived rule (Lemma~\ref{lemma:monor}).  Finally, any other focusing of $<<G |- Gr n2 : A, D>>$
+    can be recused into $[[-Gr-; {G}+, {D}- |- + A @ n2]]$ (Lemma~\ref{lemma:refocus}).  Thus,
+    we obtain our result.
+    
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{trueL}] {
+          <<G |- Gr D>>
+        }{<<G , n' : True |- Gr D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis that all focusings of $<<G |- Gr D>>$
+    are derivable.  Suppose $[[-Gr- ; G' |- + A @ n]]$ is an arbitrary focusing of 
+    $<<G |- Gr D>>$.  Then it must be the case that $[[G']] = [[{G}+,{D1}-,{D2}-]]$, where
+    $[[{D}-]] \equiv [[{D1}-,-A@n,{D2}-]]$.  Now by weakening (Lemma~\ref{lemma:weakening}) we know 
+    $[[-Gr- ; G', + < + > @ n' |- + A @ n]]$, and by exchange (Lemma~\ref{lemma:exchange})
+    $[[-Gr- ; + < + > @ n', G' |- + A @ n]]$, which is exactly an arbitrary focusing of
+    $<<G , n' : True |- Gr D>>$.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{trueR}] {
+          \ 
+        }{<<G |- Gr n : True, D>>}
+      \end{math}
+    \end{center}
+    It suffices to show that every focusing of $<<G |- Gr n : True, D>>$ is derivable.
+    Consider the focusing $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$.  This is easily derivable
+    by applying the \ifrName{unit} rule.  Now any other focusing of $<<G |- Gr n : True, D>>$ can
+    be refocused by Lemma~\ref{lemma:refocus} into $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$, and hence,
+    are derivable.
+
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{falseL}] {
+          \ 
+        }{<<G, n : False |- Gr D>>}
+      \end{math}
+    \end{center}
+    Suppose $[[-Gr-; {G}+, +{False}@n, {D1}-,{D2}- |- + A @ n']]$ is an arbitrary focusing of 
+    $<<G, n : False |- Gr D>>$, where $[[{D}-]] \equiv [[{D1}-,-A@n',{D2}-]]$.  
+    We can easily see that by definition $[[-Gr-; {G}+, +{False}@n, {D1}-,{D2}- |- + A @ n']]$
+    is equivalent to $[[-Gr-; {G}+, +<->@n, {D1}-,{D2}- |- + A @ n']]$. We can derive the latter as follows:
+    \begin{center}
+      \footnotesize
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right={\footnotesize \ifrName{axCutBar}}] {
+          [[+<->@n in G', -A@n']]
+          \\
+          $$\mprset{flushleft}
+          \inferrule* [right=\footnotesize \ifrName{unit}] {
+            \ 
+          }{[[-Gr-; G', -A @ n' |- - <-> @ n]]}
+        }{[[-Gr-; {G}+, +<->@n, {D1}-,{D2}- |- + A @ n']]}
+      \end{math}
+    \end{center}
+    In the previous derivation $[[G']] \equiv [[{G}+, +<->@n, {D1}-,{D2}-]]$.  Thus, any focusing of $<<G, n : False |- Gr D>>$ is 
+    derivable.
+    
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{falseR}] {
+          <<G |- Gr D>>
+        }{<<G |- Gr n' : False, D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis that all focusings of $<<G |- Gr D>>$
+    are derivable.  Suppose $[[-Gr- ; G' |- + A @ n]]$ is an arbitrary focusing of 
+    $<<G |- Gr D>>$.  Then it must be the case that $[[G']] = [[{G}+,{D}-]]$.
+    Now by weakening (Lemma~\ref{lemma:weakening}) we know $[[-Gr- ; G', - < - > @ n' |- + A @ n]]$,
+    and by refocusing (Lemma~\ref{lemma:refocus}) $[[-Gr- ; G', - A @ n |- + < - > @ n' ]]$, which --
+    modulo exchange -- is equivalent to $[[-Gr- ; {G}+,{D}- |- + { False} @ n' ]]$.  Thus, we obtain
+    our result.
+    
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{andL}] {
+          <<G , n : T1, n : T2 |- Gr D>>
+        }{<<G , n : T1 /\ T2   |- Gr D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis that all focusings of $<<G , n : T1, n : T2 |- Gr D>>$
+    are derivable.  In particular, we know $[[-Gr- ; {G}+,+T1@n, +T2@n, {D1}-,{D2}- |- + A @ n']]$ where
+    $[[{D}-]] = [[{D1}-]],-A@n',[[{D2}-]]$. Using exchange we know $[[-Gr- ; {G}+,{D1}-,{D2}-,+T1@n, +T2@n |- + A @ n']]$, and
+    by refocusing $[[-Gr- ; {G}+, {D1}-,{D2}-, +T1@n, - A @ n' |- - T2@n]]$, and finally by one more application
+    of exchange $[[-Gr- ; {G}+, {D1}-, {D2}-,- A @ n', +T1@n |- - T2@n]]$.  At this point we know 
+    $[[-Gr- ; {G}+, {D1}-, {D2}-, - A @ n' |- - T1 /\+ T2 @ n]]$ by the $\ifrName{andBar}$ rule.  Now using refocusing 
+    $[[-Gr- ; {G}+, {D1}-, {D2}-, + T1 /\+ T2 @ n  |- + A @ n']]$ is derivable. Lastly, by exchange 
+    $[[-Gr- ; {G}+, + T1 /\+ T2 @ n, {D1}-, {D2}- |- + A @ n']]$ is derivable, which is clearly and an arbitrary
+    focusing of $<<G , n : T1 /\ T2   |- Gr D>>$.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{andR}] {
+          <<G |- Gr n : A, D>>
+          \\\\
+          <<G |- Gr n : B, D>>
+        }{<<G |- Gr n : A /\ B, D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis that all focusings of $<<G |- Gr n : A, D>>$ and
+    $<<G |- Gr n : B, D>>$ are derivable.  In particular, $[[-Gr- ; {G}+,{D}- |- +A @ n]]$
+    and $[[-Gr- ; {G}+,{D}- |- +B @ n]]$ are derivable. Now by applying the $\ifrName{and}$ rule
+    we obtain $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$, which is a particular focusing of 
+    $<<G |- Gr n : A /\ B, D>>$. Finally, consider any other focusing, then that focusing can be
+    refocused into $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$ using Lemma~\ref{lemma:refocus}, and hence,
+    is derivable. Thus, we obtain our result.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{disjL}] {
+          <<G, n : A |- Gr D>>
+          \\\\
+          <<G, n : A |- Gr D>>
+        }{<<G, n : A \/ B |- Gr D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis that all focusings of $<<G, n : A |- Gr D>>$ and
+    $<<G, n : B |- Gr D>>$ are derivable.  So suppose $[[-Gr-; {G}+,+{A}@n,{D'}- |- + C @ n']]$ and
+    $[[-Gr-; {G}+,+{B}@n,{D'}- |- + E @ n'']]$ are particular focusings, 
+    where $[[{D}-]] \equiv [[{D1}-,-C@n',{D2}-,-E@n'',{D3}-]]$, and $[[{D'}-]] \equiv [[{D1}-,{D2}-,{D3}-]]$.
+    By exchange (Lemma~\ref{lemma:exchange}) we know \\
+    $[[-Gr-; {G}+,{D'}-,+{A}@n |- + C @ n']]$ 
+    and  $[[-Gr-; {G}+,{D'}-,+{B}@n |- + E @ n'']]$.  Now by refocusing (Lemma~\ref{def:focusing}) we know 
+    $[[-Gr-; {G}+,{D'}-, - C @ n' |- -{A}@n]]$ and $[[-Gr-; {G}+,{D'}-, - E @ n'' |- -{B}@n]]$, and by applying
+    weakening (and exchange) we know $[[-Gr-; {G}+,{D'}-, - C @ n', - E @ n'' |- -{A}@n]]$ and 
+    $[[-Gr-; {G}+,{D'}-, -C@n',- E @ n'' |- -{B}@n]]$.  At this point we can apply 
+    the $\ifrName{and}$ rule to obtain $[[-Gr-; {G}+,{D'}-, - C @ n',- E @ n'' |- - {A} /\- {B} @ n]]$ to which we can apply
+    refocusing to and obtain \\
+    $[[-Gr-; {G}+,{D'}-,- E @ n'',+ {A} /\- {B} @ n |- + C @ n']]$.  Finally, we can apply 
+    exchange again to obtain $[[-Gr-; {G}+, + {A} /\- {B} @ n, {D'}-,- E @ n'' |- + C @ n']]$, which -- modulo exchange -- is
+    an arbitrary focusing of $<<G, n : A \/ B |- Gr D>>$.   Thus, we obtain our result.
+    
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{disjR}] {
+          <<G |- Gr x : T1, x : T2, D>>
+        }{<<G |- Gr x : T1 \/ T2, D>>}
+      \end{math}
+    \end{center}
+    This case is similar to the case of $\ifrName{andR}$ case, except,
+    it makes use of the $\ifrName{andBar}$ rule.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{impL}] {
+          <<n1 Gr n2>>
+          \\\\
+          <<G |- Gr n2 : T1, D>>
+          \\\\
+          <<G, n2 : T2 |- Gr D>>
+        }{<<G , n1 : T1 -> T2 |- Gr D>>}
+      \end{math}
+    \end{center}   
+    We know by the induction hypothesis that all focusings of $<<G |- Gr y : T1, D>>$ and 
+    $<<G, y : T2 |- Gr D>>$ are derivable.  In particular, we know 
+    $[[-Gr-;{G}+,{D}- |- +{T1}@n2]]$ is derivable, and so is $[[-Gr-;{G}+, {D}- |- -{T2}@n2]]$. The latter
+    being derivable by applying the induction hypothesis followed by exchange 
+    (Lemma~\ref{lemma:exchange}) and refocusing (Lemma~\ref{lemma:refocus}). We know $<<n1 Gr n2>>$ by assumption
+    and so by Lemma~\ref{??} $[[-Gr- |- n1 <=+* n2]]$.  Thus, by applying the \ifrName{impBar} rule we obtain
+    $[[-Gr-;{G}+,{D}- |- - {T1}->+{T2} @ n1]]$.  At this point we can refocuse the previous sequent into any
+    focusing of $<<G , n1 : T1 -> T2 |- Gr D>>$, thus we obtain our result.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{impR}] {
+          <<n2 notin Gr, G, D>>
+          \\\\
+          <<G, n2 : T1 |- h(Gr U {(n1,n2)}) n2 : T2, D>>
+        }{<<G |- Gr n1 : T1 -> T2, D>>}
+      \end{math}
+    \end{center}
+    This case follows the same pattern as the previous cases.  We know by the induction hypothesis
+    that all focusings of $<<G, y : T1 |- h(Gr U {(x,y)}) y : T2, D>>$ are derivable.  In particular,
+    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n2,{D}- |- +{T2}@n2]]$ is derivable.  By exchange (Lemma~\ref{lemma:exchange})
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n2 |- +{T2}@n2]]$ is derivable, and by applying the $\ifrName{imp}$ rule
+    we obtain $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$, which is a particular focusing of 
+    $<<G |- Gr n1 : T1 -> T2, D>>$.  Note that in the previous application of $\ifrName{imp}$ we use
+    the fact that if $<<n2 notin Gr, G, D>>$, then $[[n2 notin |-Gr-|,|{G}+,{D}-|]]$. 
+    Lastly, any other focusing of $<<G |- Gr n1 : T1 -> T2, D>>$ can be refocused
+    into $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$, and hence is derivable.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{subL}] {
+          <<n1 notin Gr, G, D>>
+          \\\\
+          <<G, n1 : T1 |- h(Gr U {(n1,n2)}) n1 : T2, D>>
+        }{<<G, n2 : T1 - T2 |- Gr D>>}
+      \end{math}
+    \end{center}
+    We know by the induction hypothesis
+    that all focusings of $<<G, n1 : T1 |- h(Gr U {(n1,n2)}) n1 : T2, D>>$ are derivable.  In particular,
+    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n1,{D}- |- +{T2}@n1]]$ is derivable.  By exchange (Lemma~\ref{lemma:exchange})
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n1 |- +{T2}@n1]]$ is derivable.  Now by refocusing we know 
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,-{T2}@n1 |- -{T1}@n1]]$, and by assumption we know $<<y notin Gr, G, D>>$ which implies
+    $[[n1 notin |-Gr-|,|{G}+,{D}-|]]$.  Thus, by applying the $\ifrName{imp}$ rule we know  
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$ is derivable.  Clearly, this is a particular refocusing of
+    any focusing of $<<G, n2 : T1 - T2 |- Gr D>>$, and any other focusing can be refocused into 
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$, and hence are derivable.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{subR}] {
+          <<y Gr x>>
+          \\\\
+          <<G |- Gr y : T1 , D>>
+          \\\\
+          <<G, y : T2 |- Gr D>>
+        }{<<G |- Gr x : T1 - T2, D>>}
+      \end{math}
+    \end{center}
+    This case follows in the same way as the case for $\ifrName{impL}$,
+    except the particular focusing of $<<G, y : T2 |- Gr D>>$ has to be refocused so
+    as to allow for the application of $\ifrName{impBar}$.
+  \end{itemize}
+\end{proof}
+
+\begin{corollary}[Completeness]
+  \label{corollary:completeness}
+  DIL is complete.
+\end{corollary}
+\begin{proof}
+  Completeness of L is proved in \cite{Pinto:2009}, and by Theorem~\ref{thm:completeness} we know that
+  every derivable sequent of L is derivable in DIL.
+\end{proof}
 % subsection completeness (end)
 
 % section dualized_intuitionistic_logic (end)

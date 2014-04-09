@@ -350,9 +350,41 @@ that is type safe and supports their mixture.
 \part{Normalization by Hereditary Substitution}
 \label{part:norm-hs}
 
+As we have mentioned again and again throughout this thesis
+consistency is a property that must be proven for any programming
+language claiming to contain some notion of a logic where programs are
+proof and types are propositions.  We have seen several ways of
+proving consistency both in the background section of this thesis and
+in the previous part on the basic syntactic analysis of the freedom of
+speech language, as well as DTT.
+
+The usual method of proving consistency is through proving weak
+normalization (or simply normalization) of the programming language or
+type theory.  Often Tait's reducibility or Girard's reducibility
+candidates are the proof techniques used for showing both weak and
+strong normalization, but these techniques are very complex, and
+require advanced logical features to be able to formalize in a proof
+assistant like Coq or Agda.  Thus, it is worthwhile to investigate
+other proof techniques for proving normalization that show promise of
+being less complex.  The hereditary substitution proof technique fits
+this goal quite well.  For example, in general large eliminations are
+not needed when formalizing a hereditary substitution based proof of
+normalization, but this is not the case for a proof using
+reducibility.
+
+There is one caveat when it comes to the hereditary substitution proof
+technique, it is not known which type theories it can be applied to.
+This is the contribution of each of the following chapters.  We first
+give several normalization by hereditary substitution proofs for
+several extensions of stratified system F (SSF), and then give the
+first proof of normalization by hereditary substitution for a
+classical type theory called the $\lambda\Delta$-calculus.  Throughout
+all of the following chapters we assume the reader is familiar with
+hereditary substitution.  If the reader is not, then they should first
+read Section~\ref{sec:hereditary_substitution}.
+
 \chapter{Stratified System F and Beyond}
 \label{chap:stratified_system_f_and_beyond}
-
 \import*{norm-by-hs/ssf/}{ssf.tex}
 \import*{norm-by-hs/ssf+/}{ssf+.tex}
 \import*{norm-by-hs/dep-ssf/}{dep-ssf.tex}

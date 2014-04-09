@@ -1,43 +1,32 @@
 \section{Normalization of Stratified System F (SSF)}
 \label{subsec:normalization_stratified_system_f}
-In \cite{Eades:2010} H. Eades and A. Stump show that SSF is
+In \cite{Eades:2010} Harley Eades and Aaron Stump show that SSF is
 normalizing using a proof method which uses the hereditary
 substitution function implicitly.  We find it apparent that the
-hereditary substitution technique we have developed throughout this
-paper is easier to understand, use, and is more informative with
-respect to the hereditary substitution function and its interaction
-with the type theory than the implicit version of the proof method.
-So in this section we reprove normalization of SSF using the
-hereditary function explicitly as we developed throughout this paper.
-
-We extend STLC with predicative polymorphism to obtain a language
-first analyzed by D. Leivant and N. Danner in \cite{Leivant:1991}
-called Stratified System F.  In terms of programming polymorphism
-allows one to define programs of generic type.  For example, $\Lambda
-X.\lambda x:X.x$ would be the generic identity function.  This
-increases the overall expressive power of the type theory.  In STLC
-there is no way of defining the generic identity function.  Now in
-terms of logic polymorphism amounts to universal quantification.  So
-instead of propositional intuitionistic logic with only implication we
-obtain first-order intuitionistic logic with only implication and no
-predicates.
+hereditary substitution technique we have introduced in
+Section~\ref{sec:hereditary_substitution} is easier to understand,
+use, and is more informative -- with respect to the hereditary
+substitution function and its interaction with the type theory -- than
+the implicit version of the proof method.  So in this section we
+reprove normalization of SSF using the hereditary function explicitly.
+This will set the stage for the later chapters which extend SSF with
+various features and then reprove normalization using hereditary
+substitution.  For a brief introduction to SSF and its history see
+Section~\ref{sec:moderen_type_theory}.
 
 Stratified System F, consists of types which are stratified into
 levels (or ranks) based on type-quantification.  The types that belong
 to level zero have no type-quantification, the types at level one only
 quantify over types of level zero, and the types at level $n$ quantify
 over the types of level $n-1$.  Stratifying System F into levels
-effectively prevents impredicativity, where a type $\phi = \forall
-X.\phi'$ quantifies over types including itself.  In Stratified System
-F, we can only have $\phi = \forall X:*_n.\phi'$ where $X$ ranges over
-the set of types of level $n-1$ which does not include $\phi$.
+prevents impredicativity.  That is a type $\forall X.\phi'$ is no
+longer allowed quantify over itself.  This restriction is similar to
+Russell's simple theory of types.
 
-We consider only the finite version of Stratified System F as proposed by Leivant in 
-\cite{Leivant:1991} with some slight modifications.  One of the major differences of 
-our version of Stratified System F compared to Leivant's is that we use a  
-kinding relation which relates a level to a type with respect to some context, using 
-algorithmic type/kind-checking rules. The syntax for Stratified System F can be found 
-in the next definition followed by the definition of the reduction rules.
+First, we briefly reintroduce SSF for the readers convenience.  The
+syntax for Stratified System F can be found in the next definition
+followed by the definition of the reduction rules stated as rewrite
+rules where we omit the congruence rules.
 \begin{definition}
   \label{def:syntax_ssf}
   The syntax for terms, types, and kinds:
@@ -53,99 +42,79 @@ in the next definition followed by the definition of the reduction rules.
 \begin{definition}
   \label{def:reduction_rules_ssf}
   Full $\beta$-reduction for SSF:
-  \begin{center}
-    \begin{tabular}{lll}
+  \begin{center}   
+    \begin{tabular}{rll}
       $(\Lambda X:*_p.t)[\phi]$ & $\rightsquigarrow$ & $[\phi/X]t$\\
       $(\lambda x:\phi.t)t'$    & $\rightsquigarrow$ & $[t'/x]t$
     \end{tabular}
   \end{center}
 \end{definition}
 \noindent
-As we can see the syntax for SSF is essentionally identical to
-STLC except we have added two new terms $\Lambda X:K.t$ and $t[\phi]$.
-The former is called a type abstraction while the later is called type
-application.  This is where polymorphism is coming in.  A type
-abstraction allows one to write a generic program and then type
-application allows one to instantiate a generic program with a
-concrete type.  In Definition~\ref{def:reduction_rules_ssf} we extend
-full $\beta$-reduction to include a new redex for type application.
 Both the kinding and typing relations depend on well-formed contexts
 which is defined next.
 \begin{definition}
   \label{fig:well-formed_ssf}
   Context well-formedness rules:
-  \begin{center}
-    \begin{tabular}{ccc}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
+  \begin{mathpar}    
+      \inferrule* [right=] {
         \   
-        }{\cdot\ Ok}
-      \end{math}
-      & 
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma\ Ok
-        }{\Gamma,X:*_p\ Ok}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash \phi:*_p
-          \\
-          \Gamma\ Ok
-        }{\Gamma,x :\phi\ Ok}
-      \end{math} 
-    \end{tabular}	
-  \end{center}
+      }{\cdot\ Ok}      
+      \and
+      \inferrule* [right=] {
+        \Gamma\ Ok
+      }{\Gamma,X:*_p\ Ok}
+      \and
+      \inferrule* [right=] {
+        \Gamma \vdash \phi:*_p
+        \\
+        \Gamma\ Ok
+      }{\Gamma,x :\phi\ Ok}
+      \end{mathpar}   
 \end{definition}
 \noindent
-As stated before we use kinds to denote the level of a type.  We define algorithmic kind-checking 
-rules in the following definition.  
+As stated before we use kinds to denote the level of a type.  The
+following defines kinding relation:
 \begin{definition}
   \label{fig:l_kinding_rules}
   The kind assignment rules for SSF are defined as follows:
-  \begin{center}
-    \begin{tabular}{cccc}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash \phi_1 : *_p
-          \\
-          \Gamma \vdash \phi_2 : *_q
-        }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
-      \end{math}
-      & 
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma,X : *_q \vdash \phi : *_p
-        }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma(X) = *_p
-          \\
-          p \leq q
-          \\
-          \Gamma\ Ok
-        }{\Gamma \vdash X : *_q}
-      \end{math} 
-      & \\
-    \end{tabular}	
-  \end{center}
+  \begin{mathpar}
+    \inferrule* [right=] {
+      \Gamma \vdash \phi_1 : *_p
+      \\
+      \Gamma \vdash \phi_2 : *_q
+    }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
+    \and
+    \inferrule* [right=] {
+      \Gamma,X : *_q \vdash \phi : *_p
+    }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
+    \and
+    \inferrule* [right=] {
+      \Gamma(X) = *_p
+      \\
+      p \leq q
+      \\
+      \Gamma\ Ok
+    }{\Gamma \vdash X : *_q}
+  \end{mathpar} 
 \end{definition}
 \noindent
-The context $\Gamma$, type $\phi$, and kind $*_l$ are inputs and there
-are no outputs.  In the previous definition we extended STLC with
-kinding rules.  These rules serve the exact same purpose as typing
-rules, but instead of typing terms they type types.  They insure that
-types are well-formed.  Here types are well-formed when they have the
-proper leveling assigned to them. The following lemma shows that all
+These kind assignement rules are slightly different then the level
+assignment rules defined by Leivant.  The following rule:
+\[
+   \inferrule* [right=] {
+     \Gamma,X : *_q \vdash \phi : *_p
+   }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
+\]
+was orignially defined to be the following by Leivant:
+\[
+   \inferrule* [right=] {
+     \Gamma,X : *_q \vdash \phi : *_p
+   }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p+1,q)}}
+\]
+We conjecture that this modification does not hinder the expressive
+power of the type theory, meaning, any typeable term of Leivant's
+system is typeable in ours, but at potentially higher level.  However,
+we do not prove this here.  The following lemma shows that all
 kindable types are kindable with respect to a well-formed context.
 \begin{lemma}
   If $\Gamma \vdash \phi:*_p$ then $\Gamma\ Ok$.
@@ -201,76 +170,58 @@ kindable types are kindable with respect to a well-formed context.
 \noindent
 The previous lemma insures that if a type is kindable then we could
 not have used a ``bogus'' context where we assume something we are not
-allowed to assume.  We define algorithmic type-checking rules in the
-next definition.
+allowed to assume.  Now we define the typing relation:
 \begin{definition}
   \label{fig:typing_rules_ssf}
   Type assignment rules for SSF:
-  \begin{center}
-    \begin{tabular}{cccc}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma(x) = \phi
-          \\
-          \Gamma\ Ok
-        }{\Gamma \vdash x : \phi}
-      \end{math}  
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma,x : \phi_1 \vdash t : \phi_2
-        }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
-      \end{math} 
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
-          \\
-          \Gamma \vdash t_2 : \phi_1
-        }{\Gamma \vdash t_1\ t_2 : \phi_2}
-      \end{math}  \\
-      \\ 
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma, X : *_p \vdash t : \phi
-        }{\Gamma \vdash \Lambda X:*_p.t:\forall X : *_p.\phi}
-      \end{math} 
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash t:\forall X:*_l.\phi_1
-          \\
-          \Gamma \vdash \phi_2:*_l
-        }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
-      \end{math} 
-      & \\
-    \end{tabular}
-  \end{center}
+    \begin{mathpar}
+      \inferrule* [right=] {
+        \Gamma(x) = \phi
+        \\
+        \Gamma\ Ok
+      }{\Gamma \vdash x : \phi}
+      \and
+      \inferrule* [right=] {
+        \Gamma,x : \phi_1 \vdash t : \phi_2
+      }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
+      \and
+      \inferrule* [right=] {
+        \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
+        \\
+        \Gamma \vdash t_2 : \phi_1
+      }{\Gamma \vdash t_1\ t_2 : \phi_2}
+      \and
+      \inferrule* [right=] {
+        \Gamma, X : *_p \vdash t : \phi
+      }{\Gamma \vdash \Lambda X:*_p.t:\forall X : *_p.\phi}
+      \and
+      \inferrule* [right=] {
+        \Gamma \vdash t:\forall X:*_l.\phi_1
+        \\
+        \Gamma \vdash \phi_2:*_l
+      }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+    \end{mathpar} 
 \end{definition}  
 \noindent
-The type-checking rules depend on the kinding relation defined above.
-As with the earlier parts of the language we extend the type-checking
-rules with rules for type abstraction and type application.  Note that
-the level of the type $\phi$ and the level of the type variable $X$ in
-the type application rule must be the same.
+The type assignment rules depend on the kinding relation defined
+above.  Note that the level of the type $\phi$ and the level of the
+type variable $X$ in the type application rule must be the same.
 % subsection the_language (end)
 
 \subsection{Basic Syntactic Lemmas}
 \label{subsec:basic_syntactic_lemmas}
 We now state several results about the kinding relation. All of these
-are just basic results needed by the proofs of the key lemmas and
-theorems later. The reader may wish to just quickly read through them.
-In Section~\ref{subsec:well-founded_ordering_on_types_ssf} we will define an
-ordering on types and prove that it is well founded.  This proof
-depends on the following lemma.
-Lemma~\ref{lemma:level_weakening_for_kinding_ssf} shows that if a type
-is kindable at some level then it is also kindable at strictly larger
-levels.
+are just basic results needed by the proofs of the key results
+later. The reader may wish to just quickly read through them.  We
+simply list them with their proofs.  Briefly,
+Lemma~\ref{lemma:substitution_for_kinding_ssf} is used in the proof of
+Substitution for Typing (Lemma~\ref{lemma:type_sub_ssf}),
+Lemma~\ref{lemma:context_strengthening_for_kinding_ssf} is used in the
+main substitution lemma
+(Lemma~\ref{lemma:interpretation_of_types_closed_substitution_ssf}),
+and Lemma~\ref{lemma:context_weakening_for_kinding_ssf} is used in the
+proof of Context Weakening for the Interpretation of Types
+(Lemma~\ref{lemma:context_weakening_interpretations_ssf}).
 
 \begin{lemma}[Level Weakening for Kinding]
   If $\Gamma \vdash \phi:*_r$ and $r < s$ then $\Gamma \vdash \phi:*_s$.
@@ -325,15 +276,6 @@ levels.
     reapply the rule and obtain $\Gamma \vdash \forall X:*_q.\phi' : *_{s}$.
   \end{itemize}
 \end{proof}
-\noindent Lemma~\ref{lemma:substitution_for_kinding_ssf} is used in
-the proof of Substitution for Typing
-(Lemma~\ref{lemma:type_sub_ssf}),
-Lemma~\ref{lemma:context_strengthening_for_kinding_ssf} is used in the
-main substitution lemma
-(Lemma~\ref{lemma:interpretation_of_types_closed_substitution_ssf}),
-and Lemma~\ref{lemma:context_weakening_for_kinding_ssf} is used in the
-proof of Context Weakening for the Interpretation of Types
-(Lemma~\ref{lemma:context_weakening_interpretations_ssf}).
 
 \begin{lemma}[Substitution for Kinding, Context-Ok]
   Suppose $\Gamma \vdash \phi':*_p$.  If $\Gamma,X:*_p,\Gamma' \vdash \phi:*_q$ 
@@ -534,9 +476,8 @@ proof of Context Weakening for the Interpretation of Types
 \end{proof}
 
 \begin{lemma}[Context Weakening for Kinding]
-  If $\Gamma,\Gamma'',\Gamma'\ Ok$, and $\Gamma,\Gamma' \vdash \phi:*_p$ each with a 
-  derivation of depth $d$ then $\Gamma,\Gamma'',\Gamma' \vdash \phi:*_p$ with a 
-  derivation of depth $d$.
+  If $\Gamma,\Gamma'',\Gamma'\ Ok$, and $\Gamma,\Gamma' \vdash
+  \phi:*_p$, then $\Gamma,\Gamma'',\Gamma' \vdash \phi:*_p$.
   \label{lemma:context_weakening_for_kinding_ssf}
 \end{lemma}
 \begin{proof}
@@ -665,15 +606,13 @@ $\Gamma,\Gamma' \vdash \phi:*_p$.
   By assumption $\Gamma \vdash \phi_2:*_r$.  By the induction hypothesis 
   $\Gamma \vdash \forall X:*_p.\phi_1:*_s$ and by inversion of the forall-type
   kind-checking rule $r = max(p,q)+1$, for some $q$, which implies 
-  $\Gamma,X:*_p \vdash \phi_1:*_q$.  Now, by Lemma~\ref{lemma:substitution_for_kinding},
+  $\Gamma,X:*_p \vdash \phi_1:*_q$.  Now, by Lemma~\ref{lemma:substitution_for_kinding_ssf},
   $\Gamma \vdash [\phi_2/X]\phi_1:*_q$.
 \end{itemize}
 \end{proof}
 \noindent
-We have stated all the basic lemmas we will need.  We now step through
-our template outlined in
-Section~\ref{sec:normalization_by_hereditary_substitution} to conclude
-normalization for SSF.
+We have stated all the basic lemmas we will need.  We now proceed to
+the proof of normalization for SSF using hereditary substitution.
 % subsection basic_syntactic_lemmas (end)
 
 \subsection{Well-Founded Ordering on Types}
@@ -681,13 +620,11 @@ normalization for SSF.
 The following definition defines a well-founded ordering on the types
 of SSF.  It consists of essentially the strict-subexpression ordering
 with an additional case for universal types.  For the case of
-universal types the ordering states that a universal type is always
-larger than the instantiation of the body of the universal type.  Now
-this seems odd, because syntactically the instantiation could have
-increased the size of $\phi$ to be larger than the size of the
-universal type, but it turns out that the level of the
-type actually decreases.  That is we know the level of the universal
-type is larger than the level of the instantiation.
+universal types the ordering states that a they are always larger than
+their instantiation.  Now this seems odd, because syntactically the
+instantiation could have increased, but it turns out that the level of
+the type actually decreases.  That is, we know the level of the
+universal type is larger than the level of the instantiation.
 \begin{definition}
   The ordering $>_\Gamma$ is defined as the least relation satisfying the universal closures of 
   the following formulas:
@@ -806,25 +743,21 @@ well-founded.
 
 \subsection{The Hereditary Substitution Function}
 \label{subsec:the_hereditary_substitution_function}
-Moving forward with our proof of normalization based on our template
-we now need to define the hereditary substitution function for SSF.
 The definition of the hereditary substitution function is a basic
 extension of hereditary substitution function for STLC.  Before
 defining the hereditary substitution function we first define the
 construct type function for SSF.  This function is now defined for
-three different types of input.  It is defined for variables and
-applications just as before with the addition of type application.
+three different types of input: term variables, term applications, and
+type applications.
 \begin{definition}
   \label{def:ctype_function_ssf}
   The construct type function for SSF is defined as follows:
   \begin{itemize}
   \item[] $ctype_\phi(x,x) = \phi$
-  \item[]
   \item[] $ctype_\phi(x,t_1\ t_2) = \phi''$\\
     \begin{tabular}{lll}
       & Where $ctype_\phi(x,t_1) = \phi' \to \phi''$.
     \end{tabular}    
-  \item[]
   \item[] $ctype_\phi(x,t[\phi']) = [\phi'/X]\phi''$\\
     \begin{tabular}{lll}
       & Where $ctype_\phi(x,t) = \forall X:*_l.\phi''$.
@@ -843,35 +776,27 @@ Finally, we can define the hereditary substitution function for SSF.
     \begin{tabular}{lll}
       & Where $y$ is a variable distinct from $x$.\\
     \end{tabular}
-  \item[]
   \item[] $[t/x]^\phi (\lambda y:\phi'.t') = \lambda y:\phi'.([t/x]^\phi t')$
   \item[] $[t/x]^\phi (\Lambda X:*_l.t') = \Lambda X:*_l.([t/x]^\phi t')$
-  \item[]
   \item[] $[t/x]^\phi (t_1\ t_2) = ([t/x]^\phi t_1)\ ([t/x]^\phi t_2)$\\
     \begin{tabular}{lll}
-      & Where $([t/x]^\phi t_1)$ is not a $\lambda$-abstraction, or 
-      both $([t/x]^\phi t_1)$ and $t_1$ are $\lambda$-abstractions, \\
-      & or $ctype_\phi(x,t_1)$ is undefined.
+      & Where $([t/x]^\phi t_1)$ is not a $\lambda$-abstraction, or both $([t/x]^\phi t_1)$ and $t_1$\\
+      & are $\lambda$-abstractions.
     \end{tabular}
-  \item[]
   \item[] $[t/x]^{\phi} (t_1\ t_2) = [([t/x]^{\phi} t_2)/y]^{\phi''} s'_1$\\
     \begin{tabular}{lll}
-      & Where $([t/x]^{\phi} t_1) \equiv \lambda y:\phi''.s'_1$ 
-      for some $y$, $s'_1$, and $\phi''$ and $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
+      & Where $([t/x]^{\phi} t_1) \equiv \lambda y:\phi''.s'_1$ for some $y$, $s'_1$, and $\phi''$ \\
+      & and $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
     \end{tabular}
-  \item[] 
   \item[] $[t/x]^\phi (t'[\phi']) = ([t/x]^\phi t')[\phi']$\\
     \begin{tabular}{lll}
-      & Where $[t/x]^\phi t'$ is not a type abstraction or
-      $t'$ and $[t/x]^\phi t'$ are type abstractions.
+      & Where $[t/x]^\phi t'$ is not a type abstraction or $t'$ and $[t/x]^\phi t'$ \\
+      & are type abstractions.
     \end{tabular}
-    \item[]
     \item[] $[t/x]^{\phi} (t'[\phi']) = [\phi'/X]s'_1$\\
       \begin{tabular}{lll}
-        & Where $[t/x]^{\phi} t' \equiv \Lambda X:*_l.s'_1$,
-        for some $X$, $s'_1$ and $\Gamma \vdash \phi':*_q$, 
-        such that, $q \leq l$ and \\
-        & $ctype_\phi(x,t') = \forall X:*_l.\phi''$.
+        & Where $[t/x]^{\phi} t' \equiv \Lambda X:*_l.s'_1$, for some $X$, $s'_1$ and $\Gamma \vdash \phi':*_q$, \\
+        & such that, $q \leq l$ and $ctype_\phi(x,t') = \forall X:*_l.\phi''$.
       \end{tabular}
   \end{itemize}
 \end{definition}
@@ -880,24 +805,23 @@ Finally, we can define the hereditary substitution function for SSF.
 construct type function.  The first property is slightly different
 then the one defined for STLC.  The difference arises from the fact
 that the ordering on types is not just the subexpression ordering, but
-relies on the level of the type in order to order universal types.  So
-instead of $\phi$ being a subexpression of the output of $ctype_\phi$
-it will be greater than or equal to the output of $ctype_\phi$.  The
-remainder of the properties are as usual.
+relies on the level of the type in the ordering on types.  So instead
+of $\phi$ being a subexpression of the output of $ctype_\phi$ it will
+be greater than or equal to the output of $ctype_\phi$.  The remainder
+of the properties are as usual.
 
 \begin{lemma}[Properties of $ctype_\phi$]
   \label{lemma:ctype_props_ssf}
   \begin{itemize}
-  \item[]
-  \item[i.] If $\Gamma,x:\phi,\Gamma' \vdash t:\phi'$ and $ctype_\phi(x,t) = \phi''$ then 
+  \item[i.] If $\Gamma,x:\phi,\Gamma' \vdash t:\phi'$ and $ctype_\phi(x,t) = \phi''$, then 
     $head(t) = x$, $\phi' \equiv \phi''$, and $\phi' \leq_{\Gamma,\Gamma'} \phi$.
 
   \item[ii.] If $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$, $\Gamma \vdash t:\phi$,
-    $[t/x]^\phi t_1 = \lambda y:\phi_1.q$, and $t_1$ is not then there exists a type
+    $[t/x]^\phi t_1 = \lambda y:\phi_1.q$, and $t_1$ is not, then there exists a type
     $\psi$ such that $ctype_\phi(x,t_1) = \psi$.
 
   \item[iii.] If $\Gamma,x:\phi,\Gamma' \vdash t'[\phi'']:\phi'$, $\Gamma \vdash t:\phi$,
-    $[t/x]^\phi t' = \Lambda X:*_l.t''$, and $t'$ is not then there exists a type
+    $[t/x]^\phi t' = \Lambda X:*_l.t''$, and $t'$ is not, then there exists a type
     $\psi$ such that $ctype_\phi(x,t') = \psi$.
   \end{itemize}
 \end{lemma}
@@ -948,12 +872,12 @@ The remaining parts of the lemma are similar to part two.
 
 \subsection{Properties of the Hereditary Substitution Function}
 \label{sec:properties_of_the_hereditary_substitution_function_ssf}
-We now extend $rset$ to add type application redexes to the set of overall redexes
+We now define $rset$ as an extension of the same function for STLC by
+adding type application redexes to the set of overall redexes
 of a term.  It is defined in the following definition.  
 \begin{definition}
   \label{def:rset_ssf}
   The following function constructs the set of redexes within a term:
-
   \begin{center}
     \begin{itemize}
     \item[] $rset(x) = \emptyset$\\
@@ -989,7 +913,7 @@ the only difference are their proofs.
 \begin{lemma}[Total and Type Preserving]
   \label{lemma:total_ssf}
   Suppose $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$. Then
-  there exists a term $t''$ such that $[t/x]^\phi t' = t''$ and $\Gamma,\Gamma' \vdash t'':\phi'$.
+  there exists a term $t''$, such that, $[t/x]^\phi t' = t''$ and $\Gamma,\Gamma' \vdash t'':\phi'$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the lexicorgraphic combination $(\phi, t')$ of $>_{\Gamma,\Gamma'}$ and
@@ -1039,7 +963,7 @@ the strict subexpression ordering.  We case split on $t'$.
 
 \begin{lemma}[Redex Preserving]
   \label{lemma:redex_preserving_ssf}
-  If $\Gamma \vdash t : \phi$, $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$ then
+  If $\Gamma \vdash t : \phi$, $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$, then
   $|rset(t', t)| \geq |rset([t/x]^\phi t')|$.
 \end{lemma}
 \begin{proof}
@@ -1395,8 +1319,7 @@ conseqences of inversion.
 \subsection{Substitution for the Interpretation of Types.}
 \label{subsec:substitution_for_the_interpretation_of_types_ssf}
 The definition of the interpretation of types is identical to the
-definition in
-Section~\ref{sec:normalization_the_simply_typed_lambda-calculus}
+definition for STLC in Definition~\ref{def:interpretation_of_types_stlc}
 so we do not repeat it here.  Before concluding normalization we state
 the main substitution lemma for the interpretation of types.
 \begin{lemma}[Substitution for the Interpretation of Types]
@@ -1419,7 +1342,7 @@ the proof of the type soundness theorem
 (Theorem~\ref{thm:soundness_ssf}).
 
 \begin{lemma}[Context Weakening for Interpretations of Types]
-  If $\Gamma,\Gamma',\Gamma''\ Ok$ and $n \in \interp{\phi}_{\Gamma,\Gamma''}$ then 
+  If $\Gamma,\Gamma',\Gamma''\ Ok$ and $n \in \interp{\phi}_{\Gamma,\Gamma''}$, then 
   $n \in \interp{\phi}_{\Gamma,\Gamma',\Gamma''}$.
   \label{lemma:context_weakening_interpretations_ssf}
 \end{lemma}
@@ -1467,7 +1390,7 @@ the proof of the type soundness theorem
 \end{proof}
 \begin{lemma}[Type Substitution for the Interpretation of Types]
   If $n \in \interp{\phi'}_{\Gamma,X:*_l,\Gamma'}$ and 
-  $\Gamma \vdash \phi:*_l$ then 
+  $\Gamma \vdash \phi:*_l$, then 
   $[\phi/X]n \in \interp{[\phi/X]\phi'}_{\Gamma,[\phi/X]\Gamma'}$.
   \label{lemma:type_sub_ssf}
 \end{lemma}
@@ -1532,7 +1455,7 @@ the proof of the type soundness theorem
 \subsection{Concluding Normalization.}
 \label{subsec:soundness_of_typing_ssf}
 We are now ready to present our main result.  The next theorem shows
-that the type-assignment rules are sound with respect to the
+that the type assignment rules are sound with respect to the
 interpretation of types.  
 
 \begin{thm}[Type Soundness]
