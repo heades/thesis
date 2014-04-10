@@ -18,20 +18,17 @@
 
 \section{Stratified System $\Fp$ (SS$\Fp$)}
 \label{sec:stratified_system_f_with_sum_types}
-Stratified System $\Fp$ is a predicative polymorphic type theory.
-Stratified polymorphism is used in predicative type theories for
-universe hierarchies.  SS$\Fp$ also has sum types $\phi_1 + \phi_2$,
-whose elimination form
-$\textit{case}\ t\ \textit{of}\ x_1.t_1,x_2.t_2$ is used to case split
-on a whether or not term $t$ with a sum type is truly $x_1$ of type
-$\phi_1$, or else $x_2$ of type $\phi_2$.  We consider sum types with
-so-called commuting conversions, which allow independent cases to be
-permuted past each other (see Fig~\ref{fig:syntax_ssfp}
-below).  Commuting conversions are well-known to pose technical
-difficulties for normalization proofs based on reducibility
-(see~\cite{tatsuta+05} and Chapter 10 of~\cite{Girard:1989}).  We will
-see that they can be handled straightforwardly with hereditary
-substitution.
+Stratified System $\Fp$ is an extension of SSF with sum types denoted
+$\phi_1 + \phi_2$, whose elimination form $\textit{case}\ t\
+\textit{of}\ x_1.t_1,x_2.t_2$ is used to case split on a whether or
+not term $t$ with a sum type is truly $x_1$ of type $\phi_1$, or else
+$x_2$ of type $\phi_2$.  We consider sum types with so-called
+commuting conversions, which allow independent cases to be permuted
+past each other (see Fig~\ref{fig:syntax_ssfp} below).  Commuting
+conversions are well-known to pose technical difficulties for
+normalization proofs based on reducibility (see~\cite{tatsuta+05} and
+Chapter 10 of~\cite{Girard:1989}).  We will see that they can be
+handled straightforwardly with hereditary substitution.
 
 \begin{figure}
   \begin{center}
@@ -64,7 +61,7 @@ substitution.
         $\ccon{(\ccon{t}{x}{t_1}{t_2})}{y}{s_1}{s_2}$ & $\rightsquigarrow$ & 
         $\mbox{case}\ t\ \mbox{of}\ $\\
         &                    & \ \ \ $x.(\ccon{t_1}{y}{s_1}{s_2}),$\\
-        &                    & \ \ \ $x.(\ccon{t_1}{y}{s_1}{s_2})$
+        &                    & \ \ \ $x.(\ccon{t_2}{y}{s_1}{s_2})$
       \end{tabular}
     \end{tabular}
   \end{center}
@@ -74,31 +71,22 @@ substitution.
 \end{figure}
 
 \begin{figure}[h]
-  \begin{center}
-    \begin{tabular}{ccc}
-      \begin{math}
-        $$\mprset{flushleft}
+  \begin{center}    
+      \begin{mathpar}
         \inferrule* [right=] {
           \ 
         }{\cdot\ Ok}
-      \end{math}
-      & 
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma\ Ok
         }{\Gamma,X:*_p\ Ok}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma \vdash \phi:*_p
           \\
           \Gamma\ Ok
         }{\Gamma,x :\phi\ Ok}
-      \end{math} 
-    \end{tabular}	
+      \end{mathpar} 
     
     \caption{Well-formedness of Contexts for SS$\Fp$}
     \label{fig:well-formed_ssfp}
@@ -108,34 +96,23 @@ substitution.
 \begin{figure}
   \begin{center}
     \setlength{\tabcolsep}{1pt}
-    \begin{tabular}{cccc}
-      \begin{math}
-        $$\mprset{flushleft}
+    \begin{mathpar}    
         \inferrule* [right=] {
           \Gamma \vdash \phi_1 : *_p
           \\
           \Gamma \vdash \phi_2 : *_q
         }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
-      \end{math}      
-      & 
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma,X : *_q \vdash \phi : *_p
         }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma \vdash \phi_1 : *_p
           \\
           \Gamma \vdash \phi_2 : *_q
         }{\Gamma \vdash \phi_1 + \phi_2 : *_{max(p,q)}}
-      \end{math}
-      & 
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma(X) = *_p
           \\\\
@@ -143,8 +120,7 @@ substitution.
           \\
           p \leq q
         }{\Gamma \vdash X : *_q}
-      \end{math}
-    \end{tabular}	
+      \end{mathpar}
     
     \caption[]{SS$\Fp$ Kinding Rules}
     \label{fig:kinding_rules_ssfp}
@@ -153,68 +129,45 @@ substitution.
 
 \begin{figure}
   \setlength{\tabcolsep}{1pt}
-    \begin{tabular}{cccc}
-      \begin{math}
-        $$\mprset{flushleft}
+  \begin{mathpar}
         \inferrule* [right=] {
           \Gamma(x) = \phi
           \\\\
           \Gamma\ Ok
         }{\Gamma \vdash x : \phi}
-      \end{math}  
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma,x : \phi_1 \vdash t : \phi_2
         }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
-      \end{math} 
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
-          \\\\
+          \\
           \Gamma \vdash t_2 : \phi_1
-        }{\Gamma \vdash t_1t_2 : \phi_2}
-      \end{math}  
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        }{\Gamma \vdash t_1\,t_2 : \phi_2}
+        \and
         \inferrule* [right=] {
           \Gamma, X : *_l \vdash t : \phi
         }{\Gamma \vdash \Lambda X:*_l.t:\forall X : *_l.\phi}
-      \end{math} 
-      \\ \\
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma \vdash t:\forall X:*_l.\phi_1
           \\\\
           \Gamma \vdash \phi_2:*_l
         }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
-      \end{math} 
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma \vdash t:\phi_1
           \\\\
 	  \Gamma \vdash \phi_2:*_p
         }{\Gamma \vdash inl(t): \phi_1+\phi_2}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma \vdash t:\phi_2
           \\\\
 	  \Gamma \vdash \phi_1:*_p
         }{\Gamma \vdash inr(t): \phi_1+\phi_2}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
+        \and
         \inferrule* [right=] {
           \Gamma \vdash t:\phi_1 + \phi_2
           \\\\
@@ -222,25 +175,23 @@ substitution.
           \\\\
 	  \Gamma,x:\phi_2 \vdash t_2:\psi
         }{\Gamma \vdash \ccon{t}{x}{t_1}{t_2}: \psi}
-      \end{math}
-    \end{tabular}
+      \end{mathpar}
     
     \caption[]{SS$\Fp$ Type-Assignment Rules}
     \label{fig:typing_rules_ssfp}
   
 \end{figure}
 The syntax, reduction rules, and commuting conversions for SS$\Fp$ can
-be found in Fig.~\ref{fig:syntax_ssfp}.  This extension of SSF is
-based on the version of SSF used in \cite{Eades:2010}.  The
-kind-assignment rules are defined in Fig.~\ref{fig:kinding_rules_ssfp}
-and the type-assignment rules in defined in
-Fig.~\ref{fig:typing_rules_ssfp}. The kinding/typing relations
-depend on well-formed contexts which are defined in
-Fig.~\ref{fig:well-formed_ssfp}.  To ensure substitutions over
-contexts behave in an expected manner, we rename variables as
+be found in Fig.~\ref{fig:syntax_ssfp}.  The kind-assignment rules are
+defined in Fig.~\ref{fig:kinding_rules_ssfp} and the type-assignment
+rules in defined in Fig.~\ref{fig:typing_rules_ssfp}. The
+kinding/typing relations depend on well-formed contexts which are
+defined in Fig.~\ref{fig:well-formed_ssfp}.  To ensure substitutions
+over contexts behave in an expected manner, we rename variables as
 necessary to ensure contexts have at most one declaration per
-variable.  Lastly, throughout this chapter we the following basic
-meta-theoretic results:  
+variable.  Lastly, the basic meta-theoretic results are used
+throughout this chapter (we omit their proofs, because they are
+similar to the proofs for SSF):
 
 \begin{lemma}
   If $\Gamma \vdash \phi:*_p$ then $\Gamma\ Ok$.
@@ -283,33 +234,18 @@ meta-theoretic results:
 
 \subsection{Ordering on Types}
 \label{subsec:ordering_on_types_ssfp}
-In this section we define an ordering on types.  This ordering is
-curcial for the hereditary substitution method.  We will see in
-Section~\ref{sec:properties_of_the_hereditary_substitution_function_ssfp}
-that we prove several properties of the hereditary substitution
-function defined in
-Section~\ref{sec:the_hereditary_substitution_function_ssfp}.  The
-ordering used in these proofs is the lexicographic ordering consisting
-of the the ordering we are about to define and the strict
-subexpression ordering on terms.  In fact if no ordering on types exists then
-one cannot prove the necessary properties of the hereditary
-substitution function needed to conclude normalization.
+In this section we define the ordering on types. It is a
+straightforward extension of the ordering for SSF.
 
 \begin{definition}
-  The ordering $>_\Gamma$ is defined as the least relation satisfying the universal closures of 
+  Suppose $\text{op} \in \{+,\to\}$.  Then the ordering $>_\Gamma$ is
+  defined as the least relation satisfying the universal closures of
   the following formulas:\\
   \begin{center}
     \begin{tabular}{lll}
       \begin{tabular}{lll}
-        $\phi_1 \rightarrow \phi_2$ & $>_\Gamma$ & $\phi_1$\\
-        $\phi_1 \rightarrow \phi_2$ & $>_\Gamma$ & $\phi_2$\\
-        & & \\
-      \end{tabular}
-      &
-      \ \ \ \ \ \ \ \ \ \ \ \
-      \begin{tabular}{lll}
-        $\phi_1 + \phi_2$           & $>_\Gamma$ & $\phi_1$\\
-        $\phi_1 + \phi_2$           & $>_\Gamma$ & $\phi_2$\\
+        $\phi_1 \mathrel{\text{op}} \phi_2$           & $>_\Gamma$ & $\phi_1$\\
+        $\phi_1 \mathrel{\text{op}} \phi_2$           & $>_\Gamma$ & $\phi_2$\\
         $\forall X:*_l.\phi$        & $>_\Gamma$ & $[\phi'/X]\phi$ where 
         $\Gamma \vdash \phi':*_l$.\\
       \end{tabular}
@@ -366,52 +302,42 @@ substitution lemma.
   \label{lemma:transitivity_ssfp}
 \end{lemma}
 \begin{proof}
-  Suppose $\phi >_\Gamma \phi'$ and $\phi' >_\Gamma \phi''$.  If 
-  $\phi \equiv \phi_1 \rightarrow \phi_2$ or $\phi \equiv \phi_1 + \phi_2$ then,
-  $\phi'$ must be a subexpression of $\phi$.  Now if $\phi' \equiv \phi'_1 \rightarrow \phi'_2$ 
-  or $\phi' \equiv \phi'_1 + \phi'_2$ then,
-  $\phi''$ must be a subexpression of $\phi'$, which implies that $\phi''$ is a subexpression of 
-  $\phi$.  Thus, $\phi >_\Gamma \phi''$.
+  This proof is similar to the proof for the ordering used in the
+  proof of normalization of SSF.
+  % Suppose $\phi >_\Gamma \phi'$ and $\phi' >_\Gamma \phi''$.  If 
+  % $\phi \equiv \phi_1 \rightarrow \phi_2$ or $\phi \equiv \phi_1 + \phi_2$ then,
+  % $\phi'$ must be a subexpression of $\phi$.  Now if $\phi' \equiv \phi'_1 \rightarrow \phi'_2$ 
+  % or $\phi' \equiv \phi'_1 + \phi'_2$ then,
+  % $\phi''$ must be a subexpression of $\phi'$, which implies that $\phi''$ is a subexpression of 
+  % $\phi$.  Thus, $\phi >_\Gamma \phi''$.
   
-  If $\phi' \equiv \forall X:*_l.\phi'_1$ then, there exists a type $\phi'_2$ where, 
-  $\Gamma \vdash \phi'_2:*_l$, such that, 
-  $\phi'' \equiv [\phi'_2/X]\phi'_1$.  The level of $\phi'$ is $max(l,l')+1$, where $l'$ is the 
-  level of $\phi'_1$, the level of 
-  $\phi''$ is $max(l,l')$, and the level of $\phi$ is $max(max(l,l')+1,p)$, where $p$ is the 
-  level of the type, which is, the second subexpression of $\phi$.
-  Clearly, $max(max(l,l')+1,p) \geq max(l,l')$, thus, $\phi >_\Gamma \phi''$.
+  % If $\phi' \equiv \forall X:*_l.\phi'_1$ then, there exists a type $\phi'_2$ where, 
+  % $\Gamma \vdash \phi'_2:*_l$, such that, 
+  % $\phi'' \equiv [\phi'_2/X]\phi'_1$.  The level of $\phi'$ is $max(l,l')+1$, where $l'$ is the 
+  % level of $\phi'_1$, the level of 
+  % $\phi''$ is $max(l,l')$, and the level of $\phi$ is $max(max(l,l')+1,p)$, where $p$ is the 
+  % level of the type, which is, the second subexpression of $\phi$.
+  % Clearly, $max(max(l,l')+1,p) \geq max(l,l')$, thus, $\phi >_\Gamma \phi''$.
 
-  If $\phi \equiv \forall X:*_l.\phi_1$, then $\phi' \equiv [\phi_2/X]\phi_1$ for some type 
-  $\phi_2$, where $\Gamma \vdash \phi_2:*_l$.  If
-  $[\phi_2/X]\phi_1 \equiv \phi'_1 \rightarrow \phi'_2$ or 
-  $[\phi_2/X]\phi_1 \equiv \phi'_1 + \phi'_2$, then the level of $\phi'$ is $max(p,q)$, where 
-  $p$ is the level
-  of $\phi'_1$ and $q$ is the level of $\phi'_2$.  Now $\phi''$ must be a subexpression of 
-  $\phi'$, hence the level of $\phi''$ is either $p$ or $q$.  Now, since
-  the level of $\phi$ is greater than the level of $\phi'$ and we know, $max(p,q)$ is greater 
-  than both $p$ and $q$ then $\phi >_\Gamma \phi''$.  If 
-  $[\phi_2/X]\phi_1 \equiv \forall Y:*_{l'}.\phi'_1$, then $\phi'' \equiv [\phi'_2/X]\phi'_1$.  
-  Now if $p$ is the level of $\phi_1$, then the level of $\phi$ is
-  $max(l,p)+1$ and the level of $\phi'$ must be $max(l,p)$ since we know the level of $\phi'$ is 
-  greater than the level of $\phi''$ then clearly, the level of 
-  $\phi$ is greater than the level of $\phi''$.  Thus, $\phi >_\Gamma \phi''$.
+  % If $\phi \equiv \forall X:*_l.\phi_1$, then $\phi' \equiv [\phi_2/X]\phi_1$ for some type 
+  % $\phi_2$, where $\Gamma \vdash \phi_2:*_l$.  If
+  % $[\phi_2/X]\phi_1 \equiv \phi'_1 \rightarrow \phi'_2$ or 
+  % $[\phi_2/X]\phi_1 \equiv \phi'_1 + \phi'_2$, then the level of $\phi'$ is $max(p,q)$, where 
+  % $p$ is the level
+  % of $\phi'_1$ and $q$ is the level of $\phi'_2$.  Now $\phi''$ must be a subexpression of 
+  % $\phi'$, hence the level of $\phi''$ is either $p$ or $q$.  Now, since
+  % the level of $\phi$ is greater than the level of $\phi'$ and we know, $max(p,q)$ is greater 
+  % than both $p$ and $q$ then $\phi >_\Gamma \phi''$.  If 
+  % $[\phi_2/X]\phi_1 \equiv \forall Y:*_{l'}.\phi'_1$, then $\phi'' \equiv [\phi'_2/X]\phi'_1$.  
+  % Now if $p$ is the level of $\phi_1$, then the level of $\phi$ is
+  % $max(l,p)+1$ and the level of $\phi'$ must be $max(l,p)$ since we know the level of $\phi'$ is 
+  % greater than the level of $\phi''$ then clearly, the level of 
+  % $\phi$ is greater than the level of $\phi''$.  Thus, $\phi >_\Gamma \phi''$.
 \end{proof}
 % subsection ordering_on_types_ssfp (end)
 
 \subsection{The Hereditary Substitution Function}
 \label{sec:the_hereditary_substitution_function_ssfp}
-We will work through the hereditary substitution method in more detail
-for this first example system than for the other two.  The difference
-between ordinary capture avoiding substitution and hereditary substitution
-is if as a result of substitution a new redex is created, then
-that redex is recursively reduced.  The hereditary substitution
-function is denoted $[t/x]^\phi t'$ where $\phi$ is called the cut
-type, due to the relation of the hereditary substitution function and
-cut elimination, and $t'$ is called the principle term of
-substitution.  The purpose of the cut type is that it is used to
-ensure that the definition of the function is well founded.  We will
-see this connection below.  We now turn to defining this function for
-SS$\Fp$.
 
 The definition of the hereditary substitution function for SS$\Fp$ is
 in Fig.~\ref{fig:hereditary_substitution_function_part1} and
@@ -420,153 +346,113 @@ should read this definition as a mutually recursive function in terms
 of the hereditary substitution function $[t/x]^\phi t'$,
 the application reduction function $app_\phi\ t_1\ t_2$, and 
 case construct reduction function $rcase_\phi\ t_0\ x\ t_1\ t_2$.  The
-definitions of all these functions depend on a partial function called
-$ctype_\phi(x, t)$ which returns the type of a term $t$ if that term
-is in weak-head normal form.  This function is equivalent to the
-$treduce$ function used in \cite{Watkins:2004}.
-%
-A brief explanation of the definition of the hereditary substitution
-function is the following.  One should read the
-``where''-conditions below some of the cases of the definitions of
-each function as preconditions.  The definition of $ctype_\phi$ is
-straightforward.  Now the definition of the hereditary substitution
-function has the form one would expect for a substitution function.
-In fact the only difference between the definition of the hereditary
-substitution function and capture avoiding substitution is really
-present in the cases for applications, type instantiation, and case
-constructs.  These are the locations where new redexes can be created
-by substitution.  
-
-Consider application.  Based on the definition of the reduction rules
-we have two forms of redexes: either a $\beta$-redex or a commuting
-coversion where a case construct is applied to an argument.  In order
-to create a new $\beta$-redex as a result of substitution we must be
-substituting into a term of the form $x\ t_1 \cdots t_n$.  The
-hereditary substitution function detects this by using the
-$ctype_\phi$ function.  We will show that if this function is defined
-then the head of the input term must be a variable $x$ thus implying
-that the input term is of the form we expect.  Next we apply the
-hereditary substitution to the head of the application and if that
-results in a $\lambda$-abstraction then we know that a new redex will
-be created by substitution.  Thus, we recursively reduce this redex
-using the hereditary substitution function.  We will see that the
-result of the $ctype_\phi$ function is in fact a subexpression of the
-cut type $\phi$.  This tells us that the cut type in the case for
-creation of a new $\beta$-redex has reduced in the recursive call to
-the hereditary substitution function.
-
-Now in the definition of the hereditary substitution function where a
-new redex in the form of the commuting conversion is created -- in
-this case a case construct is applied to an argument -- we again know
-by the $ctype_\phi$ function that the head of the application is in
-the form $x\,t_1 \cdots t_2$.  Furthermore, we know applying the
-hereditary substitution function to the head of the application
-results in a case construct.  So we recursively reduce the created
-redex in the same way the reduction rules do, but when we push the
-argument into the branches of the resulting case construct more
-redexes may be created.  So to handle recursively reducing all of the
-newly created redexes in the branches we call the application
-reduction function $app_\phi$.  This function reduces redexes by
-recursively calling itself and the hereditary substitution function.
-The remaining cases where new redexes are potentially created are
-similar to these cases.  The function $rcase_\phi$ handles reducing 
-case constructs.
-\begin{figure}[t]
+definitions of all these functions depend the same definition of 
+$ctype_\phi(x, t)$ as the proof of normalization of SSF.  So we do not
+repeat it here.
+\begin{figure} 
   \small
   \begin{itemize}
-  \item[] $ctype_\phi(x,x) = \phi$
-  \item[] $ctype_\phi(x,t_1\ t_2) = \phi''$\\
-    \begin{tabular}{lll}
-      & Where $type_\phi(x,t_1) = \phi' \to \phi''$.
-    \end{tabular}    
-  \end{itemize}
-  
-  \begin{itemize}
-  \item[] $app_\phi\ t_1\ t_2 = t_1\ t_2$\\
-    \begin{tabular}{lll}
-      & Where $t_1$ is not a $\lambda$-abstraction or a case construct.
-    \end{tabular}
+  \item[] $app_\phi\ t_1\ t_2 = t_1\ t_2$
+    \hscase{
+      Where $t_1$ is not a $\lambda$-abstraction or a case construct.
+    }
+    
   \item[] $app_\phi\ (\lambda x:\phi'.t_1)\ t_2 = [t_2/x]^{\phi'} t_1$
   \item[] $app_\phi\ (\ccon{t_0}{x}{t_1}{t_2})\ t = 
     \ccon{t_0}{x}{(app_\phi\ t_1\ t)}{(app_\phi\ t_2\ t)}$
   \end{itemize}
   
   \begin{itemize}
-  \item[] $rcase_{\phi}\ t_0\ y\ t_1\ t_2 = \ccon{t_0}{y}{t_1}{t_2}$\\
-    \begin{tabular}{lll}
-      & Where $t_0$ is not an inject-left or an inject-right term or a case construct.
-    \end{tabular}
+  \item[] $rcase_{\phi}\ t_0\ y\ t_1\ t_2 = \ccon{t_0}{y}{t_1}{t_2}$
+    \hscase{
+      Where $t_0$ is not an inject-left or an inject-right term or a case construct.    
+    }
   \item[] $rcase_{\phi}\ inl(t')\ y\ t_1\ t_2 = [t'/y]^{\phi_1}\ t_1$
   \item[] $rcase_{\phi}\ inr(t')\ y\ t_1\ t_2 = [t'/y]^{\phi_2}\ t_2$
-  \item[] $rcase_{\phi}\ (\ccon{t'_0}{x}{t'_1}{t'_2})\ y\ t_1\ t_2 = 
-    \ccon{t'_0}{x}{(rcase_{\phi}\ t'_1\ y\ t_1\ t_2)}{(rcase_{\phi}\ t'_2\ y\ t_1\ t_2)}$
+  \item[] $rcase_{\phi}\,(\ccon{t'_0}{x}{t'_1}{t'_2})\,y\,t_1\,t_2 = 
+    \ccon{t'_0}{x}{(rcase_{\phi}\,t'_1\,y\,t_1\,t_2)}{(rcase_{\phi}\,t'_2\,y\,t_1\,t_2)}$
   \end{itemize}
   \caption{Hereditary Substitution Function for Stratified System $\Fp$}
   \label{fig:hereditary_substitution_function_part1}
 \end{figure}
 
-\begin{figure}[t]
-  \begin{itemize}
+\begin{figure}
+  \small
+  \begin{itemize}   
   \item[] $[t/x]^\phi x = t$
-  \item[] $[t/x]^\phi y = y$\\
-    \begin{tabular}{lll}
-      & Where $y$ is a variable distinct from $x$.\\
-    \end{tabular}
+  \item[] $[t/x]^\phi y = y$
+    \hscase{Where $y$ is a variable distinct from $x$.}
+    
   \item[] $[t/x]^\phi (\lambda y:\phi'.t') = \lambda y:\phi'.([t/x]^\phi t')$
   \item[] $[t/x]^\phi (\Lambda X:*_l.t') = \Lambda X:*_l.([t/x]^\phi t')$
   \item[] $[t/x]^\phi inr(t') = inr([t/x]^\phi t')$
   \item[] $[t/x]^\phi inl(t') = inl([t/x]^\phi t')$
-  \item[] $[t/x]^\phi (t_1\ t_2) = ([t/x]^\phi t_1)\ ([t/x]^\phi t_2)$\\
-    \begin{tabular}{lll}
-      & Where $([t/x]^\phi t_1)$ is not a $\lambda$-abstraction or a case construct, or both 
-        $([t/x]^\phi t_1)$\\
-      & and $t_1$ are $\lambda$-abstractions or case constructs, or $ctype_\phi(x,t_1)$ is 
-        undefined.
-    \end{tabular}
-  \item[] $[t/x]^{\phi} (t_1\ t_2) = [([t/x]^{\phi} t_2)/y]^{\phi''} s'_1$\\
-    \begin{tabular}{lll}
-      & Where $([t/x]^{\phi} t_1) = \lambda y:\phi''.s'_1$ 
-      for some $y$, $s'_1$, and $\phi''$ and $ctype_\phi(x,t_1) = \phi'' \to \phi'$.\\
-    \end{tabular}
+  \item[] $[t/x]^\phi (t_1\ t_2) = ([t/x]^\phi t_1)\ ([t/x]^\phi t_2)$
+    \hscase{
+      Where $([t/x]^\phi t_1)$ is not a $\lambda$-abstraction or a case construct, or both 
+      $([t/x]^\phi t_1)$ and $t_1$ are $\lambda$-abstractions or case constructs, or $ctype_\phi(x,t_1)$ is 
+      undefined.        
+    }
+  \item[] $[t/x]^{\phi} (t_1\ t_2) = [([t/x]^{\phi} t_2)/y]^{\phi''} s'_1$
+    \hscase{
+      Where $([t/x]^{\phi} t_1) = \lambda y:\phi''.s'_1$ for some $y$,
+      $s'_1$, and $\phi''$ and $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
+    }
+
   \item[] $[t/x]^{\phi} (t_1\ t_2) = 
-    \ccon{w}{y}{(app_\phi\ r\ ([t/x]^{\phi} t_2))}{(app_\phi\ s\ ([t/x]^{\phi} t_2))}$\\
-    \begin{tabular}{ll}
-      & Where $[t/x]^{\phi} t_1 = \ccon{w}{y}{r}{s}$ for some terms $w$, $r$, $s$ 
-      and variable $y$, and \\
-      & $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
-    \end{tabular}
-  \item[] $[t/x]^\phi (t'[\phi']) = ([t/x]^\phi t')[\phi']$\\
-    \begin{tabular}{lll}
-      & Where $[t/x]^\phi t'$ is not a type abstraction or
-      $t'$ and $[t/x]^\phi t'$ are type abstractions.
-    \end{tabular}
-    \item[] $[t/x]^{\phi} (t'[\phi']) = [\phi'/X]s'_1$\\
-      \begin{tabular}{lll}
-        & Where $[t/x]^{\phi} t' = \Lambda X:*_l.s'_1$,
+    \ccon{w}{y}{(app_\phi\ r\ ([t/x]^{\phi} t_2))}{(app_\phi\ s\ ([t/x]^{\phi} t_2))}$
+    \hscase{
+      Where $[t/x]^{\phi} t_1 = \ccon{w}{y}{r}{s}$ for some terms $w$, $r$, $s$ 
+      and variable $y$, and 
+      $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
+    }
+
+  \item[] $[t/x]^\phi (t'[\phi']) = ([t/x]^\phi t')[\phi']$
+    \hscase{
+      Where $[t/x]^\phi t'$ is not a type abstraction or
+      $t'$ and $[t/x]^\phi t'$ are type abstractions.    
+    }
+    
+    \item[] $[t/x]^{\phi} (t'[\phi']) = [\phi'/X]s'_1$
+      \hscase{
+        Where $[t/x]^{\phi} t' = \Lambda X:*_l.s'_1$,
         for some $X$, $s'_1$ and $\Gamma \vdash \phi':*_q$, such that, $q \leq l$ and\\
-	& $t'$ is not a type abstraction.
-      \end{tabular}
+        $t'$ is not a type abstraction.
+      }
+
     \item[] $[t/x]^{\phi} (\ccon{t_0}{y}{t_1}{t_2}) = 
-      \ccon{([t/x]^{\phi} t_0)}{y}{([t/x]^{\phi} t_1)}{([t/x]^{\phi} t_2)}$\\
-      \begin{tabular}{lll}
-        & Where $([t/x]^{\phi} t_0)$ is not an inject-left or an inject-right term or a case 
-        construct, or\\
-        & $([t/x]^{\phi} t_0)$ and $t_0$ are both inject-left or inject-right terms or case 
-        constructs, or\\
-        & $ctype_\phi(x,t_0)$ is undefined.
-      \end{tabular}
-    \item[] $[t/x]^{\phi} (\ccon{t_0}{y}{t_1}{t_2}) = 
-      rcase_{\phi}\ ([t/x]^{\phi} t_0)\ y\ 
-      ([t/x]^{\phi} t_1)\ ([t/x]^{\phi} t_2)$\\
-      \begin{tabular}{lll}
-        & Where $([t/x]^{\phi} t_0)$ is an inject-left or an inject-right term or 
-        a case construct and\\
-        & $ctype_\phi(x,t_0) = \phi_1+\phi_2$.
-      \end{tabular}
+      \ccon{([t/x]^{\phi} t_0)}{y}{([t/x]^{\phi} t_1)}{([t/x]^{\phi} t_2)}$
+      \hscase{
+        Where $([t/x]^{\phi} t_0)$ is not an inject-left or an inject-right term or a case 
+        construct, or $([t/x]^{\phi} t_0)$ and $t_0$ are both inject-left or inject-right terms or case 
+        constructs, or $ctype_\phi(x,t_0)$ is undefined.
+      }
+
+    \item[] $[t/x]^{\phi} (\ccon{t_0}{y}{t_1}{t_2}) = rcase_{\phi}\ ([t/x]^{\phi} t_0)\ y\  ([t/x]^{\phi} t_1)\ ([t/x]^{\phi} t_2)$
+      \hscase{
+        Where $([t/x]^{\phi} t_0)$ is an inject-left or an inject-right term or 
+        a case construct and $ctype_\phi(x,t_0) = \phi_1+\phi_2$.
+      }
   \end{itemize}
   \caption{Hereditary Substitution Function for Stratified System $\Fp$ Continued}
   \label{fig:hereditary_substitution_function_part2}
 \end{figure}
+The hereditary substitution function is an extension of the hereditary
+substitution function for SSF.  The most interesting case of the
+definition is when a commuting conversion is created as a result of
+substitution.  In this case we know by the $ctype_\phi$ function that
+the head of the application is in the form $x\,t_1 \cdots t_2$.
+Furthermore, we know that applying the hereditary substitution
+function to the head of the application results in a case construct.
+So we recursively reduce the created redex in the same way the
+reduction rules do, but when we push the argument into the branches of
+the resulting case construct more redexes may be created.  So to
+handle recursively reducing all of the newly created redexes in the
+branches we call the application reduction function $app_\phi$.  This
+function reduces redexes by recursively calling itself and the
+hereditary substitution function.  The remaining cases where new
+redexes are potentially created are similar to these cases.  The
+function $rcase_\phi$ handles reducing case constructs.
 % subsection the_hereditary_substitution_function_ssfp (end)
 
 \subsection{Properties of The Hereditary Substitution Function}
