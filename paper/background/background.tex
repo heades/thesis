@@ -592,8 +592,10 @@ to define hereditary substitution for STLC.
 
 \section{Hereditary Substitution for STLC}
 \label{sec:hereditary_substitution_for_stlc}
-The definition of the hereditary substitution depends on a
-partial function called $ctype$.  It is defined by the following definition.
+The definition of the hereditary substitution depends on a partial
+function called $ctype$.  This function is equivalent to the $treduce$
+function used in \cite{Watkins:2004}. It is defined by the following
+definition.
 \begin{definition}
   \label{def:ctype_stlc}
   The partial function $ctype$ is defined with respect to a fixed type $T$
