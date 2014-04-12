@@ -4,15 +4,19 @@ DSS$\F$ is SSF extended with dependent types and equations between
 terms.  Equations between terms are an important concept in
 Martin-L\"of type theory~\cite{hofmann+94,nps90}, and play a central
 role also in dependently typed programming languages, such as the
-second author's \textsc{Guru} language~\cite{stump+09}.  The syntax
-and reduction rules are defined in Fig.~\ref{fig:syntax_ssfe}.  The
-kind-assignment rules are defined in
-Fig.~\ref{fig:kinding_rules_ssfe}.  One thing to note regarding the
-kind-assignment rules is that the level of an equation is the same
-level as the type of the terms in the equation.  The terms used in an
-equation must have the same type.  Finally, the type-assignment rules
-are defined in Fig.~\ref{fig:typing_rules_ssfe}.  Note that $t_1 \join t_2$ denotes
-there exists a term $t$ such that $t_1 \redto^* t$ and $t_2 \redto^* t$.
+\textsc{Guru} language~\cite{stump+09}, $\Sep$
+(Section~\ref{chap:separation_of_proof_from_program}), the freedom of
+speech language (Section~\ref{chap:freedom_of_speech}), Coq
+\cite{CoqRefMan:2008}, and many more.  The syntax and reduction rules
+are defined in Fig.~\ref{fig:syntax_ssfe}.  The kind-assignment rules
+are defined in Fig.~\ref{fig:kinding_rules_ssfe}.  One thing to note
+regarding the kind-assignment rules is that the level of an equation
+is the same level as the type of the terms in the equation.  The terms
+used in an equation must have the same type -- also known as
+homogenous equality.  Finally, the type-assignment rules are defined
+in Fig.~\ref{fig:typing_rules_ssfe}.  Note that $t_1 \join t_2$
+denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
+\redto^* t$.
 
 \begin{figure}[t]
   \begin{center}
@@ -179,133 +183,21 @@ there exists a term $t$ such that $t_1 \redto^* t$ and $t_2 \redto^* t$.
   \label{fig:type_equality_ssfe}
 \end{figure}
 
-\section{Miscellaneous Results}
-\label{sec:micellanious_results}
-This section contains definitions and lemmas that were omitted from
-the main part of the paper due to space constraints. First are a few
-basic syntactic lemmas.
-\begin{lemma}[Type Equality Context Conversion]
-  \label{lemma:type_equality_context_conversion}
-  If $\Gamma,x:[\phi_1/X]\phi,\Gamma' \vdash t:\phi'$ and $\Gamma \vdash p:\phi_1 = \phi_2$ then
-  $\Gamma,x:[\phi_2/X]\phi,\Gamma' \vdash t:\phi'$.
-\end{lemma}
-\begin{proof}
-  This hold by straightforward induction on the assumed typing derivation.
-\end{proof}
-
-\begin{lemma}[Syntactic Inversion]
-  \label{lemma:inversion_stlceq}
-  \begin{itemize}
-  \item[]
-  \item[i.] If $\Gamma \vdash \lambda x:\phi_1.t:\phi_1 \to \phi_2$ then 
-    $\Gamma, x:\phi_1 \vdash t:\phi_2$.
-
-  \item[ii.] If $\Gamma \vdash t_1\ t_2:\phi_2$ then there exists a type $\phi_1$, such that, 
-    $\Gamma \vdash t_1:\phi_1 \to \phi_2$ and $\Gamma \vdash t_2:\phi_1$.
-  \end{itemize}
-\end{lemma}
-\begin{proof}
-  This is a proof by induction on the form of the assumed typing derivation.
-\begin{itemize}
-\item[Part i.]  We have two cases to consider.\\
-\begin{itemize}
-\item[Case.]\ \\
-  \begin{center}
-    \begin{math}
-      $$\mprset{flushleft}
-      \inferrule* [right=Lam] {
-        \Gamma \vdash \phi_1 
-        \\
-          \Gamma,x : \phi_1 \vdash t : \phi_2 
-      }{\Gamma \vdash \lambda x.t : \phi_1 \rightarrow \phi_2}
-    \end{math}
-  \end{center}
-  Trivial.
-  
-\item[Case.]\ \\
-  \begin{center}
-    \begin{math}
-      $$\mprset{flushleft}
-      \inferrule* [right=Conv] {
-        \Gamma \vdash \lambda x.t:[\phi'_1/X](\phi_1 \rightarrow \phi_2)
-        \\
-        \Gamma \vdash t' : \phi_1 = \phi'_2
-      }{\Gamma \vdash \lambda x.t: [\phi'_2/X](\phi_1 \rightarrow \phi_2)}
-    \end{math} 
-  \end{center}
-  By the induction hypothesis we know $\Gamma,x:[\phi'_1/X]\phi_1 \vdash t:[\phi'_1/X]\phi_2$ and by an
-  application of the above rule we obtain $\Gamma,x:[\phi'_1/X]\phi_1 \vdash t:[\phi'_2/X]\phi_2$.  It
-  suffices to show that $\Gamma,x:[\phi'_2/X]\phi_1 \vdash t:[\phi'_2/X]\phi_2$.  This is a simply consequence 
-  of applying Lemma~\ref{lemma:type_equality_context_conversion_stlceq} to $\Gamma,x:[\phi'_2/X]\phi_1 \vdash t:[\phi'_2/X]\phi_2$ using
-  $\Gamma \vdash t' : \phi_1 = \phi'_2$.
-\end{itemize}
-
-\item[Part ii.]  Again, we have two cases to consider.
-  \begin{itemize}
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=App] {
-          \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
-          \\
-          \Gamma \vdash t_2 : \phi_1
-        }{\Gamma \vdash t_1\ t_2 : \phi_2}
-      \end{math}  
-    \end{center}
-    Trivial.
-    
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=Conv] {
-          \Gamma \vdash t:[\phi_1/X]\phi
-          \\
-          \Gamma \vdash t' : \phi_1 = \phi_2
-        }{\Gamma \vdash t: [\phi_2/X]\phi}
-      \end{math} 
-    \end{center}
-    By the induction hypothesis there exists a type 
-    $\phi'_1$, such that, $\Gamma \vdash t_1:\phi'_1 \to [\phi_1/X]\phi$ and 
-    $\Gamma \vdash t_2:\phi'_1$.  At this point all we have to do is apply the rule above to 
-    $\Gamma \vdash t_1:\phi'_1 \to [\phi_1/X]\phi$ to obtain 
-    $\Gamma \vdash t_1:\phi'_1 \to [\phi_2/X]\phi$.
-  \end{itemize}
-\end{itemize}
-\end{proof}
-The depth function, defined in the following definition, is used in
-the proof of Lemma~\ref{lemma:well-founded_measure_ssfe} and is used
-to show that our ordering on types is well founded.
-
-\begin{definition}
-  The depth of a type $\phi$ is defined as follows:
-  \begin{center}
-    \begin{tabular}{lll}
-      $depth(t)$                  & $=$ & $0$, where $t$ is any term.\\
-      $depth(X)$                  & $=$ & $1$\\
-      $depth(\Pi x:\phi.\phi')$   & $=$ & $depth(\phi) + depth(\phi')$\\
-      $depth(\forall X:*_l.\phi)$ & $=$ & $depth(\phi) + 1$\\
-    \end{tabular}
-  \end{center}
-\end{definition}
-
-\noindent
-We use the metric $(l,d)$ in lexicographic combination, where $l$ is the level of
-a type $\phi$, and $d$ is the depth of $\phi$ in the proof of the next lemma.  
-
-\begin{lemma}[Well-Founded Measure]
-  \label{lemma:well-founded_measure_ssfe}
-  If $\phi >_\Gamma \phi'$ then $(l,d) > (l',d')$, where $\Gamma \vdash \phi:*_l$, 
-  $depth(\phi) = d$,  $\Gamma \vdash \phi:*_{l'}$, and $depth(\phi') = d'$.
-\end{lemma}
-\begin{proof}
-  Similar to the proof of the same lemma for SS$\Fp$. 
-\end{proof}
-The next few lemmas are results about the kinding and typing relations as
-well as well-formed contexts.  The first lemma states that every
-kindable type is kindable within a well-formed environment.  
-
+\subsection{Basic Syntactic Results}
+\label{subsec:basic_syntactic_lemmas_ssfe}
+In this section we give a number of basic results.  The reader may
+wish to skip this section, and only refer to the results while reading
+the rest of the chapter.  The most interesting results covered in this
+section are the proof that type-syntactic equality is an equivalence
+relation, and syntactic inversion of the typing relation.  The latter
+depends on a judgment called type-syntactic equality.  It is defined
+in Fig.~\ref{fig:type_equality_ssfe}.  We show that syntactic
+conversion holds for syntactic-type equality in
+Lemma~\ref{lemma:type_syntactic_conversion_ssfe}.  We only state the
+syntactic inversion lemma for the typing relation, because syntactic
+inversion for the kinding relation is trivial.  Note that we use
+syntactic inversion for kinding throughout this chapter without
+indication.  We now list several basic lemmata:
 \begin{lemma}
   If $\Gamma \vdash \phi:*_p$ then $\Gamma\ Ok$.
   \label{lemma:kinding_ok_ssfe}
@@ -313,11 +205,6 @@ kindable type is kindable within a well-formed environment.
 \begin{proof}
   Similar to the proof of the same lemma for SS$\Fp$.
 \end{proof}
-\noindent
-The Type Substitution for the Interpretation of Types lemma is needed in the proof of
-the Type Substitution for Kinding, Typing, Context-Ok lemma, which is needed in the proof
-of the main substitution lemma.
-
 \begin{lemma}[Type Substitution for Kinding, Typing, and Context-Ok]
   Suppose $\Gamma \vdash \phi':*_p$.  Then
   \begin{itemize}
@@ -337,9 +224,6 @@ of the main substitution lemma.
 \begin{proof}
   Similar to the proof of the same lemma for SS$\Fp$.
 \end{proof}
-\noindent
-Next we show that the kinding and typing relations are
-closed under term substitutions.
 
 \begin{lemma}[Term Substitution for Kinding, Typing, and Context-Ok]
   \label{lemma:term_substitution_for_kinding_context_ok_ssfe}
@@ -358,10 +242,6 @@ closed under term substitutions.
 \begin{proof}
   All cases hold by straightforward induction on the $d$.
 \end{proof}
-\noindent
-Context weakening for the kinding and typing relations is defined by
-Lemma~\ref{lemma:context_weakening_for_kinding_and_typing_ssfe}, and
-is used by the proof of the main substitution lemma.
 
 \begin{lemma}[Context Weakening for Kinding and Typing]
   \label{lemma:context_weakening_for_kinding_and_typing_ssfe}
@@ -372,12 +252,6 @@ is used by the proof of the main substitution lemma.
 \begin{proof}
   Similar to the proof of the same lemma for SS$\Fp$.
 \end{proof}
-\noindent
-Finally, we have regularity which is used by the proof of type
-soundness.  These are all the results about the kinding relation and
-well-formed contexts that we will need to conclude normalization, but
-we need syntactic inversion for the typing relation, because it is not a 
-trivial result like it is for SS$\Fp$.
 
 \begin{lemma}[Regularity]
   If $\Gamma \vdash t:\phi$ then $\Gamma \vdash \phi:*_p$ for some $p$.
@@ -387,6 +261,11 @@ trivial result like it is for SS$\Fp$.
   This holds by straightforward induction on the form of the assumed
   typing derivation.
 \end{proof}
+\noindent
+At this point we show that type-syntactic equality is indeed an
+equivalence relation, and that it respects substitution.  Each of
+these may be used throughout the remainder of the chapter without
+explicit mention.
 \begin{lemma}[Transitivity of Type Equality]
   \label{lemma:transitivity_of_type_equality_ssfe}
   If $\Gamma \vdash \phi_1 \approx \phi_2$ and $\Gamma \vdash \phi_2 \approx \phi_3$ then
@@ -448,69 +327,18 @@ trivial result like it is for SS$\Fp$.
   $h$ and types $\psi_1$ and $\psi_2$.  
 \end{itemize}
 \end{proof}
-\begin{definition}
-  \label{def:rset_ssfe}
-  The following function constructs the set of redexes within a term:
-
-  \begin{center}
-    \begin{itemize}
-    \item[] $rset(x) = \emptyset$\\
-    \item[] $rset(join) = \emptyset$
-    \item[] $rset(\lambda x:\phi.t) = rset(t)$\\
-    \item[] $rset(\Lambda X:*_l.t) = rset(t)$\\
-    \item[] $rset(t_1\ t_2)$\\
-      \begin{math}
-        \begin{array}{lll}
-          = & rset(t_1, t_2) & \text{if } t_1 \text{ is not a } \lambda \text{-abstraction.}\\
-          = & \{t_1\ t_2\} \cup rset(t'_1, t_2)\ & \text{if } t_1 \equiv \lambda x:\phi.t'_1.\\
-        \end{array}
-      \end{math}
-    \item[] $rset(t''[\phi''])$\\
-      \begin{math}
-        \begin{array}{lll}
-          = & rset(t'') & \text{if } t'' \text{ is not a type absraction.}\\
-          = & \{t''[\phi'']\} \cup rset(t''') & \text{if } t'' \equiv \Lambda X:*_l.t'''.
-        \end{array}
-      \end{math}
-    \end{itemize}
-  \end{center}
-  \ \\
-  The extention of $rset$ to multiple arguments is defined as follows:
-  \begin{center}
-    $rset(t_1, \ldots, t_n) =^{def} rset(t_1) \cup \cdots \cup rset(t_n)$.
-  \end{center}
-\end{definition}
-% section micellanious_results (end)
-
-
-\subsection{Syntactic Inversion}
-\label{subsec:basic_syntactic_lemmas_ssfe}
-This section covers syntactic inversion of the typing relation.  In
-Sect.~\ref{subsec:concluding_normalization_ssfe} we define the
-interpretation of types and semantic inversion must hold for this
-definition.  Since the interpretation of types is simply the
-restriction of the typing relation to normal forms syntactic inversion
-implies semantic inversion.  Hence, we only need to show syntactic
-inversion.  Syntactic inversion depends on a judgment called type
-syntactic equality.  It is defined in
-Fig.~\ref{fig:type_equality_ssfe}.  We show that syntactic
-conversion holds for syntactic type equality in
-Lemma~\ref{lemma:type_syntactic_conversion_ssfe}.  We only state the
-syntactic inversion lemma for the typing relation, because syntactic
-inversion for the kinding relation is trivial.  Note that we use
-syntactic inversion for kinding throughout the paper without
-indication.  First we define some convenient syntax used in the
-statement of the following lemma.  We write $\exists
-(a_1,a_2,\ldots,a_n)$ for $\exists a_1.\exists a_2\ldots\exists a_n$.
-Note that the proofs of the following lemmas depend on a number of
-other auxiliary lemmas.  They can also be found in the companion
-report.
-
-The first lemma is type syntactic conversion which states that if a
-term $t$ inhabits a type $\phi$ then it inhabits all types equivalent
+\begin{lemma}[Type Equality Context Conversion]
+  \label{lemma:type_equality_context_conversion}
+  If $\Gamma,x:[\phi_1/X]\phi,\Gamma' \vdash t:\phi'$ and $\Gamma \vdash p:\phi_1 = \phi_2$ then
+  $\Gamma,x:[\phi_2/X]\phi,\Gamma' \vdash t:\phi'$.
+\end{lemma}
+\begin{proof}
+  This hold by straightforward induction on the assumed typing derivation.
+\end{proof}
+The next lemma is type syntactic conversion which states that if a
+term $t$ inhabits a type $\phi$, then it inhabits all types equivalent
 to $\phi$.  Following this is injectivity of $\Pi$-types which is
-needed in the proof of syntactic inversion.  Finally, we conclude
-syntactic inversion.
+needed in the proof of syntactic inversion.  
 \begin{lemma}[Type Syntactic Conversion]
   \label{lemma:type_syntactic_conversion_ssfe}
   If $\Gamma \vdash t:\phi$ and $\Gamma \vdash \phi \approx \phi'$ then $\Gamma \vdash t:\phi'$.
@@ -559,10 +387,15 @@ syntactic inversion.
   that $\phi >_\Gamma [t_2/x]\phi''$.
 \end{itemize}
 \end{proof}
+
+\noindent
+Finally, we prove syntactic inversion, but first we will need some
+convenient syntax that is used in the statement of the following
+lemma.  We write $\exists (a_1,a_2,\ldots,a_n)$ for $\exists
+a_1.\exists a_2\ldots\exists a_n$.
 \begin{lemma}[Syntactic Inversion]
   \label{lemma:inversion_ssfe}
   \begin{itemize}\itemsep2pt
-  \item[]
   \item[i.] If $\Gamma \vdash \lambda x:\phi_1.t:\phi$
     then $\exists \phi_2.\ \Gamma,x:\phi_1 \vdash t:\phi_2 \land 
     \Gamma \vdash \Pi x:\phi_1.\phi_2 \approx \phi$.
@@ -768,20 +601,44 @@ The ordering on types is defined as follows:
   \end{center}
   \label{def:ordering_ssfe}
 \end{definition}
-Just as we seen before this is the ordering used in the proofs of the
-properties of the hereditary substitution function which will be
-defined next.  As one might have expected this is a well-founded
-ordering.
+Just as we have seen before this is the ordering used in the proofs of
+the properties of the hereditary substitution function, which state
+next.  As one might have expected this is a well-founded ordering.
 \begin{thm}[Well-Founded Ordering]
   The ordering $>_\Gamma$ is well-founded on types $\phi$ such that 
   $\Gamma \vdash \phi:*_l$ for some $l$.
   \label{thm:well-founded_ordering_ssfe}
 \end{thm}
 \begin{proof}
-  This proof is similar to the same proof for SS$\Fp$.
+  This proof is similar to the same proof for SS$\Fp$.  It depends on
+  the following function, and intermediate result.
+  \begin{definition}
+  The depth of a type $\phi$ is defined as follows:
+  \begin{center}
+    \begin{tabular}{lll}
+      $depth(t)$                  & $=$ & $0$, where $t$ is any term.\\
+      $depth(X)$                  & $=$ & $1$\\
+      $depth(\Pi x:\phi.\phi')$   & $=$ & $depth(\phi) + depth(\phi')$\\
+      $depth(\forall X:*_l.\phi)$ & $=$ & $depth(\phi) + 1$\\
+    \end{tabular}
+  \end{center}
+\end{definition}
+\noindent
+We use the metric $(l,d)$ in lexicographic combination, where $l$ is the level of
+a type $\phi$, and $d$ is the depth of $\phi$ in the proof of the next lemma.  
+
+\begin{lemma}[Well-Founded Measure]
+  \label{lemma:well-founded_measure_ssfe}
+  If $\phi >_\Gamma \phi'$ then $(l,d) > (l',d')$, where $\Gamma \vdash \phi:*_l$, 
+  $depth(\phi) = d$,  $\Gamma \vdash \phi:*_{l'}$, and $depth(\phi') = d'$.
+\end{lemma}
+\begin{proof}
+  Similar to the proof of the same lemma for SS$\Fp$. 
 \end{proof}
+\end{proof}
+\noindent
 The type-syntactic-equality relation respects this ordering.
-\begin{lemma}[]
+\begin{lemma}
   \label{lemma:typeq_ordering_ssfe}
   If $\Gamma \vdash \phi' \approx \phi''$ and $\phi >_{\Gamma} \phi'$ then $\phi >_\Gamma \phi''$.
 \end{lemma}
@@ -859,7 +716,7 @@ $\phi >_\Gamma \phi'$.\\
 \end{itemize}
 \end{proof}
 The following lemma is used in the proof of totality of the hereditary substitution function.
-\begin{lemma}[]
+\begin{lemma}[Congruence of Products]
   \label{lemma:A_prop_ssfe}
   If $\Gamma \vdash \psi \approx \Pi y:\phi_1.\phi_2$ and $\psi$ is a subexpression of $\phi''$ then
   $\phi'' >_\Gamma \phi_1$ and $\phi'' >_{\Gamma,y:\phi_1} \phi_2$.
@@ -875,12 +732,11 @@ The following lemma is used in the proof of totality of the hereditary substitut
   for typed equality we obtain $\Gamma \vdash \phi'_1 \approx \phi_1$ and $\Gamma,y:\phi_1 \vdash \phi'_2 \approx \phi_2$.
   Finally, by Lemma~\ref{lemma:typeq_ordering_ssfe} we know $\phi'' >_\Gamma \phi_1$ and $\phi'' >_{\Gamma,y:\phi_1} \phi_2$.
 \end{proof}
-We now define the hereditary substitution function for DSS$\F$.  The
-function is fully defined in
+
+The hereditary substitution function is fully defined in
 Fig.~\ref{fig:hereditary_substitution_function_ssfe}.  We do not
 repeat the definition of $ctype_\phi$ for DSS$\F$, because it is
-exactly the same as the previous system. The definition is rather
-straight forward.  
+exactly the same as the previous system. 
 \begin{figure}[t]
   \small
   \begin{itemize}
@@ -927,6 +783,7 @@ straight forward.
   \caption{Hereditary Substitution Function for Stratified System $\F$}
   \label{fig:hereditary_substitution_function_ssfe}
 \end{figure}
+Next we have the properties of the hereditary substitution function.
 All of the proofs are similar to the proofs for SS$\Fp$, so we omit
 them here.
 \begin{lemma}[Total, Type Preserving, and Sound with Respect to Reduction]
@@ -939,7 +796,7 @@ them here.
   \end{itemize}
 \end{lemma}
 
-\begin{corollary}[]
+\begin{corollary}
   \label{corollary:type_preserving_ssfe}
   Suppose $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$. Then
   $\Gamma,[t/x]\Gamma' \vdash [t/x]^\phi t':[t/x]\phi'$.
@@ -950,6 +807,32 @@ them here.
   If $\Gamma \vdash t : \phi$, $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$
   then  $|rset(t', t)| \geq |rset([t/x]^\phi t')|$.
 \end{lemma}
+\begin{proof}
+  Just as we have seen for the previous systems this proof depends on
+  the following function:
+  \begin{center}
+    \begin{itemize}
+    \item[] $rset(x) = \emptyset$\\
+    \item[] $rset(join) = \emptyset$
+    \item[] $rset(\lambda x:\phi.t) = rset(t)$\\
+    \item[] $rset(\Lambda X:*_l.t) = rset(t)$\\
+    \item[] $rset(t_1\ t_2)$\\
+      \begin{math}
+        \begin{array}{lll}
+          = & rset(t_1, t_2) & \text{if } t_1 \text{ is not a } \lambda \text{-abstraction.}\\
+          = & \{t_1\ t_2\} \cup rset(t'_1, t_2)\ & \text{if } t_1 \equiv \lambda x:\phi.t'_1.\\
+        \end{array}
+      \end{math}
+    \item[] $rset(t''[\phi''])$\\
+      \begin{math}
+        \begin{array}{lll}
+          = & rset(t'') & \text{if } t'' \text{ is not a type absraction.}\\
+          = & \{t''[\phi'']\} \cup rset(t''') & \text{if } t'' \equiv \Lambda X:*_l.t'''.
+        \end{array}
+      \end{math}
+    \end{itemize}
+  \end{center}  
+\end{proof}
 
 \begin{lemma}[Normality Preserving]
   \label{corollary:normalization_preserving_ssfe}
@@ -960,16 +843,11 @@ them here.
 
 \subsection{Concluding Normalization}
 \label{subsec:concluding_normalization_ssfe}
-We are now ready to conlcude normalization.  We will accomplish this
-by first defining the interpretation of types, then proving the
-interpretation of types are closed under hereditary substitutions, and
-finally proving type soundness.  The interpretation of types are
-defined exactly the same way as they were for SS$\Fp$.  We do not
-repeat that definition here.  Just as in the previous type system
-semantic inversion must hold for the previous definition.  This is
-implied by syntactic inversion, which we proved in the previous
-section.  The next two lemmas are used in the proof of the type
-soundness theorem.
+We are now ready to conlcude normalization.  The interpretation of
+types are defined exactly the same way as they were for STLC
+(Definition~\ref{def:interpretation_of_types_stlc}).  We do not repeat
+that definition here.  The next two lemmas are used in the proof of
+the type soundness theorem.
 
 \begin{corollary}[Type Substitution for the Interpretation of Types]
   If $n \in \interp{\phi'}_{\Gamma,X:*_l,\Gamma'}$ and 
@@ -998,7 +876,8 @@ soundness theorem.
   \interp{[t_2/x]\phi}_\Gamma$.  Therefore, $t \in
   \interp{[t_2/x]\phi}_\Gamma$.  The opposite direction is similar.
 \end{proof}
-We now conclude type soundness for SS$\F$, and hence, normalization.  
+\noindent
+We now conclude type soundness for SS$\F$, and hence normalization.  
 
 \begin{lemma}[Hereditary Substitution for the Interpretation of Types]
   If $n' \in \interp{\phi'}_{\Gamma,x:\phi,\Gamma'}$, $n \in \interp{\phi}_\Gamma$,
@@ -1176,7 +1055,7 @@ We now conclude type soundness for SS$\F$, and hence, normalization.
   $t \in \interp{[\phi_2/X]\phi_1}_\Gamma$.  Suppose $n \equiv \Lambda X:*_l.n'$.  
   Then 
   $t[\phi_2] \rightsquigarrow^{*} (\Lambda X:*_l.n')[\phi_2] \rightsquigarrow $
-  $ [\phi_2/X]n'$.  By semantic inversion
+  $ [\phi_2/X]n'$.  By inversion
   $n' \in \interp{\phi_1}_{\Gamma,X:*_l}$. Therefore, by
   Lemma~\ref{lemma:type_sub_ssfe} $[\phi_2/X]n' \in \interp{[\phi_2/X]\phi_1}_{\Gamma}$ and
   $t[\phi_2] \in \interp{[\phi_2/X]\phi_1}_{\Gamma}$, since $t[\phi_2] \join [\phi_2/X]n'$.
@@ -1187,3 +1066,9 @@ We now conclude type soundness for SS$\F$, and hence, normalization.
 \end{corollary}
 % subsection concluding_normalization_ssfp (end)
 % section dependent_ssf_with_type_equality_(dss$\f$) (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% reftex-default-bibliography: ("/Users/hde/thesis/paper/thesis.bib")
+%%% TeX-master: "/Users/hde/thesis/paper/thesis.tex"
+%%% End: 
