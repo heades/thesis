@@ -187,7 +187,7 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
 \label{subsec:basic_syntactic_lemmas_ssfe}
 In this section we give a number of basic results.  The reader may
 wish to skip this section, and only refer to the results while reading
-the rest of the chapter.  The most interesting results covered in this
+the rest of the section.  The most interesting results covered in this
 section are the proof that type-syntactic equality is an equivalence
 relation, and syntactic inversion of the typing relation.  The latter
 depends on a judgment called type-syntactic equality.  It is defined
@@ -196,7 +196,7 @@ conversion holds for syntactic-type equality in
 Lemma~\ref{lemma:type_syntactic_conversion_ssfe}.  We only state the
 syntactic inversion lemma for the typing relation, because syntactic
 inversion for the kinding relation is trivial.  Note that we use
-syntactic inversion for kinding throughout this chapter without
+syntactic inversion for kinding throughout this section without
 indication.  We now list several basic lemmata:
 \begin{lemma}
   If $\Gamma \vdash \phi:*_p$ then $\Gamma\ Ok$.
@@ -264,7 +264,7 @@ indication.  We now list several basic lemmata:
 \noindent
 At this point we show that type-syntactic equality is indeed an
 equivalence relation, and that it respects substitution.  Each of
-these may be used throughout the remainder of the chapter without
+these may be used throughout the remainder of the section without
 explicit mention.
 \begin{lemma}[Transitivity of Type Equality]
   \label{lemma:transitivity_of_type_equality_ssfe}
@@ -1062,7 +1062,8 @@ We now conclude type soundness for SS$\F$, and hence normalization.
 \end{itemize}
 \end{proof}
 \begin{corollary}[Normalization]
-  If $\Gamma \vdash t:\phi$ then $t \normto n$.
+  If $\Gamma \vdash t:\phi$, then there exists a normal form $n$, such
+  that $t \normto n$.
 \end{corollary}
 % subsection concluding_normalization_ssfp (end)
 % section dependent_ssf_with_type_equality_(dss$\f$) (end)
