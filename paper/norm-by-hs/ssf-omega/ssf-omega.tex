@@ -1,26 +1,25 @@
 \section{Normalization of Stratified System $\Fw$}
 \label{subsec:normalization_stratified_system_fw}
 In this section we do something a bit different from the previous
-sections.  Here we show that if we combine the type theories STLC and
-SSF that we can use the previous normalization results to conclude
-normalization of this new language.  First we define the new language.
+sections, we show that if we combine the type theories STLC and SSF
+into a stratified version of Girard's system $\Fw$, then we can use
+the previous normalization proofs for STLC and SSF to conclude
+normalization of this new language.  We call this new type theory
+SS$\Fw$, and we define it in the next section.
 
 \subsection{The Language}
 \label{subsec:the_language}
-J. Girard defined a well known type-theory where the types not only
+Girard defined a well known type-theory where the types did not only
 consist of type variables, function types, and universal
-quantification, but also contain $\lambda$-abstractions and
+quantification, but also contained $\lambda$-abstractions and
 application.  This type theory is called System $\Fw$
-\cite{barendregt92}. Now these new $\lambda$-abstractions represent
-functions from types to types.  Logically these correspond to
-predicates which means this language corresponds to a restricted form
-of second-order intuitionistic logic with only implication as a
-primitive and no quantification over predicates.  System $\Fw$
-contains impredicativity, but this adds a lot of complexity to the
-language so we restrict the theory just as we did for SSF to obtain
-a more less expressive theory called Stratified System $\Fw$ (SS$\Fw$).
-Lets define the language.  The following definition defines the syntax
-for SS$\Fw$.
+\cite{barendregt92} (See Section~\ref{sec:moderen_type_theory}). These
+new $\lambda$-abstractions represent functions from types to types.
+System $\Fw$ is an impredicative theory, but this adds a lot of
+complexity to the language, so we restrict the theory just as we did
+for SSF to obtain a less expressive theory called Stratified System
+$\Fw$ (SS$\Fw$). The following definition defines the syntax for
+SS$\Fw$.
 \begin{definition}
   \label{def:syntax_ssfw}
   The syntax for terms, types, and kinds:
@@ -32,7 +31,7 @@ for SS$\Fw$.
     \end{tabular}
   \end{center}
 \end{definition}
-\noindent Now we define our operational semantics for SS$\Fw$ in the following definition.
+\noindent We define the reduction relation for SS$\Fw$ next.
 \begin{definition}
   \label{def:reduction_rules_ssf}
   Full $\beta$-reduction for SS$\Fw$:
@@ -47,63 +46,48 @@ for SS$\Fw$.
 
 We can see that this system is almost the same as SSF except we have
 added essentially STLC to the type level of the theory, and we now
-allow quantification over predicates.  That is take
-STLC where the terms are types and the types are kinds and that is
-essentially what we have added to the type level of SSF to obtain
-SS$\Fw$.  This allows us to compute types, so in terms of programming we
-are able to write very generic programs where the type of the program
-may need to be computed.  Next we define the kinding and typing rules for this
-system.  Now the rules for well-formed contexts do not change from SSF so we
-do not define them here.
+allow quantification over predicates.  That is, take STLC where the
+terms are types and the types are kinds, and this is essentially what
+we have added to the type level of SSF.  This allows us to compute
+types, so in terms of programming we are able to write more generic
+programs, where the type of the program may need to be computed.  Next
+we define the kinding and typing rules for this system.  The rules for
+well-formed contexts do not change from SSF
+(Figure~\ref{fig:well-formed_ssf}), so we do not define them here.
 
 \begin{definition}
   \label{def:l_kinding_rules_ssfw}
   The kind assignment rules for SS$\Fw$ are defined as follows:
   \begin{center}
-    \begin{tabular}{cccc}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash \phi_1 : *_p
-          \\
-          \Gamma \vdash \phi_2 : *_q
-        }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
-      \end{math}
-      & 
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma,X : *_q \vdash \phi : *_p
-        }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma(X) = *_p
-          \\
-          p \leq q
-          \\
-          \Gamma\ Ok
-        }{\Gamma \vdash X : *_q}
-      \end{math} \\
-      \\
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma,X:K_1 \vdash \phi:K_2
-        }{\Gamma \vdash \lambda X:K_1.\phi:K_1 \to K_2}
-      \end{math}
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash \phi_1:K_1 \to K_2
-          \\
-          \Gamma \vdash \phi_2:K_1
-        }{\Gamma \vdash \phi_1\ \phi_2:K_2}
-      \end{math}
-    \end{tabular}	
+    \begin{mathpar}
+      \inferrule* [right=] {
+        \Gamma \vdash \phi_1 : *_p
+        \\
+        \Gamma \vdash \phi_2 : *_q
+      }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
+      \and
+      \inferrule* [right=] {
+        \Gamma,X : *_q \vdash \phi : *_p
+      }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
+      \and
+      \inferrule* [right=] {
+        \Gamma(X) = *_p
+        \\
+        p \leq q
+        \\
+        \Gamma\ Ok
+      }{\Gamma \vdash X : *_q}
+      \and
+      \inferrule* [right=] {
+        \Gamma,X:K_1 \vdash \phi:K_2
+      }{\Gamma \vdash \lambda X:K_1.\phi:K_1 \to K_2}
+      \and
+      \inferrule* [right=] {
+        \Gamma \vdash \phi_1:K_1 \to K_2
+        \\
+        \Gamma \vdash \phi_2:K_1
+      }{\Gamma \vdash \phi_1\ \phi_2:K_2}
+    \end{mathpar}
   \end{center}
 \end{definition}
 \noindent
@@ -114,53 +98,37 @@ typing rules are the exactly same as SSF.  We state them next.
   \label{fig:typing_rules_ssfw}
   Type assignment rules for SS$\Fw$:
   \begin{center}
-    \begin{tabular}{cccc}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma(x) = \phi
-          \\
-          \Gamma\ Ok
-        }{\Gamma \vdash x : \phi}
-      \end{math}  
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma,x : \phi_1 \vdash t : \phi_2
-        }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
-      \end{math} 
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
-          \\
-          \Gamma \vdash t_2 : \phi_1
-        }{\Gamma \vdash t_1\ t_2 : \phi_2}
-      \end{math}  \\
-      \\ 
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma, X : *_p \vdash t : \phi
-        }{\Gamma \vdash \Lambda X:*_p.t:\forall X : *_p.\phi}
-      \end{math} 
-      &
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash t:\forall X:*_l.\phi_1
-          \\
-          \Gamma \vdash \phi_2:*_l
-        }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
-      \end{math} 
-      & \\
-    \end{tabular}
-  \end{center}
+    \begin{mathpar}
+      \inferrule* [right=] {
+        \Gamma(x) = \phi
+        \\
+        \Gamma\ Ok
+      }{\Gamma \vdash x : \phi}
+      \and
+      \inferrule* [right=] {
+        \Gamma,x : \phi_1 \vdash t : \phi_2
+      }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
+      \and
+      \inferrule* [right=] {
+        \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
+        \\
+        \Gamma \vdash t_2 : \phi_1
+      }{\Gamma \vdash t_1\ t_2 : \phi_2}
+      \and
+      \inferrule* [right=] {
+        \Gamma, X : *_p \vdash t : \phi
+      }{\Gamma \vdash \Lambda X:*_p.t:\forall X : *_p.\phi}
+      \and
+      \inferrule* [right=] {
+        \Gamma \vdash t:\forall X:*_l.\phi_1
+        \\
+        \Gamma \vdash \phi_2:*_l
+      }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+      \end{mathpar} 
+    \end{center}
 \end{definition}  
 \noindent
-Now all the basic syntactic lemmas proved for SSF in
+All the basic syntactic lemmas proved for SSF in
 Section~\ref{subsec:properties_of_the_hereditary_substitution_function}
 hold for SS$\Fw$ so we do not state them here.
 % subsection the_language (end)
@@ -170,30 +138,29 @@ hold for SS$\Fw$ so we do not state them here.
 Concluding normalization of SS$\Fw$ is a little bit tricky, because
 the type level no longer consists of just constant types.  We conduct
 the proof similarly to how H. Barendregt proves normalization of
-System $\Fw$ in \cite{barendregt92} except we use hereditary
-substitution where he uses a technique called reducibility.  Since
+System $\Fw$ in \cite{barendregt92}, except we use hereditary
+substitution, where he uses a technique called reducibility.  Since
 types contain computation we first must prove normalization of the
-type level and then using this result we prove normalization for the
+type level, and then using this result we prove normalization for the
 term (program) level.  
 
 Now the type level is exactly STLC with constructors for function
 types and universal types.  So all we have to do is define the
-hereditary substitution function and then use the results from
-Section~\ref{sec:normalization_the_simply_typed_lambda-calculus} to
+hereditary substitution function, then use the results from
+Section~\ref{sec:hereditary_substitution_for_stlc} to
 obtain normalization.  Similarly, the term level of SS$\Fw$ is exactly
 SSF so we do not need to define the hereditary substitution for
 SS$\Fw$.  We can just use the results from
 Section~\ref{subsec:normalization_stratified_system_f} to conclude
-normalization.  Lets move onto defining the hereditary substitution
-functions for the type level.  First we have to define the construct
-kind function.  Note that $ckind_K$ is
-the exact same as $ctype_\phi$ except at the type level.  Now all the
-properties of $ctype_\phi$ are also properties of $ckind_K$ so we do
-not prove them again here.  The construct type function is exactly the
-same as SSF so we do not redefine it here.  Also the kind $K$ is
-called the cut kind and is used in the exact same way as the cut type
-$\phi$.
+normalization.  
 
+First, we have to define the construct kind function.  Note that
+$ckind_K$ is the exact same as $ctype_\phi$ except at the type level.
+Now all the properties of $ctype_\phi$ are also properties of
+$ckind_K$ so we do not prove them again here.  The construct type
+function is exactly the same as SSF, so we do not redefine it here.
+Also the kind $K$ in $ckind_K$ is called the cut kind, and is used in
+the exact same way as the cut type $\phi$.
 \begin{definition}
   \label{def:ctype_stlc}
   The $ckind_K$ function is defined with respect to a fixed kind $K$
@@ -201,369 +168,369 @@ $\phi$.
   may be free in $\phi$.  We define $ckind_K$ by induction on the form of $\phi$.
 \begin{itemize}
 \item[] $ckind_K(X,X) = K$
-  \item[]
   \item[] $ckind_K(X,\phi_1\ \phi_2) = K'$
   \item[] \ \ \ \ Where $ckind_K(X,\phi_1) = K'' \to K'$.
   \end{itemize}
 \end{definition}
 \noindent
-Now we defined the type-level hereditary substitution function.
+At this point we define the type-level hereditary substitution function.
 \begin{definition}
   \label{def:hereditary_substitution_function__type_level_ssfw}
-  The following defines the hereditary substitution function for the type level of SS$\Fw$.  It
-  is defined by recursion on the form of the term being substituted
-  into and the cut kind $K$.
+  The following defines the hereditary substitution function for the
+  type level of SS$\Fw$.  
   \begin{itemize}
   \item[] $\{\phi/X\}^K X = \phi$
   \item[] $\{\phi/X\}^K Y = Y$
-  \item[] \ \ \ \ Where $Y$ is a variable distinct from $X$.
+  \hscase{ Where $Y$ is a variable distinct from $X$.}
   \item[] $\{\phi/X\}^K (\phi_1 \to \phi_2) = (\{\phi/X\}^K \phi_1) \to (\{\phi/X\}^K \phi_2)$
   \item[] $\{\phi/X\}^K (\forall Y:*_l.\phi') = \forall Y:*_l.\{\phi/X\}^K \phi'$
   \item[] $\{\phi/X\}^K (\lambda Y:K_1.\phi') = \lambda Y:K_1.(\{\phi / X\}^K \phi')$
   \item[] $\{\phi/X\}^K (\phi_1\ \phi_2) = (\{\phi/X\}^K \phi_1)\ (\{\phi/X\}^K \phi_2)$
-  \item[] \ \ \ \ Where $(\{\phi/X\}^K \phi_1)$ is not a $\lambda$-abstraction, or both $(\{\phi/X\}^K \phi_1)$
-    and $\phi_1$ are $\lambda$-abstractions,
-  \item[] \ \ \ \ or $ckind_K(X,\phi_1)$ is undefined.
+  \hscase{
+    Where $(\{\phi/X\}^K \phi_1)$ is not a $\lambda$-abstraction, or both $(\{\phi/X\}^K \phi_1)$
+    and $\phi_1$ are $\lambda$-abstractions.
+  } 
   \item[] $\{\phi/X\}^{K} (\phi_1\ \phi_2) = \{(\{\phi/X\}^{K} \phi_2)/y\}^{K''} \phi'_1$
-  \item[] \ \ \ \ Where $(\{\phi/X\}^{K} \phi_1) \equiv \lambda Y:K''.\phi'_1$ 
-    for some $Y$, $\phi'_1$, and $K''$ and $ckind_K(X,\phi_1) = K'' \to K'$.
+    \hscase{
+      Where $(\{\phi/X\}^{K} \phi_1) \equiv \lambda Y:K''.\phi'_1$ 
+      for some $Y$, $\phi'_1$, and $K''$ and \\ $ckind_K(X,\phi_1) = K'' \to K'$.
+    }
   \end{itemize}
 \end{definition}
 Now all the properties of the hereditary substitution function from
-Section~\ref{subsec:properties_of_the_hereditary_substitution_function}
+Section~\ref{sec:hereditary_substitution_for_stlc}
 are easily modified to obtain the exact same results for the function
-just defined.  The statements of the properties do not change except
-where there are terms we use types and where there are types we use
-kinds so we do not repeat the properties here.  
+just defined.  The statements of the properties do not change, except
+where there are terms we use types, and where there are types we use
+kinds, so we do not repeat the properties here.  
 
-\begin{lemma}[Properties of $ctype_\phi$]
-  \label{lemma:ctype_props_tl_ssfw}
-  \begin{itemize}
-  \item[]
-  \item[i.] If $ckind_K(X,\phi) = K'$ then $head(\phi) = X$ and $K'$ 
-    is a subexpression of $K$.
+% \begin{lemma}[Properties of $ctype_\phi$]
+%   \label{lemma:ctype_props_tl_ssfw}
+%   \begin{itemize}
+%   \item[]
+%   \item[i.] If $ckind_K(X,\phi) = K'$ then $head(\phi) = X$ and $K'$ 
+%     is a subexpression of $K$.
     
-  \item[ii.] If $\Gamma,X:K,\Gamma' \vdash \phi:K'$ and $ckind_K(X,\phi) = K''$ then
-    $K' \equiv K''$.
+%   \item[ii.] If $\Gamma,X:K,\Gamma' \vdash \phi:K'$ and $ckind_K(X,\phi) = K''$ then
+%     $K' \equiv K''$.
     
-  \item[iii.] If $\Gamma,X:K,\Gamma' \vdash \phi_1\ \phi_2:K'$, $\Gamma \vdash \phi:K$,
-    $[\phi/X]^K \phi_1 = \lambda Y:K_1.\psi$, and $\phi_1$ is not then there exists a kind
-    $\psi'$ such that $ckind_K(X,\phi_1) = \psi'$.
-  \end{itemize}
-\end{lemma}
-\begin{proof}
-  We prove part one first. This is a proof by induction on the structure of $\phi$.
+%   \item[iii.] If $\Gamma,X:K,\Gamma' \vdash \phi_1\ \phi_2:K'$, $\Gamma \vdash \phi:K$,
+%     $[\phi/X]^K \phi_1 = \lambda Y:K_1.\psi$, and $\phi_1$ is not then there exists a kind
+%     $\psi'$ such that $ckind_K(X,\phi_1) = \psi'$.
+%   \end{itemize}
+% \end{lemma}
+% \begin{proof}
+%   We prove part one first. This is a proof by induction on the structure of $\phi$.
 
-\begin{itemize}
-\item[Case.] Suppose $\phi \equiv X$.  Then $ckind_K(X,X) = K$.  Clearly,
-  $head(X) = X$ and $K$ is a subexpression of itself.
+% \begin{itemize}
+% \item[Case.] Suppose $\phi \equiv X$.  Then $ckind_K(X,X) = K$.  Clearly,
+%   $head(X) = X$ and $K$ is a subexpression of itself.
   
-\item[Case.] Suppose $\phi \equiv \phi_1\ \phi_2$.  Then $ckind_K(X,\phi_1\ \phi_2) = K''$
-  when $ckind_K(X,\phi_1) = K' \to K''$.  Now $\phi > \phi_1$ so by the induciton
-  hypothesis $head(\phi_1) = X$ and $K' \to K''$ is a subexpression of $K$.
-  Therefore, $head(\phi_1\ \phi_2) = X$ and certainly $K''$ is a subexpression of $K$.
-\end{itemize}
+% \item[Case.] Suppose $\phi \equiv \phi_1\ \phi_2$.  Then $ckind_K(X,\phi_1\ \phi_2) = K''$
+%   when $ckind_K(X,\phi_1) = K' \to K''$.  Now $\phi > \phi_1$ so by the induciton
+%   hypothesis $head(\phi_1) = X$ and $K' \to K''$ is a subexpression of $K$.
+%   Therefore, $head(\phi_1\ \phi_2) = X$ and certainly $K''$ is a subexpression of $K$.
+% \end{itemize}
 
-\ \\
-We now prove part two.  This is also a proof by induction on the structure of $\phi$.
+% \ \\
+% We now prove part two.  This is also a proof by induction on the structure of $\phi$.
 
-\begin{itemize}
-\item[Case.] Suppose $\phi \equiv X$.  Then $ckind_K(X,X) = K$.  Clearly,
-  $K \equiv K$.
+% \begin{itemize}
+% \item[Case.] Suppose $\phi \equiv X$.  Then $ckind_K(X,X) = K$.  Clearly,
+%   $K \equiv K$.
   
-\item[Case.] Suppose $\phi \equiv \phi_1\ \phi_2$.  Then $ckind_K(X,\phi_1\ \phi_2) = K_2$
-  when $ckind_K(X,\phi_1) = K_1 \to K_2$.  By inversion on the assumed kinding
-  derivation we know there exists a kind $K''$ such that $\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$.
-  Now $\phi > \phi_1$ so by the induciton hypothesis $K_1 \to K_2 \equiv K'' \to K'$.
-  Therefore, $K_1 \equiv K''$ and $K_2 \equiv K'$.
+% \item[Case.] Suppose $\phi \equiv \phi_1\ \phi_2$.  Then $ckind_K(X,\phi_1\ \phi_2) = K_2$
+%   when $ckind_K(X,\phi_1) = K_1 \to K_2$.  By inversion on the assumed kinding
+%   derivation we know there exists a kind $K''$ such that $\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$.
+%   Now $\phi > \phi_1$ so by the induciton hypothesis $K_1 \to K_2 \equiv K'' \to K'$.
+%   Therefore, $K_1 \equiv K''$ and $K_2 \equiv K'$.
 
-\ \\
-Next we prove part three.  This is a proof by induction on the structure of $\phi_1\ \phi_2$.
+% \ \\
+% Next we prove part three.  This is a proof by induction on the structure of $\phi_1\ \phi_2$.
 
-\ \\
-The only possiblities for the form of $\phi_1$ is $X$, $\hat{\phi}_1\ \hat{\phi}_2$.  All other 
-forms would not result in $\{\phi/X\}^K \phi_1$ being a $\lambda$-abstraction and $\phi_1$ not.
-If $\phi_1 \equiv X$ then there exist a kind $K''$ such that $K \equiv K'' \to K'$ and
-$ckind_K(X,X\ \phi_2) = K'$ when $ckind_K(X,X) = K \equiv K'' \to K'$ in this case.  We know
-$K''$ to exist by inversion on $\Gamma,X:K,\Gamma' \vdash \phi_1\ \phi_2:K'$.
+% \ \\
+% The only possiblities for the form of $\phi_1$ is $X$, $\hat{\phi}_1\ \hat{\phi}_2$.  All other 
+% forms would not result in $\{\phi/X\}^K \phi_1$ being a $\lambda$-abstraction and $\phi_1$ not.
+% If $\phi_1 \equiv X$ then there exist a kind $K''$ such that $K \equiv K'' \to K'$ and
+% $ckind_K(X,X\ \phi_2) = K'$ when $ckind_K(X,X) = K \equiv K'' \to K'$ in this case.  We know
+% $K''$ to exist by inversion on $\Gamma,X:K,\Gamma' \vdash \phi_1\ \phi_2:K'$.
 
-\ \\
-Now suppose $\phi_1 \equiv (\hat{\phi}_1\ \hat{\phi}_2)$.  Now knowing $\phi'_1$ to not be a $\lambda$-abstraction
-implies that $\hat{\phi}_1$ is also not a $\lambda$-abstraction or $\{\phi/X\}^K \phi_1$ would be an application
-instead of a $\lambda$-abstraction.  So it must be the case that $\{\phi/X\}^K \hat{\phi}_1$ is a $\lambda$-abstraction
-and $\hat{\phi}_1$ is not.  Since $\phi_1\ \phi_2 > \phi_1$ we can apply the induction hypothesis to obtain there exists
-a kind $K'''$ such that $ckind_K(X,\hat{\phi}_1) = K'''$.  
-Now by inversion on $\Gamma,X:K,\Gamma' \vdash \phi_1\ \phi_2:K'$ we know there exists a kind $K''$ such that
-$\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$.  We know $\phi_1 \equiv (\hat{\phi}_1\ \hat{\phi}_2)$ so by inversion on
-$\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$ we know there exists a kind $\hat{K}$ such that
-$\Gamma,X:K,\Gamma' \vdash \hat{\phi}_1:\hat{K} \to (K'' \to K')$.
-By part two of Lemma~\ref{lemma:ctype_props_tl_ssfw} we know $K''' \equiv \hat{K} \to (K'' \to K')$ and
-$ckind_K(X,\phi_1) = ckind_K(X,\hat{\phi}_1\ \hat{\phi}_2) = K'' \to K'$ 
-when $ckind_K(X,\hat{\phi}_1) = \hat{K} \to (K'' \to K')$, because we know $ckind_K(X,\hat{\phi}_1) = K'''$.
-\end{itemize}
-\end{proof}
+% \ \\
+% Now suppose $\phi_1 \equiv (\hat{\phi}_1\ \hat{\phi}_2)$.  Now knowing $\phi'_1$ to not be a $\lambda$-abstraction
+% implies that $\hat{\phi}_1$ is also not a $\lambda$-abstraction or $\{\phi/X\}^K \phi_1$ would be an application
+% instead of a $\lambda$-abstraction.  So it must be the case that $\{\phi/X\}^K \hat{\phi}_1$ is a $\lambda$-abstraction
+% and $\hat{\phi}_1$ is not.  Since $\phi_1\ \phi_2 > \phi_1$ we can apply the induction hypothesis to obtain there exists
+% a kind $K'''$ such that $ckind_K(X,\hat{\phi}_1) = K'''$.  
+% Now by inversion on $\Gamma,X:K,\Gamma' \vdash \phi_1\ \phi_2:K'$ we know there exists a kind $K''$ such that
+% $\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$.  We know $\phi_1 \equiv (\hat{\phi}_1\ \hat{\phi}_2)$ so by inversion on
+% $\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$ we know there exists a kind $\hat{K}$ such that
+% $\Gamma,X:K,\Gamma' \vdash \hat{\phi}_1:\hat{K} \to (K'' \to K')$.
+% By part two of Lemma~\ref{lemma:ctype_props_tl_ssfw} we know $K''' \equiv \hat{K} \to (K'' \to K')$ and
+% $ckind_K(X,\phi_1) = ckind_K(X,\hat{\phi}_1\ \hat{\phi}_2) = K'' \to K'$ 
+% when $ckind_K(X,\hat{\phi}_1) = \hat{K} \to (K'' \to K')$, because we know $ckind_K(X,\hat{\phi}_1) = K'''$.
+% \end{itemize}
+% \end{proof}
 
-\begin{lemma}[Total and Type Preserving]
-  \label{lemma:total_tl_ssfw}
-  Suppose $\Gamma \vdash \phi : K$ and $\Gamma, X:K, \Gamma' \vdash \phi':K'$. Then
-  there exists a type $\phi''$ such that $\{\phi/X\}^K \phi' = \phi''$ and $\Gamma,\Gamma' \vdash \phi'':K'$.
-\end{lemma}
-\begin{proof}
-  This is a proof by induction on the lexicorgraphic combination $(K,
-  \phi')$ of the strict subexpression ordering.  We case split on $\phi'$.
+% \begin{lemma}[Total and Type Preserving]
+%   \label{lemma:total_tl_ssfw}
+%   Suppose $\Gamma \vdash \phi : K$ and $\Gamma, X:K, \Gamma' \vdash \phi':K'$. Then
+%   there exists a type $\phi''$ such that $\{\phi/X\}^K \phi' = \phi''$ and $\Gamma,\Gamma' \vdash \phi'':K'$.
+% \end{lemma}
+% \begin{proof}
+%   This is a proof by induction on the lexicorgraphic combination $(K,
+%   \phi')$ of the strict subexpression ordering.  We case split on $\phi'$.
   
-  \begin{itemize}
-  \item[Case.] Suppose $\phi'$ is either $X$ or a variable $Y$ distinct from $X$.  
-    Trivial in both cases.
+%   \begin{itemize}
+%   \item[Case.] Suppose $\phi'$ is either $X$ or a variable $Y$ distinct from $X$.  
+%     Trivial in both cases.
 
-  \item[Case.] Suppose $\phi' \equiv \phi'_1 \to \phi'_2$.  Trivial.
+%   \item[Case.] Suppose $\phi' \equiv \phi'_1 \to \phi'_2$.  Trivial.
     
-  \item[Case.] Suppse $\phi' \equiv \forall X:*_l.\phi''$.  Trivial.
+%   \item[Case.] Suppse $\phi' \equiv \forall X:*_l.\phi''$.  Trivial.
     
-  \item[Case.] Suppose $\phi' \equiv \lambda Y:K_1.\phi'_1$.  By inversion on the
-    kinding judgement we know $\Gamma,X:K,\Gamma',Y:K_1 \vdash \phi'_1:K_2$.
-    We also know $\phi' > \phi'_1$, hence we can apply the induction hypothesis to obtain
-    $\{\phi/X\}^K \phi'_1 = \hat{\phi}'_1$ and $\Gamma,\Gamma',Y:K_1 \vdash \hat{\phi}'_1:K_2$
-    for some type $\hat{\phi}'_1$.  By the definition of the hereditary substitution function 
-    $\{\phi/X\}^K \phi' = \lambda Y:K_1.\{\phi/X\}^K \phi'_1 = \lambda Y:K_1.\hat{\phi}'_1$.  It suffices
-    to show that $\Gamma,\Gamma' \vdash \lambda Y:K_1.\hat{\phi}'_1:K_1 \to K_2$.  
-    By simply applying the $\lambda$-abstraction kinding rule using
-    $\Gamma,\Gamma',Y:K_1 \vdash \hat{\phi}:K_2$ we obtain 
-    $\Gamma,\Gamma' \vdash \lambda Y:K_1.\hat{\phi}'_1:K_1 \to K_2$.
+%   \item[Case.] Suppose $\phi' \equiv \lambda Y:K_1.\phi'_1$.  By inversion on the
+%     kinding judgement we know $\Gamma,X:K,\Gamma',Y:K_1 \vdash \phi'_1:K_2$.
+%     We also know $\phi' > \phi'_1$, hence we can apply the induction hypothesis to obtain
+%     $\{\phi/X\}^K \phi'_1 = \hat{\phi}'_1$ and $\Gamma,\Gamma',Y:K_1 \vdash \hat{\phi}'_1:K_2$
+%     for some type $\hat{\phi}'_1$.  By the definition of the hereditary substitution function 
+%     $\{\phi/X\}^K \phi' = \lambda Y:K_1.\{\phi/X\}^K \phi'_1 = \lambda Y:K_1.\hat{\phi}'_1$.  It suffices
+%     to show that $\Gamma,\Gamma' \vdash \lambda Y:K_1.\hat{\phi}'_1:K_1 \to K_2$.  
+%     By simply applying the $\lambda$-abstraction kinding rule using
+%     $\Gamma,\Gamma',Y:K_1 \vdash \hat{\phi}:K_2$ we obtain 
+%     $\Gamma,\Gamma' \vdash \lambda Y:K_1.\hat{\phi}'_1:K_1 \to K_2$.
     
-  \item[Case.] Suppose $\phi' \equiv \phi'_1\ \phi'_2$.  By inversion we know
-    $\Gamma, X:K, \Gamma' \vdash \phi'_1 : K'' \to K'$ and
-    $\Gamma, X:K, \Gamma' \vdash \phi'_2 : K''$ for some types $K'$ and $K''$.
-    Clearly, $\phi' > \phi'_i$ for $i \in \{1,2\}$.  Thus, by the induction hypothesis
-    there exists types $\psi_1$ and $\psi_2$ such that $\{\phi/X\}^K \phi'_i = \psi_i$,
-    $\Gamma, \Gamma' \vdash \psi_1 : K'' \to K'$ and
-    $\Gamma, \Gamma' \vdash \psi_2 : K''$ for
-    $i \in \{1,2\}$.  We case split on whether or not $\psi_1$ is a $\lambda$-abstraction,
-    and $\phi'_1$ is not, or $ckind_K(X,\phi'_1)$ is undefined.  
-    We only consider the non-trivial case when 
-    $\psi_1 \equiv \lambda Y:K''.\psi'_1$ and $\phi'_1$ is not a $\lambda$-abstraction.
+%   \item[Case.] Suppose $\phi' \equiv \phi'_1\ \phi'_2$.  By inversion we know
+%     $\Gamma, X:K, \Gamma' \vdash \phi'_1 : K'' \to K'$ and
+%     $\Gamma, X:K, \Gamma' \vdash \phi'_2 : K''$ for some types $K'$ and $K''$.
+%     Clearly, $\phi' > \phi'_i$ for $i \in \{1,2\}$.  Thus, by the induction hypothesis
+%     there exists types $\psi_1$ and $\psi_2$ such that $\{\phi/X\}^K \phi'_i = \psi_i$,
+%     $\Gamma, \Gamma' \vdash \psi_1 : K'' \to K'$ and
+%     $\Gamma, \Gamma' \vdash \psi_2 : K''$ for
+%     $i \in \{1,2\}$.  We case split on whether or not $\psi_1$ is a $\lambda$-abstraction,
+%     and $\phi'_1$ is not, or $ckind_K(X,\phi'_1)$ is undefined.  
+%     We only consider the non-trivial case when 
+%     $\psi_1 \equiv \lambda Y:K''.\psi'_1$ and $\phi'_1$ is not a $\lambda$-abstraction.
     
-    Now by Lemma~\ref{lemma:ctype_props_tl_ssfw} it is the case that 
-    there exists a $\hat{K}$ such that $ckind_K(X,\phi'_1) = \hat{K}$, 
-    $\hat{K} \equiv K'' \to K'$, and $\hat{K}$ is a subexpression of $K$, hence
-    $K >_{\Gamma,\Gamma'} K''$.
-    Then $\{\phi/X\}^K (\phi'_1\ \phi'_2) = \{\psi_2/Y\}^{K''} \psi'_1$.  
-    Therefore, by the induction hypothesis there exists a 
-    term $\psi$ such that $\{\psi_2/Y\}^{K''} \psi'_1 = \psi$ and $\Gamma,\Gamma' \vdash \psi:K''$.
-  \end{itemize}
-\end{proof}
+%     Now by Lemma~\ref{lemma:ctype_props_tl_ssfw} it is the case that 
+%     there exists a $\hat{K}$ such that $ckind_K(X,\phi'_1) = \hat{K}$, 
+%     $\hat{K} \equiv K'' \to K'$, and $\hat{K}$ is a subexpression of $K$, hence
+%     $K >_{\Gamma,\Gamma'} K''$.
+%     Then $\{\phi/X\}^K (\phi'_1\ \phi'_2) = \{\psi_2/Y\}^{K''} \psi'_1$.  
+%     Therefore, by the induction hypothesis there exists a 
+%     term $\psi$ such that $\{\psi_2/Y\}^{K''} \psi'_1 = \psi$ and $\Gamma,\Gamma' \vdash \psi:K''$.
+%   \end{itemize}
+% \end{proof}
 
-\begin{lemma}[Normality Preserving]
-  \label{corollary:normalization_preserving_tl_ssfw}
-  If $\Gamma \vdash \phi:K$ and $\Gamma, X:K \vdash \phi':\phi'$, where $\phi$ and $\phi'$ are normal, then there exists a normal type $\phi''$ 
-  such that $\{\phi/X\}^K \phi' = \phi''$.
-\end{lemma}
-\begin{proof}
-  By Lemma~\ref{lemma:total_tl_ssfw} we know there exists a type $\phi''$ such that $\{\phi/X\}^K \phi' = \phi''$ and by 
-  Lemma~\ref{lemma:redex_preserving_tl_ssfw} 
-  $|rset(\phi', \phi)| \geq |rset(\{\phi/X\}^K \phi')|$.  Hence, $|rset(\phi', \phi)| \geq |rset(\phi'')|$, but
-  $|rset(\phi', \phi)| = 0$.  Therefore, $|rset(\phi'')| = 0$ which implies $\phi''$ is normal.
-\end{proof}
+% \begin{lemma}[Normality Preserving]
+%   \label{corollary:normalization_preserving_tl_ssfw}
+%   If $\Gamma \vdash \phi:K$ and $\Gamma, X:K \vdash \phi':\phi'$, where $\phi$ and $\phi'$ are normal, then there exists a normal type $\phi''$ 
+%   such that $\{\phi/X\}^K \phi' = \phi''$.
+% \end{lemma}
+% \begin{proof}
+%   By Lemma~\ref{lemma:total_tl_ssfw} we know there exists a type $\phi''$ such that $\{\phi/X\}^K \phi' = \phi''$ and by 
+%   Lemma~\ref{lemma:redex_preserving_tl_ssfw} 
+%   $|rset(\phi', \phi)| \geq |rset(\{\phi/X\}^K \phi')|$.  Hence, $|rset(\phi', \phi)| \geq |rset(\phi'')|$, but
+%   $|rset(\phi', \phi)| = 0$.  Therefore, $|rset(\phi'')| = 0$ which implies $\phi''$ is normal.
+% \end{proof}
 
-\begin{lemma}[Soundness with Respect to Reduction]
-  \label{lemma:soundness_reduction_tl_ssfw}
-  If $\Gamma \vdash \phi : K$ and $\Gamma, X:K, \Gamma' \vdash \phi':K'$ then
-  $\{\phi/X\}\phi' \redto^* \{\phi/X\}^K \phi'$.
-\end{lemma}
-\begin{proof}
-  This is a proof by induction on the lexicorgraphic combination
-  $(K, \phi')$ of the strict subexpression ordering.
-  We case split on the structure of $\phi'$.  When applying
-  the induction hypothesis we must show that the input terms to the
-  substitution and the hereditary substitution function are kindable.
-  We do not explicitly state kinding results that are simple
-  conseqences of inversion.
+% \begin{lemma}[Soundness with Respect to Reduction]
+%   \label{lemma:soundness_reduction_tl_ssfw}
+%   If $\Gamma \vdash \phi : K$ and $\Gamma, X:K, \Gamma' \vdash \phi':K'$ then
+%   $\{\phi/X\}\phi' \redto^* \{\phi/X\}^K \phi'$.
+% \end{lemma}
+% \begin{proof}
+%   This is a proof by induction on the lexicorgraphic combination
+%   $(K, \phi')$ of the strict subexpression ordering.
+%   We case split on the structure of $\phi'$.  When applying
+%   the induction hypothesis we must show that the input terms to the
+%   substitution and the hereditary substitution function are kindable.
+%   We do not explicitly state kinding results that are simple
+%   conseqences of inversion.
 
-  \begin{itemize}
-  \item[Case.] Suppose $\phi'$ is a variable $X$ or $Y$ distinct from $X$.  
-    Trivial in both cases.
+%   \begin{itemize}
+%   \item[Case.] Suppose $\phi'$ is a variable $X$ or $Y$ distinct from $X$.  
+%     Trivial in both cases.
   
-  \item[Case.] Suppose $\phi' \equiv \lambda Y:K'.\hat{\phi}$.  Then
-    $\{\phi/X\}^K (\lambda Y:K'.\hat{\phi}) = \lambda Y:K'.(\{\phi/X\}^K \hat{\phi})$. 
-    Now $\phi' > \hat{\phi}$ so we can apply the induction hypothesis to obtain 
-    $\{\phi/X\}\hat{\phi} \redto^* \{\phi/X\}^K \hat{\phi}$.  At this point we can see that since 
-    $\lambda Y:K'.\{\phi/X\}\hat{\phi} \equiv \{\phi/X\}(\lambda Y:K'.\hat{\phi})$ and we may
-    conclude that $\lambda Y:K'.\{\phi/X\}\hat{\phi} \redto^* \lambda Y:K'.\{\phi/X\}^K \hat{\phi}$.
+%   \item[Case.] Suppose $\phi' \equiv \lambda Y:K'.\hat{\phi}$.  Then
+%     $\{\phi/X\}^K (\lambda Y:K'.\hat{\phi}) = \lambda Y:K'.(\{\phi/X\}^K \hat{\phi})$. 
+%     Now $\phi' > \hat{\phi}$ so we can apply the induction hypothesis to obtain 
+%     $\{\phi/X\}\hat{\phi} \redto^* \{\phi/X\}^K \hat{\phi}$.  At this point we can see that since 
+%     $\lambda Y:K'.\{\phi/X\}\hat{\phi} \equiv \{\phi/X\}(\lambda Y:K'.\hat{\phi})$ and we may
+%     conclude that $\lambda Y:K'.\{\phi/X\}\hat{\phi} \redto^* \lambda Y:K'.\{\phi/X\}^K \hat{\phi}$.
 
-  \item[Case.] Suppose $\phi' \equiv \phi'_1 \to \phi'_2$.  Trivial.
+%   \item[Case.] Suppose $\phi' \equiv \phi'_1 \to \phi'_2$.  Trivial.
     
-  \item[Case.] Suppse $\phi' \equiv \forall X:*_l.\phi''$.  Trivial.
+%   \item[Case.] Suppse $\phi' \equiv \forall X:*_l.\phi''$.  Trivial.
     
-  \item[Case.] Suppose $\phi' \equiv \phi'_1\ \phi'_2$.  By
-    Lemma~\ref{lemma:total_tl_ssfw} there exists terms $\hat{\phi}'_1$ and
-    $\hat{\phi}'_2$ such that $\{\phi/X\}^K \phi'_1 = \hat{\phi}'_1$ and
-    $\{\phi/X\}^K \phi'_2 = \hat{\phi}'_2$.  Since $\phi' > \phi'_1$ and $\phi' > \phi'_2$
-    we can apply the induction hypothesis to obtain $\{\phi/X\}\phi'_1 \redto^*
-    \hat{\phi}'_1$ and $\{\phi/X\}\phi'_2 \redto^* \hat{\phi}'_2$.  Now we case split
-    on whether or not $\hat{\phi}'_1$ is a $\lambda$-abstraction and $\phi'_1$
-    is not or $ckind_K(X,\phi'_1)$ is undefined.  If
-    $ckind_K(X,\phi'_1)$ is undefined or $\hat{\phi}'_1$ is not a
-    $\lambda$-abstraction then $\{\phi/X\}^K \phi' =
-    (\{\phi/X\}^K \phi'_1)\ (\{\phi/X\}^\phi \phi'_2) \equiv
-    \hat{\phi}'_1\ \hat{\phi}'_2$. Thus, $\{\phi/X\}\phi' \redto^* \{\phi/X\}^K \phi'$,
-    because $\{\phi/X\}\phi' = (\{\phi/X\} \phi'_1)\ (\{\phi/X\} \phi'_2)$.  So suppose
-    $\hat{\phi}'_1 \equiv \lambda Y:K'.\hat{\phi}''_1$ and $\phi'_1$ is not a
-    $\lambda$-abstraction.  By Lemma~\ref{lemma:ctype_props_tl_ssfw} there
-    exists a kind $\hat{K}$ such that $ckind_K(X,\phi'_1) = \hat{K}$, $\hat{K}
-    \equiv K'' \to K'$, and $\hat{K}$ is a subexpression of $K$,
-    where by inversion on $\Gamma,X:K,\Gamma' \vdash \phi':K'$ there
-    exists a kind $K''$ such that $\Gamma,X:K,\Gamma' \vdash
-    \phi'_1:K'' \to K'$.  Then by the definiton of the hereditary
-    substitution function $\{\phi/X\}^K (\phi'_1\ \phi'_2) =
-    \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.  Now we know $K
-    > K'$ so we can apply the induction hypothesis
-    to obtain $\{\hat{\phi}'_2/Y\} \hat{\phi}''_1 \redto^*
-    \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.  Now by knowing that $(\lambda
-    Y:K'.\hat{\phi}''_1)\ \phi'_2 \redto \{\hat{\phi}'_2/Y\} \hat{\phi}''_1$ and by
-    the previous fact we know $(\lambda Y:K'.\hat{\phi}''_1)\ \phi'_2
-    \redto^* \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.  We now make use of
-    the well known result of full $\beta$-reduction.  The result is
-    stated as
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          a \redto^* a'
-          \\\\
-          b \redto^* b'
-          \\
-          a'\ b' \redto^* c
-        }{a\ b \redto^* c}
-      \end{math}
-    \end{center}
-    where $a$, $a'$, $b$, $b'$, and $c$ are all terms.  We apply this
-    result by instantiating $a$, $a'$, $b$, $b'$, and $c$ with
-    $[\phi/X] \phi'_1$, $\hat{\phi}'_1$, $[\phi/X] \phi'_2$, $\hat{\phi}'_2$, and $\{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$ 
-    respectively.  Therefore, $[\phi/X](\phi'_1\ \phi'_2) \redto^* \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.    
-  \end{itemize}
-\end{proof}
+%   \item[Case.] Suppose $\phi' \equiv \phi'_1\ \phi'_2$.  By
+%     Lemma~\ref{lemma:total_tl_ssfw} there exists terms $\hat{\phi}'_1$ and
+%     $\hat{\phi}'_2$ such that $\{\phi/X\}^K \phi'_1 = \hat{\phi}'_1$ and
+%     $\{\phi/X\}^K \phi'_2 = \hat{\phi}'_2$.  Since $\phi' > \phi'_1$ and $\phi' > \phi'_2$
+%     we can apply the induction hypothesis to obtain $\{\phi/X\}\phi'_1 \redto^*
+%     \hat{\phi}'_1$ and $\{\phi/X\}\phi'_2 \redto^* \hat{\phi}'_2$.  Now we case split
+%     on whether or not $\hat{\phi}'_1$ is a $\lambda$-abstraction and $\phi'_1$
+%     is not or $ckind_K(X,\phi'_1)$ is undefined.  If
+%     $ckind_K(X,\phi'_1)$ is undefined or $\hat{\phi}'_1$ is not a
+%     $\lambda$-abstraction then $\{\phi/X\}^K \phi' =
+%     (\{\phi/X\}^K \phi'_1)\ (\{\phi/X\}^\phi \phi'_2) \equiv
+%     \hat{\phi}'_1\ \hat{\phi}'_2$. Thus, $\{\phi/X\}\phi' \redto^* \{\phi/X\}^K \phi'$,
+%     because $\{\phi/X\}\phi' = (\{\phi/X\} \phi'_1)\ (\{\phi/X\} \phi'_2)$.  So suppose
+%     $\hat{\phi}'_1 \equiv \lambda Y:K'.\hat{\phi}''_1$ and $\phi'_1$ is not a
+%     $\lambda$-abstraction.  By Lemma~\ref{lemma:ctype_props_tl_ssfw} there
+%     exists a kind $\hat{K}$ such that $ckind_K(X,\phi'_1) = \hat{K}$, $\hat{K}
+%     \equiv K'' \to K'$, and $\hat{K}$ is a subexpression of $K$,
+%     where by inversion on $\Gamma,X:K,\Gamma' \vdash \phi':K'$ there
+%     exists a kind $K''$ such that $\Gamma,X:K,\Gamma' \vdash
+%     \phi'_1:K'' \to K'$.  Then by the definiton of the hereditary
+%     substitution function $\{\phi/X\}^K (\phi'_1\ \phi'_2) =
+%     \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.  Now we know $K
+%     > K'$ so we can apply the induction hypothesis
+%     to obtain $\{\hat{\phi}'_2/Y\} \hat{\phi}''_1 \redto^*
+%     \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.  Now by knowing that $(\lambda
+%     Y:K'.\hat{\phi}''_1)\ \phi'_2 \redto \{\hat{\phi}'_2/Y\} \hat{\phi}''_1$ and by
+%     the previous fact we know $(\lambda Y:K'.\hat{\phi}''_1)\ \phi'_2
+%     \redto^* \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.  We now make use of
+%     the well known result of full $\beta$-reduction.  The result is
+%     stated as
+%     \begin{center}
+%       \begin{math}
+%         $$\mprset{flushleft}
+%         \inferrule* [right=] {
+%           a \redto^* a'
+%           \\\\
+%           b \redto^* b'
+%           \\
+%           a'\ b' \redto^* c
+%         }{a\ b \redto^* c}
+%       \end{math}
+%     \end{center}
+%     where $a$, $a'$, $b$, $b'$, and $c$ are all terms.  We apply this
+%     result by instantiating $a$, $a'$, $b$, $b'$, and $c$ with
+%     $[\phi/X] \phi'_1$, $\hat{\phi}'_1$, $[\phi/X] \phi'_2$, $\hat{\phi}'_2$, and $\{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$ 
+%     respectively.  Therefore, $[\phi/X](\phi'_1\ \phi'_2) \redto^* \{\hat{\phi}'_2/Y\}^{K'} \hat{\phi}''_1$.    
+%   \end{itemize}
+% \end{proof}
 
-\noindent
-We redefine the $rset$ function for types as follows:
-\begin{center}
-    \begin{itemize}
-    \item[] $rset(X) = \emptyset$\\
-    \item[] $rset(\lambda X:K.\phi) = rset(\phi)$\\
-    \item[] $rset(\phi_1 \to \phi_2) = rset(\phi_1,\phi_2)$\\
-    \item[] $rset(\forall X:K.\phi) = rset(\phi)$\\
-    \item[] $rset(\phi_1\ \phi_2)$\\
-      \begin{math}
-        \begin{array}{lll}
-          = & rset(\phi_1, \phi_2) & \text{if } \phi_1 \text{ is not a } \lambda \text{-abstraction.}\\
-          = & \{\phi_1\ \phi_2\} \cup rset(\phi'_1, \phi_2)\ & \text{if } \phi_1 \equiv \lambda X:K.\phi'_1.\\
-        \end{array}
-      \end{math}
-    \end{itemize}
-  \end{center}
+% \noindent
+% We redefine the $rset$ function for types as follows:
+% \begin{center}
+%     \begin{itemize}
+%     \item[] $rset(X) = \emptyset$\\
+%     \item[] $rset(\lambda X:K.\phi) = rset(\phi)$\\
+%     \item[] $rset(\phi_1 \to \phi_2) = rset(\phi_1,\phi_2)$\\
+%     \item[] $rset(\forall X:K.\phi) = rset(\phi)$\\
+%     \item[] $rset(\phi_1\ \phi_2)$\\
+%       \begin{math}
+%         \begin{array}{lll}
+%           = & rset(\phi_1, \phi_2) & \text{if } \phi_1 \text{ is not a } \lambda \text{-abstraction.}\\
+%           = & \{\phi_1\ \phi_2\} \cup rset(\phi'_1, \phi_2)\ & \text{if } \phi_1 \equiv \lambda X:K.\phi'_1.\\
+%         \end{array}
+%       \end{math}
+%     \end{itemize}
+%   \end{center}
 
-\begin{lemma}[Redex Preserving]
-  \label{lemma:redex_preserving_tl_ssfw}
-  If $\Gamma \vdash \phi : K$, $\Gamma, X:K, \Gamma' \vdash \phi':K'$
-  then  $|rset(\phi', \phi)| \geq |rset(\{\phi/X\}^K \phi')|$.
-\end{lemma}
-\begin{proof}
-  This is a proof by induction on the lexicorgraphic combination
-  $(K, \phi')$ of the strict subexpression ordering.
-  We case split on the structure of $\phi'$.  
+% \begin{lemma}[Redex Preserving]
+%   \label{lemma:redex_preserving_tl_ssfw}
+%   If $\Gamma \vdash \phi : K$, $\Gamma, X:K, \Gamma' \vdash \phi':K'$
+%   then  $|rset(\phi', \phi)| \geq |rset(\{\phi/X\}^K \phi')|$.
+% \end{lemma}
+% \begin{proof}
+%   This is a proof by induction on the lexicorgraphic combination
+%   $(K, \phi')$ of the strict subexpression ordering.
+%   We case split on the structure of $\phi'$.  
   
-  \begin{itemize}
-  \item[Case.] Let $\phi' \equiv X$ or $\phi' \equiv Y$ where $Y$ is distinct from $X$.  Trivial. 
+%   \begin{itemize}
+%   \item[Case.] Let $\phi' \equiv X$ or $\phi' \equiv Y$ where $Y$ is distinct from $X$.  Trivial. 
 
-  \item[Case.] Suppose $\phi' \equiv \phi'_1 \to \phi'_2$.  Trivial.
+%   \item[Case.] Suppose $\phi' \equiv \phi'_1 \to \phi'_2$.  Trivial.
     
-  \item[Case.] Suppse $\phi' \equiv \forall X:*_l.\phi''$.  Trivial.
+%   \item[Case.] Suppse $\phi' \equiv \forall X:*_l.\phi''$.  Trivial.
   
-  \item[Case.] Let $\phi' \equiv \lambda X:K_1.\phi''$.  Then $\{\phi/X\}^K \phi' \equiv \lambda X:K_1.\{\phi/X\}^K \phi''$.
-    Now 
-    \begin{center}
-      \begin{math}
-        \begin{array}{lll}
-          rset(\lambda X:K_1.\phi'', \phi) & = & rset(\lambda X:K_1.\phi'') \cup rset(\phi)\\
-          & = & rset(\phi'') \cup rset(\phi)\\
-          & = & rset(\phi'', \phi).\\
-        \end{array}
-      \end{math}
-    \end{center}
-    We know that $\phi' > \phi''$ by the strict subexpression ordering, hence by the induction hypothesis
-    $|rset(\phi'', \phi)| \geq |rset(\{\phi/X\}^K \phi'')|$ which implies $|rset(\phi', \phi)| \geq |rset(\{\phi/X\}^K \phi')|$.
+%   \item[Case.] Let $\phi' \equiv \lambda X:K_1.\phi''$.  Then $\{\phi/X\}^K \phi' \equiv \lambda X:K_1.\{\phi/X\}^K \phi''$.
+%     Now 
+%     \begin{center}
+%       \begin{math}
+%         \begin{array}{lll}
+%           rset(\lambda X:K_1.\phi'', \phi) & = & rset(\lambda X:K_1.\phi'') \cup rset(\phi)\\
+%           & = & rset(\phi'') \cup rset(\phi)\\
+%           & = & rset(\phi'', \phi).\\
+%         \end{array}
+%       \end{math}
+%     \end{center}
+%     We know that $\phi' > \phi''$ by the strict subexpression ordering, hence by the induction hypothesis
+%     $|rset(\phi'', \phi)| \geq |rset(\{\phi/X\}^K \phi'')|$ which implies $|rset(\phi', \phi)| \geq |rset(\{\phi/X\}^K \phi')|$.
     
-  \item[Case.] Let $\phi' \equiv \phi'_1\ \phi'_2$.  First consider when $\phi_1'$ is not a $\lambda$-abstraction. Then
-    \begin{center}
-      $rset(\phi'_1\ \phi'_2, \phi) = rset(\phi'_1, \phi'_2, \phi)$
-    \end{center}  
-    Clearly,  $\phi' > \phi'_i$ for $i \in \{1,2\}$, hence, by the induction hypothesis $|rset(\phi'_i,\phi)| \geq |rset(\{\phi/X\}^K \phi'_i)|$.  
-    We have two cases to consider.  That is whether or not $\{\phi/X\}^K \phi'_1$ is a $\lambda$-abstraction or
-    $ckind_K(X,\phi'_1)$ is undefined.  
-    Suppose the former.
-    Then by Lemma~\ref{lemma:ctype_props_tl_ssfw} $ctype_\phi(X,\phi'_1) = \hat{K}$ for some kind $\hat{K}$ and by inversion on 
-    $\Gamma,X:K,\Gamma' \vdash \phi'_1\ \phi'_2:K'$
-    there exists a kind $K''$ such that $\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$.  Again, by Lemma~\ref{lemma:ctype_props_tl_ssfw}
-    $\hat{K} \equiv K'' \to K'$. Thus, $ckind_K(X,\phi'_1) = K'' \to K'$ and $K'' \to K'$ is a subexpression of $K$.
-    So by the definition of the hereditary substitution function $\{\phi/X\}^K \phi'_1\ \phi'_2 = \{(\{\phi/X\}^K \phi'_2)/Y\}^{K''} \phi''_1$, where
-    $\{\phi/X\}^K \phi'_1 = \lambda Y:K''.\phi''_1$.  Hence,
-    \begin{center}
-      \begin{math}
-        |rset(\{\phi/X\}^K \phi'_1\ \phi'_2)| = |rset(\{(\{\phi/X\}^K \phi'_2)/Y\}^{K''} \phi''_1)|.
-      \end{math}
-    \end{center}
-    Now $K > K''$ so by the induction hypothesis 
-    \begin{center}
-      \begin{math}
-        \begin{array}{lll}
-          |rset(\{(\{\phi/X\}^K \phi'_2)/Y\}^{K''} \phi''_1)| & \leq & |rset(\{\phi/X\}^K \phi'_2, \phi''_1)|\\
-          & \leq & |rset(\phi'_2, \phi''_1, \phi)|\\
-          & = & |rset(\phi'_2, \{\phi/X\}^K \phi'_1, \phi)|\\
-          & \leq & |rset(\phi'_2, \phi'_1, \phi)|\\
-          & = & |rset(\phi'_1, \phi'_2, \phi)|.\\
-        \end{array}
-      \end{math}
-    \end{center}
+%   \item[Case.] Let $\phi' \equiv \phi'_1\ \phi'_2$.  First consider when $\phi_1'$ is not a $\lambda$-abstraction. Then
+%     \begin{center}
+%       $rset(\phi'_1\ \phi'_2, \phi) = rset(\phi'_1, \phi'_2, \phi)$
+%     \end{center}  
+%     Clearly,  $\phi' > \phi'_i$ for $i \in \{1,2\}$, hence, by the induction hypothesis $|rset(\phi'_i,\phi)| \geq |rset(\{\phi/X\}^K \phi'_i)|$.  
+%     We have two cases to consider.  That is whether or not $\{\phi/X\}^K \phi'_1$ is a $\lambda$-abstraction or
+%     $ckind_K(X,\phi'_1)$ is undefined.  
+%     Suppose the former.
+%     Then by Lemma~\ref{lemma:ctype_props_tl_ssfw} $ctype_\phi(X,\phi'_1) = \hat{K}$ for some kind $\hat{K}$ and by inversion on 
+%     $\Gamma,X:K,\Gamma' \vdash \phi'_1\ \phi'_2:K'$
+%     there exists a kind $K''$ such that $\Gamma,X:K,\Gamma' \vdash \phi_1:K'' \to K'$.  Again, by Lemma~\ref{lemma:ctype_props_tl_ssfw}
+%     $\hat{K} \equiv K'' \to K'$. Thus, $ckind_K(X,\phi'_1) = K'' \to K'$ and $K'' \to K'$ is a subexpression of $K$.
+%     So by the definition of the hereditary substitution function $\{\phi/X\}^K \phi'_1\ \phi'_2 = \{(\{\phi/X\}^K \phi'_2)/Y\}^{K''} \phi''_1$, where
+%     $\{\phi/X\}^K \phi'_1 = \lambda Y:K''.\phi''_1$.  Hence,
+%     \begin{center}
+%       \begin{math}
+%         |rset(\{\phi/X\}^K \phi'_1\ \phi'_2)| = |rset(\{(\{\phi/X\}^K \phi'_2)/Y\}^{K''} \phi''_1)|.
+%       \end{math}
+%     \end{center}
+%     Now $K > K''$ so by the induction hypothesis 
+%     \begin{center}
+%       \begin{math}
+%         \begin{array}{lll}
+%           |rset(\{(\{\phi/X\}^K \phi'_2)/Y\}^{K''} \phi''_1)| & \leq & |rset(\{\phi/X\}^K \phi'_2, \phi''_1)|\\
+%           & \leq & |rset(\phi'_2, \phi''_1, \phi)|\\
+%           & = & |rset(\phi'_2, \{\phi/X\}^K \phi'_1, \phi)|\\
+%           & \leq & |rset(\phi'_2, \phi'_1, \phi)|\\
+%           & = & |rset(\phi'_1, \phi'_2, \phi)|.\\
+%         \end{array}
+%       \end{math}
+%     \end{center}
     
-    \ \\
-    \noindent
-    Suppose $\{\phi/X\}^K \phi'_1$ is not a $\lambda$-abstractions or $ckind_K(X,\phi'_1)$ is undefined.  Then
-    \begin{center}
-      \begin{math}
-        \begin{array}{lll}
-          rset(\{\phi/X\}^K (\phi'_1\ \phi'_2)) & = & rset(\{\phi/X\}^K \phi'_1\ \{\phi/X\}^K \phi'_2)\\
-          & = & rset(\{\phi/X\}^K \phi'_1, \{\phi/X\}^K \phi'_2).\\
-          & \leq & rset(\phi'_1, \phi'_2, \phi).\\
-        \end{array}
-      \end{math}
-    \end{center}
+%     \ \\
+%     \noindent
+%     Suppose $\{\phi/X\}^K \phi'_1$ is not a $\lambda$-abstractions or $ckind_K(X,\phi'_1)$ is undefined.  Then
+%     \begin{center}
+%       \begin{math}
+%         \begin{array}{lll}
+%           rset(\{\phi/X\}^K (\phi'_1\ \phi'_2)) & = & rset(\{\phi/X\}^K \phi'_1\ \{\phi/X\}^K \phi'_2)\\
+%           & = & rset(\{\phi/X\}^K \phi'_1, \{\phi/X\}^K \phi'_2).\\
+%           & \leq & rset(\phi'_1, \phi'_2, \phi).\\
+%         \end{array}
+%       \end{math}
+%     \end{center}
   
-    \ \\
-    Next suppose $\phi'_1 \equiv \lambda Y:K_1.\phi''_1$.  Then 
-    \begin{center}
-      \begin{math}
-        \begin{array}{lll}
-          rset((\lambda Y:K_1.\phi''_1)\ \phi'_2, \phi) & = & \{ (\lambda Y:K_1.\phi''_1)\ \phi'_2\} \cup rset(\phi''_1, \phi'_2, \phi).
-        \end{array}
-      \end{math}
-    \end{center}
-    By the definition of the hereditary substitution function,
-    \begin{center}
-      \begin{math}
-        \begin{array}{lll}
-          rset(\{\phi/X\}^K (\lambda Y:K_1.\phi''_1)\ \phi'_2) & = & rset(\{\phi/X\}^K (\lambda Y:K_1.\phi''_1)\ \{\phi/X\}^K \phi'_2)\\
-          & = & rset((\lambda Y:K_1.\{\phi/X\}^K \phi''_1)\ \{\phi/X\}^K \phi'_2)\\
-          & = & \{(\lambda Y:K_1.\{\phi/X\}^K \phi''_1)\ \{\phi/X\}^K \phi'_2\} \cup 
-          rset(\{\phi/X\}^K \phi''_1) \cup rset(\{\phi/X\}^K \phi'_2).\\
-        \end{array}
-      \end{math}
-    \end{center}
-    Since $\phi' > \phi''_1$ and $\phi' > \phi'_2$ we can apply the induction hypothesis to obtain,
-    $|rset(\phi''_1, \phi)| \geq |rset(\{\phi/X\}^K \phi''_1)|$ and $|rset(\phi'_2,\phi)| \geq |rset(\{\phi/X\}^K \phi'_2)|$.  Therefore, \\
-    $|\{ (\lambda Y:K_1.\phi''_1)\ \phi'_2\}\ \cup\ rset(\phi''_1,\phi)\ \cup\ rset(\phi'_2,\phi)| \geq $ 
-    $|\{(\lambda Y:K_1.\{\phi/X\}^K \phi''_1)\ \{\phi/X\}^K \phi'_2\}\ \cup\ rset(\{\phi/X\}^K \phi''_1)\ \cup\ rset(\{\phi/X\}^K \phi'_2)|$.
-  \end{itemize}
-\end{proof}
-
+%     \ \\
+%     Next suppose $\phi'_1 \equiv \lambda Y:K_1.\phi''_1$.  Then 
+%     \begin{center}
+%       \begin{math}
+%         \begin{array}{lll}
+%           rset((\lambda Y:K_1.\phi''_1)\ \phi'_2, \phi) & = & \{ (\lambda Y:K_1.\phi''_1)\ \phi'_2\} \cup rset(\phi''_1, \phi'_2, \phi).
+%         \end{array}
+%       \end{math}
+%     \end{center}
+%     By the definition of the hereditary substitution function,
+%     \begin{center}
+%       \begin{math}
+%         \begin{array}{lll}
+%           rset(\{\phi/X\}^K (\lambda Y:K_1.\phi''_1)\ \phi'_2) & = & rset(\{\phi/X\}^K (\lambda Y:K_1.\phi''_1)\ \{\phi/X\}^K \phi'_2)\\
+%           & = & rset((\lambda Y:K_1.\{\phi/X\}^K \phi''_1)\ \{\phi/X\}^K \phi'_2)\\
+%           & = & \{(\lambda Y:K_1.\{\phi/X\}^K \phi''_1)\ \{\phi/X\}^K \phi'_2\} \cup 
+%           rset(\{\phi/X\}^K \phi''_1) \cup rset(\{\phi/X\}^K \phi'_2).\\
+%         \end{array}
+%       \end{math}
+%     \end{center}
+%     Since $\phi' > \phi''_1$ and $\phi' > \phi'_2$ we can apply the induction hypothesis to obtain,
+%     $|rset(\phi''_1, \phi)| \geq |rset(\{\phi/X\}^K \phi''_1)|$ and $|rset(\phi'_2,\phi)| \geq |rset(\{\phi/X\}^K \phi'_2)|$.  Therefore, \\
+%     $|\{ (\lambda Y:K_1.\phi''_1)\ \phi'_2\}\ \cup\ rset(\phi''_1,\phi)\ \cup\ rset(\phi'_2,\phi)| \geq $ 
+%     $|\{(\lambda Y:K_1.\{\phi/X\}^K \phi''_1)\ \{\phi/X\}^K \phi'_2\}\ \cup\ rset(\{\phi/X\}^K \phi''_1)\ \cup\ rset(\{\phi/X\}^K \phi'_2)|$.
+%   \end{itemize}
+% \end{proof}
 
 We now prove normalization for the type-level of SS$\Fw$.  The
 following defines the interpretation of types and the main
@@ -610,97 +577,13 @@ of SS$\Fw$ is normalizing.
   \label{thm:soundness_ssfw}
 \end{thm}
 \begin{proof}
-  This is a proof by induction on the structure of the typing derivation of $\phi$.
-  
-  \begin{itemize}
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma(X) = *_p
-          \\
-          p \leq q
-          \\
-          \Gamma\ Ok
-        }{\Gamma \vdash X:*_p}
-      \end{math}
-    \end{center}
-    Clearly, $X \in \interp{K}_\Gamma$ by the definition of the interpretation of types.
-    
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash \phi_1 : *_p
-          \\
-          \Gamma \vdash \phi_2 : *_q
-        }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
-      \end{math}
-    \end{center}
-    Trivial.
-
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma,X : *_q \vdash \phi : *_p
-        }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
-      \end{math}
-    \end{center}
-    Trivial.
-    
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma,X:K_1 \vdash \phi:K_2
-        }{\Gamma \vdash \lambda X:K_1.\phi : K_1 \rightarrow K_2}
-      \end{math}
-    \end{center}
-    By the induction hypothesis $\phi \in
-    \interp{K_2}_{\Gamma,X:K_1}$ and by the definition of the
-    interpretation of types $\phi \normto \psi \in $ 
-    $\interp{\phi_2}_{\Gamma,X:K_1}$ and $\Gamma, X:K_1 \vdash
-    \psi:K_2$.  Thus, by applying the $\lambda$-abstraction kind-checking
-    rule, $\Gamma \vdash \lambda X:K_1.\psi:K_1 \to K_2$ so 
-    by the definition of the interpretation of types $\lambda X:K_1.\psi
-    \in \interp{K_1 \rightarrow K_2}_\Gamma$.  Thus, according to the
-    definition of the interpretation of types $\lambda X:K_1.\phi
-    \normto \lambda X:K_1.\psi \in \interp{K_1 \rightarrow K_2}_\Gamma$.
-    
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=] {
-          \Gamma \vdash \phi_1 : K_2 \rightarrow K_1 
-          \\
-          \Gamma \vdash \phi_2 : K_2
-        }{\Gamma \vdash \phi_1\ \phi_2 : K_1}
-      \end{math}
-    \end{center}
-    By the induction hypothesis $\phi_1 \normto \psi_1 \in $ $\interp{K_2 \rightarrow K_1}_\Gamma$, and $\phi_2 \normto \psi_2 \in
-    \interp{K_2}_\Gamma$.
-    
-    \ \\
-    Now we know from above that $\psi_1 \in \interp{K_2 \rightarrow K_1}_\Gamma$ and
-    $\psi_2 \in \interp{K_2}_\Gamma$, hence $\Gamma \vdash \psi_1:K_2 \to K_1$ and
-    $\Gamma \vdash \psi_2:K_2$.  It suffices to show that $\psi_1\ \psi_2 \in \interp{K_2}_\Gamma$.
-    Clearly, $\psi_1\ \psi_2 = [\psi_1/Z](Z\ \psi_2)$ for some variable $Z \not \in FV(\psi_1,\psi_2)$.  
-    Lemma~\ref{lemma:total_tl_ssfw}, Lemma~\ref{lemma:soundness_reduction_tl_ssfw}, 
-    and Lemma~\ref{corollary:normalization_preserving_tl_ssfw} allow us to conclude that 
-    $[\psi_1/Z](Z\ \psi_2) \redto^* \{\psi_1/Z\}^{K_2 \to K_1}(Z\ \psi_2)$, $\Gamma \vdash \{\psi_1/Z\}^{\phi_2 \to \phi_1}(Z\ \psi_2):K_2$,
-    and $\{\psi_1/Z\}^{K_2 \to K_1}(Z\ \psi_2)$ is normal.  Thus, 
-    $\phi_1\ \phi_2 \redto^* \psi_1\ \psi_2 = [\psi_1/Z](Z\ \psi_2) \normto \{\psi_1/Z\}^{K_2 \to K_1}(Z\ \psi_2) \in \interp{K_2}_\Gamma$.
-  \end{itemize}
+  This proof is similar to the proof of the type soundness theorem in
+  the normalization proof for STLC (Theorem~\ref{thm:soundness_stlc}).
 \end{proof}
-\begin{corollary}[Normalization]
+\begin{corollary}[Type-level Normalization]
   \label{coro:normalization_type_level_ssfw}
-  If $\Gamma \vdash \phi:K$ then $\phi \normto \psi$.
+  If $\Gamma \vdash \phi:K$, then there exists a normal form $\psi$,
+  such that $\phi \normto \psi$.
 \end{corollary}
 
 Now we have to use the fact that we know the type level of SS$\Fw$ is
@@ -709,16 +592,17 @@ define the interpretation of types for the term level.
 
 \begin{definition}
   \label{def:interpretation_of_types_stlc}
-  First we define when a normal form is a member of the interpretation of normal type $\phi$ in context $\Gamma$
+  We define when a normal form is a member of the interpretation of
+  normal type $\psi$ in context $\Gamma$ as follows:
   \begin{center}
     \begin{math}
-    n \in \interp{\phi}_\Gamma \iff \Gamma \vdash n:\phi,
+    n \in \interp{\psi}_\Gamma \iff \Gamma \vdash n:\psi,
   \end{math}
   \end{center}
   and this definition is extended to non-normal forms in the following way
   \begin{center}
     \begin{math}
-    t \in \interp{\phi}_\Gamma \iff t \normto n \in \interp{\phi}_\Gamma.
+      t \in \interp{\psi}_\Gamma \iff t \normto n \in \interp{\psi}_\Gamma.
   \end{math}
   \end{center}
 \end{definition}
@@ -728,38 +612,36 @@ Next we show that the definition of the interpretation of types is closed under
 hereditary substitutions.  
 
 \begin{lemma}[Substitution for the Interpretation of Types]
-  If $n' \in \interp{\phi'}_{\Gamma,x:\phi,\Gamma'}$, $n \in \interp{\phi}_\Gamma$, then 
-  $[n/x]^\phi n' \in \interp{\phi'}_{\Gamma,\Gamma'}$.
+  If $n' \in \interp{\psi'}_{\Gamma,x:\phi,\Gamma'}$, $n \in \interp{\psi}_\Gamma$, then 
+  $[n/x]^\psi n' \in \interp{\psi'}_{\Gamma,\Gamma'}$.
   
   \label{lemma:interpretation_of_types_closed_substitution_stlc}
 \end{lemma}
 \begin{proof}
-  
+  This proof is similar to the proof for SSF
+  (Lemma~\ref{lemma:interpretation_of_types_closed_substitution_ssf}).
 \end{proof}
-At this point we have to show that for any term $t$ of some type
-$\phi$ no matter if $\phi$ is normal or not then $t$ reduces to a
-normal form. We have to do this in two steps.  We first show that for
-all typeable terms where their types are normal they reduces to a
-normal form.  Then knowing this we show that for all typeable terms
-where their types are not necessarily normal they reduce to a normal
-form.  We first show the former.
-\begin{thm}[Type Soundness Normal Types]
-  If $\Gamma \vdash t:\phi$ and $\phi$ is normal then $t \in \interp{\phi}_\Gamma$.
+At this point we must show that all terms of arbitrary type are
+normalizing. We do this in two steps, first, we show that for all
+typeable terms (where their types are normal) are normalizing.  Then
+knowing this, we show that all typeable terms (where their types are
+arbitrary) are normalizing. The former is established next.
+\begin{thm}[Type Soundness (Normal Types)]
+  If $\Gamma \vdash t:\psi$ and $\psi$ is normal, then $t \in \interp{\psi}_\Gamma$.
   \label{thm:soundness__normal_ssfw}
 \end{thm}
 \begin{proof}
-  This proof is equivalent to the proof for standard SSF.
+  This proof is equivalent to the proof for standard SSF
+  (Theorem~\ref{thm:soundness_ssf}).
 \end{proof}
 \noindent
-The following lemmas are used in the proof of the type soundness lemma
-which shows that all typeable terms are in the interpretation of the
-normal form of their type.
+The following lemmas are used in the proof of the general type
+soundness theorem, which shows that all typeable terms normalize.
 \begin{lemma}[Preservation of Types]
   \label{lemma:preservation_for_kinding_ssfw}
   \begin{itemize}
-  \item[]
-  \item[i.] If $(\Gamma,x:\phi,\Gamma')\ Ok$ and $\phi \redto \phi'$ then $(\Gamma,x:\phi',\Gamma')\ Ok$.
-  \item[ii.] If $\Gamma \vdash \phi:K$ and $\phi \redto \phi'$ then there exists a $\Gamma'$ such that $\Gamma' \vdash \phi':K$.
+  \item[i.] If $(\Gamma,x:\phi,\Gamma')\ Ok$ and $\phi \redto \phi'$, then $(\Gamma,x:\phi',\Gamma')\ Ok$.
+  \item[ii.] If $\Gamma \vdash \phi:K$ and $\phi \redto \phi'$, then $\Gamma \vdash \phi':K$.
   \end{itemize}
 \end{lemma}
 \begin{proof}
@@ -785,7 +667,7 @@ normal form of their type.
       }{(\Gamma,x:\phi,\Gamma',X:*_p)\ Ok}
     \end{math}
   \end{center}
-  A simple application of the inductive hypothesis yeilds our desired result.
+  A simple application of the inductive hypothesis yeilds the result.
 
 \item[Case.]\ \\
   \begin{center}
@@ -799,7 +681,7 @@ normal form of their type.
     \end{math} 
   \end{center}
 \end{itemize}
-By weakening for kinding, $\Gamma,\Gamma' \vdash \psi:*_p$ and then by strengthening for kinding, $\Gamma,x:\phi',\Gamma' \vdash \psi:*_p$.
+By weakening for kinding, $\Gamma,\Gamma' \vdash \psi:*_p$, and then, by strengthening for kinding, $\Gamma,x:\phi',\Gamma' \vdash \psi:*_p$.
 The inductive hypothesis on $(\Gamma,x:\phi,\Gamma')\ Ok$ yields $(\Gamma,x:\phi',\Gamma')\ Ok$, thus by applying the above rule
 $(\Gamma,x :\phi',\Gamma',y:\psi)\ Ok$.
 
@@ -945,21 +827,30 @@ Next we prove part two.
 \end{itemize}
 \end{proof}
 \noindent
-Finally, we conclude normalization by showing type soundness.
+Finally, we conclude normalization.
 \begin{thm}[Type Soundness]
   If $\Gamma \vdash t:\phi$ then $\phi \normto \psi$, and there exists a $\Gamma'$ such that $t \in \interp{\psi}_{\Gamma'}$.
   \label{thm:soundness_term_ssfw}
 \end{thm}
 \begin{proof}
-  By regularity we know $\Gamma \vdash \phi:K$ for some kind $K$ and by Corollary~\ref{coro:normalization_type_level_ssfw}
-  there exists a normal type $\psi$ such that $\phi \normto \psi$.  Finally,
-  by Lemma~\ref{lemma:preservation_2} there exists a $\Gamma'$ such that $\Gamma' \vdash t:\psi$.  Thus, by Theorem~\ref{thm:soundness__normal_ssfw} 
-  $t \in \interp{\psi}_{\Gamma'}$.
+  By regularity we know $\Gamma \vdash \phi:K$ for some kind $K$, and
+  by Corollary~\ref{coro:normalization_type_level_ssfw} there exists a
+  normal type $\psi$, such that $\phi \normto \psi$.  Finally, by
+  Lemma~\ref{lemma:preservation_2}, there exists a $\Gamma'$, such
+  that $\Gamma' \vdash t:\psi$.  Thus, by
+  Theorem~\ref{thm:soundness__normal_ssfw} $t \in \interp{\psi}_{\Gamma'}$.
 \end{proof}
 
 \begin{corollary}[Normalization]
-  If $\Gamma \vdash t:\phi$ then $t \normto n$.
+  If $\Gamma \vdash t:\phi$, then there exists a normal form $n$, such
+  that $t \normto n$.
 \end{corollary}
 % subsection concluding_normalization (end)
 % subsection normalization_stratified_system_fw (end)
 % section normalization_by_hereditary_substitution (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% reftex-default-bibliography: ("/Users/hde/thesis/paper/thesis.bib")
+%%% TeX-master: "/Users/hde/thesis/paper/thesis.tex"
+%%% End: 
