@@ -385,32 +385,38 @@ languages themselves.
 \part{Normalization by Hereditary Substitution}
 \label{part:norm-hs}
 
-As we have mentioned again and again throughout this thesis
-consistency is a property that must be proven for any programming
-language claiming to contain some notion of a logic where programs are
-proof and types are propositions.  We have seen several ways of
-proving consistency both in the background section of this thesis and
-in the previous part on the basic syntactic analysis of the freedom of
-speech language, as well as DTT.
+One motivation for the work in this thesis is that programming
+languages must contain the means of verifying the software written in
+them.  This verification would catch major bugs during development as
+opposed to after the software is released to the public.  For example,
+the bug found in the breaking system of the 2010 Prius would have
+never been released, and thus no accidents would have occurred.  A
+programming language that contains the ability to verify programs
+would have to contain some notion of a logic, and this logic must be
+trusted.  That is, the proofs written in this logic must be true; this
+corresponds to logical consistency.
 
-The usual method of proving consistency is through proving weak
+We have seen several ways of proving consistency both in the
+background section of this thesis and in the previous part on the
+basic syntactic analysis of the freedom of speech language, as well as
+DTT.  The usual method of proving consistency is through proving weak
 normalization (or simply normalization) of the programming language or
 type theory.  Often Tait's reducibility or Girard's reducibility
 candidates are the proof techniques used for showing both weak and
 strong normalization, but these techniques are very complex, and
-require advanced logical features to be able to formalize in a proof
-assistant like Coq or Agda.  Thus, it is worthwhile to investigate
-other proof techniques for proving normalization that show promise of
-being less complex.  The hereditary substitution proof technique fits
-this goal quite well.  For example, in general large eliminations are
-not needed when formalizing a hereditary substitution based proof of
-normalization, but this is not the case for a proof using
-reducibility.
+require advanced logical features to be able to formalize arguments
+using such techniques in a proof assistant like Coq or Agda.  Thus, it
+is worthwhile to investigate other proof techniques for proving
+normalization that show promise of being less complex.  The hereditary
+substitution proof technique fits this goal perfectly.  For example,
+in general, large eliminations are not needed when formalizing a
+hereditary substitution based proof of normalization, but this is not
+the case for a proof using reducibility.
 
 There is one caveat when it comes to the hereditary substitution proof
 technique, it is not known which type theories it can be applied to.
 This is the contribution of each of the following chapters.  We first
-give several normalization by hereditary substitution proofs for
+give several proofs of normalization using hereditary substitution for
 several extensions of stratified system F (SSF), and then give the
 first proof of normalization by hereditary substitution for a
 classical type theory called the $\lambda\Delta$-calculus.  Throughout
