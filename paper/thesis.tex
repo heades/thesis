@@ -442,8 +442,75 @@ read Section~\ref{sec:hereditary_substitution}.
 \chapter{Conclusion}
 \label{chap:conclusion}
 
+Bugs are the bain of software development, and in order to rid the
+world of such problems we must revisit the very foundations of
+programming languages.  We have argued that a programming language
+must be mathematically defined.  This allows programmers and language
+designers the ability to reason about the software being developed in
+the language.  Furthermore, we have argued that the programming
+languages of the future must contain some notion of a logic which
+allows for the verification of the programs written in the languages.
+
+We introduced two new dependently-typed functional programming
+languages that contain a logical fragment called Freedom of Speech and
+Separation of Proof from Program.  We proved logical consistency of
+logical fragment of the former.  Furthermore, we introduced a new type
+theory called Dualized Type Theory that shows promise of being a
+logical foundation of induction and co-induction.  All of these new
+theories constitue foundations of programming languages that directly
+support verification of the software developed in them.
+
+Finally, we showed how to adapt the hereditary substitution proof
+technique for showing logical consistency by establishing
+normalization of several extensions of Stratified System F.  We also
+proved normalization by hereditary substitution of the
+$\lambda\Delta$-calculus; the first classical type theory to be proved
+consistent using hereditary substitution.  These proofs show that
+hereditary substitution is a valuable tool that can be used to
+establish consistency of the logical fragment of various programming
+languages.
+
+We believe the future is bright, and that investigations such as the
+ones in this thesis will lead to new and exciting programming
+languages.  These new languages will have the means to prevent major
+bugs in safety critical devices from reaching the public, but there is
+a lot more work to be done.
+
 \section{Future Work}
 \label{sec:future_work}
+The following list addresses future work related to each theory:
+\begin{itemize}
+\item[-] The freedom of speech language has a call-by-value
+  operational semantics, but this requires many unfortunate value
+  restrictions.  It would be worthwhile to explore the language design
+  when call-by-name is adopted.  Some questions to ask are is the
+  language more elegant?  That is, do we trade the value restrictions
+  for some other restrictions?
+
+\item[-] We only presented the design of the $\Sep$, but the analysis
+  still needs to be done.  In particular, consistency should be
+  established for the proof fragment, and type safety should be proven
+  for the entire language.
+
+\item[-] DTT is a nice start at understanding if bi-intuitionistic
+  logic can be the basis of a logical framework for induction and
+  co-induction, but it is not clear that DTT can be conservatively
+  extended with such features and maintain type safety and
+  consistency.  An exploration of these features is an important
+  future goal.  Furthermore, the language design containing
+  abstrctions from the semantics (abstract Kripke graphs, and worlds
+  on types) is an unfortunate consequence of the failure of
+  cut-elimination due to subtraction, are their alternate designs that
+  could be used which prevent the need for these abstractions?
+
+\item[-] Hereditary substitution still needs to be explored with
+  respect to more expressive type theories.  For example, can it be
+  used to prove normalization for a type theory with large
+  eliminations?  How about impredicative theories like system F?  My
+  conjecture is that it can, but it will require new ideas, because
+  the orderings we have used to prove correctness of the hereditary
+  substitution function are too weak.
+\end{itemize}
 
 % section future_work (end)
 
