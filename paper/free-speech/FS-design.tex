@@ -12,7 +12,7 @@ first designing a very powerful programming language (PL), and then
 carving out two fragments of programs. The first consists of all the
 terminating programs called the logical fragment, and the second
 consists of all programs, and this is called the programmatic
-fragment. That is we have a picture that looks something like:
+fragment. That is, we have a picture that looks something like:
 \begin{center}
   \begin{tikzpicture}[scale=2.5,cap=round,>=latex]
     % draw the unit circle
@@ -26,11 +26,11 @@ fragment. That is we have a picture that looks something like:
   \end{tikzpicture}
 \end{center}
 The logical fragment will then be considered the ``logical framework''
-of the language, and this is where the programs are proofs and the
-types are propositions, that is the logical fragment makes use of the
+of the language. This is where the programs are proofs and the types
+are propositions; that is, the logical fragment makes use of the
 computational trinity (Chapter~\ref{chap:the_three_perspectives}).
 Now the programmatic fragment is where all the usual programming will
-take place, then one can use the logical fragment to verify properties
+take place. One can then use the logical fragment to verify properties
 of the programs written in the programmatic fragment.  Alternately,
 one can understand the fragments as worlds in the sense of possible
 world semantics of modal logics.  Below we will see how these two
@@ -59,7 +59,7 @@ fragment is purely specificational.  Its primary use is for the
 verification of programs written in the programmatic fragment.
 Furthermore, carrying around non-computationally interesting proofs is
 expensive.  Thus, it is important to allow some specificational data
-to be stripped away during compile time.  In addition, it is important
+to be stripped away at compile time.  In addition, it is important
 that the programmer be the one to decide which data is removed.  Now
 logical programs are proofs, but they are also terminating programs,
 and thus can be considered both logical programs and programmatic
@@ -108,7 +108,7 @@ Figure~\ref{fig:FS-syn-red}.
       \begin{math}
         \arraycolsep=2pt\edef\arraystretch{1.2}
         \begin{array}{rllllllllllllllll}
-          \text{(Classifiers)}  & [[th]] & ::= & [[L]]\,|\,[[C]]\\
+          \text{(Classifiers)}  & [[th]] & ::= & [[L]]\,|\,[[P]]\\
           \text{(Stages)}       & [[ep]] & ::= & [[+]]\,|\,[[-]]\\
           \text{(Expressions)}  & [[e]],[[t]]  & ::= & 
           [[Type]]\,|\,[[Nat]]\,|\,[[x]]\,|\,[[(x : th e1) ep -> e2]]\,|\,[[e1 = e2]]\,|\,
@@ -192,7 +192,7 @@ where with in an expression computation can take place. The syntax of
 evaluation contexts can be found in Figure~\ref{fig:FS-syn-red}.  This
 defines a fragment of the syntax of expressions where exactly one well
 formed subexpression has been replaced with a hole.  Holes are denoted
-$[[ [] ]]$. Lets consider a few examples:
+$[[ [] ]]$. Let's consider a few examples:
 \begin{example}
   \label{ex:FS-WF-ECTX}
   The following are all well-formed contexts:
@@ -231,7 +231,7 @@ rules parametric in the evaluation context $[[C]]$. Now the rule
 $\FSdrulename{Red\_Ctxt}$ simply extended the CBV $\beta$-reduction to
 evaluation contexts, while the rule $\FSdrulename{Red\_Abort}$ says
 that if $[[abort]]$ appears anywhere in an evaluation context, then the
-computation is aborted and concludes just $[[abort]]$.  Lets consider
+computation is aborted and concludes just $[[abort]]$.  Let's consider
 an example using what we have introduced thus far before moving onto
 the type system.
 
@@ -270,7 +270,7 @@ the type system.
   the first plus two by the second.  However, there is a catch, the
   division function is undefined when the second argument is zero.  So
   instead of leaving the exception handling to the division function
-  lets craft our function to throw an error when the second argument
+  let's craft our function to throw an error when the second argument
   is zero.  In what way can we throw an error?  This is exactly when
   we use the $[[abort]]$ term.  We can define our function as follows:
   \begin{center}
@@ -284,11 +284,11 @@ the type system.
   \end{center}
   In the definition of the function $\textsf{div-plus-2}$ we had to
   bundle up the abort program inside a constant function to prevent
-  our function from always triggering abort.  This insures us that our
+  our function from always triggering abort.  This ensures us that our
   function will abort if and only if it calls the function
   $[[\x.abort]]$.  Similarly, we had to bundle up the division
-  function inside a $\lambda$-abstraction so as to insure that it does
-  not throw an exception before our function can.  Lets consider some
+  function inside a $\lambda$-abstraction so as to ensure that it does
+  not throw an exception before our function can.  Let's consider some
   computations using $\textsf{div-plus-2}$:
   \begin{center}
     \small
@@ -326,13 +326,17 @@ Notice that by wrapping the division function up in a
 $\lambda$-abstraction we prevent the reduction relation from reducing
 it until it is actually needed.  If the $\mathsf{isZero}$ function
 returns true then the division function is never needed and thus is
-never ran.  This shows how call-by-need reduction can be simulated by
-CBV reduction.  
+never ran.  This shows how call-by-name reduction can be simulated by
+CBV reduction.  In fact, some of the major short comings of the free
+speech language may be overcome by adopting call-by-name instead of
+call-by-value.  For example, we conjecture that the value restrictions
+would no longer be needed, and the example above would no longer need
+to wrap the division and abort functions with $\lambda$-abstractions.
 
 There is one final judgment defined with the reduction relation in
 Figure~\ref{fig:FS-syn-red}, and it is denoted $[[e1 \v/ e2]]$. We
 call this the joinability judgment and is defined by only one rule
-\FSdrulename{ComputeJoin}. This rule stats that whenever there exists
+\FSdrulename{ComputeJoin}. This rule states that whenever there exists
 an expression $[[e]]$ such that the expressions $[[e1]]$ and $[[e2]]$
 both reduce to $[[e]]$ in any number of steps, then $[[e1]]$ and
 $[[e2]]$ are joinable.  If $[[e1 \v/ e2]]$ holds then we consider the
@@ -363,7 +367,7 @@ this judgment as the expression $[[e]]$ has type $[[e']]$ in fragment
 $[[th]]$ in environment $[[G]]$.  We can think of this judgment as
 being parametric in $[[th]]$, and thus is two judgments in one.  If
 $[[th]]$ is $[[L]]$, then $[[e]]$ is a proof or logical program, while
-if $[[th]]$ is $[[C]]$, then $[[e]]$ is a potentially diverging
+if $[[th]]$ is $[[P]]$, then $[[e]]$ is a potentially diverging
 program.  So it is the typing judgment that does the carving out of
 the two fragments.
 
@@ -395,7 +399,7 @@ $\FSdrulename{K\_Pi}$ does not require the consistency classifier of
 the arguments to match the consistency classifier of the range type.
 This allows functions to take in arguments from one fragment and then
 produce a program of the opposite fragment.  For example, the type
-$[[(x : C Nat)+ -> x = x]]$ takes a programmatic argument, but
+$[[(x : P Nat)+ -> x = x]]$ takes a programmatic argument, but
 produces a formula which is the statement that $[[x]]$ is equivalent
 to itself.  Thus, formulas can depend on potentially diverging
 programs.  This is exactly the freedom of speech property.  Finally,
@@ -421,7 +425,7 @@ only in the logical fragment, but one might think that these are
 purely programmatic, because they do not make for very interesting
 formulas.  As we mentioned above the logical fragment can be
 considered as a terminating functional programming language so if one
-wishes to insure that the program they are constructing is terminating
+wishes to ensure that the program they are constructing is terminating
 then they can construct it in the logical fragment.  To use the
 natural numbers in the programmatic fragment we add an additional
 typing rule:
@@ -437,7 +441,7 @@ the introduction of this chapter.  Thus, natural numbers can be used
 in either fragment.  The third rule we introduce above is the variable
 rule \FSdrulename{Var} which depends on the premise $[[G |- e : Type
 th]]$.  This premise -- we will see these all throughout the
-definition of the typing relation -- insures that the expression
+definition of the typing relation -- ensures that the expression
 $[[e]]$ is indeed a type.  This is necessary because we only have one
 syntactic category for expressions, so the only way to tell the
 difference between a type and an expression is by using the typing
@@ -458,7 +462,7 @@ $\lambda$-abstractions:
     }{[[G |- v : (x : th' e1) - -> e2 th]]}
   \end{mathpar}
 \end{center}
-The former introduces $\lambda$-abstractions with runtime relavent
+The former introduces $\lambda$-abstractions with runtime relevant
 arguments, while the latter introduces $\lambda$-abstractions whose
 argument is compile time relavent only.  We call the latter implicit
 $\lambda$-abstractions, because the argument is left implicit.  The
@@ -467,14 +471,14 @@ consistency classifier does not have to match the bodies, thus
 allowing freedom of speech.  
 
 The typing rule \FSdrulename{ILam} has a restriction on the body of
-the implicit $\lambda$-abstraction, infact there are a number of value
+the implicit $\lambda$-abstraction. In fact, there are a number of value
 restrictions in the definition of the typing relation.  This
 restriction is necessary in order to maintain the meta-theoretic
 property called progress. This property states that every well-typed
 program can either take a computational step or is already a value.
-Suppose the restirction on \FSdrulename{ILam} is lifted. Then the
+Suppose the restriction on \FSdrulename{ILam} is lifted. Then the
 judgment $[[. |- Z Z : (x : L Nat = (y : L Nat) + -> Nat)- -> Nat L]]$
-holds, but $[[Z Z]]$ is niether a value nor a redex.  It is a stuck term!
+holds, but $[[Z Z]]$ is neither a value nor a redex.  It is a stuck term!
 Thus, this value restriction is necessary to rule out stuck terms of
 this form.
 
@@ -558,7 +562,7 @@ is equivalent to $[[G |- v:e'1 th]]$.  So the rule
 \FSdrulename{InjRan} is sound.
 
 Equational reasoning is based on the runtime behavior of programs, but
-there a number of different programs of a different type so what
+there are a number of different programs of a different type so what
 happens when it is possible to obtain a equation between contradicting
 values?  The reader may object to the very question, because the
 logical fragment -- as we have said above -- must be consistent, but
@@ -586,7 +590,7 @@ our result by using $[[contra]]$.  The third rule, \FSdrulename{Contra},
 is similar to the previous rule, except it requires a proof that
 $[[Z]]$ is equivalent to a natural number greater than $[[Z]]$.  
 
-There is one additional type of inconsistent equations that might be
+There is one additional type of inconsistent equation that might be
 introduced that can cause major problems.  The fact that in an
 inconsistent context one can prove two dependent products equivalent
 when they have differing stage annotations or consistency classifiers
@@ -620,9 +624,9 @@ Terminating recursion is introduced using the following rules:
 A recursive definition is denoted $[[rec f x v]]$ and should be
 thought of as a function from a natural number to some type $[[e2]]$.
 So there are two rules: one with a runtime argument, and one with a
-compile time argument.  The function we are defining we call $[[f]]$
-and is bound in $[[v]]$.  Now $[[x]]$ is the recursive argument that
-decreases across recursive calls, which is also bound in $[[v]]$,
+compile time argument.  The function we are defining we call $[[f]]$;
+$[[f]]$ is bound in $[[v]]$.  Now $[[x]]$ is the recursive argument
+that decreases across recursive calls, which is also bound in $[[v]]$,
 finally $[[v]]$ is the definition of the recursive function.  Note
 that the invariant that the recursive argument decreases across
 recursive calls is captured by the type of $[[f]]$.  We can see that

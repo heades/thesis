@@ -7,7 +7,7 @@ indexvar ivar, i, n, m, j, k ::=
 grammar
 type_relegation, th {{ tex \theta }} :: 'Eff_' ::= {{ com consistency classifier }}
   | L     :: :: Term {{tex L}}
-  | C     :: :: Gen {{tex P}} 
+  | P     :: :: Gen {{tex P}} 
 
 sgn, ep {{tex \varepsilon}} :: 'sgn_' ::= {{ com compile time versus run time }}
   | + :: :: Plus
@@ -172,7 +172,7 @@ Jtyp :: '' ::=
   by
 
     --------------------- :: K_Type
-    G |- Type : Type    C
+    G |- Type : Type P
 
     ----------------- :: K_Nat
     G |- Nat : Type L
@@ -187,7 +187,7 @@ Jtyp :: '' ::=
 
     G |- e : e1 L
     ------------- :: Coerce
-    G |- e : e1 C
+    G |- e : e1 P
 
 %% In the general language, we only require types to be classified
 %% by 'type'. 
@@ -260,7 +260,7 @@ Jtyp :: '' ::=
   G |- e1 : Type th'
   G, f : th (x : th' e1)+ -> e2, x : th' e1 |- e : e2   th
   -------------------------------------------------------- :: Rec
-  G |- rec f x e : (x : th' e1)+ -> e2   C
+  G |- rec f x e : (x : th' e1)+ -> e2   P
 
   ----------------- :: Zero
   G |- Z : Nat   L
@@ -292,7 +292,7 @@ Jtyp :: '' ::=
 
   G |- e1 : Type th
   ---------------------- :: Abort
-  G |- abort : e1  C
+  G |- abort : e1  P
 
 defns 
 Join :: '' ::=

@@ -72,7 +72,7 @@ proof.
   \label{lemma:regularity}
   \begin{itemize}
   \item[i.] If $[[G |- e':e L]]$ and it is not the case that $[[e \v/ Type]]$, then $[[G |- e:Type L]]$.
-  \item[ii.] If $[[G |- e':e C]]$ then $[[G |- e:Type C]]$.
+  \item[ii.] If $[[G |- e':e P]]$ then $[[G |- e:Type P]]$.
   \end{itemize}
 \end{lemma}
 \begin{proof}
@@ -330,7 +330,7 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
         \end{math}
       \end{center}
       By the induction hypothesis we know 
-      $\Gamma,[v/x]\Gamma' \tvdash{\theta_1} [v/x]e:[v/x]e'_1$ and
+      $\Gamma,[v/x]\Gamma' \tvdash{\theta_1} [v/x]e:[v/x]e'_1$ and\\
       $\Gamma,[v/x]\Gamma' \tvdash{\theta_2} [v/x]e':[v/x]e'_2$.  We can now apply 
       $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e = [v/x]e':[[Type]]$,
       which is equivalent to $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x](e = e'):[[Type]]$.
@@ -366,10 +366,10 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
        \end{math}
      \end{center}
      By the induction hypothesis we know 
-     $\Gamma, [v/x]\Gamma' \tvdash{\theta'} [v/x]e'_1:[[Type]]$ and 
+     $\Gamma, [v/x]\Gamma' \tvdash{\theta'} [v/x]e'_1:[[Type]]$ and\\ 
      $\Gamma, [v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e:[v/x]e''_1$. Finally,
-     by applying $\FSdrulename{Lam}$, 
-     $\Gamma, [v/x]\Gamma' \tvdash{\theta'} 
+     by applying \\
+     $\FSdrulename{Lam}$, $\Gamma, [v/x]\Gamma' \tvdash{\theta'} 
      \lambda y.[v/x]e:\arrowT{y}{\theta''}{[v/x]e'_1}{+}{[v/x]e''_1}$, which is equivalent to
      $\Gamma, [v/x]\Gamma' \tvdash{\theta'} 
      [v/x](\lambda y.e):[v/x](\arrowT{y}{\theta''}{e'_1}{+}{e''_1})$.     
@@ -388,9 +388,9 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
        \end{math}
      \end{center}
      By the induction hypothesis we know 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and
+     $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and\\
      $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]v':[v/x]e''_1$.  Finally,
-     by applying $\FSdrulename{ILam}$, 
+     by applying $\FSdrulename{ILam}$, \\
    $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]v':\arrowT{y}{\theta''}{[v/x]e'_1}{-}{[v/x]e''_1}$
      which is equivalent to 
    $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]v':[v/x](\arrowT{y}{\theta''}{e'_1}{-}{e''_1})$.
@@ -571,7 +571,7 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
        \end{math}
      \end{center}
      By the induction hypothesis we know $\Gamma,[v/x]\Gamma' \tvdash{\theta} [v/x]e:[[Type]]$ 
-     and $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e':[v/x]((\arrowT{x}{\theta}{e'_1}{+}{e'_2}) = 
+     and \\ $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e':[v/x]((\arrowT{x}{\theta}{e'_1}{+}{e'_2}) = 
      (\arrowT{x}{\theta}{e''_1}{+}{e''_2}))$ and by applying $\FSdrulename{ContrapiTh}$,
      $\Gamma,[v/x]\Gamma' \tvdash{L} contra : [v/x]e$.
 
@@ -846,6 +846,7 @@ definition of the interpretation of types.
   set of terms such that $t \normto v$, where $v$ is a value.  We
   define the interpretation of types as follows:
   \begin{center}
+    \small
     \begin{tabular}{lll}
       \begin{tabular}{lll}
         $e \in \interp{\nat}^{L}_\rho$ if and only if\\
