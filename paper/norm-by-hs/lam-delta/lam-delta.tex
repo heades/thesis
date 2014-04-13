@@ -2,91 +2,29 @@
 
 \renewcommand{\LamDeltadrulename}[1]{\textsc{\scriptsize #1}}
 
-\section{The $\lambda\Delta$-Calculus}
-\label{sec:the_lambda_delta-calculus}
-The $\lambda\Delta$-calculus is a straightforward extension of the
-simply typed $\lambda$-calculus.  The syntax is defined in
-Figure~\ref{fig:syntax_mu}.
-\begin{figure}[h]
-    \begin{center}
-      \begin{tabular}{lll}
-        \begin{math}
-          \begin{array}{rrll}
-            \text{(Types)} & [[T]],[[A]],[[B]],[[C]] & ::= & 
-              [[_|_]]\,|\,[[b]]\,|\,[[A->B]]\\
-            \text{(Terms)} & [[t]] & ::= & 
-              [[x]]\,|\,[[\ x:T.t]]\,|\,[[\m x:T.t]]\,|\,[[t1 t2]]\\
-            \text{(Normal Forms)} & [[n]],[[m]] & ::= & 
-              [[x]]\,|\,[[\ x:T.n]]\,|\,[[\m x:T.n]]\,|\,[[h n]]\\
-            \text{(Heads)} & [[h]] & ::= & [[x]]\,|\,[[h n]]\\
-            \text{(Contexts)} & [[G]] & ::= & [[.]]\,|\,[[x:A]]\,|\,[[G1,G2]]\\
-          \end{array}
-        \end{math}
-      \end{tabular}
-    \end{center}
-    \caption{Syntax for Types and Terms}
-    \label{fig:syntax_mu}
-\end{figure}
-The type $[[b]]$ is an arbitrary base type.  Negation is defined as it
-is in intuitionistic type theory, that is, $[[{-A}]] =^{def} [[A ->
-_|_]]$, where $[[_|_]]$ is absurdity.  Arbitrary syntactically defined
-normal forms will be denoted by the meta-variables $[[n]]$ and
-$[[m]]$, and arbitrary typing contexts will be denoted by the
-meta-variable $[[G]]$.  We assume at all times that all variables in
-the domain of $[[G]]$ are unique.  In addition we rearrange the
-objects in $[[G]]$ freely without indication.
+So far in this chapter we have introduced proofs of normalization for
+several extensions of SSF, which is an intuitionistic logic.  In fact,
+to the knowledge of the author the only type theories to which the
+hereditary substitution proof technique has been applied to are
+intuitionistic.  So a natural question is, can hereditary substitution
+be used to prove normalization of a classical type theory?  This would
+then imply that hereditary substitution can be used to provide a
+constructive proof of normalization for a non-constructive theory.  
 
-The typing rules are defined in Figure~\ref{fig:typing}.  The
-operational semantics are the compatible closure of the rules in
-Figure~\ref{fig:opsem}.
-\begin{figure}[h]
-  \begin{center}
-    \begin{math}
-      \begin{array}{ccc}
-        \LamDeltadruleAx{} & \LamDeltadruleLam{} \\
-        & \\
-        \LamDeltadruleApp{} & \LamDeltadruleDelta{} \\
-      \end{array}
-    \end{math}
-  \end{center}
-
-  \caption[]{Typing Rules}
-  \label{fig:typing}
-\end{figure}
-\begin{figure}[h]
-    \begin{center}
-    \begin{math}
-      \begin{array}{ccc}
-        \LamDeltadruleBeta{} \\
-        & \\
-        \LamDeltadruleStructRed{}
-      \end{array}
-    \end{math}
-  \end{center}
-
-  \caption{Operational Semantics}
-  \label{fig:opsem}
-\end{figure}
-It is easy to see based on the typing rules that the
-$\Delta$-abstraction is the introduction form for double negation.  We
-annotate the $\Delta$-abstraction with the type of the bound variable
-to make the definition of the hereditary substitution function a
-little less complicated.  Removing this annotation should not cause
-any significant problems.  On a more programmatic front the
-$\Delta$-abstraction is a control operator.  It can simulate
-Felleisen's control operators; see \cite{Rehof:1994} for more
-information on this.  N. Rehof and M. S\o rensen also extend the
-operational semantics with a structural reduction rule for the
-$\Delta$-abstraction (\LamDeltadrulename{StructRed} in
-Figure~\ref{fig:opsem}). This rule is called structural because it
-does not amount to a computational step, rather pushes the application
-into the body of the $\Delta$-abstraction potentially creating
-additional redexes.  We denote the reflexive and transitive closure of
-$[[~>]]$ as $[[~*>]]$. We also define $[[t ~!> t']]$ to mean that $[[t
-~*> t']]$ and $[[t']]$ is normal.  Now that we have defined the
-$\lambda\Delta$-calculus we state several well-known meta-results that
-will be needed throughout the sequel.
-% section the_lambda_delta-calculus (end) 
+In this section we answer this question positively.  We show
+normalization using hereditary substitution for the classical type
+theory the $\lambda\Delta$-calculus.  The $\lambda\Delta$-calculus was
+introduced in Section~\ref{sec:the_lambda-delta-calculus}.  We do not
+repeat its definition.  The reader can find the syntax and reduction
+rules in Figure~\ref{fig:lamd_syntax} and the typing rules in
+Figure~\ref{fig:lamd_typing}.  We define negation just as it is in
+intuitionistic type theory, that is, $[[{-A}]] =^{def} [[A -> _|_]]$,
+where $[[_|_]]$ is absurdity.  Arbitrary syntactically defined normal
+forms will be denoted by the meta-variables $[[n]]$ and $[[m]]$, and
+arbitrary typing contexts will be denoted by the meta-variable
+$[[G]]$.  We assume at all times that all variables in the domain of
+$[[G]]$ are unique.  In addition we rearrange the objects in $[[G]]$
+freely without indication. 
 
 \section{Basic Syntactic Lemmas}
 \label{sec:basic_syntactic_lemmas}
@@ -129,7 +67,6 @@ and the proof of the latter is trivial.
 \begin{thm}[Inversion]
   \label{theorem:inversion}
   \begin{itemize}
-  \item[]
   \item[i.] If $[[G |- x : T]]$ then $[[x]] \in [[G]]$.
   \item[ii.] If $[[G |- \x:T1.t:T1->T2]]$ then $[[G, x:T1 |- t:T2]]$.
   \item[iii.] If $[[G |- \m x:{-T}.t:T]]$ then $[[G, x:{-T} |- t: _|_]]$.
@@ -382,32 +319,33 @@ In the next section we prove the definition of the hereditary substitution funct
 
 \subsection{Properties of the Hereditary Substitution Function}
 \label{subsec:properties_of_the_hereditary_substitution_function}
-There are two main ways the hereditary substitution function is used.
-It either replaces capture-avoiding substitution in ones' type theory
-or it is used in some other way.  For example, in Canonical LF
-hereditary substitution replaces capture-avoiding substitution
-\cite{Watkins:2004,Adams:2004}.  However, in \cite{Abel:2008} it is
-used only as a normalization function.  No matter how it is used there
-are three correctness results which must be proven.  These are
-totality, type preservation, and normality preservation.  There is an
-additional correctness property we feel one must prove when hereditary
-substitution is used as a normalization function.  This property is
-called soundness with respect to reduction.  It shows that hereditary
-substitution does nothing more than what capture-avoiding substitution
-and $\beta$-reduction can do.
-
-We introduce some notation to make working with multi-substitutions a
-bit easier.  The sets of all first, second, and third projections of
-the triples in $[[Th]]$ are denoted $[[Th 1]]$, $[[Th 2]]$, and $[[Th
-3]]$ respectively.  We denote the assumption of all elements of
-$[[Th]]^i$ having the type $[[T]]$ as $[[Th]]^i : [[T]]$. This latter
-notation is used in typing contexts to indicate the addition of all the
-variables in $[[Th]]^j$ for $j \in \{1,2\}$ to the context with the
-specified type.  We denote this as $[[G]],[[Th]]^j : [[T]],[[G']]$ for
-some contexts $[[G]]$ and $[[G']]$.  The notation $[[G |- Th 3 : T]]$
-is defined as for all $[[t]] \in [[Th 3]]$ the typing judgment $[[G |-
-t : T]]$ holds.  Finally, we denote terms in $[[Th 3]]$ being normal
-as $[[norm(Th 3)]]$.
+% There are two main ways the hereditary substitution function is used.
+% It either replaces capture-avoiding substitution in ones' type theory
+% or it is used in some other way.  For example, in Canonical LF
+% hereditary substitution replaces capture-avoiding substitution
+% \cite{Watkins:2004,Adams:2004}.  However, in \cite{Abel:2008} it is
+% used only as a normalization function.  No matter how it is used there
+% are three correctness results which must be proven.  These are
+% totality, type preservation, and normality preservation.  There is an
+% additional correctness property we feel one must prove when hereditary
+% substitution is used as a normalization function.  This property is
+% called soundness with respect to reduction.  It shows that hereditary
+% substitution does nothing more than what capture-avoiding substitution
+% and $\beta$-reduction can do.
+Just as we did for the previous system we now prove the properties of
+hereditary substitution.  We introduce some notation to make working
+with multi-substitutions a bit easier.  The sets of all first, second,
+and third projections of the triples in $[[Th]]$ are denoted $[[Th
+1]]$, $[[Th 2]]$, and $[[Th 3]]$ respectively.  We denote the
+assumption of all elements of $[[Th]]^i$ having the type $[[T]]$ as
+$[[Th]]^i : [[T]]$. This latter notation is used in typing contexts to
+indicate the addition of all the variables in $[[Th]]^j$ for $j \in
+\{1,2\}$ to the context with the specified type.  We denote this as
+$[[G]],[[Th]]^j : [[T]],[[G']]$ for some contexts $[[G]]$ and
+$[[G']]$.  The notation $[[G |- Th 3 : T]]$ is defined as for all
+$[[t]] \in [[Th 3]]$ the typing judgment $[[G |- t : T]]$ holds.
+Finally, we denote terms in $[[Th 3]]$ being normal as $[[norm(Th
+3)]]$.
 
 All of the following properties will depend on a few 
 properties of the $[[ctype]]$ function.  They are listed in 
@@ -452,7 +390,6 @@ the following lemma.
 \begin{lemma}[Properties of $[[ctype]]$ Continued]
   \label{lemma:ctype_props_cont}
   \begin{itemize}
-    \item[]
   \item[i.] If $[[G,x:T,G' |- t1 t2:T']]$, $[[G |- t:T]]$, 
     $[[ [t/x] T t1]] = [[\y:T1.t']]$, and $[[t1]]$ is not a
     $\lambda$-abstraction, then $t_1$ is in head normal form and
@@ -492,12 +429,10 @@ the following lemma.
   The proof of part two is similar to the proof of part one.
 \end{proof}
 The first two properties of the hereditary substitution function are
-totality and type preservation.  The latter is similar to substitution
-for typing using the hereditary substitution function.
+totality and type preservation.  
 \begin{lemma}[Totality and Type Preservation]
   \label{lemma:totality_and_type_preservation}
   \begin{itemize}
-  \item[]
   \item[i.] If $[[G |- Th 3 : A]]$ and $[[G, Th 1:{-(A->A')} |- t' : B]]$, then there
     exists a term $[[s]]$ such that $[[<Th,A,A'>t']] = [[s]]$ and $[[G, Th 2 :{-A'} |- s : B]]$.
   
@@ -641,10 +576,8 @@ for typing using the hereditary substitution function.
   \end{itemize}
 \end{proof}
 The next property shows that the hereditary substitution function is
-normality preserving.  That is, if the input to the hereditary
-substitution function is normal then so is the output.  This is
-crucial for the normalization argument. The proof of normality
-preservation depends on the following auxiliary result.
+normality preserving. The proof of normality preservation depends on
+the following auxiliary result.
 \begin{lemma}
   \label{lemma:ssub_var_head}
   For any $[[Th]]$, $[[A]]$ and $[[A']]$, if $[[n1 n2]]$ is normal then 
@@ -804,7 +737,6 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
 \begin{lemma}[Soundness with Respect to Reduction]
   \label{lemma:soundness_reduction}  
   \begin{itemize}
-  \item[]
   \item[i.] If $[[G |- Th 3 : A]]$ and $[[G, Th 1:{-(A->A')} |- t' : B]]$, then
     $[[lift Th A A' t' ~*> <Th,A,A'>t']]$.
   
@@ -1018,7 +950,7 @@ Using these properties it is now possible to conclude normalization for the $\la
 We now define the interpretation $\interp{[[T]]}_[[G]]$ of types
 $[[T]]$ in typing context $[[G]]$.  This is in fact the same
 interpretation of types that was used to show normalization using
-hereditary substitution of Stratified System F in \cite{Eades:2010}.
+hereditary substitution of the various extensions of SSF.
 \begin{definition}
   \label{def:semantics}
   The interpretation of types $\interp{[[T]]}_[[G]]$ is defined by:
@@ -1038,8 +970,8 @@ hereditary substitution of Stratified System F in \cite{Eades:2010}.
     \end{math}
   \end{center}
 \end{definition}
-Type soundness depends on the following lemma. It shows that the
-interpretation of types is closed under hereditary substitution.
+Finally, we have the main lemma hereditary substitution for the
+interpretation of types.
 \begin{lemma}[Hereditary Substitution for the Interpretation of Types]
   \label{lemma:substitution_for_the_interpretation_of_types}
   If $[[n]] \in \interp{[[T]]}_[[G]]$ and $[[n']] \in \interp{[[T']]}_{[[G,x:T,G']]}$, then
@@ -1200,10 +1132,10 @@ to use in a total type theory, because it can be implemented without a
 termination proof.  This is because the hereditary-substitution
 function can be recognized as structurally recursive, and hence
 accepted directly by Agda's termination checker.
-
-One point which sets the current work apart from all of the related
-work just considered is that they were all concerned with
-intuitionistic type theories.  Here we apply hereditary substitution
-on a classical type theory.  To our knowledge this is the first time
-this has been done.
 % section defining_a_normalization_function (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% reftex-default-bibliography: ("/Users/hde/thesis/paper/thesis.bib")
+%%% TeX-master: "/Users/hde/thesis/paper/thesis.tex"
+%%% End: 
