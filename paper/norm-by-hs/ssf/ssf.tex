@@ -560,7 +560,7 @@ $\Gamma,\Gamma' \vdash \phi:*_p$.
     \end{math}
   \end{center}
   By the induction hypothesis $\Gamma \vdash \phi_1:*_p$,
-  $\Gamma,x:\phi_1 \vdash \phi_2:*_q$ and by Lemma~\ref{lemma:context_strengthening_for_kinding},
+  $\Gamma,x:\phi_1 \vdash \phi_2:*_q$ and by Lemma~\ref{lemma:context_strengthening_for_kinding_ssf},
   $\Gamma \vdash \phi_2:*_q$.
   By applying the arrow-type kind-checking rule we get 
   $\Gamma \vdash \phi_1 \rightarrow \phi_2:*_{max(p,q)}$.

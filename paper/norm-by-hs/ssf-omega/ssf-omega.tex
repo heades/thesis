@@ -564,10 +564,8 @@ hereditary substitutions.
   \label{lemma:interpretation_of_types_closed_substitution_ssfw}
 \end{lemma}
 \begin{proof}
-  By Lemma~\ref{lemma:total_tl_ssfw} we know there exists a type $\hat{\phi}$ 
-  such that $\{\phi/X\}^K \phi' = \hat{\phi}$ and $\Gamma,\Gamma' \vdash \hat{\phi}:K'$ and by 
-  Lemma~\ref{corollary:normalization_preserving_tl_ssfw} $\hat{\phi}$ is normal.  Therefore,
-  $\{\phi/X\}^K \phi' = \hat{\phi} \in \interp{K'}_{\Gamma,\Gamma'}$.
+  This proof is similar to the proof of the same result for STLC
+  (Lemma~\ref{lemma:interpretation_of_types_closed_substitution_stlc}).
 \end{proof}
 \noindent
 Finally, by the definition of the interpretation of types the following result implies that the type-level
