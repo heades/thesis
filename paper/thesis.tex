@@ -346,6 +346,30 @@ that is type safe and supports their mixture.
 
 \part{Basic Syntactic Analysis}
 \label{part:basic-analysis}
+The following chapters conduct basic meta-theoretic analysis of the
+freedom of speech language, and dualized logic and its corresponding
+type theory dualized type theory.  We consider these analysis to be
+basic because they are straightforward applications of existing
+techniques, and consist of the most basic properties that should hold
+for any programming language.
+
+At least a basic meta-theoretic analysis of a programming language is
+very important.  Every programming language should at least have been
+proven type safe, and if the language contains a logical fragment,
+then it should be proven consistent.  These give strong guarantees to
+the programmer.  Type safety ensures that if a program has a type,
+then it can either compute something, or is the answer itself.
+Furthermore, it ensures that if a program has a type, then after
+running it, the result has the same type.  Lastly, consistency -- as
+we have mentioned before -- ensures that the objects of the language
+we call proofs really are proof.  These sound like commonsense
+properties, and they are, but many programming language implementors
+fail to establish them.  A programming language without such
+guarantees would amount to a large number of significant bugs;
+e.g. the ones we mentioned in the introduction.  Therefore, a basic
+meta-theoretic analysis is necessary to be able to trust the programs
+we write, and the verification of programs carried out within the
+languages themselves.
 
 \chapter{Freedom of Speech}
 \label{chap:freedom_of_speech_anal}
