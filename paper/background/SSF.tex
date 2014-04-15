@@ -25,9 +25,9 @@ Fig.~\ref{fig:SSF_typing}.
       
       \begin{math}
         \begin{array}{lll}
-          [[K]] & ::= & 1\,|\,2\,|\,\ldots\\
-          [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X:K.T]]\\
-          [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X:K.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
+              K & ::= & *_1\,|\,*_2\,|\,\ldots\\
+          [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X:p.T]]\\
+          [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X:p.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
         \end{array}
       \end{math}\\
       \\
@@ -76,7 +76,7 @@ the types of system F.  To accomplish this Leivant took the same path
 as Russell in that he added a second layer of typing to system F. This
 second layer is known as the kind level.  Kinds are the types of
 types.  The kinds of SSF are the elements of the syntactic category
-$[[K]]$ in the syntax for SSF.  These are simply all the natural
+$K$ in the syntax for SSF.  These are simply all the natural
 numbers.  We call these type levels.  To stratify the types of system
 F we use kinding rules to organize the types into levels making sure
 that polymorphic types reside in a higher level than the types allowed
@@ -88,10 +88,10 @@ straightforward. The one of interest is
   \end{math}
 \end{center}
 This is the rule which enforces predicativity. It does this by making
-sure the level of $[[Forall X:K.T]]$ is at a larger level than
+sure the level of $[[Forall X:p.T]]$ is at a larger level than
 $[[X]]$.  This works, because all the types we instantiate this type
 with must have the same level as $[[X]]$. We can easily see that
-$[[K]] < max([[K]]+1,[[K']])$ for all $[[K]]$ and $[[K']]$.  Hence,
+$[[p]] < max([[p]]+1,[[q]])$ for all $[[p]]$ and $[[q]]$.  Hence,
 resulting in the enforcement of our desired property.
 
 A understandable question one could ask at this point is, are
