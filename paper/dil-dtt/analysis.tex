@@ -1,6 +1,4 @@
-\section{Dualized Intuitionistic Logic}
-\label{sec:dualized_intuitionistic_logic}
-\subsection{Consistency of DIL}
+\section{Consistency of DIL}
 \label{subsec:consistency_of_dil}
 
 In this section we prove consistency of DIL with respect to Rauszer's
@@ -151,7 +149,7 @@ can prove consistency.
 \end{thm}
 % subsection consistency (end)
 
-\section{Completeness}
+\section{Completeness of DIL}
 \label{sec:completeness}
 In this section we prove that every derivable sequent in L can be
 translated to a derivable sequent of DIL.  We will call a sequent in L
@@ -210,9 +208,9 @@ of the logic throughout the sequel.
   \end{center}
   Thus, we obtain our result.
 \end{proof}
-We state that We mentioned DIL avoids analogs of a number of rules
-from L.  To be able to translate every derivable sequent of L to DIL,
-we must show admissibility of those rules in DIL.
+We mentioned DIL avoids analogs of a number of rules from L.  To be
+able to translate every derivable sequent of L to DIL, we must show
+admissibility of those rules in DIL.
 %% Derived rules.
 \begin{lemma}[Reflexivity]
   \label{lemma:reflexivity}
@@ -262,14 +260,6 @@ we must show admissibility of those rules in DIL.
   \end{proof}
 Note that we often leave the application of exchange implicit for
 readablity.
-
-\begin{lemma}[Weakening]
-  \label{lemma:weakening}
-  If $[[Gr ; G |- p' B @ n']]$, then $[[Gr ; G, p A @ n |- p' B @ n']]$.
-\end{lemma}
-  \begin{proof}
-    This holds by a straightforward induction on the form of the assumed derivation.
-  \end{proof}
 
 \begin{lemma}[Graph Weakening]
   \label{lemma:graph_weakening}
@@ -1212,10 +1202,10 @@ activation of a derivable L-sequent is derivable in DIL.
 % section completeness (end)
 % section dualized_intuitionistic_logic (end)
 
-\section{Dualized Type Theory}
+\section{Type Preservation and Strong Normalization of DTT}
 \label{sec:dualized_type_theory}
 We now present the basic metatheory of DTT, starting with type
-preservations. Throughout the remainder of the present paper we use
+preservations. Throughout the remainder of this section we use
 the inversion lemma of the typing relation, but we do not state it or
 prove it here, because the proof is trivial.
 \begin{lemma}[Substitution for Typing]
@@ -1861,3 +1851,9 @@ The result now follows from Newman's Lemma, using Lemma~\ref{lem:localconf} and
 Theorem~\ref{thm:strong_normalization}.
 \end{proof}
 % section dualized_type_theory (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% reftex-default-bibliography: ("/Users/hde/thesis/paper/thesis.bib")
+%%% TeX-master: "/Users/hde/thesis/paper/thesis.tex"
+%%% End: 

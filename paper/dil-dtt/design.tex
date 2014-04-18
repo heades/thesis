@@ -71,12 +71,12 @@ version of Crolard's subtractive logic for which he was able to
 construct a categorical model using linear categories in
 \cite{Bellin:2012}.
 
-\textbf{Contributions.} The contributions of this paper are a new BINT
-logic called Dualized Intuitionistic Logic (DIL) and a corresponding
-type theory called Dualized Type Theory (DTT).  DIL is a single-sided
-polarized formulation of Pinto and Uustalu's labeled sequent calculus
-L.  DIL builds on L by removing the following rules (see
-Section~\ref{sec:L} for a complete definition of L):
+In this section we propose a new BINT logic called Dualized
+Intuitionistic Logic (DIL) and a corresponding type theory called
+Dualized Type Theory (DTT).  DIL is a single-sided polarized
+formulation of Pinto and Uustalu's labeled sequent calculus L.  DIL
+builds on L by removing the following rules (see Section~\ref{sec:L}
+for a complete definition of L):
 \begin{center}
   \begin{math}
     \begin{array}{lll}
@@ -86,28 +86,30 @@ Section~\ref{sec:L} for a complete definition of L):
     \end{array}
   \end{math}
 \end{center} 
-We show that in the absence of the previous rules DIL still maintains
-consistency and completeness.  Furthermore, DIL is defined using a
+We show in Chapter~\ref{chap:dualized_type_theory_anal} that in the
+absence of the previous rules DIL still maintains consistency
+(Section~\ref{subsec:consistency_of_dil}) and completeness
+(Section~\ref{sec:completeness}).  Furthermore, DIL is defined using a
 dualized syntax which reduces the number of inference rules needed to
 define the logic.  Again, DIL is a single-sided sequent calculus with
 multiple conclusions and thus must provide a means of moving
 conclusions from left to right. This is done in DIL using cuts on
-hypotheses. We call these types of cuts ``axiom cuts.''  
+hypotheses. We call these types of cuts ``axiom cuts.''
 
 Now we consider BINT logic to be the closest extension of
 intuitionistic logic to classical logic while maintaining
 constructivity.  BINT has two forms of negation, one defined as usual,
 $\lnot A \stackrel{\mathsf{def}}{=} A \to \perp$, and a second defined
-interms of subtraction, $\mathrel{\sim} A \stackrel{\mathsf{def}}{=}
+interms of subtraction, $\mathop{\sim} A \stackrel{\mathsf{def}}{=}
 \top - A$.  The latter we call ``non-$A$''.  Now in BINT it is
-possible to prove $A \lor \mathrel{\sim} A$ for any $A$
+possible to prove $A \lor \mathop{\sim} A$ for any $A$
 \cite{crolard01}. Furthermore, when the latter is treated as a type in
 DTT, the inhabitant is a continuation without a canonical form,
 because the inhabitant contains as a subexpression an axiom cut.
 Thus, the presence of these continuations prevents the canonicity
 result for a type theory -- like DTT -- from holding.  Thus, if
 general cut elimination was a theorem of DIL, then $A \lor
-\mathrel{\sim} A$ would not be provable.  So DIL must contain cuts
+\mathop{\sim} A$ would not be provable.  So DIL must contain cuts
 that cannot be eliminated.  This implies that DIL does not enjoy
 general cut elimination, but all cuts other than axiom cuts can be
 eliminated. Throughout the sequel we define ``cut elimination'' as the
@@ -115,17 +117,10 @@ elimination of all cuts other than axiom cuts, and we call DIL ``cut
 free'' with respect to this definition of cut elimination. The latter
 point is similar to Wadler's dual calculus \cite{Wadler:2005}.
 
-Finally, we present a computer-checked proof -- in Agda -- of
-consistency for DIL with respect to Rauszer's Kripke semantics for
-BINT logic, prove completeness of DIL by reduction to Pinto and
-Uustalu's L, and show type preservation and strong normalization for
-DTT.  We show the latter using a version of Krivine's classical
-realizability by translating DIL into a classical logic.
-
-The contributions of this article are subgoals of a larger one.  Due
-to the rich duality in BINT logic we believe it shows promise of being
-a logical foundation for induction and coinduction, because induction
-is dual to coinduction. Our working hypothesis is that a logical
+The study of DIL and DTT are subgoals of a larger one.  Due to the
+rich duality in BINT logic we believe it shows promise of being a
+logical foundation for induction and coinduction, because induction is
+dual to coinduction. Our working hypothesis is that a logical
 foundation based on intuitionistic duality will allow the semantic
 duality between induction and coinduction to be expressed in type
 theory, yielding a solution to the problems with these important
@@ -133,17 +128,6 @@ features in existing systems.  For example, Agda restricts how
 inductive and coinductive types can be nested (see the discussion in
 \cite{abel+13}), while Coq supports general mixed inductive and
 coinductive data, but in doing so, sacrifices type preservation.
-
-The rest of this paper is organized as follows.  We first introduce
-Pinto and Uustalu's L calculus in Section~\ref{sec:L}, and then DIL in
-Section~\ref{sec:dualized_intuitionistic_logic_(dil)}. Then we prove
-DIL consistent and complete (with only axiom cuts) in
-Section~\ref{subsec:consistency_of_dil} and
-Section~\ref{subsec:completeness} respectively.  Following DIL we
-introduce DTT in Section~\ref{sec:dualized_type_theory_(dtt)}, and its
-metatheory in Section~\ref{sec:metatheory_of_dtt}. All of the
-mathematical content of this paper was typeset with the help of Ott
-\cite{Sewell:2010}.
 
 \section{Pinto and Uustalu's L}
 \label{sec:L}
@@ -223,8 +207,8 @@ detailed proof, but is proven complete with respect to Rauszer's
 Kripke semantics using a counter model construction.  In
 Section~\ref{sec:dualized_intuitionistic_logic_(dil)} we give a
 translation of the formulas of L into the formals of DIL, and in
-Section~\ref{subsec:completeness} we will give a translation of the
-rest of L into DIL which will be used to conclude completeness of DIL.
+Section~\ref{sec:completeness} we will give a translation of the rest
+of L into DIL which will be used to conclude completeness of DIL.
 % section L (end)
 
 \section{Dualized Intuitionistic Logic}
@@ -235,8 +219,11 @@ formulas.  The following definition shows that DIL's formulas are
 simply polarized versions of L's formulas.
 \begin{definition}
   \label{def:L-form-to-DIL-form}
-  The following defines a translation of formulas of L to formulas of DIL:
+  The following defines a translation of formulas of L to formulas of
+  DIL:
+  \linespread{0.5}
   \begin{center}
+    \small
     \begin{tabular}{cccccccccccccc}
       \begin{math}
       \begin{array}{lll}
@@ -351,24 +338,30 @@ example of a derivation in DIL. Consider the following where we leave
 off the reachability derivations for clarity and $[[G']] \equiv
 [[h(-(A /\- ~A) @ n), h(-A@n)]]$:
 \begin{center}  
-  \footnotesize
+  \scriptsize
   \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=\footnotesize andBar] {
+      \inferrule* [right=\tiny andBar] {
         $$\mprset{flushleft}
-        \inferrule* [right=cut] {
+        \inferrule* [right=\tiny cut] {
           $$\mprset{flushleft}
-          \inferrule* [right=\footnotesize andBar] {
+          \inferrule* [right=\tiny andBar] {
             $$\mprset{flushleft}
-            \inferrule* [right=\footnotesize impBar] {
-              [[Gr ; G, G' |- -A @ n]]
+            \inferrule* [right=\tiny impBar] {
+              $$\mprset{flushleft}
+              \inferrule* [right=\tiny ax] {
+                \,
+              }{[[Gr ; G, G' |- -A @ n]]}
               \\
-              [[Gr ; G, G' |- +<+> @ n]]
+              $$\mprset{flushleft}
+              \inferrule* [right=\tiny unit] {
+                \,
+              }{[[Gr ; G, G' |- +<+> @ n]]}
             }{[[Gr ; G, G' |- + ~A @ n]]}
           }{[[Gr ; G, G' |- +(A /\- ~A) @ n]]}
           \\
           $$\mprset{flushleft}
-          \inferrule* [right=\footnotesize ax] {
+          \inferrule* [right=\tiny ax] {
             \,
           }{[[Gr ; G, G' |- -(A /\- ~A) @ n]]}
         }{[[Gr ; G, -(A /\- ~A) @ n |- +A @ n]]}
@@ -377,13 +370,16 @@ off the reachability derivations for clarity and $[[G']] \equiv
 \end{center}
 Now using only an axiom cut we may conclude the following derivation:
 \begin{center}
-  \footnotesize
+  \scriptsize
   \begin{math}
     $$\mprset{flushleft}
-    \inferrule* [right=cut] {
+    \inferrule* [right=\scriptsize cut] {
       [[Gr ; G, -(A /\- ~A) @ n |- +(A /\- ~A) @ n]]
       \\
-      [[Gr ; G, -(A /\- ~A) @ n |- -(A /\- ~A) @ n]]
+      $$\mprset{flushleft}
+      \inferrule* [right=\scriptsize ax] {
+        \,
+      }{[[Gr ; G, -(A /\- ~A) @ n |- -(A /\- ~A) @ n]]}
     }{[[Gr ; G |- +(A /\- ~A) @ n]]}
   \end{math}
 \end{center}
@@ -396,8 +392,7 @@ eliminated.
 \label{sec:dualized_type_theory}
 In this section we give DIL a term assignment yielding Dualized Type
 Theory (DTT).  First, we introduce DTT, and give several examples
-illustrating how to program in DTT.  Then we present the metatheory of
-DTT.
+illustrating how to program in DTT.  
 
 The syntax for DIL is defined in Figure~\ref{fig:dtt-syntax}.
 \begin{figure}[t]
@@ -535,8 +530,8 @@ return value of the cut.
 %this instance can be seen as an axiom cut.
 
 There is one additional bit of intuition we can use when thinking about
-programming in DTT. We can think of cuts of the form
-$\nu z.(\lambda x_1\cdots\lambda x_i.t) \mathbin{\Cdot[2]} \langle t_1, \langle t_2, \cdots \langle t_i, z \rangle \cdots \rangle$ 
+programming in DTT. We can think of cuts of the form 
+\[ \nu z.(\lambda x_1\cdots\lambda x_i.t) \mathbin{\Cdot[2]} \langle t_1, \langle t_2, \cdots \langle t_i, z \rangle \cdots \rangle \]
 as an abstract machine, where $\lambda x_1\cdots\lambda x_i.t$ is the 
 functional part of the machine, and $\langle t_1, \langle t_2, \cdots \langle t_i, z \rangle \cdots \rangle$ is 
 the stack of inputs the abstract machine will apply the function to
@@ -549,7 +544,8 @@ Similarly to the eliminator for implication we can define the eliminator for dis
 of the usual case analysis. Suppose $[[Gr ; H |- t : + (A /\- B)@n]]$, $[[Gr ; H, x : + A@n |- t1 : + C@n]]$, and
 $[[Gr ; H, x : + B@n |- t2 : + C@n]]$ are all admissible.  Then we can
 derive the usual eliminator for disjunction.  Define 
-$[[case t of x.t1 , x.t2]] =^{\text{def}} [[nu z0 . (nu z1. (nu z2.t * (z1,z2)) * (nu x.t2 * z0)) * (nu x.t1 * z0)]]$.
+\[ [[case t of x.t1 , x.t2]] \stackrel{\mathsf{def}}{=} [[nu z0 . (nu z1. (nu z2.t
+* (z1,z2)) * (nu x.t2 * z0)) * (nu x.t1 * z0)]]. \]
 Then we have the following result.
 \begin{lemma}
   \label{lemma:disj-elim-adm}
@@ -585,14 +581,16 @@ Then we have the following result.
   \end{math} \\
 
   \noindent
-  Then the remainder of the derivation depends on the following sub-derivations:
-  
+  Then the remainder of the derivation depends on the following
+  sub-derivations:
+
+  \scriptsize
   \begin{math}
     \begin{array}{lcl}
       D_0:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
         D_3
         \\
         D_4
@@ -600,16 +598,16 @@ Then we have the following result.
     \end{array}
   \end{math} \\
 
-  \begin{math}
+  \begin{math}    
     \begin{array}{lcc}
       D_1: \\      
-      & 
-      D_2
-      \\
+      &       
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
+        D_2
+        \\
         $$\mprset{flushleft}
-        \inferrule* [right= \ifrName{ax}] {
+        \inferrule* [right=\scriptsize\ifrName{ax}] {
           \,
         }{[[Gr;H, z0 :- C @ n, x : + A@n |- z0 : - C@n]]}               
       }{[[Gr;H, z0 :- C @ n |- nu x.t1 * z0 : - A@n]]}
@@ -621,7 +619,7 @@ Then we have the following result.
       D_2: \\      
       & 
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{weakening}] {
+      \inferrule* [right=\scriptsize\ifrName{Weakening}] {
         [[Gr;H, x : + A@n |- t1 : + C@n]]
       }{[[Gr;H, z0 :- C @ n, x : + A@n |- t1 : + C@n]]}
     \end{array}
@@ -632,7 +630,7 @@ Then we have the following result.
       D_4:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
         D_5
         \\        
         [[Gr;H, z0 :- C @ n, z1 : - A @ n, x : + B@n |- z0 : - C@n]]
@@ -645,7 +643,7 @@ Then we have the following result.
       D_3:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
         D_6
         \\
         D_7
@@ -658,18 +656,19 @@ Then we have the following result.
       D_5:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{weakening}] {
+      \inferrule* [right=\scriptsize\ifrName{Weakening}] {
         [[Gr;H, x : + B@n |- t2 : + C@n]]
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, x : + B@n |- t2 : + C@n]]}
     \end{array}
   \end{math} \\
 
   \begin{math}
+    \scriptsize
     \begin{array}{lcl}
       D_6:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{weakening}] {
+      \inferrule* [right=\scriptsize \ifrName{Weakening}] {
         [[Gr;H |- t : + (A /\ - B)@n ]]
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, z2 : - B @ n |- t : + (A /\ - B)@n ]]}
     \end{array}
@@ -680,7 +679,7 @@ Then we have the following result.
       D_7:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{and}] {
+      \inferrule* [right=\scriptsize \ifrName{and}] {
         D_8 
         \\
         D_9
@@ -693,7 +692,7 @@ Then we have the following result.
       D_8:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{ax}] {
+      \inferrule* [right=\scriptsize \ifrName{ax}] {
         \,
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, z2 : - B @ n |- z1 : - A @n ]]}
     \end{array}
@@ -704,7 +703,7 @@ Then we have the following result.
       D_9:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{ax}] {
+      \inferrule* [right=\scriptsize \ifrName{ax}] {
         \,
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, z2 : - B @ n |- z2 : - B @n ]]}
     \end{array}
@@ -743,3 +742,9 @@ $[[\x.(\y.y)]]$ to the arguments $[[triv]]$ and $[[triv]]$.
   \end{math}
 \end{center}
 % section dualized_type_theory_(dtt) (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% reftex-default-bibliography: ("/Users/hde/thesis/paper/thesis.bib")
+%%% TeX-master: "/Users/hde/thesis/paper/thesis.tex"
+%%% End: 
