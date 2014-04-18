@@ -282,6 +282,7 @@ readablity.
   \label{def:raise}
   We define the function $[[raise]]$ on abstract graphs as follows:
   \begin{center}
+    \small
     \begin{math}
       \begin{array}{lll}
         [[raise ( n1 , n2 , . )]] & = & [[.]]\\
@@ -503,7 +504,7 @@ readablity.
           }{[[Gr,Gr1,Gr' ; G |- p (A1 ->p A2) @ n]]}
         \end{math}
       \end{center}
-      Since we know $[[n1]] \not\equiv [[n2]]$, then by Lemma~\ref{lemma:graph_node_containment} we know
+      Since we know $[[n1]] \not\equiv [[n2]]$, then by Lemma~\ref{lemma:graph_node_containment} we know\\
       $[[n1]],[[n2]] \in [[| Gr,Gr' |]]$. Thus, $[[n']] \not\equiv [[n1]] \not\equiv [[n2]]$.  Now by the
       induction hypothesis we know $[[(Gr,raise(n1,n2,Gr1),Gr', n <= p n') ; G , p A1 @ n' |- p A2 @ n']]$.
       This case then follows by the application of the $\ifrName{imp}$ rule to the former.
@@ -555,7 +556,7 @@ readablity.
 \begin{lemma}[General Monotonicity]
   \label{lemma:genmono}
   If $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, $[[Gr |- m <= p * m']]$, and
-  $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]$, then 
+  $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]$, then \\
   $[[Gr ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i |- p B @ m']]$.
 \end{lemma}
 \begin{proof}
@@ -890,15 +891,16 @@ activation of a derivable L-sequent is derivable in DIL.
     $[[G']] = [[h(h(h({G}+ , + A @ n ) , {D1}-), -{A} @ n ),{D2}-]]$ for some $<<D1>>$ and $<<D2>>$.
     This sequent is then derivable as follows:
     \begin{center}
+      \small
       \begin{math}
         $$\mprset{flushleft}
-        \inferrule* [right=Left-to-Right] {
+        \inferrule* [right=\scriptsize Left-to-Right] {
           $$\mprset{flushleft}
-          \inferrule* [right=Exchange] {
+          \inferrule* [right=\scriptsize Exchange] {
             $$\mprset{flushleft}
-          \inferrule* [right=Ax] {
+          \inferrule* [right=\scriptsize Ax] {
             $$\mprset{flushleft}
-            \inferrule* [right=Refl] {
+            \inferrule* [right=\scriptsize Refl] {
               \ 
             }{[[-Gr- |- n <=+* n]]}
           }{[[-Gr- ; {G}+ , {D1}- ,{D2}- , - B @ n', + A @ n |- +{A} @ n ]] }
@@ -1084,9 +1086,9 @@ activation of a derivable L-sequent is derivable in DIL.
     where $[[{D}-]] \equiv [[{D1}-,-C@n',{D2}-,-E@n'',{D3}-]]$, and $[[{D'}-]] \equiv [[{D1}-,{D2}-,{D3}-]]$.
     By exchange (Lemma~\ref{lemma:exchange}) we know \\
     $[[-Gr-; {G}+,{D'}-,+{A}@n |- + C @ n']]$ 
-    and  $[[-Gr-; {G}+,{D'}-,+{B}@n |- + E @ n'']]$.  Now by the left-to-right lemma (Lemma~\ref{def:refocus}) we know 
+    and  $[[-Gr-; {G}+,{D'}-,+{B}@n |- + E @ n'']]$.  Now by the left-to-right lemma (Lemma~\ref{lemma:refocus}) we know \\
     $[[-Gr-; {G}+,{D'}-, - C @ n' |- -{A}@n]]$ and $[[-Gr-; {G}+,{D'}-, - E @ n'' |- -{B}@n]]$, and by applying
-    weakening (and exchange) we know $[[-Gr-; {G}+,{D'}-, - C @ n', - E @ n'' |- -{A}@n]]$ and 
+    weakening (and exchange) we know \\ $[[-Gr-; {G}+,{D'}-, - C @ n', - E @ n'' |- -{A}@n]]$ and 
     $[[-Gr-; {G}+,{D'}-, -C@n',- E @ n'' |- -{B}@n]]$.  At this point we can apply 
     the $\ifrName{and}$ rule to obtain $[[-Gr-; {G}+,{D'}-, - C @ n',- E @ n'' |- - {A} /\- {B} @ n]]$ to which we can apply
     the left-to-right lemma to and obtain \\
@@ -1142,7 +1144,8 @@ activation of a derivable L-sequent is derivable in DIL.
     \end{center}
     This case follows the same pattern as the previous cases.  We know by the induction hypothesis
     that all activations of $<<G, y : T1 |- h(Gr U {(x,y)}) y : T2, D>>$ are derivable.  In particular,
-    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n2,{D}- |- +{T2}@n2]]$ is derivable.  By exchange (Lemma~\ref{lemma:exchange})\\
+    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n2,{D}- |- +{T2}@n2]]$ is
+    derivable.  By exchange (Lemma~\ref{lemma:exchange})
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n2 |- +{T2}@n2]]$ is derivable, and by applying the $\ifrName{imp}$ rule
     we obtain $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$, which is a particular activation of 
     $<<G |- Gr n1 : T1 -> T2, D>>$.  Note that in the previous application of $\ifrName{imp}$ we use
@@ -1163,10 +1166,11 @@ activation of a derivable L-sequent is derivable in DIL.
     \end{center}
     We know by the induction hypothesis
     that all activation of \\ $<<G, n1 : T1 |- h(Gr U {(n1,n2)}) n1 : T2, D>>$ are derivable.  In particular,
-    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n1,{D}- |- +{T2}@n1]]$ is derivable.  By exchange (Lemma~\ref{lemma:exchange})
-    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n1 |- +{T2}@n1]]$ is derivable.  Now by the left-to-right lemma we know 
+    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n1,{D}- |- +{T2}@n1]]$ is
+    derivable.  By exchange \\ (Lemma~\ref{lemma:exchange})
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n1 |- +{T2}@n1]]$ is derivable.  Now by the left-to-right lemma we know \\
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,-{T2}@n1 |- -{T1}@n1]]$, and by
-    assumption we know $<<y notin Gr, G, D>>$ which implies \\
+    assumption we know $<<y notin Gr, G, D>>$ which implies 
     $[[n1 notin |-Gr-|,|{G}+,{D}-|]]$ is derivable.  Thus, by applying the $\ifrName{imp}$ rule we know  
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$ is derivable.  Clearly, this is a particular activation of
     $<<G, n2 : T1 - T2 |- Gr D>>$, and any other activation implies
@@ -1348,7 +1352,7 @@ prove it here, because the proof is trivial.
         \end{center}
       \end{itemize}
       The remainder of this case follows from applying substitution
-      for typing (Lemma~\ref{lemma:substitution_for_typing}) to $(1)$
+      for typing \\ (Lemma~\ref{lemma:substitution_for_typing}) to $(1)$
       using $(2)$, and then applying $\dttdrulename{Cut}$ to the
       result of the former and $(3)$.
       
