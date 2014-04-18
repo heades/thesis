@@ -19,10 +19,10 @@
 \section{Stratified System $\Fp$ (SS$\Fp$)}
 \label{sec:stratified_system_f_with_sum_types}
 Stratified System $\Fp$ is an extension of SSF with sum types denoted
-$\phi_1 + \phi_2$, whose elimination form $\textit{case}\ t\
+$T_1 + T_2$, whose elimination form $\textit{case}\ t\
 \textit{of}\ x_1.t_1,x_2.t_2$ is used to case split on a whether or
-not term $t$ with a sum type is truly $x_1$ of type $\phi_1$, or else
-$x_2$ of type $\phi_2$.  We consider sum types with so-called
+not term $t$ with a sum type is truly $x_1$ of type $T_1$, or else
+$x_2$ of type $T_2$.  We consider sum types with so-called
 commuting conversions, which allow independent cases to be permuted
 past each other (see Fig~\ref{fig:syntax_ssfp} below).  Commuting
 conversions are well-known to pose technical difficulties for
@@ -44,8 +44,8 @@ handled straightforwardly with hereditary substitution.
       Reduction Rules:\\
       \begin{tabular}{cc}
         \begin{tabular}{lll}
-          $(\Lambda X:*_p.t)[\phi]$ & $\rightsquigarrow$ & $[\phi/X]t$\\
-          $(\lambda x:\phi.t)t'$    & $\rightsquigarrow$ & $[t'/x]t$\\
+          $(\Lambda X:*_p.t)[T]$ & $\rightsquigarrow$ & $[T/X]t$\\
+          $(\lambda x:T.t)t'$    & $\rightsquigarrow$ & $[t'/x]t$\\
         \end{tabular}
         &
         \begin{tabular}{lll}
@@ -82,10 +82,10 @@ handled straightforwardly with hereditary substitution.
         }{\Gamma,X:*_p\ Ok}
         \and
         \inferrule* [right=] {
-          \Gamma \vdash \phi:*_p
+          \Gamma \vdash T:*_p
           \\
           \Gamma\ Ok
-        }{\Gamma,x :\phi\ Ok}
+        }{\Gamma,x :T\ Ok}
       \end{mathpar} 
     
     \caption{Well-formedness of Contexts for SS$\Fp$}
@@ -98,20 +98,20 @@ handled straightforwardly with hereditary substitution.
     \setlength{\tabcolsep}{1pt}
     \begin{mathpar}    
         \inferrule* [right=] {
-          \Gamma \vdash \phi_1 : *_p
+          \Gamma \vdash T_1 : *_p
           \\
-          \Gamma \vdash \phi_2 : *_q
-        }{\Gamma \vdash \phi_1 \rightarrow \phi_2 : *_{max(p,q)}}
+          \Gamma \vdash T_2 : *_q
+        }{\Gamma \vdash T_1 \rightarrow T_2 : *_{max(p,q)}}
         \and
         \inferrule* [right=] {
-          \Gamma,X : *_q \vdash \phi : *_p
-        }{\Gamma \vdash \forall X:*_q.\phi : *_{max(p,q)+1}}
+          \Gamma,X : *_q \vdash T : *_p
+        }{\Gamma \vdash \forall X:*_q.T : *_{max(p,q)+1}}
         \and
         \inferrule* [right=] {
-          \Gamma \vdash \phi_1 : *_p
+          \Gamma \vdash T_1 : *_p
           \\
-          \Gamma \vdash \phi_2 : *_q
-        }{\Gamma \vdash \phi_1 + \phi_2 : *_{max(p,q)}}
+          \Gamma \vdash T_2 : *_q
+        }{\Gamma \vdash T_1 + T_2 : *_{max(p,q)}}
         \and
         \inferrule* [right=] {
           \Gamma(X) = *_p
@@ -131,49 +131,49 @@ handled straightforwardly with hereditary substitution.
   \setlength{\tabcolsep}{1pt}
   \begin{mathpar}
         \inferrule* [right=] {
-          \Gamma(x) = \phi
+          \Gamma(x) = T
           \\\\
           \Gamma\ Ok
-        }{\Gamma \vdash x : \phi}
+        }{\Gamma \vdash x : T}
         \and
         \inferrule* [right=] {
-          \Gamma,x : \phi_1 \vdash t : \phi_2
-        }{\Gamma \vdash \lambda x : \phi_1.t : \phi_1 \rightarrow \phi_2}
+          \Gamma,x : T_1 \vdash t : T_2
+        }{\Gamma \vdash \lambda x : T_1.t : T_1 \rightarrow T_2}
         \and
         \inferrule* [right=] {
-          \Gamma \vdash t_1 : \phi_1 \rightarrow \phi_2 
+          \Gamma \vdash t_1 : T_1 \rightarrow T_2 
           \\
-          \Gamma \vdash t_2 : \phi_1
-        }{\Gamma \vdash t_1\,t_2 : \phi_2}
+          \Gamma \vdash t_2 : T_1
+        }{\Gamma \vdash t_1\,t_2 : T_2}
         \and
         \inferrule* [right=] {
-          \Gamma, X : *_l \vdash t : \phi
-        }{\Gamma \vdash \Lambda X:*_l.t:\forall X : *_l.\phi}
+          \Gamma, X : *_l \vdash t : T
+        }{\Gamma \vdash \Lambda X:*_l.t:\forall X : *_l.T}
         \and
         \inferrule* [right=] {
-          \Gamma \vdash t:\forall X:*_l.\phi_1
+          \Gamma \vdash t:\forall X:*_l.T_1
           \\\\
-          \Gamma \vdash \phi_2:*_l
-        }{\Gamma \vdash t[\phi_2]: [\phi_2/X]\phi_1}
+          \Gamma \vdash T_2:*_l
+        }{\Gamma \vdash t[T_2]: [T_2/X]T_1}
         \and
         \inferrule* [right=] {
-          \Gamma \vdash t:\phi_1
+          \Gamma \vdash t:T_1
           \\\\
-	  \Gamma \vdash \phi_2:*_p
-        }{\Gamma \vdash inl(t): \phi_1+\phi_2}
+	  \Gamma \vdash T_2:*_p
+        }{\Gamma \vdash inl(t): T_1+T_2}
         \and
         \inferrule* [right=] {
-          \Gamma \vdash t:\phi_2
+          \Gamma \vdash t:T_2
           \\\\
-	  \Gamma \vdash \phi_1:*_p
-        }{\Gamma \vdash inr(t): \phi_1+\phi_2}
+	  \Gamma \vdash T_1:*_p
+        }{\Gamma \vdash inr(t): T_1+T_2}
         \and
         \inferrule* [right=] {
-          \Gamma \vdash t:\phi_1 + \phi_2
+          \Gamma \vdash t:T_1 + T_2
           \\\\
-	  \Gamma,x:\phi_1 \vdash t_1:\psi
+	  \Gamma,x:T_1 \vdash t_1:\psi
           \\\\
-	  \Gamma,x:\phi_2 \vdash t_2:\psi
+	  \Gamma,x:T_2 \vdash t_2:\psi
         }{\Gamma \vdash \ccon{t}{x}{t_1}{t_2}: \psi}
       \end{mathpar}
     
@@ -194,7 +194,7 @@ throughout this chapter (we omit their proofs, because they are
 similar to the proofs for SSF):
 
 \begin{lemma}
-  If $\Gamma \vdash \phi:*_p$ then $\Gamma\ Ok$.
+  If $\Gamma \vdash T:*_p$ then $\Gamma\ Ok$.
   \label{lemma:kinding_ok_ssfp}
 \end{lemma}
 \begin{proof}
@@ -203,7 +203,7 @@ similar to the proofs for SSF):
 \end{proof}
 
 \begin{lemma}[Level Weakening for Kinding]
-  If $\Gamma \vdash \phi:*_r$ and $r < s$ then $\Gamma \vdash \phi:*_s$.
+  If $\Gamma \vdash T:*_r$ and $r < s$ then $\Gamma \vdash T:*_s$.
   \label{lemma:level_weakening_for_kinding_ssfp}
 \end{lemma}
 \begin{proof}
@@ -212,11 +212,11 @@ similar to the proofs for SSF):
 \end{proof}
 
 \begin{lemma}[Substitution for Kinding, Context-Ok]
-  Suppose $\Gamma \vdash \phi':*_p$.  If $\Gamma,X:*_p,\Gamma' \vdash \phi:*_q$ 
-  with a derivation of depth $d$, then $\Gamma,[\phi'/X]\Gamma' \vdash [\phi'/X]\phi:*_q$
+  Suppose $\Gamma \vdash T':*_p$.  If $\Gamma,X:*_p,\Gamma' \vdash T:*_q$ 
+  with a derivation of depth $d$, then $\Gamma,[T'/X]\Gamma' \vdash [T'/X]T:*_q$
   with a derivation of depth $d$.
   Also, if $\Gamma,X:*_p,\Gamma'\ Ok$ with a derivation of depth $d$, then 
-  $\Gamma,[\phi'/X]\Gamma'\ Ok$ with a derivation of depth $d$.
+  $\Gamma,[T'/X]\Gamma'\ Ok$ with a derivation of depth $d$.
   \label{lemma:substitution_for_kinding_ssfp}
 \end{lemma}
 \begin{proof}
@@ -224,7 +224,7 @@ similar to the proofs for SSF):
 \end{proof}
 
 \begin{lemma}[Regularity]
-  If $\Gamma \vdash t:\phi$ then $\Gamma \vdash \phi:*_p$ for some $p$.
+  If $\Gamma \vdash t:T$ then $\Gamma \vdash T:*_p$ for some $p$.
   \label{lemma:regularity_ssfp}
 \end{lemma}
 \begin{proof}
@@ -244,10 +244,10 @@ straightforward extension of the ordering for SSF.
   \begin{center}
     \begin{tabular}{lll}
       \begin{tabular}{lll}
-        $\phi_1 \mathrel{\text{op}} \phi_2$           & $>_\Gamma$ & $\phi_1$\\
-        $\phi_1 \mathrel{\text{op}} \phi_2$           & $>_\Gamma$ & $\phi_2$\\
-        $\forall X:*_l.\phi$        & $>_\Gamma$ & $[\phi'/X]\phi$ where 
-        $\Gamma \vdash \phi':*_l$.\\
+        $T_1 \mathrel{\text{op}} T_2$           & $>_\Gamma$ & $T_1$\\
+        $T_1 \mathrel{\text{op}} T_2$           & $>_\Gamma$ & $T_2$\\
+        $\forall X:*_l.T$        & $>_\Gamma$ & $[T'/X]T$ where 
+        $\Gamma \vdash T':*_l$.\\
       \end{tabular}
     \end{tabular}
   \end{center}
@@ -255,36 +255,36 @@ straightforward extension of the ordering for SSF.
 \end{definition}
 
 \begin{thm}[Well-Founded Ordering]
-  The ordering $>_\Gamma$ is well-founded on types $\phi$ such that 
-  $\Gamma \vdash \phi:*_l$ for some $l$.
+  The ordering $>_\Gamma$ is well-founded on types $T$ such that 
+  $\Gamma \vdash T:*_l$ for some $l$.
   \label{thm:well-founded_ordering_ssfp}
 \end{thm}
 \begin{proof}
   The depth function, defined in the following definition, is used in the following proof.
 
   \begin{definition}
-    The depth of a type $\phi$ is defined as follows:
+    The depth of a type $T$ is defined as follows:
     \begin{center}
       \begin{tabular}{lll}
         $depth(X)$                  & $=$ & $1$\\
-        $depth(\phi \to \phi')$     & $=$ & $depth(\phi) + depth(\phi')$\\
-        $depth(\phi + \phi')$       & $=$ & $depth(\phi) + depth(\phi')$\\
-        $depth(\forall X:*_l.\phi)$ & $=$ & $depth(\phi) + 1$\\
+        $depth(T \to T')$     & $=$ & $depth(T) + depth(T')$\\
+        $depth(T + T')$       & $=$ & $depth(T) + depth(T')$\\
+        $depth(\forall X:*_l.T)$ & $=$ & $depth(T) + 1$\\
       \end{tabular}
     \end{center}
   \end{definition}
 
   We define the metric $(l,d)$ in lexicographic combination, where $l$
-  is the level of a type $\phi$ and $d$ is the depth of $\phi$.
+  is the level of a type $T$ and $d$ is the depth of $T$.
 
   \begin{lemma}[Well-Founded Measure]
     \label{lemma:well-founded_measure_ssfp}
-    If $\phi >_\Gamma \phi'$ then $(l,d) > (l',d')$, where $\Gamma \vdash \phi:*_l$, 
-    $depth(\phi) = d$,  $\Gamma \vdash \phi:*_{l'}$, and $depth(\phi') = d'$.
+    If $T >_\Gamma T'$ then $(l,d) > (l',d')$, where $\Gamma \vdash T:*_l$, 
+    $depth(T) = d$,  $\Gamma \vdash T:*_{l'}$, and $depth(T') = d'$.
   \end{lemma}
   \begin{proof}
     This holds by straightforward induction on the structure of
-    $\phi$. 
+    $T$. 
   \end{proof}
   
   Finally, the proof of well-foundedness of $>_\Gamma$.  If there exists
@@ -297,8 +297,8 @@ We need transitivity in a number of places in the proof of the main
 substitution lemma.  
 
 \begin{lemma}[Transitivity of $>_\Gamma$]
-  Let $\phi$, $\phi'$, and $\phi''$ be kindable types.  If $\phi >_\Gamma \phi'$ and 
-  $\phi' >_\Gamma \phi''$ then $\phi >_\Gamma \phi''$.
+  Let $T$, $T'$, and $T''$ be kindable types.  If $T >_\Gamma T'$ and 
+  $T' >_\Gamma T''$ then $T >_\Gamma T''$.
   \label{lemma:transitivity_ssfp}
 \end{lemma}
 \begin{proof}
@@ -314,35 +314,35 @@ The definition of the hereditary substitution function for SS$\Fp$ is
 in Fig.~\ref{fig:hereditary_substitution_function_part1} and
 Fig.~\ref{fig:hereditary_substitution_function_part2}.  First, one
 should read this definition as a mutually recursive function in terms
-of the hereditary substitution function $[t/x]^\phi t'$, the
-application reduction function $app_\phi\ t_1\ t_2$, and case
-construct reduction function $rcase_\phi\ t_0\ x\ t_1\ t_2$.  The
+of the hereditary substitution function $[t/x]^T t'$, the
+application reduction function $app_T\ t_1\ t_2$, and case
+construct reduction function $rcase_T\ t_0\ x\ t_1\ t_2$.  The
 definitions of all these functions depend the same definition of
-$ctype_\phi(x, t)$ as the proof of normalization of SSF
+$ctype_T(x, t)$ as the proof of normalization of SSF
 (Definition~\ref{def:ctype_function_ssf}).  So we do not repeat it
 here.
 \begin{figure} 
   \small
   \begin{itemize}
-  \item[] $app_\phi\ t_1\ t_2 = t_1\ t_2$
+  \item[] $app_T\ t_1\ t_2 = t_1\ t_2$
     \hscase{
       Where $t_1$ is not a $\lambda$-abstraction or a case construct.
     }
     
-  \item[] $app_\phi\ (\lambda x:\phi'.t_1)\ t_2 = [t_2/x]^{\phi'} t_1$
-  \item[] $app_\phi\ (\ccon{t_0}{x}{t_1}{t_2})\ t = 
-    \ccon{t_0}{x}{(app_\phi\ t_1\ t)}{(app_\phi\ t_2\ t)}$
+  \item[] $app_T\ (\lambda x:T'.t_1)\ t_2 = [t_2/x]^{T'} t_1$
+  \item[] $app_T\ (\ccon{t_0}{x}{t_1}{t_2})\ t = 
+    \ccon{t_0}{x}{(app_T\ t_1\ t)}{(app_T\ t_2\ t)}$
   \end{itemize}
   
   \begin{itemize}
-  \item[] $rcase_{\phi}\ t_0\ y\ t_1\ t_2 = \ccon{t_0}{y}{t_1}{t_2}$
+  \item[] $rcase_{T}\ t_0\ y\ t_1\ t_2 = \ccon{t_0}{y}{t_1}{t_2}$
     \hscase{
       Where $t_0$ is not an inject-left or an inject-right term or a case construct.    
     }
-  \item[] $rcase_{\phi}\ inl(t')\ y\ t_1\ t_2 = [t'/y]^{\phi_1}\ t_1$
-  \item[] $rcase_{\phi}\ inr(t')\ y\ t_1\ t_2 = [t'/y]^{\phi_2}\ t_2$
-  \item[] $rcase_{\phi}\,(\ccon{t'_0}{x}{t'_1}{t'_2})\,y\,t_1\,t_2 = 
-    \ccon{t'_0}{x}{(rcase_{\phi}\,t'_1\,y\,t_1\,t_2)}{(rcase_{\phi}\,t'_2\,y\,t_1\,t_2)}$
+  \item[] $rcase_{T}\ inl(t')\ y\ t_1\ t_2 = [t'/y]^{T_1}\ t_1$
+  \item[] $rcase_{T}\ inr(t')\ y\ t_1\ t_2 = [t'/y]^{T_2}\ t_2$
+  \item[] $rcase_{T}\,(\ccon{t'_0}{x}{t'_1}{t'_2})\,y\,t_1\,t_2 = 
+    \ccon{t'_0}{x}{(rcase_{T}\,t'_1\,y\,t_1\,t_2)}{(rcase_{T}\,t'_2\,y\,t_1\,t_2)}$
   \end{itemize}
   \caption{Hereditary Substitution Function for Stratified System $\Fp$}
   \label{fig:hereditary_substitution_function_part1}
@@ -351,59 +351,59 @@ here.
 \begin{figure}
   \small
   \begin{itemize}   
-  \item[] $[t/x]^\phi x = t$
-  \item[] $[t/x]^\phi y = y$
+  \item[] $[t/x]^T x = t$
+  \item[] $[t/x]^T y = y$
     \hscase{Where $y$ is a variable distinct from $x$.}
     
-  \item[] $[t/x]^\phi (\lambda y:\phi'.t') = \lambda y:\phi'.([t/x]^\phi t')$
-  \item[] $[t/x]^\phi (\Lambda X:*_l.t') = \Lambda X:*_l.([t/x]^\phi t')$
-  \item[] $[t/x]^\phi inr(t') = inr([t/x]^\phi t')$
-  \item[] $[t/x]^\phi inl(t') = inl([t/x]^\phi t')$
-  \item[] $[t/x]^\phi (t_1\ t_2) = ([t/x]^\phi t_1)\ ([t/x]^\phi t_2)$
+  \item[] $[t/x]^T (\lambda y:T'.t') = \lambda y:T'.([t/x]^T t')$
+  \item[] $[t/x]^T (\Lambda X:*_l.t') = \Lambda X:*_l.([t/x]^T t')$
+  \item[] $[t/x]^T inr(t') = inr([t/x]^T t')$
+  \item[] $[t/x]^T inl(t') = inl([t/x]^T t')$
+  \item[] $[t/x]^T (t_1\ t_2) = ([t/x]^T t_1)\ ([t/x]^T t_2)$
     \hscase{
-      Where $([t/x]^\phi t_1)$ is not a $\lambda$-abstraction or a case construct, or both 
-      $([t/x]^\phi t_1)$ and $t_1$ are $\lambda$-abstractions or case constructs, or $ctype_\phi(x,t_1)$ is 
+      Where $([t/x]^T t_1)$ is not a $\lambda$-abstraction or a case construct, or both 
+      $([t/x]^T t_1)$ and $t_1$ are $\lambda$-abstractions or case constructs, or $ctype_T(x,t_1)$ is 
       undefined.        
     }
-  \item[] $[t/x]^{\phi} (t_1\ t_2) = [([t/x]^{\phi} t_2)/y]^{\phi''} s'_1$
+  \item[] $[t/x]^{T} (t_1\ t_2) = [([t/x]^{T} t_2)/y]^{T''} s'_1$
     \hscase{
-      Where $([t/x]^{\phi} t_1) = \lambda y:\phi''.s'_1$ for some $y$,
-      $s'_1$, and $\phi''$ and $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
+      Where $([t/x]^{T} t_1) = \lambda y:T''.s'_1$ for some $y$,
+      $s'_1$, and $T''$ and $ctype_T(x,t_1) = T'' \to T'$.
     }
 
-  \item[] $[t/x]^{\phi} (t_1\ t_2) = 
-    \ccon{w}{y}{(app_\phi\ r\ ([t/x]^{\phi} t_2))}{(app_\phi\ s\ ([t/x]^{\phi} t_2))}$
+  \item[] $[t/x]^{T} (t_1\ t_2) = 
+    \ccon{w}{y}{(app_T\ r\ ([t/x]^{T} t_2))}{(app_T\ s\ ([t/x]^{T} t_2))}$
     \hscase{
-      Where $[t/x]^{\phi} t_1 = \ccon{w}{y}{r}{s}$ for some terms $w$, $r$, $s$ 
+      Where $[t/x]^{T} t_1 = \ccon{w}{y}{r}{s}$ for some terms $w$, $r$, $s$ 
       and variable $y$, and 
-      $ctype_\phi(x,t_1) = \phi'' \to \phi'$.
+      $ctype_T(x,t_1) = T'' \to T'$.
     }
 
-  \item[] $[t/x]^\phi (t'[\phi']) = ([t/x]^\phi t')[\phi']$
+  \item[] $[t/x]^T (t'[T']) = ([t/x]^T t')[T']$
     \hscase{
-      Where $[t/x]^\phi t'$ is not a type abstraction or
-      $t'$ and $[t/x]^\phi t'$ are type abstractions.    
+      Where $[t/x]^T t'$ is not a type abstraction or
+      $t'$ and $[t/x]^T t'$ are type abstractions.    
     }
     
-    \item[] $[t/x]^{\phi} (t'[\phi']) = [\phi'/X]s'_1$
+    \item[] $[t/x]^{T} (t'[T']) = [T'/X]s'_1$
       \hscase{
-        Where $[t/x]^{\phi} t' = \Lambda X:*_l.s'_1$,
-        for some $X$, $s'_1$ and $\Gamma \vdash \phi':*_q$, such that, $q \leq l$ and\\
+        Where $[t/x]^{T} t' = \Lambda X:*_l.s'_1$,
+        for some $X$, $s'_1$ and $\Gamma \vdash T':*_q$, such that, $q \leq l$ and\\
         $t'$ is not a type abstraction.
       }
 
-    \item[] $[t/x]^{\phi} (\ccon{t_0}{y}{t_1}{t_2}) = 
-      \ccon{([t/x]^{\phi} t_0)}{y}{([t/x]^{\phi} t_1)}{([t/x]^{\phi} t_2)}$
+    \item[] $[t/x]^{T} (\ccon{t_0}{y}{t_1}{t_2}) = 
+      \ccon{([t/x]^{T} t_0)}{y}{([t/x]^{T} t_1)}{([t/x]^{T} t_2)}$
       \hscase{
-        Where $([t/x]^{\phi} t_0)$ is not an inject-left or an inject-right term or a case 
-        construct, or $([t/x]^{\phi} t_0)$ and $t_0$ are both inject-left or inject-right terms or case 
-        constructs, or $ctype_\phi(x,t_0)$ is undefined.
+        Where $([t/x]^{T} t_0)$ is not an inject-left or an inject-right term or a case 
+        construct, or $([t/x]^{T} t_0)$ and $t_0$ are both inject-left or inject-right terms or case 
+        constructs, or $ctype_T(x,t_0)$ is undefined.
       }
 
-    \item[] $[t/x]^{\phi} (\ccon{t_0}{y}{t_1}{t_2}) = rcase_{\phi}\ ([t/x]^{\phi} t_0)\ y\  ([t/x]^{\phi} t_1)\ ([t/x]^{\phi} t_2)$
+    \item[] $[t/x]^{T} (\ccon{t_0}{y}{t_1}{t_2}) = rcase_{T}\ ([t/x]^{T} t_0)\ y\  ([t/x]^{T} t_1)\ ([t/x]^{T} t_2)$
       \hscase{
-        Where $([t/x]^{\phi} t_0)$ is an inject-left or an inject-right term or 
-        a case construct and $ctype_\phi(x,t_0) = \phi_1+\phi_2$.
+        Where $([t/x]^{T} t_0)$ is an inject-left or an inject-right term or 
+        a case construct and $ctype_T(x,t_0) = T_1+T_2$.
       }
   \end{itemize}
   \caption{Hereditary Substitution Function for Stratified System $\Fp$ Continued}
@@ -412,7 +412,7 @@ here.
 The hereditary substitution function is an extension of the hereditary
 substitution function for SSF.  The most interesting case of the
 definition is when a commuting conversion is created as a result of
-substitution.  In this case we know by the $ctype_\phi$ function that
+substitution.  In this case we know by the $ctype_T$ function that
 the head of the application is in the form $x\,t_1 \cdots t_2$.
 Furthermore, we know that applying the hereditary substitution
 function to the head of the application results in a case construct.
@@ -420,48 +420,48 @@ So we recursively reduce the created redex in the same way the
 reduction rules do, but when we push the argument into the branches of
 the resulting case construct more redexes may be created.  So to
 handle recursively reducing all of the newly created redexes in the
-branches we call the application reduction function $app_\phi$.  This
+branches we call the application reduction function $app_T$.  This
 function reduces redexes by recursively calling itself and the
 hereditary substitution function.  The remaining cases where new
 redexes are potentially created are similar to these cases.  The
-function $rcase_\phi$ handles reducing case constructs.
+function $rcase_T$ handles reducing case constructs.
 % subsection the_hereditary_substitution_function_ssfp (end)
 
 \subsection{Properties of The Hereditary Substitution Function}
 \label{sec:properties_of_the_hereditary_substitution_function_ssfp}
 We are now to the point where we can prove the properties of the
 hereditary substitution function.  Just as we did in the proof for SSF
-we first must show the properties of $ctype_\phi$ hold.
+we first must show the properties of $ctype_T$ hold.
 
-\begin{lemma}[Properties of $ctype_\phi$]
+\begin{lemma}[Properties of $ctype_T$]
   \label{lemma:ctype_props_ssfp}
   \small
   \begin{itemize}
-  \item[i.] If $ctype_\phi(x,t) = \phi'$ then $head(t) = x$ and $\phi'$ 
-    is a subexpression of $\phi$.
+  \item[i.] If $ctype_T(x,t) = T'$ then $head(t) = x$ and $T'$ 
+    is a subexpression of $T$.
     
-  \item[ii.] If $\Gamma,x:\phi,\Gamma' \vdash t:\phi'$ and $ctype_\phi(x,t) = \phi''$ then
-    $\phi' \equiv \phi''$.
+  \item[ii.] If $\Gamma,x:T,\Gamma' \vdash t:T'$ and $ctype_T(x,t) = T''$ then
+    $T' \equiv T''$.
 
-  \item[iii.] If $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$, $\Gamma \vdash t:\phi$,
-    $[t/x]^\phi t_1 = \lambda y:\phi_1.q$, and $t_1$ is not then there exists a type
-    $\psi$ such that $ctype_\phi(x,t_1) = \psi$.
+  \item[iii.] If $\Gamma,x:T,\Gamma' \vdash t_1\ t_2:T'$, $\Gamma \vdash t:T$,
+    $[t/x]^T t_1 = \lambda y:T_1.q$, and $t_1$ is not then there exists a type
+    $\psi$ such that $ctype_T(x,t_1) = \psi$.
 
-  \item[iv.] If $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$, $\Gamma \vdash t:\phi$,
-    $[t/x]^\phi t_1 = \ccon{t'_0}{y}{t'_1}{t'_2}$, and $t_1$ is not then there exists a type
-    $\psi$ such that $ctype_\phi(x,t_1) = \psi$.
+  \item[iv.] If $\Gamma,x:T,\Gamma' \vdash t_1\ t_2:T'$, $\Gamma \vdash t:T$,
+    $[t/x]^T t_1 = \ccon{t'_0}{y}{t'_1}{t'_2}$, and $t_1$ is not then there exists a type
+    $\psi$ such that $ctype_T(x,t_1) = \psi$.
 
-  \item[v.] If $\Gamma,x:\phi,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:\phi'$, 
-    $\Gamma \vdash t:\phi$, $[t/x]^\phi t_0 = \ccon{t'_0}{z}{t'_1}{t'_2}$, and 
-    $t_0$ is not then there exists a type $\psi$ such that $ctype_\phi(x,t_0) = \psi$.
+  \item[v.] If $\Gamma,x:T,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:T'$, 
+    $\Gamma \vdash t:T$, $[t/x]^T t_0 = \ccon{t'_0}{z}{t'_1}{t'_2}$, and 
+    $t_0$ is not then there exists a type $\psi$ such that $ctype_T(x,t_0) = \psi$.
 
-  \item[vi.] If $\Gamma,x:\phi,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:\phi'$, 
-    $\Gamma \vdash t:\phi$, $[t/x]^\phi t_0 = inl(t')$, and $t_0$ is not then there 
-    exists a type $\psi$ such that $ctype_\phi(x,t_0) = \psi$.
+  \item[vi.] If $\Gamma,x:T,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:T'$, 
+    $\Gamma \vdash t:T$, $[t/x]^T t_0 = inl(t')$, and $t_0$ is not then there 
+    exists a type $\psi$ such that $ctype_T(x,t_0) = \psi$.
 
-  \item[vii.] If $\Gamma,x:\phi,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:\phi'$, 
-    $\Gamma \vdash t:\phi$, $[t/x]^\phi t_0 = inr(t')$, and $t_0$ is not then 
-    there exists a type $\psi$ such that $ctype_\phi(x,t_0) = \psi$.
+  \item[vii.] If $\Gamma,x:T,\Gamma' \vdash \ccon{t_0}{y}{t_1}{t_2}:T'$, 
+    $\Gamma \vdash t:T$, $[t/x]^T t_0 = inr(t')$, and $t_0$ is not then 
+    there exists a type $\psi$ such that $ctype_T(x,t_0) = \psi$.
   \end{itemize}
 \end{lemma}
 \begin{proof}
@@ -472,24 +472,24 @@ we first must show the properties of $ctype_\phi$ hold.
 
   \ \\
   The only possiblities for the form of $t_1$ is $x$ or $\hat{t}_1\ \hat{t}_2$.  All other 
-  forms would not result in $[t/x]^\phi t_1$ being a $\lambda$-abstraction and $t_1$ not.
-  If $t_1 \equiv x$ then there exist a type $\phi''$ such that $\phi \equiv \phi'' \to \phi'$ and
-  $ctype_\phi(x,x\ t_2) = \phi'$ when $ctype_\phi(x,x) = \phi \equiv \phi'' \to \phi'$ in this case.  We know
-  $\phi''$ to exist by inversion on $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$.
+  forms would not result in $[t/x]^T t_1$ being a $\lambda$-abstraction and $t_1$ not.
+  If $t_1 \equiv x$ then there exist a type $T''$ such that $T \equiv T'' \to T'$ and
+  $ctype_T(x,x\ t_2) = T'$ when $ctype_T(x,x) = T \equiv T'' \to T'$ in this case.  We know
+  $T''$ to exist by inversion on $\Gamma,x:T,\Gamma' \vdash t_1\ t_2:T'$.
 
   \ \\
   Now suppose $t_1 \equiv (\hat{t}_1\ \hat{t}_2)$.  Now knowing $t'_1$ to not be a $\lambda$-abstraction
-  implies that $\hat{t}_1$ is also not a $\lambda$-abstraction or $[t/x]^\phi t_1$ would be an application
-  instead of a $\lambda$-abstraction.  So it must be the case that $[t/x]^\phi \hat{t}_1$ is a $\lambda$-abstraction
+  implies that $\hat{t}_1$ is also not a $\lambda$-abstraction or $[t/x]^T t_1$ would be an application
+  instead of a $\lambda$-abstraction.  So it must be the case that $[t/x]^T \hat{t}_1$ is a $\lambda$-abstraction
   and $\hat{t}_1$ is not.  Since $t_1\ t_2 > t_1$ we can apply the induction hypothesis to obtain there exists
-  a type $\psi$ such that $ctype_\phi(x,\hat{t}_1) = \psi$.  
-  Now by inversion on $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$ we know there exists a type $\phi''$ such that
-  $\Gamma,x:\phi,\Gamma' \vdash t_1:\phi'' \to \phi'$.  We know $t_1 \equiv (\hat{t}_1\ \hat{t}_2)$ so by inversion on
-  $\Gamma,x:\phi,\Gamma' \vdash t_1:\phi'' \to \phi'$ we know there exists a type $\psi''$ such that
-  $\Gamma,x:\phi,\Gamma' \vdash \hat{t}_1:\psi'' \to (\phi'' \to \phi')$.
-  By part two of Lemma~\ref{lemma:ctype_props_ssfp} we know $\psi \equiv \psi'' \to (\phi'' \to \phi')$ and
-  $ctype_\phi(x,t_1) = ctype_\phi(x,\hat{t}_1\ \hat{t}_2) = \phi'' \to \phi'$ 
-  when $ctype_\phi(x,\hat{t}_1) = \psi'' \to (\phi'' \to \phi')$, because we know $ctype_\phi(x,\hat{t}_1) = \psi$.
+  a type $\psi$ such that $ctype_T(x,\hat{t}_1) = \psi$.  
+  Now by inversion on $\Gamma,x:T,\Gamma' \vdash t_1\ t_2:T'$ we know there exists a type $T''$ such that
+  $\Gamma,x:T,\Gamma' \vdash t_1:T'' \to T'$.  We know $t_1 \equiv (\hat{t}_1\ \hat{t}_2)$ so by inversion on
+  $\Gamma,x:T,\Gamma' \vdash t_1:T'' \to T'$ we know there exists a type $\psi''$ such that
+  $\Gamma,x:T,\Gamma' \vdash \hat{t}_1:\psi'' \to (T'' \to T')$.
+  By part two of Lemma~\ref{lemma:ctype_props_ssfp} we know $\psi \equiv \psi'' \to (T'' \to T')$ and
+  $ctype_T(x,t_1) = ctype_T(x,\hat{t}_1\ \hat{t}_2) = T'' \to T'$ 
+  when $ctype_T(x,\hat{t}_1) = \psi'' \to (T'' \to T')$, because we know $ctype_T(x,\hat{t}_1) = \psi$.
 \end{proof}
 
 We now move on to proving the main properties of the hereditary
@@ -498,132 +498,132 @@ total function and the output maintains the same type as the principle
 term of substitution.
 \begin{lemma}[Total and Type Preserving]
   \label{lemma:total_ssfp}
-  Suppose $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$. Then
-  there exists a term $t''$ such that $[t/x]^\phi t' = t''$ and 
-  $\Gamma,\Gamma' \vdash t'':\phi'$.
+  Suppose $\Gamma \vdash t : T$ and $\Gamma, x:T, \Gamma' \vdash t':T'$. Then
+  there exists a term $t''$ such that $[t/x]^T t' = t''$ and 
+  $\Gamma,\Gamma' \vdash t'':T'$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the lexicorgraphic combination
-  $(\phi, t')$ of $>_{\Gamma,\Gamma'}$ and the strict subexpression
+  $(T, t')$ of $>_{\Gamma,\Gamma'}$ and the strict subexpression
   ordering.  We case split on $t'$.
 
 \begin{itemize}
 \item[Case.] Suppose $t'$ is either $x$ or a variable $y$ distinct from $x$.  
   Trivial in both cases.
   
-\item[Case.] Suppose $t' \equiv \lambda y:\phi_1.t'_1$.  By inversion on the
-  typing judgement we know $\Gamma,x:\phi,\Gamma',y:\phi_1 \vdash t'_1:\phi_2$.
+\item[Case.] Suppose $t' \equiv \lambda y:T_1.t'_1$.  By inversion on the
+  typing judgement we know $\Gamma,x:T,\Gamma',y:T_1 \vdash t'_1:T_2$.
   We also know $t' > t'_1$, hence we can apply the induction hypothesis to obtain
-  $[t/x]^\phi t'_1 = \hat{t}'_1$ and $\Gamma,\Gamma',y:\phi_1 \vdash \hat{t}:\phi_2$
+  $[t/x]^T t'_1 = \hat{t}'_1$ and $\Gamma,\Gamma',y:T_1 \vdash \hat{t}:T_2$
   for some term $\hat{t}'_1$.  By the definition of the hereditary substitution function 
-  $[t/x]^\phi t' = \lambda y:\phi_1.[t/x]^\phi t'_1 = \lambda y:\phi_1.\hat{t}'_1$.  It suffices
-  to show that $\Gamma,\Gamma' \vdash \lambda y:\phi_1.\hat{t}'_1:\phi_1 \to \phi_2$.  
+  $[t/x]^T t' = \lambda y:T_1.[t/x]^T t'_1 = \lambda y:T_1.\hat{t}'_1$.  It suffices
+  to show that $\Gamma,\Gamma' \vdash \lambda y:T_1.\hat{t}'_1:T_1 \to T_2$.  
   By simply applying the $\lambda$-abstraction typing rule using
-  $\Gamma,\Gamma',y:\phi_1 \vdash \hat{t}:\phi_2$ we obtain 
-  $\Gamma,\Gamma' \vdash \lambda y:\phi_1.\hat{t}'_1:\phi_1 \to \phi_2$.
+  $\Gamma,\Gamma',y:T_1 \vdash \hat{t}:T_2$ we obtain 
+  $\Gamma,\Gamma' \vdash \lambda y:T_1.\hat{t}'_1:T_1 \to T_2$.
   
 \item[Case.] Suppose $t' \equiv \Lambda X:*_l.t'_1$.  Similar to the previous case.
   
 \item[Case.] Suppose $t' \equiv t'_1\ t'_2$.  By inversion we know
-  $\Gamma, x:\phi, \Gamma' \vdash t'_1 : \phi'' \to \phi'$ and
-  $\Gamma, x:\phi, \Gamma' \vdash t'_2 : \phi''$ for some types $\phi'$ and $\phi''$.
+  $\Gamma, x:T, \Gamma' \vdash t'_1 : T'' \to T'$ and
+  $\Gamma, x:T, \Gamma' \vdash t'_2 : T''$ for some types $T'$ and $T''$.
   Clearly, $t' > t'_i$ for $i \in \{1,2\}$.  Thus, by the induction hypothesis
-  there exists terms $m_1$ and $m_2$ such that $[t/x]^\phi t'_i = m_i$,
-  $\Gamma, \Gamma' \vdash m_1 : \phi'' \to \phi'$ and
-  $\Gamma, \Gamma' \vdash m_2 : \phi''$ for
+  there exists terms $m_1$ and $m_2$ such that $[t/x]^T t'_i = m_i$,
+  $\Gamma, \Gamma' \vdash m_1 : T'' \to T'$ and
+  $\Gamma, \Gamma' \vdash m_2 : T''$ for
   $i \in \{1,2\}$.  We case split on whether or not $m_1$ is a $\lambda$-abstraction,
-  a case construct and $t'_1$ is not, or $ctype_\phi(x,t'_1)$ is undefined.  
+  a case construct and $t'_1$ is not, or $ctype_T(x,t'_1)$ is undefined.  
   We only consider the non-trivial cases when 
-  $m_1 \equiv \lambda y:\phi''.m'_1$ and $t'_1$ is not a $\lambda$-abstraction or $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$,
-  $ctype_\phi(x,t'_1) = \psi'' \to \psi'$, and $t'_1$ is not a case construct.  Suppose the former.  
+  $m_1 \equiv \lambda y:T''.m'_1$ and $t'_1$ is not a $\lambda$-abstraction or $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$,
+  $ctype_T(x,t'_1) = \psi'' \to \psi'$, and $t'_1$ is not a case construct.  Suppose the former.  
   Now by Lemma~\ref{lemma:ctype_props_ssfp} it is the case that 
-  there exists a $\psi$ such that $ctype_\phi(x,t'_1) = \psi$, 
-  $\psi \equiv \phi'' \to \phi'$, and $\psi$ is a subexpression of $\phi$, hence
-  $\phi >_{\Gamma,\Gamma'} \phi''$.
-  Then $[t/x]^\phi (t'_1\ t'_2) = [m_2/y]^{\psi''} m'_1$.  
+  there exists a $\psi$ such that $ctype_T(x,t'_1) = \psi$, 
+  $\psi \equiv T'' \to T'$, and $\psi$ is a subexpression of $T$, hence
+  $T >_{\Gamma,\Gamma'} T''$.
+  Then $[t/x]^T (t'_1\ t'_2) = [m_2/y]^{\psi''} m'_1$.  
   Therefore, by the induction hypothesis there exists a 
-  term $m$ such that $[m_2/y]^{\phi''} m'_1 = m$ and $\Gamma,\Gamma' \vdash m:\phi''$.
+  term $m$ such that $[m_2/y]^{T''} m'_1 = m$ and $\Gamma,\Gamma' \vdash m:T''$.
   
   \ \\
   Suppose $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$ and $t'_1$ is not a case construct.
-  Now $[t/x]^\phi t' = \ccon{m'_0}{y}{app_\phi\ m'_1\ m_2}{app_\phi\ m'_2\ m_2}$.  By inversion on
-  $\Gamma,\Gamma' \vdash m_1 : \phi'' \to \phi'$ we know there exists terms $\phi_1$ and $\phi_2$ such that
-  $\Gamma,\Gamma' \vdash m'_0:\phi_1+\phi_2$ and
-  $\Gamma,\Gamma',y:\phi_i \vdash m'_i:\phi'' \to \phi'$
+  Now $[t/x]^T t' = \ccon{m'_0}{y}{app_T\ m'_1\ m_2}{app_T\ m'_2\ m_2}$.  By inversion on
+  $\Gamma,\Gamma' \vdash m_1 : T'' \to T'$ we know there exists terms $T_1$ and $T_2$ such that
+  $\Gamma,\Gamma' \vdash m'_0:T_1+T_2$ and
+  $\Gamma,\Gamma',y:T_i \vdash m'_i:T'' \to T'$
   for $i \in \{1,2\}$.  It suffcies to show that
-  there exists terms $q$ and $q'$ such that $app_\phi\ m'_1\ m_2 = q$ and $app_\phi\ m'_2\ m_2 = q'$.  To obtain
-  this result we prove the following proposition.  Note that $ctype_\phi(x,t'_1) = \psi'' \to \psi'$ which
-  by Lemma~\ref{lemma:ctype_props_ssfp} is equivalent to $\phi'' \to \phi'$ and is 
-  a subexpression of $\phi$, hence $\phi >_{\Gamma,\Gamma'} \phi''$ and $\phi >_{\Gamma,\Gamma'} \phi'$.
+  there exists terms $q$ and $q'$ such that $app_T\ m'_1\ m_2 = q$ and $app_T\ m'_2\ m_2 = q'$.  To obtain
+  this result we prove the following proposition.  Note that $ctype_T(x,t'_1) = \psi'' \to \psi'$ which
+  by Lemma~\ref{lemma:ctype_props_ssfp} is equivalent to $T'' \to T'$ and is 
+  a subexpression of $T$, hence $T >_{\Gamma,\Gamma'} T''$ and $T >_{\Gamma,\Gamma'} T'$.
 
   \ \\
   {\bf Proposition.}  For all 
-  $\Gamma \vdash m_2 : \phi''$ and $\Gamma \vdash m'_1:\phi'' \to \phi'$
-  there exists a term $q$ such that $app_\phi\ m'_1\ m_2 = q$ and $\Gamma \vdash q:\phi'$.
+  $\Gamma \vdash m_2 : T''$ and $\Gamma \vdash m'_1:T'' \to T'$
+  there exists a term $q$ such that $app_T\ m'_1\ m_2 = q$ and $\Gamma \vdash q:T'$.
   
   \ \\
-  We prove this by nested induction on the ordering $(\phi, t', m'_1)$ and case splitting on 
+  We prove this by nested induction on the ordering $(T, t', m'_1)$ and case splitting on 
   the structure of $m'_1$.
   \begin{itemize}
   \item[Case.] Suppose $m'_1$ is neither a $\lambda$-abstraction or a case construct.  Then\\
-    $app_\phi\  m'_1\ m_2 = m'_1\ m_2$.  Take $m'_1\ m_2$ for $q$ and by applying the application typing rule
-    we know $\Gamma \vdash m'_1\ m_2:\phi'$.
+    $app_T\  m'_1\ m_2 = m'_1\ m_2$.  Take $m'_1\ m_2$ for $q$ and by applying the application typing rule
+    we know $\Gamma \vdash m'_1\ m_2:T'$.
     
-  \item[Case.] Suppose $m'_1 \equiv \lambda z:\phi''.m''_1$.  Then $app_\phi\ m'_1\ m_2 = [m_2/z]^{\phi''} m''_1$.
-    By inversion on the assumption $\Gamma \vdash m'_1:\phi'' \to \phi'$ we know 
-    $\Gamma,z:\phi'' \vdash m''_1:\phi'$.  Since $\phi >_{\Gamma} \phi''$ we can apply the outter induction
-    hypothesis to obtain there there exists a $q$ such that $[m_2/z]^{\phi''} m''_1 = q$ and 
-    $\Gamma \vdash q:\phi'$.  Therefore, $app_\phi\ m'_1\ m_2 = q$.
+  \item[Case.] Suppose $m'_1 \equiv \lambda z:T''.m''_1$.  Then $app_T\ m'_1\ m_2 = [m_2/z]^{T''} m''_1$.
+    By inversion on the assumption $\Gamma \vdash m'_1:T'' \to T'$ we know 
+    $\Gamma,z:T'' \vdash m''_1:T'$.  Since $T >_{\Gamma} T''$ we can apply the outter induction
+    hypothesis to obtain there there exists a $q$ such that $[m_2/z]^{T''} m''_1 = q$ and 
+    $\Gamma \vdash q:T'$.  Therefore, $app_T\ m'_1\ m_2 = q$.
     
   \item[Case.] Suppose $m'_1 \equiv \ccon{m''_0}{z}{m''_1}{m''_2}$.  Then\\
-    $app_\phi\ m'_1\ m_2 = \ccon{m''_0}{z}{app_\phi\ m''_1\ m_2}{app_\phi\ m''_2\ m_2}$.  By inversion on the assumption
-    $\Gamma \vdash m'_1:\phi''\to\phi'$ we know there exists types $\phi_1$ and $\phi_2$ such that
-    $\Gamma \vdash m''_0:\phi_1+\phi_2$, $\Gamma,z:\phi_1 \vdash m''_1:\phi''\to\phi'$
-    and $\Gamma,z:\phi_2 \vdash m''_2:\phi''\to\phi'$.  Since $m'_1 > m''_1$ and $m'_1 > m''_2$ we can 
+    $app_T\ m'_1\ m_2 = \ccon{m''_0}{z}{app_T\ m''_1\ m_2}{app_T\ m''_2\ m_2}$.  By inversion on the assumption
+    $\Gamma \vdash m'_1:T'' \to T'$ we know there exists types $T_1$ and $T_2$ such that
+    $\Gamma \vdash m''_0:T_1+T_2$, $\Gamma,z:T_1 \vdash m''_1:T'' \to T'$
+    and $\Gamma,z:T_2 \vdash m''_2:T'' \to T'$.  Since $m'_1 > m''_1$ and $m'_1 > m''_2$ we can 
     apply the inner induction hypothesis to obtain there exists terms $q'$ and $q''$ such that 
-    $app_\phi\ m''_1\ m_2 = q'$, $\Gamma,z:\phi_1 \vdash q':\phi'$, $app_\phi\ m''_1\ m_2 = q''$ and $\Gamma,z:\phi_2 \vdash q'':\phi'$.  
+    $app_T\ m''_1\ m_2 = q'$, $\Gamma,z:T_1 \vdash q':T'$, $app_T\ m''_1\ m_2 = q''$ and $\Gamma,z:T_2 \vdash q'':T'$.  
     Hence, 
-    $app_\phi\ m'_1\ m_2 = \ccon{m''_0}{z}{app_\phi\ m''_1\ m_2}{app_\phi\ m''_2\ m_2} = \ccon{m''_0}{z}{q'}{q''}$.  It suffices to 
-    to show that $\Gamma \vdash \ccon{m''_0}{z}{q'}{q''}:\phi'$.  This is a simple consequence of applying the
-    case-construct typing rule using $\Gamma \vdash m''_0:\phi_1+\phi_2$, $\Gamma,z:\phi_1 \vdash q':\phi'$, and
-    $\Gamma,z:\phi_2 \vdash q'':\phi'$.        
+    $app_T\ m'_1\ m_2 = \ccon{m''_0}{z}{app_T\ m''_1\ m_2}{app_T\ m''_2\ m_2} = \ccon{m''_0}{z}{q'}{q''}$.  It suffices to 
+    to show that $\Gamma \vdash \ccon{m''_0}{z}{q'}{q''}:T'$.  This is a simple consequence of applying the
+    case-construct typing rule using $\Gamma \vdash m''_0:T_1+T_2$, $\Gamma,z:T_1 \vdash q':T'$, and
+    $\Gamma,z:T_2 \vdash q'':T'$.        
   \end{itemize}
 
    
   \ \\
   By the previous proposition there exists terms $q$ and $q'$ such that \\
-  $[t/x]^\phi t' = \ccon{m'_0}{y}{app_\phi\ m'_1\ m_2}{app_\phi\ m'_2\ m_2}
-  = \ccon{m'_0}{y}{q}{q'}$, where $app_\phi\ m'_1\ m_2 = q$, $\Gamma,\Gamma',y:\phi_1 \vdash q:\phi'$, $app_\phi\ m'_1\ m_2 = q'$
-  and $\Gamma,\Gamma',y:\phi_2 \vdash q':\phi'$.  It suffices to show that
-  $\Gamma, \Gamma' \vdash \ccon{m'_0}{y}{q}{q'}:\phi'$.  From above we know that $\Gamma,\Gamma' \vdash m'_0:\phi_1+\phi_2$, 
-  $\Gamma,\Gamma',y:\phi_1 \vdash q:\phi'$ and $\Gamma,\Gamma',y:\phi_2 \vdash q':\phi'$.  Thus,
-  by applying the case-construct typing rule we obtain $\Gamma, \Gamma' \vdash \ccon{m'_0}{y}{q}{q'}:\phi'$.
+  $[t/x]^T t' = \ccon{m'_0}{y}{app_T\ m'_1\ m_2}{app_T\ m'_2\ m_2}
+  = \ccon{m'_0}{y}{q}{q'}$, where $app_T\ m'_1\ m_2 = q$, $\Gamma,\Gamma',y:T_1 \vdash q:T'$, $app_T\ m'_1\ m_2 = q'$
+  and $\Gamma,\Gamma',y:T_2 \vdash q':T'$.  It suffices to show that
+  $\Gamma, \Gamma' \vdash \ccon{m'_0}{y}{q}{q'}:T'$.  From above we know that $\Gamma,\Gamma' \vdash m'_0:T_1+T_2$, 
+  $\Gamma,\Gamma',y:T_1 \vdash q:T'$ and $\Gamma,\Gamma',y:T_2 \vdash q':T'$.  Thus,
+  by applying the case-construct typing rule we obtain $\Gamma, \Gamma' \vdash \ccon{m'_0}{y}{q}{q'}:T'$.
   
-\item[Case.] Suppose $t' \equiv t'_1[\phi'']$. Similar to the previous case.  
+\item[Case.] Suppose $t' \equiv t'_1[T'']$. Similar to the previous case.  
   
 \item[Case.] Suppose $t' \equiv inl(t)$. Trivial.
   
 \item[Case.] Suppose $t' \equiv inr(t)$. Trivial.
   
 \item[Case.] Suppose $t' \equiv \ccon{m_0}{y}{m_1}{m_2}$. By inversion on the assumption
-  $\Gamma,x:\phi,\Gamma' \vdash t':\phi'$ we know the following:
+  $\Gamma,x:T,\Gamma' \vdash t':T'$ we know the following:
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        \Gamma,x:\phi,\Gamma' \vdash m_0:\phi_1+\phi_2 \text{, for some types } \phi_1 \text{ and } \phi_2,\\
-        \Gamma,x:\phi,\Gamma',y:\phi_1 \vdash m_1:\phi, and\\
-        \Gamma,x:\phi,\Gamma',y:\phi_2 \vdash m_2:\phi.\\
+        \Gamma,x:T,\Gamma' \vdash m_0:T_1+T_2 \text{, for some types } T_1 \text{ and } T_2,\\
+        \Gamma,x:T,\Gamma',y:T_1 \vdash m_1:T, and\\
+        \Gamma,x:T,\Gamma',y:T_2 \vdash m_2:T.\\
       \end{array}
     \end{math}
   \end{center}
   It is easy to see that
   $t' > m_i$ for all $i \in \{0,1,2\}$.  Hence, by the induction hypothesis
-  there exists terms $m'_0$, $m'_1$, and $m'_2$ such that $[t/x]^\phi m_i = m'_i$ for all $i \in \{0,1,2\}$,
+  there exists terms $m'_0$, $m'_1$, and $m'_2$ such that $[t/x]^T m_i = m'_i$ for all $i \in \{0,1,2\}$,
   \begin{center}
     \begin{tabular}{lll}
-      (i)   & $\Gamma,\Gamma \vdash m'_0:\phi_1+\phi_2$,  \\
-      (ii)  & $\Gamma,\Gamma',y:\phi_1 \vdash m'_1:\phi'$, and\\
-      (iii) & $\Gamma,\Gamma',y:\phi_2 \vdash m'_2:\phi'$.  
+      (i)   & $\Gamma,\Gamma \vdash m'_0:T_1+T_2$,  \\
+      (ii)  & $\Gamma,\Gamma',y:T_1 \vdash m'_1:T'$, and\\
+      (iii) & $\Gamma,\Gamma',y:T_2 \vdash m'_2:T'$.  
     \end{tabular}
   \end{center}
   We have two cases to consider.
@@ -631,60 +631,60 @@ term of substitution.
   \item[Case.] Suppose $m_0$ and $m'_0$ are inject-left terms, inject-right terms, or case constructs,
     or $m_0$ is an inject-left term, inject-right term, or a case-construct and $m'_0$ is not, or
     $m_0$ and $m'_0$ are neither inject-left terms, inject-right terms, or case constructs, or
-    $ctype_\phi(x,m_0)$ is undefined.
+    $ctype_T(x,m_0)$ is undefined.
     Then \\
-    $[t/x]^{\phi} (\ccon{m_0}{y}{m_1}{m_2}) = \ccon{m'_0}{y}{m'_1}{m'_2}$ and by applying the case-construct 
-    typing rule to i - iii above we obtain \\ $\Gamma,\Gamma' \vdash \ccon{m'_0}{y}{m'_1}{m'_2}:\phi'$.
+    $[t/x]^{T} (\ccon{m_0}{y}{m_1}{m_2}) = \ccon{m'_0}{y}{m'_1}{m'_2}$ and by applying the case-construct 
+    typing rule to i - iii above we obtain \\ $\Gamma,\Gamma' \vdash \ccon{m'_0}{y}{m'_1}{m'_2}:T'$.
     
-  \item[Case.] Suppose $m'_0$ is an inject-left term, inject-right term, or case construct and $ctype_\phi(x,m_0) = \psi_1+\psi_2$.  Then\\
-    $[t/x]^{\phi} (\ccon{m_0}{y}{m_1}{m_2}) = rcase_{\phi}\ m'_0\ y\ m'_1\ m'_2$ and by Lemma~\ref{lemma:ctype_props_ssfp} we know
-    $\psi_1 + \psi_2 \equiv \phi_1+\phi_2$ and is a subexpression of $\phi$.
+  \item[Case.] Suppose $m'_0$ is an inject-left term, inject-right term, or case construct and $ctype_T(x,m_0) = \psi_1+\psi_2$.  Then\\
+    $[t/x]^{T} (\ccon{m_0}{y}{m_1}{m_2}) = rcase_{T}\ m'_0\ y\ m'_1\ m'_2$ and by Lemma~\ref{lemma:ctype_props_ssfp} we know
+    $\psi_1 + \psi_2 \equiv T_1+T_2$ and is a subexpression of $T$.
     It suffices to show that there exists some term
-    $q$ such that $rcase_{\phi}\ m'_0\ y\ m'_1\ m'_2 = q$ and $\Gamma, \Gamma' \vdash q:\phi'$.  We obtain this
+    $q$ such that $rcase_{T}\ m'_0\ y\ m'_1\ m'_2 = q$ and $\Gamma, \Gamma' \vdash q:T'$.  We obtain this
     result by the following proposition.
     
     \ \\
-    {\bf Proposition.} For all $\Gamma \vdash q_0:\phi$, $\Gamma, y:\phi_1 \vdash q_1:\phi'$, 
-    and $\Gamma, y:\phi_2 \vdash q_2:\phi'$ there exists a term $\hat{q}$ such that 
-    $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = \hat{q}$ and $\Gamma \vdash \hat{q}:\phi'$.  
-    We prove this by induction on the the ordering $(\phi, t', q_0)$ and case split on the structure of $q_0$.
+    {\bf Proposition.} For all $\Gamma \vdash q_0:T$, $\Gamma, y:T_1 \vdash q_1:T'$, 
+    and $\Gamma, y:T_2 \vdash q_2:T'$ there exists a term $\hat{q}$ such that 
+    $rcase_{T}\ q_0\ y\ q_1\ q_2 = \hat{q}$ and $\Gamma \vdash \hat{q}:T'$.  
+    We prove this by induction on the the ordering $(T, t', q_0)$ and case split on the structure of $q_0$.
     \begin{itemize}
     \item[Case.] Suppose $q_0$ is not an inject-left term, inject-right term, or a case construct.  Then\\
-      $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = \ccon{q_0}{y}{q_1}{q_2}$ and by applying the case-construct typing rule
-      using the assumptions $\Gamma \vdash q_0:\phi$, $\Gamma, y:\phi_1 \vdash q_1:\phi'$, 
-      and $\Gamma, y:\phi_2 \vdash q_2:\phi'$ we obtain $\Gamma,\Gamma' \vdash \ccon{q_0}{y}{q_1}{q_2}:\phi'$.
+      $rcase_{T}\ q_0\ y\ q_1\ q_2 = \ccon{q_0}{y}{q_1}{q_2}$ and by applying the case-construct typing rule
+      using the assumptions $\Gamma \vdash q_0:T$, $\Gamma, y:T_1 \vdash q_1:T'$, 
+      and $\Gamma, y:T_2 \vdash q_2:T'$ we obtain $\Gamma,\Gamma' \vdash \ccon{q_0}{y}{q_1}{q_2}:T'$.
       
-    \item[Case.] Suppose $q_0 \equiv inl(q'_0)$.  Then $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = [q'_0/y]^{\phi_1} q_1$ and
-      by inversion on $\Gamma \vdash q_0:\phi$ we know $\Gamma \vdash q'_0:\phi_1$.  It suffices to show that there
-      exists a term $\hat{q}$ such that $[q'_0/y]^{\phi_1} q_1 = \hat{q}$  and $\Gamma \vdash \hat{q}:\phi'$.  
-      Since $\phi >_{\Gamma} \phi'$ we can apply the the outer induction hypothesis to obtain that there exists 
+    \item[Case.] Suppose $q_0 \equiv inl(q'_0)$.  Then $rcase_{T}\ q_0\ y\ q_1\ q_2 = [q'_0/y]^{T_1} q_1$ and
+      by inversion on $\Gamma \vdash q_0:T$ we know $\Gamma \vdash q'_0:T_1$.  It suffices to show that there
+      exists a term $\hat{q}$ such that $[q'_0/y]^{T_1} q_1 = \hat{q}$  and $\Gamma \vdash \hat{q}:T'$.  
+      Since $T >_{\Gamma} T'$ we can apply the the outer induction hypothesis to obtain that there exists 
       such a term $\hat{q}$.
       
     \item[Case.] Suppose $q_0 \equiv inl(q'_0)$.  Similar to the previous case.
       
     \item[Case.] Suppose $q_0 \equiv \ccon{q'_0}{z}{q'_1}{q'_2}$.  Then \\
-      $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = \ccon{q'_0}{z}{(rcase_{\phi}\ q'_1\ y\ q_1\ q_2)}{(rcase_{\phi}\ q'_2\ y\ q_1\ q_2)}$.
-      We know by assumption that $\Gamma \vdash q_0:\phi$, $\Gamma \vdash q_0:\phi$, and $\Gamma, y:\phi_1 \vdash q_1:\phi'$
+      $rcase_{T}\ q_0\ y\ q_1\ q_2 = \ccon{q'_0}{z}{(rcase_{T}\ q'_1\ y\ q_1\ q_2)}{(rcase_{T}\ q'_2\ y\ q_1\ q_2)}$.
+      We know by assumption that $\Gamma \vdash q_0:T$, $\Gamma \vdash q_0:T$, and $\Gamma, y:T_1 \vdash q_1:T'$
       so by inversion we know the following:
       \begin{center}
         \begin{math}
           \begin{array}{lll}
-            (i) & \Gamma \vdash q'_0:\phi'_1 + \phi'_2 \text{, for some types } \phi'_1 \text{ and } \phi'_2,\\
-            (ii) & \Gamma, z:\phi'_1 \vdash q'_1:\phi, \text{ and }\\
-            (iii) & \Gamma, z:\phi'_2 \vdash q'_2:\phi.\\
+            (i) & \Gamma \vdash q'_0:T'_1 + T'_2 \text{, for some types } T'_1 \text{ and } T'_2,\\
+            (ii) & \Gamma, z:T'_1 \vdash q'_1:T, \text{ and }\\
+            (iii) & \Gamma, z:T'_2 \vdash q'_2:T.\\
           \end{array}
         \end{math}
       \end{center}
       Now $q_0 > q'_1$ and $q_0 > q'_1$ so we can apply the induction hypothesis twice to obtain terms $\hat{q}_1$ and
-      $\hat{q}_2$ such that $rcase_{\phi}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$, $rcase_{\phi}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$,
-      $\Gamma, z:\phi'_1 \vdash \hat{q}_1:\phi'$ and $\Gamma, z:\phi'_2 \vdash \hat{q}_2:\phi'$. So
-      $\ccon{q'_0}{z}{(rcase_{\phi}\ q'_1\ y\ q_1\ q_2)}{(rcase_{\phi}\ q'_2\ y\ q_1\ q_2)} = 
+      $\hat{q}_2$ such that $rcase_{T}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$, $rcase_{T}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$,
+      $\Gamma, z:T'_1 \vdash \hat{q}_1:T'$ and $\Gamma, z:T'_2 \vdash \hat{q}_2:T'$. So
+      $\ccon{q'_0}{z}{(rcase_{T}\ q'_1\ y\ q_1\ q_2)}{(rcase_{T}\ q'_2\ y\ q_1\ q_2)} = 
       \ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2}$.  It suffices to show that $\ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2} = \hat{q}$ 
-      and $\Gamma \vdash \hat{q}:\phi$ for some term $\hat{q}$.  Now $q_0 > q'_0$ so we can apply the induction hypothesis
-      to obtain our result, but before we can we must show that $\Gamma \vdash \ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2}:\phi'$.
-      This is a direct consequence of applying the case-construct typing rule using i, $\Gamma, z:\phi'_1 \vdash \hat{q}_1:\phi'$
-      and $\Gamma, z:\phi'_2 \vdash \hat{q}_2:\phi'$.  Therefore, by the induction hypothesis there exists a term $\hat{q}$ 
-      such that $\ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2} = \hat{q}$ and $\Gamma \vdash \hat{q}:\phi$.
+      and $\Gamma \vdash \hat{q}:T$ for some term $\hat{q}$.  Now $q_0 > q'_0$ so we can apply the induction hypothesis
+      to obtain our result, but before we can we must show that $\Gamma \vdash \ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2}:T'$.
+      This is a direct consequence of applying the case-construct typing rule using i, $\Gamma, z:T'_1 \vdash \hat{q}_1:T'$
+      and $\Gamma, z:T'_2 \vdash \hat{q}_2:T'$.  Therefore, by the induction hypothesis there exists a term $\hat{q}$ 
+      such that $\ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2} = \hat{q}$ and $\Gamma \vdash \hat{q}:T$.
     \end{itemize}
   \end{itemize}
 \end{itemize}
@@ -701,7 +701,7 @@ this requires the following definition.
       \begin{array}{lll}    
       rset(x) = \emptyset\\
       & \\
-      rset(\lambda x:\phi.t) = rset(t)\\
+      rset(\lambda x:T.t) = rset(t)\\
       & \\
       rset(\Lambda X:*_l.t) = rset(t)\\
       & \\
@@ -712,15 +712,15 @@ this requires the following definition.
       & \\
       rset(t_1\ t_2) = \{t_1\ t_2\} \cup rset(t'_1, t_2)\\
       \hscase{
-        \text{ Where } t_1 \equiv \lambda x:\phi.t'_1.
+        \text{ Where } t_1 \equiv \lambda x:T.t'_1.
       }\\
       & \\
-      rset(t''[\phi'']) = rset(t'')\\
+      rset(t''[T'']) = rset(t'')\\
       \hscase{
         \text{ Where } t'' \text{ is not a type absraction.} 
       }\\
       & \\
-      rset(t''[\phi'']) = \{t''[\phi'']\} \cup rset(t''') \\
+      rset(t''[T'']) = \{t''[T'']\} \cup rset(t''') \\
       \hscase{
         \text{ Where } t'' \equiv \Lambda X:*_l.t'''.
       }\\
@@ -751,20 +751,20 @@ this requires the following definition.
 \begin{lemma}[Redex Preserving]
   \label{lemma:redex_preserving_ssfp}
   \small
-  If $\Gamma \vdash t : \phi$, $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$, and
-  $t'$ then $|rset(t', t)| \geq |rset([t/x]^\phi t')|$.
+  If $\Gamma \vdash t : T$, $\Gamma, x:T, \Gamma' \vdash t':T'$, and
+  $t'$ then $|rset(t', t)| \geq |rset([t/x]^T t')|$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the lexicorgraphic combination
-  $(\phi, t')$ of $>_{\Gamma,\Gamma'}$ and the strict subexpression
+  $(T, t')$ of $>_{\Gamma,\Gamma'}$ and the strict subexpression
   ordering.  We case split on the structure of $t'$, and we only show
   the cases that differ from the proof of the same lemma for SSF
   (Lemma~\ref{lemma:redex_preserving_ssf}).
 \begin{itemize}  
   
 \item[Case.] Let $t' \equiv inl(t'')$. We know $rset(t', t) = rset(t'', t)$.  Since $t' > t''$ we can apply
-  the induction hypothesis to obtain $|rset(t'', t)| \geq |rset([t/x]^\phi t'')|$.  This implies
-  $|rset(t', t)| \geq |rset([t/x]^\phi t')|$.
+  the induction hypothesis to obtain $|rset(t'', t)| \geq |rset([t/x]^T t'')|$.  This implies
+  $|rset(t', t)| \geq |rset([t/x]^T t')|$.
   
 \item[Case.] Let $t' \equiv inr(t'')$. Similar to the previous case.  
   
@@ -772,16 +772,16 @@ this requires the following definition.
   \begin{center}
     $rset(t'_1\ t'_2, t) = rset(t'_1, t'_2, t)$
   \end{center}  
-  Clearly,  $t' > t'_i$ for $i \in \{1,2\}$, hence, by the induction hypothesis $|rset(t'_i,t)| \geq |rset([t/x]^\phi t'_i)|$.  
-  We have three cases to consider.  That is whether or not $[t/x]^\phi t'_1$ is a $\lambda$-abstraction, 
-  a case construct, or neither, or $ctype_\phi(x,t'_1)$ is undefined. However, we only show the new cases. 
-  Suppose $[t/x]^\phi t'_1 = \ccon{t''_0}{y}{t''_1}{t''_2}$. Then 
+  Clearly,  $t' > t'_i$ for $i \in \{1,2\}$, hence, by the induction hypothesis $|rset(t'_i,t)| \geq |rset([t/x]^T t'_i)|$.  
+  We have three cases to consider.  That is whether or not $[t/x]^T t'_1$ is a $\lambda$-abstraction, 
+  a case construct, or neither, or $ctype_T(x,t'_1)$ is undefined. However, we only show the new cases. 
+  Suppose $[t/x]^T t'_1 = \ccon{t''_0}{y}{t''_1}{t''_2}$. Then 
   \begin{center}
     \small
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi (t'_1\ t'_2))| & = & |rset(\ccon{t''_0}{y}{(app_\phi\ t''_1\ [t/x]^\phi t'_2)}{(app_\phi\ t''_2\ [t/x]^\phi t'_2)})|\\
-        & = & |rset(t''_0, (app_\phi\ t''_1\ [t/x]^\phi t'_2), (app_\phi\ t''_2\ [t/x]^\phi t'_2))|.
+        |rset([t/x]^T (t'_1\ t'_2))| & = & |rset(\ccon{t''_0}{y}{(app_T\ t''_1\ [t/x]^T t'_2)}{(app_T\ t''_2\ [t/x]^T t'_2)})|\\
+        & = & |rset(t''_0, (app_T\ t''_1\ [t/x]^T t'_2), (app_T\ t''_2\ [t/x]^T t'_2))|.
       \end{array}
     \end{math}
   \end{center}
@@ -789,7 +789,7 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t'_1)| & =    & |rset(t''_0, t''_1,t''_2)|\\
+        |rset([t/x]^T t'_1)| & =    & |rset(t''_0, t''_1,t''_2)|\\
         & \leq & |rset(t'_1,t)|
       \end{array}
     \end{math}
@@ -797,57 +797,57 @@ this requires the following definition.
   and
   \begin{center}
     \begin{math}
-      |rset([t/x]^\phi t'_2)| \leq |rset(t'_2,t)|.
+      |rset([t/x]^T t'_2)| \leq |rset(t'_2,t)|.
     \end{math}
   \end{center}
-  By inversion on $\Gamma,x:\phi,\Gamma' \vdash t_1\ t_2:\phi'$ there exists a type $\phi''$ such that
-  $\Gamma,x:\phi,\Gamma' \vdash t'_1:\phi'' \to \phi'$.  So by Lemma~\ref{lemma:ctype_props_ssfp},
-  $ctype_\phi(x,t'_1) = \psi$, $\psi \equiv \phi'' \to \phi'$, and $\psi$ is a subexpression of $\phi$.  Hence,
-  $\phi >_{\Gamma,\Gamma'} \phi''$ and $\phi >_{\Gamma,\Gamma'} \phi'$.  At this point we must show the following
+  By inversion on $\Gamma,x:T,\Gamma' \vdash t_1\ t_2:T'$ there exists a type $T''$ such that
+  $\Gamma,x:T,\Gamma' \vdash t'_1:T'' \to T'$.  So by Lemma~\ref{lemma:ctype_props_ssfp},
+  $ctype_T(x,t'_1) = \psi$, $\psi \equiv T'' \to T'$, and $\psi$ is a subexpression of $T$.  Hence,
+  $T >_{\Gamma,\Gamma'} T''$ and $T >_{\Gamma,\Gamma'} T'$.  At this point we must show the following
   proposition.
   \ \\
-  {\bf Proposition.}  For all $\Gamma \vdash t_1:\phi'' \to \phi'$ and $\Gamma \vdash t_2:\phi''$ we have \\
-  $|rset(app_\phi\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
+  {\bf Proposition.}  For all $\Gamma \vdash t_1:T'' \to T'$ and $\Gamma \vdash t_2:T''$ we have \\
+  $|rset(app_T\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
   
   \ \\
-  We prove this by nested induction on the ordering $(\phi, t', t_1)$ and case split on the structure of $t_1$. 
+  We prove this by nested induction on the ordering $(T, t', t_1)$ and case split on the structure of $t_1$. 
   
   \begin{itemize}
   \item[Case.] Suppose $t_1$ is not a $\lambda$-abstraction or a case construct.  Then
-    $app_\phi\ t_1\ t_2 = t_1\ t_2$ and $|rset(t_1\ t_2)| = |rset(t_1,t_2)|$.  Thus,
-    $|rset(app_\phi\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.  
+    $app_T\ t_1\ t_2 = t_1\ t_2$ and $|rset(t_1\ t_2)| = |rset(t_1,t_2)|$.  Thus,
+    $|rset(app_T\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.  
     
-  \item[Case.] Suppose $t_1 \equiv \lambda y:\phi''.t''_1$.  Then $app_\phi\ t_1\ t_2 = [t_2/y]^{\phi''} t''_1$.
-    By inversion on the assumption $\Gamma \vdash t_1:\phi'' \to \phi'$ we know $\Gamma,y:\phi'' \vdash t''_1:\phi'$.  
-    We know $\phi >_{\Gamma,\Gamma'} \phi''$ so by the outter induction hypothesis 
+  \item[Case.] Suppose $t_1 \equiv \lambda y:T''.t''_1$.  Then $app_T\ t_1\ t_2 = [t_2/y]^{T''} t''_1$.
+    By inversion on the assumption $\Gamma \vdash t_1:T'' \to T'$ we know $\Gamma,y:T'' \vdash t''_1:T'$.  
+    We know $T >_{\Gamma,\Gamma'} T''$ so by the outter induction hypothesis 
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          |rset([t_2/y]^{\phi''} t''_1)| & \leq & |rset(t''_1,t_2)\\
+          |rset([t_2/y]^{T''} t''_1)| & \leq & |rset(t''_1,t_2)\\
           & =    & |rset(t_1,t_2).
         \end{array}
       \end{math}
     \end{center}
-    Thus, $|rset(app_\phi\ t_1\ t_2) \leq |rset(t_1,t_2)|$.
+    Thus, $|rset(app_T\ t_1\ t_2) \leq |rset(t_1,t_2)|$.
     
   \item[Case.] Suppose $t_1 \equiv \ccon{t''_0}{y}{t''_1}{t''_2}$.  Then 
     \begin{center}
       \begin{math}
-        app_\phi\ t_1\ t_2 = \ccon{t''_0}{y}{app_\phi\ t''_1\ t_2}{app_\phi\ t''_2\ t_2}.
+        app_T\ t_1\ t_2 = \ccon{t''_0}{y}{app_T\ t''_1\ t_2}{app_T\ t''_2\ t_2}.
       \end{math}
     \end{center}
-    By inversion on the assumption $\Gamma \vdash t_1:\phi'' \to \phi'$ we know 
-    $\Gamma,y:\phi''_1 \vdash t''_1:\phi'' \to \phi'$ and $\Gamma,y:\phi''_2 \vdash t''_2:\phi'' \to \phi'$.
+    By inversion on the assumption $\Gamma \vdash t_1:T'' \to T'$ we know 
+    $\Gamma,y:T''_1 \vdash t''_1:T'' \to T'$ and $\Gamma,y:T''_2 \vdash t''_2:T'' \to T'$.
     Since $t_1 > t''_1$ and $t_1 > t''_2$ we can apply the induction hypothesis to obtain
     \begin{center}
       \begin{math}
-        |rset(app_\phi\ t''_1\ t_2)| \leq |rset(t''_1,t_2)|
+        |rset(app_T\ t''_1\ t_2)| \leq |rset(t''_1,t_2)|
       \end{math}
     \end{center}
     and
     \begin{center}
       \begin{math}
-        |rset(app_\phi\ t''_2\ t_2)| \leq |rset(t''_2,t_2)|.
+        |rset(app_T\ t''_2\ t_2)| \leq |rset(t''_2,t_2)|.
       \end{math}
     \end{center}
     Suppose $t''_0$ is not an inject-left or an inject-right term.  Then
@@ -863,15 +863,15 @@ this requires the following definition.
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          |rset(app_\phi\ t_1\ t_2)| & = & |rset(\ccon{t''_0}{y}{app_\phi\ t''_1\ t_2}{app_\phi\ t''_2\ t_2})|\\
-          & = & |rset(t''_0) \cup rset(app_\phi\ t''_1\ t_2) \cup rset(app_\phi\ t''_2\ t_2)|\\
+          |rset(app_T\ t_1\ t_2)| & = & |rset(\ccon{t''_0}{y}{app_T\ t''_1\ t_2}{app_T\ t''_2\ t_2})|\\
+          & = & |rset(t''_0) \cup rset(app_T\ t''_1\ t_2) \cup rset(app_T\ t''_2\ t_2)|\\
           & \leq & |rset(t''_0) \cup rset(t''_1, t_2) \cup rset(t''_2, t_2)|\\
           & = & |rset(t''_0) \cup rset(t''_1, t''_2, t_2)|\\
           & = & |rset(t''_0, t''_1, t''_2, t_2)|.
         \end{array}
       \end{math}
     \end{center}
-    Therefore, $|rset(app_\phi\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
+    Therefore, $|rset(app_T\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
 
     \ \\
     Now suppose $t''_0 \equiv inl(\hat{t}_0)$.  We only show the case when $t''_0$ is an
@@ -890,16 +890,16 @@ this requires the following definition.
       \small
       \begin{math}
         \begin{array}{lll}
-          |rset(app_\phi\ t_1\ t_2)| \\
-          \,\,\,\,\,= |rset(\ccon{t''_0}{y}{app_\phi\ t''_1\ t_2}{app_\phi\ t''_2\ t_2})|\\
-%%          \,\,\,\,\,= |\{\ccon{t''_0}{y}{app_\phi\ t''_1\ t_2}{app_\phi\ t''_2\ t_2}\} \cup rset(t''_0) \cup rset(app_\phi\ t''_1\ t_2) \cup rset(app_\phi\ t''_2\ t_2)|\\
-%%          \,\,\,\,\,\leq |\{\ccon{t''_0}{y}{app_\phi\ t''_1\ t_2}{app_\phi\ t''_2\ t_2}\} \cup rset(t''_0) \cup rset(t''_1, t_2) \cup rset(t''_2, t_2)|\\
-          \,\,\,\,\,\leq |\{\ccon{t''_0}{y}{app_\phi\ t''_1\ t_2}{app_\phi\ t''_2\ t_2}\} \cup rset(t''_0) \cup rset(t''_1, t''_2, t_2)|\\
-          \,\,\,\,\,= |\{\ccon{t''_0}{y}{app_\phi\ t''_1\ t_2}{app_\phi\ t''_2\ t_2}\} \cup rset(t''_0, t''_1, t''_2, t_2)|.
+          |rset(app_T\ t_1\ t_2)| \\
+          \,\,\,\,\,= |rset(\ccon{t''_0}{y}{app_T\ t''_1\ t_2}{app_T\ t''_2\ t_2})|\\
+%%          \,\,\,\,\,= |\{\ccon{t''_0}{y}{app_T\ t''_1\ t_2}{app_T\ t''_2\ t_2}\} \cup rset(t''_0) \cup rset(app_T\ t''_1\ t_2) \cup rset(app_T\ t''_2\ t_2)|\\
+%%          \,\,\,\,\,\leq |\{\ccon{t''_0}{y}{app_T\ t''_1\ t_2}{app_T\ t''_2\ t_2}\} \cup rset(t''_0) \cup rset(t''_1, t_2) \cup rset(t''_2, t_2)|\\
+          \,\,\,\,\,\leq |\{\ccon{t''_0}{y}{app_T\ t''_1\ t_2}{app_T\ t''_2\ t_2}\} \cup rset(t''_0) \cup rset(t''_1, t''_2, t_2)|\\
+          \,\,\,\,\,= |\{\ccon{t''_0}{y}{app_T\ t''_1\ t_2}{app_T\ t''_2\ t_2}\} \cup rset(t''_0, t''_1, t''_2, t_2)|.
         \end{array}
       \end{math}
     \end{center}
-    Therefore, $|rset(app_\phi\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
+    Therefore, $|rset(app_T\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
   \end{itemize}
   % end proposition.
 
@@ -907,9 +907,9 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi (t'_1\ t'_2))| \\
-        \,\,\,\,= |rset((\ccon{[t/x]^\phi t''_0}{y}{[t/x]^\phi t''_1}{[t/x]^\phi t''_2})\ [t/x]^\phi t'_2)|\\
-        \,\,\,\,= |\{[t/x]^\phi (t'_1\ t'_2)\} \cup rset([t/x]^\phi t''_0,[t/x]^\phi t''_1,[t/x]^\phi t''_2,[t/x]^\phi t'_2)|.
+        |rset([t/x]^T (t'_1\ t'_2))| \\
+        \,\,\,\,= |rset((\ccon{[t/x]^T t''_0}{y}{[t/x]^T t''_1}{[t/x]^T t''_2})\ [t/x]^T t'_2)|\\
+        \,\,\,\,= |\{[t/x]^T (t'_1\ t'_2)\} \cup rset([t/x]^T t''_0,[t/x]^T t''_1,[t/x]^T t''_2,[t/x]^T t'_2)|.
       \end{array}
     \end{math}
   \end{center}
@@ -917,17 +917,17 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t''_0| \leq |rset(t''_0, t)|,\\
-        |rset([t/x]^\phi t''_1| \leq |rset(t''_1, t)|,\\
-        |rset([t/x]^\phi t''_2| \leq |rset(t''_2, t)|, \text{ and }\\
-        |rset([t/x]^\phi t'_2| \leq |rset(t'_2, t)|.\\
+        |rset([t/x]^T t''_0| \leq |rset(t''_0, t)|,\\
+        |rset([t/x]^T t''_1| \leq |rset(t''_1, t)|,\\
+        |rset([t/x]^T t''_2| \leq |rset(t''_2, t)|, \text{ and }\\
+        |rset([t/x]^T t'_2| \leq |rset(t'_2, t)|.\\
       \end{array}
     \end{math}
   \end{center}
   Hence, 
   \begin{center}
     \begin{math}
-      |rset([t/x]^\phi t''_0,[t/x]^\phi t''_1,[t/x]^\phi t''_2,[t/x]^\phi t'_2)| \leq |rset(t''_0, t''_1, t''_2, t'_2, t)|.
+      |rset([t/x]^T t''_0,[t/x]^T t''_1,[t/x]^T t''_2,[t/x]^T t'_2)| \leq |rset(t''_0, t''_1, t''_2, t'_2, t)|.
     \end{math}
   \end{center}
   Now
@@ -939,7 +939,7 @@ this requires the following definition.
       \end{array}
     \end{math}
   \end{center}
-  Therefore, $|rset([t/x]^\phi (t'_1\ t'_2))| \leq |rset(t'_1\ t'_2,t)|$.
+  Therefore, $|rset([t/x]^T (t'_1\ t'_2))| \leq |rset(t'_1\ t'_2,t)|$.
   
 \item[Case.] 
   Let $t' \equiv \ccon{t'_0}{y}{t'_1}{t'_2}$.  Suppose $t'_0$ is not an inject-left term, and inject-right term,
@@ -949,15 +949,15 @@ this requires the following definition.
       |rset(t', t)| = |rset(t'_0, t'_1, t'_2, t)|.
     \end{math}
   \end{center}
-  Now we have several cases to consider, when $[t/x]^\phi t'_0$ is an inject-left term,
-  an inject-right term, a case construct, something else entirely, or $ctype_\phi(x,t'_0)$ is undefined. Suppose it is something else entirely or
-  $ctype_\phi(x,t'_0)$ is undefined.
+  Now we have several cases to consider, when $[t/x]^T t'_0$ is an inject-left term,
+  an inject-right term, a case construct, something else entirely, or $ctype_T(x,t'_0)$ is undefined. Suppose it is something else entirely or
+  $ctype_T(x,t'_0)$ is undefined.
   Then 
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t')| & = & |rset(\ccon{[t/x]^\phi t'_0}{y}{([t/x]^\phi t'_1)}{([t/x]^\phi t'_2)})|\\
-        & = & |rset([t/x]^\phi t'_0,([t/x]^\phi t'_1),([t/x]^\phi t'_2))|.
+        |rset([t/x]^T t')| & = & |rset(\ccon{[t/x]^T t'_0}{y}{([t/x]^T t'_1)}{([t/x]^T t'_2)})|\\
+        & = & |rset([t/x]^T t'_0,([t/x]^T t'_1),([t/x]^T t'_2))|.
       \end{array}
     \end{math}
   \end{center}
@@ -965,17 +965,17 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t'_0| \leq |rset(t'_0, t)|,\\
-        |rset([t/x]^\phi t'_1| \leq |rset(t'_1, t)|, \text{ and }\\
-        |rset([t/x]^\phi t'_2| \leq |rset(t'_2, t)|.
+        |rset([t/x]^T t'_0| \leq |rset(t'_0, t)|,\\
+        |rset([t/x]^T t'_1| \leq |rset(t'_1, t)|, \text{ and }\\
+        |rset([t/x]^T t'_2| \leq |rset(t'_2, t)|.
       \end{array}
     \end{math}
   \end{center}
-  This implies that $|rset([t/x]^\phi t'_0,([t/x]^\phi t'_1),([t/x]^\phi t'_2))| \leq |rset(t'_0,t'_1,t'_2,t)|$.\\
-  Therefore, $|rset(t', t)| \geq |rset([t/x]^\phi t')$.
+  This implies that $|rset([t/x]^T t'_0,([t/x]^T t'_1),([t/x]^T t'_2))| \leq |rset(t'_0,t'_1,t'_2,t)|$.\\
+  Therefore, $|rset(t', t)| \geq |rset([t/x]^T t')$.
   
   \ \\
-  Now suppose $[t/x]^\phi t'_0 \equiv inl(t''_0)$.  We only show the case for when $[t/x]^\phi t'_0$ is an inject-left
+  Now suppose $[t/x]^T t'_0 \equiv inl(t''_0)$.  We only show the case for when $[t/x]^T t'_0$ is an inject-left
   term, because the case for when it is an inject-right term is similar.  We can see that 
   \begin{center}
     \begin{math}
@@ -985,16 +985,16 @@ this requires the following definition.
       \end{array}
     \end{math}
   \end{center}
-  and $|rset([t/x]^\phi t')| = |rset([t''_0/y]^{\phi_1} ([t/x]^\phi t'_1))|$.    By inversion on $\Gamma,x:\phi,\Gamma' \vdash t':\phi'$ we know there exists
-  types $\phi_1$ and $\phi_2$ such that $\Gamma,x:\phi,\Gamma' \vdash t_0:\phi_1+\phi_2$.
-  So by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that $ctype_\phi (x,t'_0) = \psi$, $\psi \equiv \phi_1+\phi_2$, and $\psi$ is a 
-  subexpression of $\phi$.  Thus, $\phi >_{\Gamma,\Gamma'} \phi_1$, $\phi >_{\Gamma,\Gamma'} \phi_2$, $t > t'_0$, and $t > t'_1$ so we can apply the induction hypothesis
+  and $|rset([t/x]^T t')| = |rset([t''_0/y]^{T_1} ([t/x]^T t'_1))|$.    By inversion on $\Gamma,x:T,\Gamma' \vdash t':T'$ we know there exists
+  types $T_1$ and $T_2$ such that $\Gamma,x:T,\Gamma' \vdash t_0:T_1+T_2$.
+  So by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that $ctype_T (x,t'_0) = \psi$, $\psi \equiv T_1+T_2$, and $\psi$ is a 
+  subexpression of $T$.  Thus, $T >_{\Gamma,\Gamma'} T_1$, $T >_{\Gamma,\Gamma'} T_2$, $t > t'_0$, and $t > t'_1$ so we can apply the induction hypothesis
   to obtain 
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t''_0/y]^{\phi_1} ([t/x]^\phi t'_1))| & \leq & |rset(t''_0,[t/x]^\phi t'_1)|\\
-        & =    & |rset([t/x]^\phi t'_0,[t/x]^\phi t'_1)|\\
+        |rset([t''_0/y]^{T_1} ([t/x]^T t'_1))| & \leq & |rset(t''_0,[t/x]^T t'_1)|\\
+        & =    & |rset([t/x]^T t'_0,[t/x]^T t'_1)|\\
         & \leq & |rset(t'_0, t'_1, t)|\\
         & \leq & |rset(t'_0, t'_1, t'_2, t)|.\\
       \end{array}
@@ -1002,10 +1002,10 @@ this requires the following definition.
   \end{center}
     
   \ \\
-  Next suppose $[t/x]^\phi t'_0 \equiv \ccon{t''_0}{y}{t''_1}{t''_2}$.  Then 
+  Next suppose $[t/x]^T t'_0 \equiv \ccon{t''_0}{y}{t''_1}{t''_2}$.  Then 
   \begin{center}
     \begin{math}
-      |rset([t/x]^\phi t')| = |rset(rcase_{\phi}\ [t/x]^\phi t'_0\ y\ [t/x]^\phi t'_1\ [t/x]^\phi t'_2)|
+      |rset([t/x]^T t')| = |rset(rcase_{T}\ [t/x]^T t'_0\ y\ [t/x]^T t'_1\ [t/x]^T t'_2)|
     \end{math}
   \end{center}
   and
@@ -1017,71 +1017,71 @@ this requires the following definition.
       \end{array}
     \end{math}
   \end{center}
-  Note that by inverision on $\Gamma,x:\phi,\Gamma' \vdash t':\phi'$ we know there exists
-  types $\phi_1$ and $\phi_2$ such that $\Gamma,x:\phi,\Gamma' \vdash t'_0:\phi_1+\phi_2$.
-  So by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that $ctype_\phi (x,t'_0) = \psi$, $\psi \equiv \phi_1+\phi_2$, and $\psi$ is a 
-  subexpression of $\phi$. Thus, $\phi >_{\Gamma,\Gamma'} \phi_1$ and $\phi >_{\Gamma,\Gamma'} \phi_2$.
-  It suffices to show that $|rset(rcase_\phi\ [t/x]^\phi t'_0\ [t/x]^\phi t'_1\ [t/x]^\phi t'_2)| \leq |rset([t/x]^\phi t'_0, [t/x]^\phi t'_1, [t/x]^\phi t'_2)|$ which
+  Note that by inverision on $\Gamma,x:T,\Gamma' \vdash t':T'$ we know there exists
+  types $T_1$ and $T_2$ such that $\Gamma,x:T,\Gamma' \vdash t'_0:T_1+T_2$.
+  So by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that $ctype_T (x,t'_0) = \psi$, $\psi \equiv T_1+T_2$, and $\psi$ is a 
+  subexpression of $T$. Thus, $T >_{\Gamma,\Gamma'} T_1$ and $T >_{\Gamma,\Gamma'} T_2$.
+  It suffices to show that $|rset(rcase_T\ [t/x]^T t'_0\ [t/x]^T t'_1\ [t/x]^T t'_2)| \leq |rset([t/x]^T t'_0, [t/x]^T t'_1, [t/x]^T t'_2)|$ which
   is a consequence of the following proposition.
     
   \ \\
-  {\bf Proposition.}  For all $\Gamma \vdash t:\phi_1+\phi_2$, $\Gamma, y:\phi_1 \vdash t'_1:\phi'$, and 
-  $\Gamma, y:\phi_2 \vdash t'_2:\phi'$ we have $|rset(rcase_{\phi}\ t\ y\ t'_1\ t'_2)| \leq |rset(t, t'_1, t'_2)|$.
+  {\bf Proposition.}  For all $\Gamma \vdash t:T_1+T_2$, $\Gamma, y:T_1 \vdash t'_1:T'$, and 
+  $\Gamma, y:T_2 \vdash t'_2:T'$ we have $|rset(rcase_{T}\ t\ y\ t'_1\ t'_2)| \leq |rset(t, t'_1, t'_2)|$.
     
   \ \\
-  We prove this proposition by nested induction on $(\phi, t', t)$ and we case split on $t$.
+  We prove this proposition by nested induction on $(T, t', t)$ and we case split on $t$.
   \begin{itemize}
   \item[Case.] Suppose $t \equiv inl(t')$.  Then
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          rset(rcase_{\phi}\ t\ y\ t'_1\ t'_2) = rset([t'/y]^{\phi_1} t'_1).
+          rset(rcase_{T}\ t\ y\ t'_1\ t'_2) = rset([t'/y]^{T_1} t'_1).
         \end{array}
       \end{math}
     \end{center}
-    By inversion on $\Gamma \vdash t:\phi_1+\phi_2$ we know $\Gamma \vdash t':\phi_1$.  So by the outer induction
+    By inversion on $\Gamma \vdash t:T_1+T_2$ we know $\Gamma \vdash t':T_1$.  So by the outer induction
     hypothesis 
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          |rset([t'/y]^{\phi_1}t'_1)| & \leq & |rset(t'_1,t')|\\
+          |rset([t'/y]^{T_1}t'_1)| & \leq & |rset(t'_1,t')|\\
           & =    & |rset(t,t'_1)|\\
           & \leq & |rset(t,t'_1,t'_2)|.
         \end{array}
       \end{math}
     \end{center}
-    Therefore, $|rset(rcase_{\phi}\ t\ y\ t'_1\ t'_2)| \leq |rset(t,t'_1,t'_2)|$.
+    Therefore, $|rset(rcase_{T}\ t\ y\ t'_1\ t'_2)| \leq |rset(t,t'_1,t'_2)|$.
 
   \item[Case.] Suppose $t \equiv inr(t')$.  This case is similar to the previous case.
 
   \item[Case.] Suppose $t \equiv \ccon{t_0}{z}{t_1}{t_2}$.  Then
     \begin{center}
       \begin{math}
-        \rcase{\phi}{t}{y}{t'_1}{t'_2} = 
-        \ccon{t_0}{z}{(\rcase{\phi}{t_1}{y}{t'_1}{t'_2})}{(\rcase{\phi}{t_2}{y}{t'_1}{t'_2})}.
+        \rcase{T}{t}{y}{t'_1}{t'_2} = 
+        \ccon{t_0}{z}{(\rcase{T}{t_1}{y}{t'_1}{t'_2})}{(\rcase{T}{t_2}{y}{t'_1}{t'_2})}.
       \end{math}
     \end{center}
     Now $t > t'_i$ for $i \in \{0,1,2\}$. Before we can apply the inductive hypothesis we must show that $t_1$ and $t_2$ 
-    are typeable.  By inversion on the assumption $\Gamma \vdash t:\phi_1+\phi_2$ we know 
-    $\Gamma,z:\phi'_1 \vdash t_1:\phi_1+\phi_2$ and $\Gamma,z:\phi'_2 \vdash t_2:\phi_1+\phi_2$.  So by the inner induction 
-    hypothesis $|rset(\rcase{\phi}{t_i}{y}{t'_1}{t'_2})| \leq |rset(t_i,t'_1,t'_2)|$.
+    are typeable.  By inversion on the assumption $\Gamma \vdash t:T_1+T_2$ we know 
+    $\Gamma,z:T'_1 \vdash t_1:T_1+T_2$ and $\Gamma,z:T'_2 \vdash t_2:T_1+T_2$.  So by the inner induction 
+    hypothesis $|rset(\rcase{T}{t_i}{y}{t'_1}{t'_2})| \leq |rset(t_i,t'_1,t'_2)|$.
         
     \ \\
     We have two cases to consider either $t_0$ is not an inject-left term or an inject-right term, or it is.
     If not then
     \begin{center}
       \begin{math}
-        rset(\rcase{\phi}{t}{y}{t'_1}{t'_2}) =
-        rset(t_0,\rcase{\phi}{t_1}{y}{t'_2}{t'_2},\rcase{\phi}{t_2}{y}{t'_2}{t'_2}) 
+        rset(\rcase{T}{t}{y}{t'_1}{t'_2}) =
+        rset(t_0,\rcase{T}{t_1}{y}{t'_2}{t'_2},\rcase{T}{t_2}{y}{t'_2}{t'_2}) 
       \end{math}
     \end{center}
     otherwise 
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          rset(\rcase{\phi}{t}{y}{t'_1}{t'_2}) \\
-          \text{\ \ \ \ } = \{\rcase{\phi}{t}{y}{t'_1}{t'_2}\} \cup
-          rset(t_0,\rcase{\phi}{t_1}{y}{t'_1}{t'_2},\rcase{\phi}{t_2}{y}{t'_1}{t'_2}).
+          rset(\rcase{T}{t}{y}{t'_1}{t'_2}) \\
+          \text{\ \ \ \ } = \{\rcase{T}{t}{y}{t'_1}{t'_2}\} \cup
+          rset(t_0,\rcase{T}{t_1}{y}{t'_1}{t'_2},\rcase{T}{t_2}{y}{t'_1}{t'_2}).
         \end{array}
       \end{math}
     \end{center}
@@ -1095,15 +1095,15 @@ this requires the following definition.
     \begin{center}
       \begin{math}
         \begin{array}{ll}
-          |rset(t_0,\rcase{\phi}{t_1}{y}{t'_2}{t'_2},\rcase{\phi}{t_2}{y}{t'_2}{t'_2})|\\
+          |rset(t_0,\rcase{T}{t_1}{y}{t'_2}{t'_2},\rcase{T}{t_2}{y}{t'_2}{t'_2})|\\
           \text{\ \ \ } = 
-          |rset(t_0) \cup rset(\rcase{\phi}{t_1}{y}{t'_2}{t'_2}) \cup rset(\rcase{\phi}{t_2}{y}{t'_2}{t'_2})|\\
+          |rset(t_0) \cup rset(\rcase{T}{t_1}{y}{t'_2}{t'_2}) \cup rset(\rcase{T}{t_2}{y}{t'_2}{t'_2})|\\
           \text{\ \ \ } \leq  |rset(t_0) \cup rset(t_1,t'_2,t'_2) \cup rset(t_1,t'_2,t'_2)| \\
           \text{\ \ \ } =   |rset(t_0, t_1,t_2,t'_2,t'_2)|.
         \end{array}
       \end{math}
     \end{center}
-    Therefore, $|rset(\rcase{\phi}{t}{y}{t'_1}{t'_2})| \leq |rset(t, t'_1, t'_2)|$.
+    Therefore, $|rset(\rcase{T}{t}{y}{t'_1}{t'_2})| \leq |rset(t, t'_1, t'_2)|$.
     
     \ \\
     Now suppose $t_0 \equiv inl(t'_0)$.  Then
@@ -1116,22 +1116,22 @@ this requires the following definition.
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          |\{\rcase{\phi}{t}{y}{t'_1}{t'_2}\} \cup
-          rset(t_0,\rcase{\phi}{t_1}{y}{t'_1}{t'_2},\rcase{\phi}{t_2}{y}{t'_1}{t'_2})|\\
+          |\{\rcase{T}{t}{y}{t'_1}{t'_2}\} \cup
+          rset(t_0,\rcase{T}{t_1}{y}{t'_1}{t'_2},\rcase{T}{t_2}{y}{t'_1}{t'_2})|\\
           \text{\ \ \ \ } \leq |\{t\} \cup rset(t_0, t_1, t_2, t'_1, t'_2)|.
         \end{array}
       \end{math}
     \end{center}
-    Let $A = \rcase{\phi}{t_1}{y}{t'_1}{t'_2}$ and $B = \rcase{\phi}{t_2}{y}{t'_1}{t'_2}$. Since \\
-    $|rset(\rcase{\phi}{t_i}{y}{t'_1}{t'_2})| \leq |rset(t_i,t'_1,t'_2)|$ we obtain the following:
+    Let $A = \rcase{T}{t_1}{y}{t'_1}{t'_2}$ and $B = \rcase{T}{t_2}{y}{t'_1}{t'_2}$. Since \\
+    $|rset(\rcase{T}{t_i}{y}{t'_1}{t'_2})| \leq |rset(t_i,t'_1,t'_2)|$ we obtain the following:
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          |\{\rcase{\phi}{t}{y}{t'_1}{t'_2}\} \cup rset(t_0,A,B)|\\
-          \text{\ \ \ \ } = |\{\rcase{\phi}{t}{y}{t'_1}{t'_2}\}| + |rset(t_0)| + |rset(A)| + |rset(B)|\\
-          \text{\ \ \ \ } \leq |\{\rcase{\phi}{t}{y}{t'_1}{t'_2}\}| +
+          |\{\rcase{T}{t}{y}{t'_1}{t'_2}\} \cup rset(t_0,A,B)|\\
+          \text{\ \ \ \ } = |\{\rcase{T}{t}{y}{t'_1}{t'_2}\}| + |rset(t_0)| + |rset(A)| + |rset(B)|\\
+          \text{\ \ \ \ } \leq |\{\rcase{T}{t}{y}{t'_1}{t'_2}\}| +
           |rset(t_0)| + |rset(t_1,t'_1,t'_2)| + |rset(t_2,t'_1,t'_2)|\\
-          \text{\ \ \ \ } = |\{\rcase{\phi}{t}{y}{t'_1}{t'_2}\}| + |rset(t_0, t_1,t_2,t'_1,t'_2)|\\
+          \text{\ \ \ \ } = |\{\rcase{T}{t}{y}{t'_1}{t'_2}\}| + |rset(t_0, t_1,t_2,t'_1,t'_2)|\\
           \text{\ \ \ \ } = |\{t\} \cup rset(t_0, t_1, t_2, t'_1, t'_2)|.\\
         \end{array}
       \end{math}
@@ -1140,16 +1140,16 @@ this requires the following definition.
   \end{itemize}
   Now by the previous proposition we know 
   \begin{center}
-    $|rset(rcase_\phi\ [t/x]^\phi t'_0\ [t/x]^\phi t'_1\ [t/x]^\phi t'_2)| \leq |rset([t/x]^\phi t'_0, [t/x]^\phi t'_1, [t/x]^\phi t'_2)|$,
+    $|rset(rcase_T\ [t/x]^T t'_0\ [t/x]^T t'_1\ [t/x]^T t'_2)| \leq |rset([t/x]^T t'_0, [t/x]^T t'_1, [t/x]^T t'_2)|$,
   \end{center}
-  becuase by Lemma~\ref{lemma:total_ssfp} $t'_0$, $t'_1$, and $t'_2$ have the same types as $[t/x]^\phi t'_0$, $[t/x]^\phi t'_1$, and $[t/x]^\phi t'_2$.
+  becuase by Lemma~\ref{lemma:total_ssfp} $t'_0$, $t'_1$, and $t'_2$ have the same types as $[t/x]^T t'_0$, $[t/x]^T t'_1$, and $[t/x]^T t'_2$.
   Now $t' > t'_0$, $t' > t'_1$, and $t' > t'_2$, so 
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t'_0)| \leq |rset(t'_0, t),\\
-        |rset([t/x]^\phi t'_1)| \leq |rset(t'_1, t), \text{ and }\\
-        |rset([t/x]^\phi t'_2)| \leq |rset(t'_2, t).
+        |rset([t/x]^T t'_0)| \leq |rset(t'_0, t),\\
+        |rset([t/x]^T t'_1)| \leq |rset(t'_1, t), \text{ and }\\
+        |rset([t/x]^T t'_2)| \leq |rset(t'_2, t).
       \end{array}
     \end{math}
   \end{center}
@@ -1157,7 +1157,7 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t'_0, [t/x]^\phi t'_1, [t/x]^\phi t'_2)| & \leq & |rset(t'_0,t'_1,t'_2,t)|\\
+        |rset([t/x]^T t'_0, [t/x]^T t'_1, [t/x]^T t'_2)| & \leq & |rset(t'_0,t'_1,t'_2,t)|\\
         & =    & |rset(t',t)|.
       \end{array}
     \end{math}
@@ -1169,9 +1169,9 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t')| & = & |rset(\ccon{[t/x]^\phi t'_0}{y}{[t/x]^\phi t'_1}{[t/x]^\phi t'_2})|\\
-        & = & |rset(\ccon{inl([t/x]^\phi t''_0)}{y}{[t/x]^\phi t'_1}{[t/x]^\phi t'_2})|\\
-        & = & |\{[t/x]^\phi t'\} \cup rset([t/x]^\phi t''_0, [t/x]^\phi t'_1, [t/x]^\phi t'_2)|
+        |rset([t/x]^T t')| & = & |rset(\ccon{[t/x]^T t'_0}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
+        & = & |rset(\ccon{inl([t/x]^T t''_0)}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
+        & = & |\{[t/x]^T t'\} \cup rset([t/x]^T t''_0, [t/x]^T t'_1, [t/x]^T t'_2)|
       \end{array}
     \end{math}
   \end{center}
@@ -1189,23 +1189,23 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t''_0)| & \leq & |rset(t''_0,t)|\\
-        |rset([t/x]^\phi t'_1)|  & \leq & |rset(t'_1,t)|\\
-        |rset([t/x]^\phi t'_2)|  & \leq & |rset(t'_2,t)|.
+        |rset([t/x]^T t''_0)| & \leq & |rset(t''_0,t)|\\
+        |rset([t/x]^T t'_1)|  & \leq & |rset(t'_1,t)|\\
+        |rset([t/x]^T t'_2)|  & \leq & |rset(t'_2,t)|.
       \end{array}
     \end{math}
   \end{center}
-  Therefore, $|rset([t/x]^\phi t''_0, [t/x]^\phi t'_1, [t/x]^\phi t'_2)| \leq |rset(t''_0, t'_1, t'_2, t)|$
-  which implies that $|rset([t/x]^\phi t')| \leq |rset(t',t)|$.
+  Therefore, $|rset([t/x]^T t''_0, [t/x]^T t'_1, [t/x]^T t'_2)| \leq |rset(t''_0, t'_1, t'_2, t)|$
+  which implies that $|rset([t/x]^T t')| \leq |rset(t',t)|$.
 
   Finally, suppose $t'_0 \equiv \ccon{t''_0}{z}{t''_1}{t''_2}$.  Then 
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t')| \\
-        \,\,\,\,= |rset(\ccon{[t/x]^\phi t'_0}{y}{[t/x]^\phi t'_1}{[t/x]^\phi t'_2})|\\
-        \,\,\,\,= |rset(\ccon{\ccon{[t/x]^\phi t''_0}{z}{[t/x]^\phi t''_0 t''_1}{[t/x]^\phi t''_0 t''_2}}{y}{[t/x]^\phi t'_1}{[t/x]^\phi t'_2})|\\
-        \,\,\,\,= |\{[t/x]^\phi t'\} \cup rset([t/x]^\phi t'_0, [t/x]^\phi t'_1, [t/x]^\phi t'_2)|
+        |rset([t/x]^T t')| \\
+        \,\,\,\,= |rset(\ccon{[t/x]^T t'_0}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
+        \,\,\,\,= |rset(\ccon{\ccon{[t/x]^T t''_0}{z}{[t/x]^T t''_0 t''_1}{[t/x]^T t''_0 t''_2}}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
+        \,\,\,\,= |\{[t/x]^T t'\} \cup rset([t/x]^T t'_0, [t/x]^T t'_1, [t/x]^T t'_2)|
       \end{array}
     \end{math}
   \end{center}
@@ -1223,14 +1223,14 @@ this requires the following definition.
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        |rset([t/x]^\phi t'_0)| & \leq & |rset(t'_0,t)|,\\
-        |rset([t/x]^\phi t'_1)|  & \leq & |rset(t'_1,t)|, \text{ and }\\
-        |rset([t/x]^\phi t'_2)|  & \leq & |rset(t'_2,t)|.
+        |rset([t/x]^T t'_0)| & \leq & |rset(t'_0,t)|,\\
+        |rset([t/x]^T t'_1)|  & \leq & |rset(t'_1,t)|, \text{ and }\\
+        |rset([t/x]^T t'_2)|  & \leq & |rset(t'_2,t)|.
       \end{array}
     \end{math}
   \end{center}
-  Therefore, $|rset([t/x]^\phi t''_0, [t/x]^\phi t'_1, [t/x]^\phi t'_2)| \leq |rset(t''_0, t'_1, t'_2, t)|$
-  which implies that $|rset([t/x]^\phi t')| \leq |rset(t',t)|$.  
+  Therefore, $|rset([t/x]^T t''_0, [t/x]^T t'_1, [t/x]^T t'_2)| \leq |rset(t''_0, t'_1, t'_2, t)|$
+  which implies that $|rset([t/x]^T t')| \leq |rset(t',t)|$.  
 \end{itemize}
 \end{proof}
 \noindent
@@ -1238,88 +1238,88 @@ We now use the previous result to show the hereditary substitution
 function to be normality preserving.
 \begin{lemma}[Normality Preserving]
   \label{corollary:normalization_preserving_ssfp}
-  If $\Gamma \vdash n:\phi$ and $\Gamma, x:\phi' \vdash n':\phi'$ then there exists 
-  a normal term $n''$ such that $[n/x]^\phi n' = n''$.
+  If $\Gamma \vdash n:T$ and $\Gamma, x:T' \vdash n':T'$ then there exists 
+  a normal term $n''$ such that $[n/x]^T n' = n''$.
 \end{lemma}
 \begin{proof}
-  By Lemma~\ref{lemma:total_ssfp} we know there exists a term $n''$ such that $[n/x]^\phi n' = t$ and by 
+  By Lemma~\ref{lemma:total_ssfp} we know there exists a term $n''$ such that $[n/x]^T n' = t$ and by 
   Lemma~\ref{lemma:redex_preserving_ssfp} 
-  $|rset(n', n)| \geq |rset([n/x]^\phi n')|$.  Hence, $|rset(n', n)| \geq |rset(t)|$, but
+  $|rset(n', n)| \geq |rset([n/x]^T n')|$.  Hence, $|rset(n', n)| \geq |rset(t)|$, but
   $|rset(n', n)| = 0$.  Therefore, $|rset(t)| = 0$ which implies $n''$ has no redexes.  It suffices to show
-  that $n''$ has no structural redexes.  We prove this by induction on the lexicographic ordering $(\phi,n')$.
+  that $n''$ has no structural redexes.  We prove this by induction on the lexicographic ordering $(T,n')$.
   We case split on the structure of $n'$.
 \begin{itemize}
 \item[Case.] Suppose $n'$ is a variable $x$ or $y$ distinct from $x$.  Trivial in both cases.
   
-\item[Case.] Suppose $n' \equiv \lambda y:\phi''.\hat{n'}$.  Then
-  $[n/x]^\phi n' = \lambda y:\phi''.[t/x]^\phi \hat{n'}$. By inversion on the assumption  
-  $\Gamma, x:\phi' \vdash n':\phi'$ we know $\Gamma, x:\phi',\Gamma',y:\phi'' \vdash \hat{n'}:\phi'$.  Since
+\item[Case.] Suppose $n' \equiv \lambda y:T''.\hat{n'}$.  Then
+  $[n/x]^T n' = \lambda y:T''.[t/x]^T \hat{n'}$. By inversion on the assumption  
+  $\Gamma, x:T' \vdash n':T'$ we know $\Gamma, x:T',\Gamma',y:T'' \vdash \hat{n'}:T'$.  Since
   $n' > \hat{n}$ we can apply the induction hypothesis to obtain there exists a term $t'$ such that
-  $[t/x]^\phi \hat{n} = t'$ and $t'$ has no structural redexes.  Therefore, neither does 
-  $\lambda y:\phi''.[t/x]^\phi \hat{n'}$.
+  $[t/x]^T \hat{n} = t'$ and $t'$ has no structural redexes.  Therefore, neither does 
+  $\lambda y:T''.[t/x]^T \hat{n'}$.
   
 \item[Case.] Suppose $n' \equiv \Lambda X:*_l.\hat{n}$.  Similar to the previous case.
   
 \item[Case.] Suppose $n' \equiv inl(n'_0)$.  Similar to the $\lambda$-abstraction case.
   
 \item[Case.] Suppose $n' \equiv n'_1\ n'_2$.  By inversion we know
-  $\Gamma, x:\phi, \Gamma' \vdash n'_1 : \phi'' \to \phi'$ and
-  $\Gamma, x:\phi, \Gamma' \vdash n'_2 : \phi''$ for some types $\phi'$ and $\phi''$.
+  $\Gamma, x:T, \Gamma' \vdash n'_1 : T'' \to T'$ and
+  $\Gamma, x:T, \Gamma' \vdash n'_2 : T''$ for some types $T'$ and $T''$.
   Clearly, $n' > n'_i$ for $i \in \{1,2\}$.  Thus, by the induction hypothesis
-  there exists normal terms $m_1$ and $m_2$ such that $[n/x]^\phi n'_i = m_i$ such that $m_i$ have no
+  there exists normal terms $m_1$ and $m_2$ such that $[n/x]^T n'_i = m_i$ such that $m_i$ have no
   structural redexes.  We case split on whether or not $m_1$ is a $\lambda$-abstraction
-  or a case construct and $n'_1$ is not, or $ctype_\phi(x,n'_1)$ is undefined.  
+  or a case construct and $n'_1$ is not, or $ctype_T(x,n'_1)$ is undefined.  
   We only consider the non-trivial cases when 
-  $m_1 \equiv \lambda y:\phi''.m'_1$ or $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$ and $n'_1$
+  $m_1 \equiv \lambda y:T''.m'_1$ or $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$ and $n'_1$
   is not a $\lambda$-abstraction or a case construct.
   Suppose the former.  
   Now by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that 
-  $ctype_\phi(x, n'_1) = \psi$, $\psi \equiv \phi'' \to \phi'$, and $\psi$ is a subexpression
-  of $\phi$, hence $\phi >_{\Gamma,\Gamma'} \phi''$. So $[n/x]^\phi (n'_1\ n'_2) = [m_2/y]^{\phi''} m'_1$ and
+  $ctype_T(x, n'_1) = \psi$, $\psi \equiv T'' \to T'$, and $\psi$ is a subexpression
+  of $T$, hence $T >_{\Gamma,\Gamma'} T''$. So $[n/x]^T (n'_1\ n'_2) = [m_2/y]^{T''} m'_1$ and
   by the induction hypothesis there exists a term $m$ such that 
-  $[m_2/y]^{\phi''} m'_1 = m$ and $m$ has no structural redexes..  
+  $[m_2/y]^{T''} m'_1 = m$ and $m$ has no structural redexes..  
   
   \ \\
   Suppose $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$.
   By inversion on
-  $\Gamma,\Gamma' \vdash m_1 : \phi'' \to \phi'$ we know there exists terms $\phi_1$ and $\phi_2$ such that
-  $\Gamma,\Gamma' \vdash m'_0:\phi_1+\phi_2$ and
-  $\Gamma,\Gamma',y:\phi_i \vdash m'_i:\phi'' \to \phi'$
+  $\Gamma,\Gamma' \vdash m_1 : T'' \to T'$ we know there exists terms $T_1$ and $T_2$ such that
+  $\Gamma,\Gamma' \vdash m'_0:T_1+T_2$ and
+  $\Gamma,\Gamma',y:T_i \vdash m'_i:T'' \to T'$
   for $i \in \{1,2\}$.  Note that by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that 
-  $ctype_\phi(x, n'_1) = \psi$, $\psi \equiv \phi'' \to \phi'$, and $\psi$ is a subexpression
-  of $\phi$, hence $\phi >_{\Gamma,\Gamma'} \phi'$ and $\phi >_{\Gamma,\Gamma'} \phi''$.  
-  Now $[t/x]^\phi t' = \ccon{m'_0}{y}{app_\phi\ m'_1\ m_2}{app_\phi\ m'_2\ m_2}$.  It suffcies to show that
-  there exists terms $q$ and $q'$ such that $app_\phi\ m'_1\ m_2 = q$, $app_\phi\ m'_2\ m_2 = q'$ and $q$ and $q'$ have
+  $ctype_T(x, n'_1) = \psi$, $\psi \equiv T'' \to T'$, and $\psi$ is a subexpression
+  of $T$, hence $T >_{\Gamma,\Gamma'} T'$ and $T >_{\Gamma,\Gamma'} T''$.  
+  Now $[t/x]^T t' = \ccon{m'_0}{y}{app_T\ m'_1\ m_2}{app_T\ m'_2\ m_2}$.  It suffcies to show that
+  there exists terms $q$ and $q'$ such that $app_T\ m'_1\ m_2 = q$, $app_T\ m'_2\ m_2 = q'$ and $q$ and $q'$ have
   no structural redexes.  To obtain this result we prove the following proposition.
   
   \ \\
   {\bf Proposition.}  For all normal terms $m_2$ and $m'_1$ such that  
-  $\Gamma \vdash m_2 : \phi''$ and $\Gamma \vdash m'_1:\phi'' \to \phi'$
-  there exists a term $q$ such that $app_\phi\ m'_1\ m_2 = q$ and $q$ has no structural redexes.
+  $\Gamma \vdash m_2 : T''$ and $\Gamma \vdash m'_1:T'' \to T'$
+  there exists a term $q$ such that $app_T\ m'_1\ m_2 = q$ and $q$ has no structural redexes.
   
   \ \\
-  We prove this by nested induction on the ordering $(\phi, n', m'_1)$ and case splitting on 
+  We prove this by nested induction on the ordering $(T, n', m'_1)$ and case splitting on 
   the structure of $m'_1$.
   \begin{itemize}
   \item[Case.] Suppose $m'_1$ is neither a $\lambda$-abstraction or a case construct.  Then
-    $app_\phi\  m'_1\ m_2 = m'_1\ m_2$.  Take $m'_1\ m_2$ for $q$ and we know $q$ has no structural
+    $app_T\  m'_1\ m_2 = m'_1\ m_2$.  Take $m'_1\ m_2$ for $q$ and we know $q$ has no structural
     redexes, because $m'_1$ and $m_2$ are normal.
     
-  \item[Case.] Suppose $m'_1 \equiv \lambda z:\phi''.m''_1$.  Then $app_\phi\ m'_1\ m_2 = [m_2/z]^{\phi''} m''_1$.
-    By inversion on the assumption $\Gamma \vdash m'_1:\phi'' \to \phi'$ we know 
-    $\Gamma,z:\phi'' \vdash m''_1:\phi'$.  Since $\phi >_{\Gamma} \phi''$ we can apply the outter induction
-    hypothesis to obtain there there exists a $q$ such that $[m_2/z]^{\phi''} m''_1 = q$ and 
+  \item[Case.] Suppose $m'_1 \equiv \lambda z:T''.m''_1$.  Then $app_T\ m'_1\ m_2 = [m_2/z]^{T''} m''_1$.
+    By inversion on the assumption $\Gamma \vdash m'_1:T'' \to T'$ we know 
+    $\Gamma,z:T'' \vdash m''_1:T'$.  Since $T >_{\Gamma} T''$ we can apply the outter induction
+    hypothesis to obtain there there exists a $q$ such that $[m_2/z]^{T''} m''_1 = q$ and 
     $q$ has no structural redexes.
     
   \item[Case.] Suppose $m'_1 \equiv \ccon{m''_0}{z}{m''_1}{m''_2}$.  Then\\
-    $app_\phi\ m'_1\ m_2 = \ccon{m''_0}{z}{app_\phi\ m''_1\ m_2}{app_\phi\ m''_2\ m_2}$.  By inversion on the assumption
-    $\Gamma \vdash m'_1:\phi''\to\phi'$ we know there exists types $\phi_1$ and $\phi_2$ such that
-    $\Gamma \vdash m''_0:\phi_1+\phi_2$, $\Gamma,z:\phi_1 \vdash m''_1:\phi''\to\phi'$
-    and $\Gamma,z:\phi_2 \vdash m''_2:\phi''\to\phi'$.  Since $m'_1 > m''_1$ and $m'_1 > m''_2$ we can 
+    $app_T\ m'_1\ m_2 = \ccon{m''_0}{z}{app_T\ m''_1\ m_2}{app_T\ m''_2\ m_2}$.  By inversion on the assumption
+    $\Gamma \vdash m'_1:T''\to T'$ we know there exists types $T_1$ and $T_2$ such that
+    $\Gamma \vdash m''_0:T_1+T_2$, $\Gamma,z:T_1 \vdash m''_1:T''\to T'$
+    and $\Gamma,z:T_2 \vdash m''_2:T''\to T'$.  Since $m'_1 > m''_1$ and $m'_1 > m''_2$ we can 
     apply the inner induction hypothesis to obtain there exists terms $q'$ and $q''$ such that 
-    $app_\phi\ m''_1\ m_2 = q'$, $q'$ has no structural redexes, $app_\phi\ m''_1\ m_2 = q''$ and $q''$ has no structural redexes.  
+    $app_T\ m''_1\ m_2 = q'$, $q'$ has no structural redexes, $app_T\ m''_1\ m_2 = q''$ and $q''$ has no structural redexes.  
     Hence, 
-    $app_\phi\ m'_1\ m_2 = \ccon{m''_0}{z}{app_\phi\ m''_1\ m_2}{app_\phi\ m''_2\ m_2} = \ccon{m''_0}{z}{q'}{q''}$ and
+    $app_T\ m'_1\ m_2 = \ccon{m''_0}{z}{app_T\ m''_1\ m_2}{app_T\ m''_2\ m_2} = \ccon{m''_0}{z}{q'}{q''}$ and
     $\ccon{m''_0}{z}{q'}{q''}$ has no structural redexes.  Note that $m''_0$ is normal, because $m'_1$ is
     normal.  
   \end{itemize}
@@ -1327,85 +1327,85 @@ function to be normality preserving.
   
   \ \\
   By the previous proposition there exists terms $q$ and $q'$ such that \\
-  $[n/x]^\phi n' = \ccon{m'_0}{y}{app_\phi\ m'_1\ m_2}{app_\phi\ m'_2\ m_2}
-  = \ccon{m'_0}{y}{q}{q'}$, where $app_\phi\ m'_1\ m_2 = q$, $app_\phi\ m'_1\ m_2 = q'$, and
+  $[n/x]^T n' = \ccon{m'_0}{y}{app_T\ m'_1\ m_2}{app_T\ m'_2\ m_2}
+  = \ccon{m'_0}{y}{q}{q'}$, where $app_T\ m'_1\ m_2 = q$, $app_T\ m'_1\ m_2 = q'$, and
   $q$ and $q'$ have no structural redexes.  Thus, $\ccon{m'_0}{y}{q}{q'}$ has no
   structural redexes.  
   
 \item[Case.] Suppose $n' \equiv \ccon{m_0}{y}{m_1}{m_2}$. By inversion on the assumption
-  $\Gamma,x:\phi,\Gamma' \vdash n':\phi'$ we know the following:
+  $\Gamma,x:T,\Gamma' \vdash n':T'$ we know the following:
   \begin{center}
     \begin{math}
       \begin{array}{lll}
-        \Gamma,x:\phi,\Gamma' \vdash m_0:\phi_1+\phi_2 \text{, for some types } \phi_1 \text{ and } \phi_2,\\
-        \Gamma,x:\phi,\Gamma',y:\phi_1 \vdash m_1:\phi, and\\
-        \Gamma,x:\phi,\Gamma',y:\phi_2 \vdash m_2:\phi.\\
+        \Gamma,x:T,\Gamma' \vdash m_0:T_1+T_2 \text{, for some types } T_1 \text{ and } T_2,\\
+        \Gamma,x:T,\Gamma',y:T_1 \vdash m_1:T, and\\
+        \Gamma,x:T,\Gamma',y:T_2 \vdash m_2:T.\\
       \end{array}
     \end{math}
   \end{center}
   It is easy to see that
   $n' > m_i$ for all $i \in \{0,1,2\}$.  Hence, by the induction hypothesis
-  there exists terms $m'_0$, $m'_1$, and $m'_2$ such that $[t/x]^\phi m_i = m'_i$ and $m'_i$ have no structural redexes
+  there exists terms $m'_0$, $m'_1$, and $m'_2$ such that $[t/x]^T m_i = m'_i$ and $m'_i$ have no structural redexes
   for all $i \in \{0,1,2\}$.  We have two cases to consider.
   \begin{itemize}
   \item[Case.] Suppose $m'_0$ is not an inject-left term, inject-right term, or case construct, or
-    $m_0$ is an inject-left term, an inject-right term, or a case construct, or $ctype_\phi(x,m_0)$ is undefined.
+    $m_0$ is an inject-left term, an inject-right term, or a case construct, or $ctype_T(x,m_0)$ is undefined.
     Then \\
-    $[n/x]^{\phi} (\ccon{m_0}{y}{m_1}{m_2}) = \ccon{m'_0}{y}{m'_1}{m'_2}$ which has no structural redexes.
+    $[n/x]^{T} (\ccon{m_0}{y}{m_1}{m_2}) = \ccon{m'_0}{y}{m'_1}{m'_2}$ which has no structural redexes.
     
   \item[Case.] Suppose $m'_0$ is an inject-left term, inject-right term, or case construct and $m_0$ is not
     an inject-left term, an inject-right term, or a case construct.  Then
-    $[n/x]^{\phi} (\ccon{m_0}{y}{m_1}{m_2}) = rcase_{\phi}\ m'_0\ y\ m'_1\ m'_2$, where by \\
+    $[n/x]^{T} (\ccon{m_0}{y}{m_1}{m_2}) = rcase_{T}\ m'_0\ y\ m'_1\ m'_2$, where by \\
     Lemma~\ref{lemma:ctype_props_ssfp}
-    there exists a type $\psi$ such that $ctype_\phi(x,m_0) = \psi$, $\psi \equiv \phi_1+\phi_2$, and $\psi$ is a subexpression
-    of $\phi$, hence $\phi >_{\Gamma,\Gamma'} \phi_1$ and $\phi >_{\Gamma,\Gamma'} \phi_2$.
+    there exists a type $\psi$ such that $ctype_T(x,m_0) = \psi$, $\psi \equiv T_1+T_2$, and $\psi$ is a subexpression
+    of $T$, hence $T >_{\Gamma,\Gamma'} T_1$ and $T >_{\Gamma,\Gamma'} T_2$.
     Consider the case when $m'_0 \equiv inl(m''_0)$.  Then we know by the definition of $rcase$ that
-    $rcase_{\phi}\ m'_0\ y\ m'_1\ m'_2 = [m''_0/y]^{\phi_1} m'_1$.  Clearly, $\phi >_{\Gamma,\Gamma'} \phi_1$ hence
-    by the the induction hypothesis there exists a term $r$ such that $[m''_0/y]^{\phi_1} m'_1 = r$ and
+    $rcase_{T}\ m'_0\ y\ m'_1\ m'_2 = [m''_0/y]^{T_1} m'_1$.  Clearly, $T >_{\Gamma,\Gamma'} T_1$ hence
+    by the the induction hypothesis there exists a term $r$ such that $[m''_0/y]^{T_1} m'_1 = r$ and
     $r$ has no structural redexes. Similarly for when $m'_0 \equiv inr(m''_0)$.  
     So suppose $m'_0 \equiv \ccon{m''_0}{z}{m''_1}{m''_2}$ then it suffices to show that there exists some term
-    $q$ such that $rcase_{\phi}\ m'_0\ y\ m'_1\ m'_2 = q$ and $q$ has no structural redexes.  We obtain this
+    $q$ such that $rcase_{T}\ m'_0\ y\ m'_1\ m'_2 = q$ and $q$ has no structural redexes.  We obtain this
     result by the following proposition.
       
     \ \\
     {\bf Proposition.} For all normal terms $q$ and $q_1$ such that 
-    $\Gamma \vdash q_0:\phi$, $\Gamma, y:\phi_1 \vdash q_1:\phi'$, 
-    and $\Gamma, y:\phi_2 \vdash q_2:\phi'$ there exists a term $\hat{q}$ such that 
-    $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = \hat{q}$ and $\hat{q}$ has no structural redexes.
-    We prove this by induction on the the ordering $(\phi, n', q_0)$ and case split on the structure of $q_0$.
+    $\Gamma \vdash q_0:T$, $\Gamma, y:T_1 \vdash q_1:T'$, 
+    and $\Gamma, y:T_2 \vdash q_2:T'$ there exists a term $\hat{q}$ such that 
+    $rcase_{T}\ q_0\ y\ q_1\ q_2 = \hat{q}$ and $\hat{q}$ has no structural redexes.
+    We prove this by induction on the the ordering $(T, n', q_0)$ and case split on the structure of $q_0$.
     \begin{itemize}
     \item[Case.] Suppose $q_0$ is not an inject-left term, inject-right term, or a case construct.  Then\\
-      $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = \ccon{q_0}{y}{q_1}{q_2}$ which has no structural redexes.
+      $rcase_{T}\ q_0\ y\ q_1\ q_2 = \ccon{q_0}{y}{q_1}{q_2}$ which has no structural redexes.
       
-    \item[Case.] Suppose $q_0 \equiv inl(q'_0)$.  Then $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = [q'_0/y]^{\phi_1} q_1$ and
-      by inversion on $\Gamma \vdash q_0:\phi$ we know $\Gamma \vdash q'_0:\phi_1$.  It suffices to show that there
-      exists a term $\hat{q}$ such that $[q'_0/y]^{\phi_1} q_1 = \hat{q}$  and $\hat{q}$ has no structural redexes.
-      Clearly, $\phi >_{\Gamma} \phi'$ so by the outer induction hypothesis there exists such a term $\hat{q}$.
+    \item[Case.] Suppose $q_0 \equiv inl(q'_0)$.  Then $rcase_{T}\ q_0\ y\ q_1\ q_2 = [q'_0/y]^{T_1} q_1$ and
+      by inversion on $\Gamma \vdash q_0:T$ we know $\Gamma \vdash q'_0:T_1$.  It suffices to show that there
+      exists a term $\hat{q}$ such that $[q'_0/y]^{T_1} q_1 = \hat{q}$  and $\hat{q}$ has no structural redexes.
+      Clearly, $T >_{\Gamma} T'$ so by the outer induction hypothesis there exists such a term $\hat{q}$.
       
     \item[Case.] Suppose $q_0 \equiv inl(q'_0)$.  Similar to the previous case.
       
     \item[Case.] Suppose $q_0 \equiv \ccon{q'_0}{z}{q'_1}{q'_2}$.  Then \\
-      $rcase_{\phi}\ q_0\ y\ q_1\ q_2 = \ccon{q'_0}{z}{(rcase_{\phi}\ q'_1\ y\ q_1\ q_2)}{(rcase_{\phi}\ q'_2\ y\ q_1\ q_2)}$.
-      We know by assumption that $\Gamma \vdash q_0:\phi$, $\Gamma \vdash q_0:\phi$, and $\Gamma, y:\phi_1 \vdash q_1:\phi'$
+      $rcase_{T}\ q_0\ y\ q_1\ q_2 = \ccon{q'_0}{z}{(rcase_{T}\ q'_1\ y\ q_1\ q_2)}{(rcase_{T}\ q'_2\ y\ q_1\ q_2)}$.
+      We know by assumption that $\Gamma \vdash q_0:T$, $\Gamma \vdash q_0:T$, and $\Gamma, y:T_1 \vdash q_1:T'$
       so by inversion we know the following:
       \begin{center}
         \begin{math}
           \begin{array}{lll}
-            (i) & \Gamma \vdash q'_0:\phi'_1 + \phi'_2 \text{, for some types } \phi'_1 \text{ and } \phi'_2,\\
-            (ii) & \Gamma, z:\phi'_1 \vdash q'_1:\phi, \text{ and }\\
-            (iii) & \Gamma, z:\phi'_2 \vdash q'_2:\phi.\\
+            (i) & \Gamma \vdash q'_0:T'_1 + T'_2 \text{, for some types } T'_1 \text{ and } T'_2,\\
+            (ii) & \Gamma, z:T'_1 \vdash q'_1:T, \text{ and }\\
+            (iii) & \Gamma, z:T'_2 \vdash q'_2:T.\\
           \end{array}
         \end{math}
       \end{center}
       Now $q_0 > q'_1$ and $q_0 > q'_1$ so we can apply the inner induction hypothesis twice to obtain terms $\hat{q}_1$ and
-      $\hat{q}_2$ such that $rcase_{\phi}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$, $rcase_{\phi}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$ where 
+      $\hat{q}_2$ such that $rcase_{T}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$, $rcase_{T}\ q'_1\ y\ q_1\ q_2 = \hat{q}_1$ where 
       $\hat{q}_1$ and $\hat{q}_2$ have no structural redexes. So
-      $\ccon{q'_0}{z}{(rcase_{\phi}\ q'_1\ y\ q_1\ q_2)}{(rcase_{\phi}\ q'_2\ y\ q_1\ q_2)} = 
+      $\ccon{q'_0}{z}{(rcase_{T}\ q'_1\ y\ q_1\ q_2)}{(rcase_{T}\ q'_2\ y\ q_1\ q_2)} = 
       \ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2}$.  It suffices to show that $\ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2} = \hat{q}$ 
       for some normal term $\hat{q}$.  Now $q_0 > q'_0$ so we can apply the induction hypothesis
-      to obtain our result, but before we can we must show that $\Gamma \vdash \ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2}:\phi'$.
-      This is a direct consequence of applying the case-construct typing rule using i, $\Gamma, z:\phi'_1 \vdash \hat{q}_1:\phi'$
-      and $\Gamma, z:\phi'_2 \vdash \hat{q}_2:\phi'$.  Therefore, by the inner induction hypothesis there exists a term $\hat{q}$ 
+      to obtain our result, but before we can we must show that $\Gamma \vdash \ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2}:T'$.
+      This is a direct consequence of applying the case-construct typing rule using i, $\Gamma, z:T'_1 \vdash \hat{q}_1:T'$
+      and $\Gamma, z:T'_2 \vdash \hat{q}_2:T'$.  Therefore, by the inner induction hypothesis there exists a term $\hat{q}$ 
       such that $\ccon{q'_0}{z}{\hat{q}_1}{\hat{q}_2} = \hat{q}$ and $\hat{q}$ is has no structural redexes.
     \end{itemize}
   \end{itemize}
@@ -1416,12 +1416,12 @@ Finally, we show that the hereditary substitution function is
 consistent with respect to reduction.
 \begin{lemma}[Soundness with Respect to Reduction]
   \label{lemma:soundness_reduction_ssfp}
-  If $\Gamma \vdash t : \phi$ and $\Gamma, x:\phi, \Gamma' \vdash t':\phi'$ then
-  $[t/x]t' \redto^* [t/x]^\phi t'$.
+  If $\Gamma \vdash t : T$ and $\Gamma, x:T, \Gamma' \vdash t':T'$ then
+  $[t/x]t' \redto^* [t/x]^T t'$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the lexicorgraphic combination
-  $(\phi, t')$ of $>_\Gamma$ and the strict subexpression ordering.
+  $(T, t')$ of $>_\Gamma$ and the strict subexpression ordering.
   We case split on the structure of $t'$.  When applying the induction
   hypothesis we must show that the input terms to the substitution and
   the hereditary substitution functions are typeable.  We do not
@@ -1431,34 +1431,34 @@ consistent with respect to reduction.
   (Lemma~\ref{lemma:soundness_reduction_ssf}).
 
   \begin{itemize}
-  \item[Case.] Suppose $t' \equiv inl(t'_0)$.  Then $[t/x]^\phi t' = inl([t/x]^\phi t'_0)$.  We can
-    see that $t' > t'_0$ so by the induction hypothesis $[t/x]t'_0 \redto^* [t/x]^\phi t'_0$.  Hence,
-    $inl([t/x]t'_0) \redto^* inl([t/x]^\phi t'_0)$ which implies that 
-    $[t/x](inl(t'_0)) \redto^* [t/x]^\phi (inl(t'_0))$.
+  \item[Case.] Suppose $t' \equiv inl(t'_0)$.  Then $[t/x]^T t' = inl([t/x]^T t'_0)$.  We can
+    see that $t' > t'_0$ so by the induction hypothesis $[t/x]t'_0 \redto^* [t/x]^T t'_0$.  Hence,
+    $inl([t/x]t'_0) \redto^* inl([t/x]^T t'_0)$ which implies that 
+    $[t/x](inl(t'_0)) \redto^* [t/x]^T (inl(t'_0))$.
     
   \item[Case.] Suppose $t' \equiv inr(t'_0)$.  Similar to the previous case.
     
   \item[Case.] Suppose $t' \equiv \ccon{t'_0}{y}{t'_1}{t'_2}$.  Clearly, $t' > t'_0$,
     $t' > t'_1$, and $t' > t'_2$, so we can apply the induction hypothesis to conclude 
-    $[t/x]t'_0 \redto^* [t/x]^\phi t'_0$, $[t/x]t'_1 \join [t/x]^\phi t'_1$, and 
-    $[t/x]t'_2 \redto^* [t/x]^\phi t'_2$.  We have several cases to consider, either when $[t/x]^\phi t'_0$ is an
-    inject-left term or an inject-right term and $t'_0$ is not, when $[t/x]^\phi t'_0$ is a case construct
-    and $t'_0$ is not, or $[t/x]^\phi t'_0$ is not an inject-left term, an inject-right term, or a case construct, or
-    $ctype_\phi(x,t'_0)$ is undefined.  The cases when $[t/x]^\phi t'_0$ is not an inject-left term, an inject-right term, 
-    or a case construct, or $ctype_\phi(x,t'_0)$ is undefined are trivial.
+    $[t/x]t'_0 \redto^* [t/x]^T t'_0$, $[t/x]t'_1 \join [t/x]^T t'_1$, and 
+    $[t/x]t'_2 \redto^* [t/x]^T t'_2$.  We have several cases to consider, either when $[t/x]^T t'_0$ is an
+    inject-left term or an inject-right term and $t'_0$ is not, when $[t/x]^T t'_0$ is a case construct
+    and $t'_0$ is not, or $[t/x]^T t'_0$ is not an inject-left term, an inject-right term, or a case construct, or
+    $ctype_T(x,t'_0)$ is undefined.  The cases when $[t/x]^T t'_0$ is not an inject-left term, an inject-right term, 
+    or a case construct, or $ctype_T(x,t'_0)$ is undefined are trivial.
     
     \ \\
-    Let's consider the case when $[t/x]^\phi t'_0$ is an inject-left term or an inject-right term and 
-    $t'_0$ is not.  Since the case when $[t/x]^\phi t'_0$ is an inject-left term is similar to the case when
-    it is an inject-right term we only consider the former.  Suppose $[t/x]^\phi t'_0 = inl(t''_0)$ and 
+    Let's consider the case when $[t/x]^T t'_0$ is an inject-left term or an inject-right term and 
+    $t'_0$ is not.  Since the case when $[t/x]^T t'_0$ is an inject-left term is similar to the case when
+    it is an inject-right term we only consider the former.  Suppose $[t/x]^T t'_0 = inl(t''_0)$ and 
     $t'_0$ is not an inject-left term.  By Lemma~\ref{lemma:ctype_props_ssfp} there exists a type
-    $\psi$ such that $ctype_\phi(x,t'_0) = \psi$, $\psi \equiv \phi_1+\phi_2$, and $\psi$ is a subexpression
-    of $\phi$, where by inversion on $\Gamma,x:\phi,\Gamma' \vdash t':\phi'$ there exists types $\phi_1$ and
-    $\phi_2$ such that $\Gamma,x:\phi,\Gamma' \vdash t'_0:\phi_1+\phi_2$.  Thus, $\phi >_{\Gamma,\Gamma'} \phi_1$
-    and $\phi >_{\Gamma,\Gamma'} \phi_2$.  So $[t/x]^\phi t' = [t''_0/y]^{\phi_1} ([t/x]^{\phi} t'_1)$ and we know from above
-    that $[t/x]t'_1 \redto^* [t/x]^{\phi} t'_1$.  Now $\phi >_{\Gamma,\Gamma'} \phi_1$, so by the induction
-    hypothesis, $[t''_0/y]([t/x]^{\phi} t'_1) \redto^* [t''_0/y]^{\phi_1}([t/x]^\phi t'_1)$.  Thus,
-    $[t''_0/y]([t/x] t'_1) \redto^* [t''_0/y]^{\phi_1}([t/x]^\phi t'_1)$.  It suffices to show 
+    $\psi$ such that $ctype_T(x,t'_0) = \psi$, $\psi \equiv T_1+T_2$, and $\psi$ is a subexpression
+    of $T$, where by inversion on $\Gamma,x:T,\Gamma' \vdash t':T'$ there exists types $T_1$ and
+    $T_2$ such that $\Gamma,x:T,\Gamma' \vdash t'_0:T_1+T_2$.  Thus, $T >_{\Gamma,\Gamma'} T_1$
+    and $T >_{\Gamma,\Gamma'} T_2$.  So $[t/x]^T t' = [t''_0/y]^{T_1} ([t/x]^{T} t'_1)$ and we know from above
+    that $[t/x]t'_1 \redto^* [t/x]^{T} t'_1$.  Now $T >_{\Gamma,\Gamma'} T_1$, so by the induction
+    hypothesis, $[t''_0/y]([t/x]^{T} t'_1) \redto^* [t''_0/y]^{T_1}([t/x]^T t'_1)$.  Thus,
+    $[t''_0/y]([t/x] t'_1) \redto^* [t''_0/y]^{T_1}([t/x]^T t'_1)$.  It suffices to show 
     $ [t/x]t' \redto^* [t''_0/y]([t/x] t'_1)$.  We can see that 
     \begin{center}
       \begin{math}
@@ -1473,13 +1473,13 @@ consistent with respect to reduction.
     
     \ \\
     Suppose $[t/x]t'_0 = \ccon{t''_0}{z}{t''_1}{t''_2}$ and $t'_0$ is not.  It suffices to show that 
-    $[t/x]t \redto^* [t/x]^\phi t'$, which is equivalent to showing 
-    $[t/x](\ccon{t'_0}{y}{t'_1}{t'_2}) \redto^* [t/x]^\phi (\ccon{t'_0}{y}{t'_1}{t'_2})$.  Now
+    $[t/x]t \redto^* [t/x]^T t'$, which is equivalent to showing 
+    $[t/x](\ccon{t'_0}{y}{t'_1}{t'_2}) \redto^* [t/x]^T (\ccon{t'_0}{y}{t'_1}{t'_2})$.  Now
     \begin{center}
       \begin{math}
         \begin{array}{lll}
-          [t/x]^\phi (\ccon{t'_0}{y}{t'_1}{t'_2})\\
-          \,\,\,\,= \ccon{t''_0}{z}{(\rcase{\phi}{t''_1}{y}{t'_1}{t'_2})}{(\rcase{\phi}{t''_1}{y}{t'_1}{t'_2})}
+          [t/x]^T (\ccon{t'_0}{y}{t'_1}{t'_2})\\
+          \,\,\,\,= \ccon{t''_0}{z}{(\rcase{T}{t''_1}{y}{t'_1}{t'_2})}{(\rcase{T}{t''_1}{y}{t'_1}{t'_2})}
         \end{array}
       \end{math}
     \end{center}
@@ -1494,33 +1494,33 @@ consistent with respect to reduction.
         \end{array}
       \end{math}
     \end{center}
-    because we know from above that $[t/x]t'_0 \redto^* [t/x]^\phi t'_0$.  So it suffices to show that
-    $(\ccon{t''_1}{y}{t'_1}{t'_2}) \redto^* (\rcase{\phi}{t''_1}{y}{t'_1}{t'_2})$ and
-    $(\ccon{t''_2}{y}{t'_1}{t'_2}) \redto^* (\rcase{\phi}{t''_2}{y}{t'_1}{t'_2})$, because we know from above that 
-    $[t/x]t_i \redto^* [t/x]^\phi t'_i$.  This is a consequence of the following proposition.  First note that 
-    again by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that $ctype_\phi(x,t'_0) = \psi$,
-    $\psi \equiv \phi_1+\phi_2$, and $\psi$ is a subexpression of $\phi$, where by inversion on the assumption
-    $\Gamma,x:\phi,\Gamma' \vdash t':\phi'$ there exists types $\phi_1$ and $\phi_2$ such that 
-    $\Gamma,x:\phi,\Gamma' \vdash t'_0:\phi_1+\phi_2$.  Hence, $\phi >_{\Gamma,\Gamma'} \phi_1$ and
-    $\phi >_{\Gamma,\Gamma'} \phi_2$.  
+    because we know from above that $[t/x]t'_0 \redto^* [t/x]^T t'_0$.  So it suffices to show that
+    $(\ccon{t''_1}{y}{t'_1}{t'_2}) \redto^* (\rcase{T}{t''_1}{y}{t'_1}{t'_2})$ and
+    $(\ccon{t''_2}{y}{t'_1}{t'_2}) \redto^* (\rcase{T}{t''_2}{y}{t'_1}{t'_2})$, because we know from above that 
+    $[t/x]t_i \redto^* [t/x]^T t'_i$.  This is a consequence of the following proposition.  First note that 
+    again by Lemma~\ref{lemma:ctype_props_ssfp} there exists a type $\psi$ such that $ctype_T(x,t'_0) = \psi$,
+    $\psi \equiv T_1+T_2$, and $\psi$ is a subexpression of $T$, where by inversion on the assumption
+    $\Gamma,x:T,\Gamma' \vdash t':T'$ there exists types $T_1$ and $T_2$ such that 
+    $\Gamma,x:T,\Gamma' \vdash t'_0:T_1+T_2$.  Hence, $T >_{\Gamma,\Gamma'} T_1$ and
+    $T >_{\Gamma,\Gamma'} T_2$.  
     
     \ \\
-    {\bf Proposition.} For all $\Gamma \vdash t_0:\phi_1+\phi_2$, $\Gamma,y:\phi_1 \vdash t_1:\phi''$ and
-    $\Gamma,y:\phi_2 \vdash t_2:\phi''$ we have 
-    $(\ccon{t_0}{y}{t_1}{t_2}) \redto^* (\rcase{\phi}{t_0}{y}{t_1}{t_2})$.
+    {\bf Proposition.} For all $\Gamma \vdash t_0:T_1+T_2$, $\Gamma,y:T_1 \vdash t_1:T''$ and
+    $\Gamma,y:T_2 \vdash t_2:T''$ we have 
+    $(\ccon{t_0}{y}{t_1}{t_2}) \redto^* (\rcase{T}{t_0}{y}{t_1}{t_2})$.
     
     \ \\
-    We prove this by nested induction on the ordering $(\phi,t',t_0)$ and case splitting on
+    We prove this by nested induction on the ordering $(T,t',t_0)$ and case splitting on
     the structure of $t_0$.  
     \begin{itemize}
     \item[Case.] Suppose $t_0$ is not an inject-left term, an inject-right term, or a case construct.  Then
       \begin{center}
-        $\rcase{\phi}{t_0}{y}{t_1}{t_2} = \ccon{t_0}{y}{t_1}{t_2}$.
+        $\rcase{T}{t_0}{y}{t_1}{t_2} = \ccon{t_0}{y}{t_1}{t_2}$.
       \end{center}
       
     \item[Case.] Suppose $t_0 \equiv inl(t'_0)$.  Then 
       \begin{center}
-        $\rcase{\phi}{t_0}{y}{t_1}{t_2} = [t'_0/y]^{\phi_1} t_1$
+        $\rcase{T}{t_0}{y}{t_1}{t_2} = [t'_0/y]^{T_1} t_1$
       \end{center}
       and
       \begin{center}
@@ -1531,18 +1531,18 @@ consistent with respect to reduction.
           \end{array}
         \end{math}
       \end{center}
-      Now $\phi >_{\Gamma} \phi_1$ so by the outer-induction hypothesis 
-      $[t'_0/y]t_1 \redto^* [t'_0/y]^{\phi_1} t_1$.  Therefore, 
-      $(\ccon{t_0}{y}{t_1}{t_2}) \redto^* (\rcase{\phi}{t_0}{y}{t_1}{t_2})$.
+      Now $T >_{\Gamma} T_1$ so by the outer-induction hypothesis 
+      $[t'_0/y]t_1 \redto^* [t'_0/y]^{T_1} t_1$.  Therefore, 
+      $(\ccon{t_0}{y}{t_1}{t_2}) \redto^* (\rcase{T}{t_0}{y}{t_1}{t_2})$.
       
     \item[Case.] Suppose $t_0 \equiv inl(t'_0)$.  Similar to the previous case.
       
     \item[Case.] Suppose $t_0 \equiv \ccon{t'_0}{z}{t'_1}{t'_2}$.  Then 
       \begin{center}
         \begin{math}
-          \rcase{\phi}{t_0}{y}{t_1}{t_2} = 
-          \ccon{t'_0}{z}{(\rcase{\phi}{t'_1}{y}{t_1}{t_2})}
-          {(\rcase{\phi}{t'_2}{y}{t_1}{t_2})}
+          \rcase{T}{t_0}{y}{t_1}{t_2} = 
+          \ccon{t'_0}{z}{(\rcase{T}{t'_1}{y}{t_1}{t_2})}
+          {(\rcase{T}{t'_2}{y}{t_1}{t_2})}
         \end{math}
       \end{center}
       and
@@ -1556,27 +1556,27 @@ consistent with respect to reduction.
         \end{math}
       \end{center}
       Trivially, $t_0 > t'_1$ and $t_0 > t'_2$ so by the inner-induction hypothesis \\
-      \[ (\ccon{t'_1}{y}{t_1}{t_2}) \redto^* (\rcase{\phi}{t'_1}{y}{t_1}{t_2})\] and 
-      \[(\ccon{t'_2}{y}{t_1}{t_2}) \redto^* (\rcase{\phi}{t'_2}{y}{t_1}{t_2}).\]  Therefore,
-      $(\ccon{t_0}{y}{t_1}{t_2}) \redto^* (\rcase{\phi}{t_0}{y}{t_1}{t_2})$.
+      \[ (\ccon{t'_1}{y}{t_1}{t_2}) \redto^* (\rcase{T}{t'_1}{y}{t_1}{t_2})\] and 
+      \[(\ccon{t'_2}{y}{t_1}{t_2}) \redto^* (\rcase{T}{t'_2}{y}{t_1}{t_2}).\]  Therefore,
+      $(\ccon{t_0}{y}{t_1}{t_2}) \redto^* (\rcase{T}{t_0}{y}{t_1}{t_2})$.
     \end{itemize}
     
   \item[Case.] Suppose $t' \equiv t'_1\ t'_2$.  By Lemma~\ref{lemma:total_ssfp}
     there exists terms $\hat{t}'_1$ and $\hat{t}'_2$
-    such that $[t/x]^\phi t'_1 = \hat{t}'_1$ and $[t/x]^\phi t'_2 = \hat{t}'_2$.  Since
+    such that $[t/x]^T t'_1 = \hat{t}'_1$ and $[t/x]^T t'_2 = \hat{t}'_2$.  Since
     $t' > t'_1$ and $t' > t'_2$ we can apply the induction hypothesis to obtain
     $[t/x]t'_1 \redto^* \hat{t}'_1$ and $[t/x]t'_2 \redto^* \hat{t}'_2$.  Now we case
     split on whether or not $\hat{t}'_1$ is a $\lambda$-abstraction and $t'_1$ is not, $\hat{t}'_1$ is a case construct and
-    $t'_1$ is not, $ctype_\phi(x,t'_1)$ is undefined, or $\hat{t}'_1$ is neither a $\lambda$-abstraction or a case construct.  
+    $t'_1$ is not, $ctype_T(x,t'_1)$ is undefined, or $\hat{t}'_1$ is neither a $\lambda$-abstraction or a case construct.  
     We only show the case where $\hat{t}'_1$ is a case construct.
     \ \\
     Finally, suppose $\hat{t}'_1 \equiv \ccon{t_0}{y}{t_1}{t_2}$ and $t'_0$ is not a case construct.  By Lemma~\ref{lemma:ctype_props_ssfp}
-    there exists a type $\psi$ such that $ctype_\phi(x,t'_1) = \psi$, $\psi \equiv \phi'' \to \phi'$ and $\psi$ is a subexpression
-    of $\phi$, where by inversion on the assumption $\Gamma,x:\phi,\Gamma' \vdash t':\phi'$ there exists a type $\phi''$ such that
-    $\Gamma,x:\phi,\Gamma' \vdash t'_1:\phi'' \to \phi'$.  Now 
+    there exists a type $\psi$ such that $ctype_T(x,t'_1) = \psi$, $\psi \equiv T'' \to T'$ and $\psi$ is a subexpression
+    of $T$, where by inversion on the assumption $\Gamma,x:T,\Gamma' \vdash t':T'$ there exists a type $T''$ such that
+    $\Gamma,x:T,\Gamma' \vdash t'_1:T'' \to T'$.  Now 
     \begin{center}
       \begin{math}
-        [t/x]^\phi (t'_1\ t'_2) = \ccon{t_0}{y}{(app_\phi\ t_1\ ([t/x]^\phi t'_2))}{(app_\phi\ t_1\ ([t/x]^\phi t'_2))}
+        [t/x]^T (t'_1\ t'_2) = \ccon{t_0}{y}{(app_T\ t_1\ ([t/x]^T t'_2))}{(app_T\ t_1\ ([t/x]^T t'_2))}
       \end{math}
     \end{center}
     and
@@ -1585,43 +1585,43 @@ consistent with respect to reduction.
         [t/x](t'_1\ t'_2) = ([t/x]t'_1)([t/x]t'_2).
       \end{math}
     \end{center}
-    Clearly, $t' > t'_1$ and $t' > t'_2$, so by the induction hypothesis $[t/x]t'_1 \redto^* [t/x]^\phi t'_1$ and $[t/x]t'_2 \redto^* [t/x]^\phi t'_2$.  Thus,
+    Clearly, $t' > t'_1$ and $t' > t'_2$, so by the induction hypothesis $[t/x]t'_1 \redto^* [t/x]^T t'_1$ and $[t/x]t'_2 \redto^* [t/x]^T t'_2$.  Thus,
     \begin{center}
       \begin{math}
         \begin{array}{lll}
           ([t/x]t'_1)\ ([t/x]t'_2) & \redto^* & (\ccon{t_0}{y}{t_1}{t_2})\ ([t/x]t'_2)\\
-          & \redto & \ccon{t_0}{y}{(app_\phi\ t_1 ([t/x]t'_2))}{(app_\phi\ t_2 ([t/x]t'_2))}
+          & \redto & \ccon{t_0}{y}{(app_T\ t_1 ([t/x]t'_2))}{(app_T\ t_2 ([t/x]t'_2))}
         \end{array}
       \end{math}
     \end{center}
     and
     \begin{center}
       \begin{math}
-        ((\ccon{t_0}{y}{(app_\phi\ t_1\ ([t/x] t'_2))}{(app_\phi\ t_1\ ([t/x] t'_2))})) \redto^* (\ccon{t_0}{y}{(app_\phi\ t_1\ ([t/x]^\phi t'_2))}{(app_\phi\ t_1\ ([t/x]^\phi t'_2))}).
+        ((\ccon{t_0}{y}{(app_T\ t_1\ ([t/x] t'_2))}{(app_T\ t_1\ ([t/x] t'_2))})) \redto^* (\ccon{t_0}{y}{(app_T\ t_1\ ([t/x]^T t'_2))}{(app_T\ t_1\ ([t/x]^T t'_2))}).
       \end{math}
     \end{center}
-    It suffices to show that $(t_1\ ([t/x] t'_2)) \redto^* (app_\phi\ t_1\ ([t/x] t'_2))$ and 
-    $(t_2\ ([t/x] t'_2)) \redto^* (app_\phi\ t_2\ ([t/x] t'_2))$.  This is a consequence of the following proposition:
+    It suffices to show that $(t_1\ ([t/x] t'_2)) \redto^* (app_T\ t_1\ ([t/x] t'_2))$ and 
+    $(t_2\ ([t/x] t'_2)) \redto^* (app_T\ t_2\ ([t/x] t'_2))$.  This is a consequence of the following proposition:
     
     \ \\
-    {\bf Proposition.} For all $\Gamma \vdash t_1:\phi_1 \to \phi_2$ and $\Gamma \vdash t_2:\phi_1$ we have
-    $(t_1\ t_2) \redto^* (app_\phi\ t_1\ t_2)$.
+    {\bf Proposition.} For all $\Gamma \vdash t_1:T_1 \to T_2$ and $\Gamma \vdash t_2:T_1$ we have
+    $(t_1\ t_2) \redto^* (app_T\ t_1\ t_2)$.
     
     \ \\
-    We prove this by nested induction on the ordering $(\phi, t', t_1)$ and case split on the
+    We prove this by nested induction on the ordering $(T, t', t_1)$ and case split on the
     structure of $t_1$.  
     \begin{itemize}
     \item[Case.] Suppose $t_1$ is not a $\lambda$-abstraction or a case construct.  Then 
-      $app_\phi\ t_1\ t_2 = t_1\ t_2$.
+      $app_T\ t_1\ t_2 = t_1\ t_2$.
       
-    \item[Case.] Suppose $t_1 \equiv \lambda y:\phi_1.t''_1$.  Then $app_\phi\ t_1\  t_2 = [t_2/y]^{\phi_1} t''_1$.
-      Clearly, $\phi >_\Gamma \phi_1$ so by the outer-induction hypothesis 
-      $[t_2/y]t''_1 \redto^* [t_2/y]^{\phi_1} t''_1$.  Therefore, $(t_1\ t_2) \redto^* (app_\phi\ t_1\ t_2)$.
+    \item[Case.] Suppose $t_1 \equiv \lambda y:T_1.t''_1$.  Then $app_T\ t_1\  t_2 = [t_2/y]^{T_1} t''_1$.
+      Clearly, $T >_\Gamma T_1$ so by the outer-induction hypothesis 
+      $[t_2/y]t''_1 \redto^* [t_2/y]^{T_1} t''_1$.  Therefore, $(t_1\ t_2) \redto^* (app_T\ t_1\ t_2)$.
       
     \item[Case.] Suppose $t_1 \equiv \ccon{t'_0}{y}{t'_1}{t'_2}$.  Then 
       \begin{center}
         \begin{math}
-          app_\phi\ t_1\ t_2 = \ccon{t'_0}{y}{(app_\phi\ t'_1\ t_2)}{(app_\phi\ t'_2\ t_2)}
+          app_T\ t_1\ t_2 = \ccon{t'_0}{y}{(app_T\ t'_1\ t_2)}{(app_T\ t'_2\ t_2)}
         \end{math}
       \end{center}
       and
@@ -1633,14 +1633,14 @@ consistent with respect to reduction.
           \end{array}
         \end{math}
       \end{center}
-      We can see that $t_1 > t'_1$ and $t_1 > t'_2$ so by the inner-induction hypothesis, $(t'_1\ t_2) \redto^* (app_\phi\ t'_1\ t_2)$ and
-      $(t'_2\ t_2) \redto^* (app_\phi\ t'_2\ t_2)$.  Therefore, 
+      We can see that $t_1 > t'_1$ and $t_1 > t'_2$ so by the inner-induction hypothesis, $(t'_1\ t_2) \redto^* (app_T\ t'_1\ t_2)$ and
+      $(t'_2\ t_2) \redto^* (app_T\ t'_2\ t_2)$.  Therefore, 
       \begin{center}
         \begin{math}
-          (\ccon{t'_0}{y}{(t'_1\ t_2)}{(t'_2\ t_2)}) \redto^* (\ccon{t'_0}{y}{(app_\phi\ t'_1\ t_2)}{(app_\phi\ t'_2\ t_2)}),
+          (\ccon{t'_0}{y}{(t'_1\ t_2)}{(t'_2\ t_2)}) \redto^* (\ccon{t'_0}{y}{(app_T\ t'_1\ t_2)}{(app_T\ t'_2\ t_2)}),
         \end{math}
       \end{center}
-      which implies $(t_1\ t_2) \redto^* (app_\phi\ t_1\ t_2)$.
+      which implies $(t_1\ t_2) \redto^* (app_T\ t_1\ t_2)$.
     \end{itemize} 
   \end{itemize}
 \end{proof}
@@ -1659,9 +1659,9 @@ of the type soundness theorem (Theorem~\ref{thm:soundness_ssfp}).
 
 \begin{lemma}[Type Substitution for the Interpretation of Types]
   \ \\
-  If $n \in \interp{\phi'}_{\Gamma,X:*_l,\Gamma'}$ and 
-  $\Gamma \vdash \phi:*_l$ then 
-  $[\phi/X]n \in \interp{[\phi/X]\phi'}_{\Gamma,[\phi/X]\Gamma'}$.
+  If $n \in \interp{T'}_{\Gamma,X:*_l,\Gamma'}$ and 
+  $\Gamma \vdash T:*_l$ then 
+  $[T/X]n \in \interp{[T/X]T'}_{\Gamma,[T/X]\Gamma'}$.
   \label{lemma:type_sub_ssfp}
 \end{lemma}
 \begin{proof}
@@ -1670,22 +1670,22 @@ of the type soundness theorem (Theorem~\ref{thm:soundness_ssfp}).
 \noindent
 Next we now show substitution for the interpretation of types.
 \begin{lemma}[Hereditary Substitution for the Interpretation of Types]
-  If $n' \in \interp{\phi'}_{\Gamma,x:\phi,\Gamma'}$, $n \in \interp{\phi}_\Gamma$, then 
-  $[n/x]^\phi n' \in \interp{\phi'}_{\Gamma,\Gamma'}$.
+  If $n' \in \interp{T'}_{\Gamma,x:T,\Gamma'}$, $n \in \interp{T}_\Gamma$, then 
+  $[n/x]^T n' \in \interp{T'}_{\Gamma,\Gamma'}$.
   \label{lemma:interpretation_of_types_closed_substitution_ssfp}
 \end{lemma}
 \begin{proof}
   By Lemma~\ref{lemma:total_ssfp} we know there exists a term $\hat{n}$ 
-  such that $[n/x]^\phi n' = \hat{n}$ and $\Gamma,\Gamma' \vdash \hat{n}:\phi'$ and by 
+  such that $[n/x]^T n' = \hat{n}$ and $\Gamma,\Gamma' \vdash \hat{n}:T'$ and by 
   Lemma~\ref{corollary:normalization_preserving_ssfp} $\hat{n}$ is normal.  Therefore,
-  $[n/x]^\phi n' = \hat{n} \in \interp{\phi'}_{\Gamma,\Gamma'}$.
+  $[n/x]^T n' = \hat{n} \in \interp{T'}_{\Gamma,\Gamma'}$.
 \end{proof}
 \noindent
 Finally, we are ready to present our main result, which implies
 normalization of SS$\Fp$.
 
 \begin{thm}[Type Soundness]
-  If $\Gamma \vdash t:\phi$ then $t \in \interp{\phi}_\Gamma$.
+  If $\Gamma \vdash t:T$ then $t \in \interp{T}_\Gamma$.
   \label{thm:soundness_ssfp}
 \end{thm}
 \begin{proof}
@@ -1699,27 +1699,27 @@ normalization of SS$\Fp$.
     \begin{math}
       $$\mprset{flushleft}
       \inferrule* [right=] {
-        \Gamma \vdash t:\phi_1
+        \Gamma \vdash t:T_1
 	\\
-	\Gamma \vdash \phi_2:*_p
-      }{\Gamma \vdash inl(t): \phi_1+\phi_2}
+	\Gamma \vdash T_2:*_p
+      }{\Gamma \vdash inl(t): T_1+T_2}
     \end{math}
   \end{center}
-  By the induction hypothesis, $t \in \interp{\phi_1}_\Gamma$ and by the definition of the 
+  By the induction hypothesis, $t \in \interp{T_1}_\Gamma$ and by the definition of the 
   interpretation of types,
-  $t \normto n \in \interp{\phi_1}_\Gamma$, and $inl(n) \in \interp{\phi_1 + \phi_2}_{\Gamma}$.  
+  $t \normto n \in \interp{T_1}_\Gamma$, and $inl(n) \in \interp{T_1 + T_2}_{\Gamma}$.  
   Again, by the definition of the interpretation of types
-  $inl(t) \normto inl(n) \in \interp{\phi_1 + \phi_2}_\Gamma$.
+  $inl(t) \normto inl(n) \in \interp{T_1 + T_2}_\Gamma$.
   
 \item[Case.]\ \\
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
       \inferrule* [right=] {
-        \Gamma \vdash t:\phi_2
+        \Gamma \vdash t:T_2
 	\\
-	\Gamma \vdash \phi_1:*_p
-      }{\Gamma \vdash inr(t): \phi_1+\phi_2}
+	\Gamma \vdash T_1:*_p
+      }{\Gamma \vdash inr(t): T_1+T_2}
     \end{math}
   \end{center}
   Similar the inject-left case above.
@@ -1729,18 +1729,18 @@ normalization of SS$\Fp$.
     \begin{math}
       $$\mprset{flushleft}
       \inferrule* [right=] {
-        \Gamma \vdash t_0:\phi_1 + \phi_2
+        \Gamma \vdash t_0:T_1 + T_2
         \\
-	\Gamma,x:\phi_1 \vdash t_1:\psi
+	\Gamma,x:T_1 \vdash t_1:\psi
         \\
-	\Gamma,x:\phi_2 \vdash t_2:\psi
+	\Gamma,x:T_2 \vdash t_2:\psi
       }{\Gamma \vdash \ccon{t_0}{x}{t_1}{t_2}: \psi}
     \end{math}
   \end{center}
   By the induction hypothesis and the definition of the interpretation of types
-  $t_0 \normto n_0 \in \interp{\phi_1 + \phi_2}_\Gamma$ and $\Gamma \vdash n_0:\phi_1+\phi_2$, 
-  $t_1 \normto n_1 \in \interp{\psi}_{\Gamma,x:\phi_1}$ and $\Gamma,x:\phi_1 \vdash n_1:\psi$, and
-  $t_2 \normto n_2 \in \interp{\psi}_{\Gamma,x:\phi_2}$ and  $\Gamma,x:\phi_2 \vdash n_2:\psi$.  
+  $t_0 \normto n_0 \in \interp{T_1 + T_2}_\Gamma$ and $\Gamma \vdash n_0:T_1+T_2$, 
+  $t_1 \normto n_1 \in \interp{\psi}_{\Gamma,x:T_1}$ and $\Gamma,x:T_1 \vdash n_1:\psi$, and
+  $t_2 \normto n_2 \in \interp{\psi}_{\Gamma,x:T_2}$ and  $\Gamma,x:T_2 \vdash n_2:\psi$.  
   Clearly, 
   \begin{center}
     \begin{math}
@@ -1752,15 +1752,15 @@ normalization of SS$\Fp$.
   \end{center}
   for some variable $z \not \in FV(n_0,n_1,n_2) \cup \{x\}$.  Lemma~\ref{lemma:total_ssfp}, 
   Lemma~\ref{lemma:soundness_reduction_ssfp}, and Lemma~\ref{corollary:normalization_preserving_ssfp} 
-  allow us to conclude that $[n_0/z](\ccon{z}{x}{n_1}{n_2}) \redto^* [n_0/z]^{\phi_1+\phi_2}(\ccon{z}{x}{n_1}{n_2})$,
-  $\Gamma \vdash [n_0/z]^{\phi_1+\phi_2}(\ccon{z}{x}{n_1}{n_2}) :\psi$, and $[n_0/z]^{\phi_1+\phi_2}(\ccon{z}{x}{n_1}{n_2})$
-  is normal.  Thus, $[n_0/z]^{\phi_1+\phi_2}(\ccon{z}{x}{n_1}{n_2}) \in \interp{\psi}_\Gamma$ and we obtain 
+  allow us to conclude that $[n_0/z](\ccon{z}{x}{n_1}{n_2}) \redto^* [n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2})$,
+  $\Gamma \vdash [n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2}) :\psi$, and $[n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2})$
+  is normal.  Thus, $[n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2}) \in \interp{\psi}_\Gamma$ and we obtain 
   $\ccon{t_0}{x}{t_1}{t_2} \in \interp{\psi}_\Gamma$. 
 \end{itemize}
 \end{proof}
 
 \begin{corollary}[Normalization]
-  If $\Gamma \vdash t:\phi$, then there exists a normal form $n$, such
+  If $\Gamma \vdash t:T$, then there exists a normal form $n$, such
   that $t \normto n$.
 \end{corollary}
 % subsubsection concluding_normalization_ssfp (end)

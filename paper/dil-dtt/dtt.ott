@@ -222,6 +222,16 @@ terminals :: '' ::=
   {{tex [[y]] \not \equiv [[y']] \quad [[y'']] \not\in FV([[t1]])}}
   | n1 rel n2 in Gr :: :: edgeInGr
   {{tex [[n1]] [[rel]] [[n2]] \in [[Gr]] }}
+  | formula == t :: :: FEq
+  {{tex [[formula]] \equiv [[t]]}}
+  | formula == A :: :: FTEq
+  {{tex [[formula]] \equiv [[A]]}}
+  | t1 == t2 :: :: TermEq
+  {{tex [[t1]] \equiv [[t2]] }}
+  | A == B :: :: TypeEq
+  {{tex [[A]] \equiv [[B]] }}
+  | h( formula ) :: :: HParens
+  {{tex [[formula]] }}
  
 
 subrules
@@ -287,7 +297,7 @@ by
  ---------------------- :: and
  G |- p (T1 /\p T2)
 
- G , bar p T ! bar d |- p T ! d
+ G |- p T ! d
  ------------------------------ :: andBar
  G |- p (T1 /\ bar p T2)
 
@@ -314,7 +324,7 @@ by
  -------------------------------------- :: and
  Gr ; G |- p (A /\p B) @ n
 
- Gr ; G , bar p A ! bar d @ n |- p A ! d @ n
+ Gr ; G |- p A ! d @ n
  ------------------------------------------- :: andBar
  Gr ; G |- p (A1 /\ bar p A2) @ n
 

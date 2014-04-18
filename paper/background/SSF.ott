@@ -5,18 +5,18 @@ indexvar level_var, l ::=
          
 grammar
 
-kind, K :: 'Kind_' ::=
+kind, p,q :: 'Kind_' ::=
   | l                  ::  :: Level
-  | K + 1              ::  :: LevelUp
-  | max ( K , K' )     ::  :: Max
-    {{ tex \mathsf{max} ( [[K]] , [[K']] ) }}
+  | p + 1              ::  :: LevelUp
+  | max ( p , q )     ::  :: Max
+    {{ tex \mathsf{max} ( [[p]] , [[q]] ) }}
 
 type, T  :: 'Type_' ::=
   | X            ::   :: Var
   | T -> T'      ::   :: Arrow
     {{ tex [[T]] \to [[T']] }}
-  | Forall X : K . T ::   :: Forall
-    {{ tex \forall [[X]]:[[K]] . [[T]] }}
+  | Forall X : p . T ::   :: Forall
+    {{ tex \forall [[X]]:*_{[[p]]} . [[T]] }}
   | ( T )        :: S :: Parens
   | [ T / X ] T' :: M :: Substitution
 
@@ -24,8 +24,8 @@ term, t :: 'Term_' ::=
   | x              ::   :: Variables
   | \ x : T . t    ::   :: Lam (+ bind x in t +)
     {{ tex \lambda [[x]] : [[T]] . [[t]] }}
-  | \\ X : K . t       ::   :: TypeAbs
-    {{ tex \Lambda [[X]] : [[K]] . [[t]] }}
+  | \\ X : p . t       ::   :: TypeAbs
+    {{ tex \Lambda [[X]] : *_{[[p]]} . [[t]] }}
   | t1 t2          ::   :: App
   | t [ T ]        ::   :: TypeApp
   | [ t / x ] t'   :: M :: Substitution
@@ -34,7 +34,8 @@ term, t :: 'Term_' ::=
 
 G {{ tex \Gamma }} :: 'Context_' ::=
   | x : T       :: :: TermElement
-  | X : K       :: :: TypeElement
+  | X : p       :: :: TypeElement
+  {{tex [[X]] : *_{[[p]]} }}
   | .           :: :: Empty
   | G , G'      :: :: Extension
 
@@ -45,21 +46,21 @@ formula :: 'formula_' ::=
 defns
   JTyping :: '' ::=
   defn
-  G |- T : K :: :: kinding :: 'K_'
-    {{ tex [[G]] \vdash [[T]] : [[K]] }}
+  G |- T : p :: :: kinding :: 'K_'
+    {{ tex [[G]] \vdash [[T]] : *_{[[p]]} }}
   by
 
   --------------------- :: Var
-  G, X : K, G' |- X : K
+  G, X : p, G' |- X : p
 
-  G |- T1 : K
-  G |- T2 : K'
+  G |- T1 : p
+  G |- T2 : q
   ------------------------- :: Arrow
-  G |- T1 -> T2 : max(K,K')
+  G |- T1 -> T2 : max(p,q)
 
-  G, X:K |- T : K'
+  G, X:p |- T : q
   ------------------------------- :: Forall
-  G |- Forall X:K.T : max(K+1,K')
+  G |- Forall X:p.T : max(p+1,q)
 
 defns
  Opsem :: '' ::=
@@ -72,7 +73,7 @@ defns
   (\x : T . t) t' ~> [t'/x]t  
 
   ---------------------- :: TypeRed
-  (\\X:K.t)[T] ~> [T/X]t
+  (\\X:p.t)[T] ~> [T/X]t
 
   t ~> t'
   ----------------- :: Lam
@@ -80,7 +81,7 @@ defns
 
   t ~> t'
   ------------------- :: TypeAbs
-  \\X:K.t ~> \\X:K.t'
+  \\X:p.t ~> \\X:p.t'
 
   t1 ~> t'1
   --------------- :: App1
@@ -99,7 +100,7 @@ defns
     {{ tex [[G]] \vdash [[t]] : [[T]] }}
   by
 
-  G |- T : K  
+  G |- T : p  
   --------------------- :: Var
   G, x : T, G' |- x : T
 
@@ -112,12 +113,12 @@ defns
   ------------------ :: App
   G |- t1 t2 : T2
 
-  G, X:K |- t : T
+  G, X:p |- t : T
   ------------------------------- :: TypeAbs
-  G |- \\X : K .t : Forall X:K.T
+  G |- \\X : p .t : Forall X:p.T
 
-  G |- t : Forall X:K.T'
-  G |- T : K
+  G |- t : Forall X:p.T'
+  G |- T : p
   ---------------------- :: TypeApp
   G |- t[T] : [T/X]T'
 

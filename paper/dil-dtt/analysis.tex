@@ -1,8 +1,6 @@
-\section{Dualized Intuitionistic Logic}
-\label{sec:dualized_intuitionistic_logic}
+\section{Consistency of DIL}
+\label{subsec:consistency_of_dil}
 
-\subsection{Consistency}
-\label{subsec:consistency_dil}
 In this section we prove consistency of DIL with respect to Rauszer's
 Kripke semantics for BINT logic.  All of the results in this section
 have been formalized in the Agda proof assistant\footnote{Agda source
@@ -151,21 +149,19 @@ can prove consistency.
 \end{thm}
 % subsection consistency (end)
 
-\subsection{Completeness}
-\label{subsec:completeness_dil}
+\section{Completeness of DIL}
+\label{sec:completeness}
 In this section we prove that every derivable sequent in L can be
-translated to a derivable sequent of DIL.  Due to space constraints
-the full definition of L is recalled only in the companion report
-\cite{Eades:2014}. We will call a sequent in L a L-sequent and a
-sequent in DIL a DIL-sequent. Along the way, we will see admissibility
-of the analogs of the rules we mentioned in
+translated to a derivable sequent of DIL.  We will call a sequent in L
+a L-sequent and a sequent in DIL a DIL-sequent. Along the way, we will
+see admissibility of the analogs of the rules we mentioned in
 Section~\ref{sec:dualized_intuitionistic_logic_(dil)}.  The proof of
 consistency was with respect to DIL including the cut rule, but we
 prove completeness with respect to DIL where the general cut rule has
 been replaced with the following two inference rules, which can be
 seen as restricted instances of the cut rule:
 \begin{center}
-  \small
+  \footnotesize
   \begin{math}
     \begin{array}{c}
       \dttdruleaxCut{} \\
@@ -174,8 +170,20 @@ seen as restricted instances of the cut rule:
     \end{array}
   \end{math}
 \end{center}
-These two rules are required for the following crucial lemma.
-\begin{lemma}[Refocus]
+  These two rules are required for the crucial left-to-right lemma.
+  This lemma depends on the following admissible rule:
+  \begin{lemma}[Weakening]
+    \label{lemma:weakening}
+    If $[[Gr ; G |- p B @ n]]$ is derivable, then $[[Gr ; G, p1 A @ n1 |- p2 B @
+    n1]]$ is derivable.
+  \end{lemma}
+    \begin{proof}
+      This holds by straightforward induction on the assumed typing
+      derivation.    
+    \end{proof}
+Note that we will use admissible rules as if they are inference rules
+of the logic throughout the sequel.
+\begin{lemma}[Left-to-Right]
   \label{lemma:refocus}
   If $[[Gr ; G1 , bar p A @ n , G2 |- bar p' B @ n']]$ is derivable, then \\
   so is $[[Gr ; G1 , G2 , p' B @ n' |- p A @ n]]$.  
@@ -192,7 +200,7 @@ These two rules are required for the following crucial lemma.
         [[p' B @ n' in (G3, p' B @ n')]]
         \\
         $$\mprset{flushleft}
-        \inferrule* [right=\footnotesize weakening] {
+        \inferrule* [right=\footnotesize Weakening] {
           [[Gr ; G3 |- bar p' B @ n']]
         }{[[Gr ; G3, p' B @ n' |- bar p' B @ n']]}
       }{[[Gr ; G1 , G2 , p' B @ n' |- p A @ n]]}
@@ -200,7 +208,6 @@ These two rules are required for the following crucial lemma.
   \end{center}
   Thus, we obtain our result.
 \end{proof}
-
 We mentioned DIL avoids analogs of a number of rules from L.  To be
 able to translate every derivable sequent of L to DIL, we must show
 admissibility of those rules in DIL.
@@ -242,9 +249,6 @@ admissibility of those rules in DIL.
     $[[Gr ; G, bar p A @ n2, G' |- p A @ n2]]$.  Finally, we know by the 
     axiom cut rule that $[[Gr ; G, G' |- p A @ n2]]$.    
   \end{proof}
-There are a number of other derived rules that the results in this
-section depend on, all of which, can be found in the companion report
-\cite{Eades:2014}.
 
 \begin{lemma}[Exchange]
   \label{lemma:exchange}
@@ -256,14 +260,6 @@ section depend on, all of which, can be found in the companion report
   \end{proof}
 Note that we often leave the application of exchange implicit for
 readablity.
-
-\begin{lemma}[Weakening]
-  \label{lemma:weakening}
-  If $[[Gr ; G |- p' B @ n']]$, then $[[Gr ; G, p A @ n |- p' B @ n']]$.
-\end{lemma}
-  \begin{proof}
-    This holds by a straightforward induction on the form of the assumed derivation.
-  \end{proof}
 
 \begin{lemma}[Graph Weakening]
   \label{lemma:graph_weakening}
@@ -281,7 +277,6 @@ readablity.
   \begin{proof}
     This holds by a straightforward induction on the form of the assumed derivation.
   \end{proof}
-
   
 \begin{definition}
   \label{def:raise}
@@ -491,7 +486,7 @@ readablity.
         \begin{math}
           $$\mprset{flushleft}
           \inferrule* [right=\ifrName{andBar}] {
-            [[Gr,Gr1,Gr' ; G , bar p A ! bar d @ n |- p A ! d @ n]]
+            [[Gr,Gr1,Gr' ; G |- p A ! d @ n]]
           }{[[Gr,Gr1,Gr' ; G |- p (A1 /\ bar p A2) @ n]]}
         \end{math}
       \end{center}
@@ -537,23 +532,23 @@ readablity.
         \begin{math}
           $$\mprset{flushleft}
           \inferrule* [right=\ifrName{axCut}] {
-            [[p T' @ n' in G && Gr ; G, bar p T @ n |- bar p T' @ n']]
-          }{[[Gr; G |- p T @ n]]}
+            [[p T' @ n' in G && Gr,Gr1,Gr' ; G, bar p T @ n |- bar p T' @ n']]
+          }{[[Gr,Gr1,Gr'; G |- p T @ n]]}
         \end{math}
       \end{center}
-
+      This case follows by a simple application of the induction hypothesis, and then reapplying
+      the rule.
 
     \item[Case.]\ \\ 
       \begin{center}
         \begin{math}
           $$\mprset{flushleft}
           \inferrule* [right=\ifrName{axCutBar}] {
-            [[bar p T' @ n' in G && Gr ; G , bar p T @ n |- p T' @ n']]
-          }{[[Gr; G |- p T @ n]]}
+            [[bar p T' @ n' in G && Gr,Gr1,Gr' ; G , bar p T @ n |- p T' @ n']]
+          }{[[Gr,Gr1,Gr'; G |- p T @ n]]}
         \end{math}
       \end{center}
-
-
+      Similar to the previous case.
     \end{itemize}
   \end{proof}
 
@@ -737,7 +732,7 @@ readablity.
     \end{itemize}
   \end{proof}
 
-The proofs of the derived rules MonoL and MonoR depend on the
+The proofs of the admissible rules MonoL and MonoR depend on the
 following monotonicity result.
 \begin{corollary}[Monotonicity]
   \label{coro:mono}
@@ -757,15 +752,16 @@ We now have everything we need to prove that every derivable sequent
 of L can be translated to a derivable sequent in DIL. The proof
 technique we use here does not provide an algorithm taking a sequent
 of L and yielding a derivable sequent in DIL.  Such an algorithm would
-have to choose a particular focusing, but this is quite difficult.
-Instead we show that all possible focusings in DIL of a sequent L are
-derivable.  
+have to choose a particular conclusion in the L-sequent to be the
+active formula of the DIL-sequent, but this is quite difficult.
+Instead we show that all possible conclusions in the L-sequent can be
+chosen to be active and yield a derivable DIL-sequent.
 
 Using the translation of formulas given in
 Definition~\ref{def:L-form-to-DIL-form} we can easily translate
 contexts.  Right contexts $<<G>>$ in L are translated to positive
 hypotheses, while left contexts, not including the formula chosen as
-the focused formula, are translated into negative hypotheses.  The
+the active formula, are translated into negative hypotheses.  The
 following definition defines the translation of both types of contexts
 simultaneously.
 \begin{definition}
@@ -797,19 +793,26 @@ Abstract Kripke models are straightforward to translate.
     \end{math}
   \end{center}
 \end{definition}
+\noindent
+The previous definition implies the following result:
+\begin{lemma}[Reachability]
+  \label{lemma:reach}
+  If $<<n1 Gr n2>>$, then $[[-Gr- |- n1 <=+* n2]]$.
+\end{lemma}
+
 The translation of a derivable L-sequent is a DIL-sequent which
-requires a particular formula as the focus.  We define such a
-translation in the following definition.
+requires a particular formula as the active formula.  We define
+such a translation in the following definition.
 \begin{definition}
   \label{def:focusing}
-  A focusing of a derivable L-sequent $<<G |- Gr D>>$ is a DIL-sequent
+  An activation of a derivable L-sequent $<<G |- Gr D>>$ is a DIL-sequent
   $[[-Gr-;{G}+,{D1,D2}- |- +{A}@n]]$, where $<<D>> = <<D1,n : A,D2>>$.
 \end{definition}
 Finally, the following theorem is the main result showing that any
-focusing of a derivable L-sequent is derivable in DIL.
+activation of a derivable L-sequent is derivable in DIL.
 \begin{thm}[Containment of L in DIL]
   \label{thm:completeness}
-  If $[[-Gr- ; G' |- + A @ n]]$ is a focusing of the derivable L-sequent 
+  If $[[-Gr- ; G' |- + A @ n]]$ is an activation of the derivable L-sequent 
   $<<G |- Gr D>>$, then $[[-Gr- ; G' |- + A @ n]]$ is derivable.
 \end{thm}
   \begin{proof}
@@ -825,11 +828,11 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G |- Gr D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that every focusing of $<<G |- h(Gr,(n,n)) D>>$ is derivable.  
-    Suppose that $[[-Gr,(n,n)- ; G' |- + A @ n]]$ is an arbitrary focusing, where
+    We know by the induction hypothesis that every activation of $<<G |- h(Gr,(n,n)) D>>$ is derivable.  
+    Suppose that $[[-Gr,(n,n)- ; G' |- + A @ n]]$ is an arbitrary activation, where
     $[[{D}-]] \equiv [[{D1}-,-A@n,{D2}-]]$ and $[[G']] \equiv [[{D1}-,{D2}-]]$.
     This is equivalent to $[[-Gr-, n <=+ n ; G' |- + A @ n]]$, and 
-    by the derived rule for reflexivity (Lemma~\ref{lemma:reflexivity}) we have 
+    by the admissible rule for reflexivity (Lemma~\ref{lemma:reflexivity}) we have 
     $[[-Gr- ; G' |- + A @ n]]$.
 
   \item[Case.]\ \\ 
@@ -845,12 +848,12 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G |- Gr D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that every focusing of $<<G |- h(Gr,(n1,n3)) D>>$ is derivable.  
-    Suppose that $[[-Gr,(n1,n3)- ; G' |- + A @ n]]$ is an arbitrary focusing, where
+    We know by the induction hypothesis that every activation of $<<G |- h(Gr,(n1,n3)) D>>$ is derivable.  
+    Suppose that $[[-Gr,(n1,n3)- ; G' |- + A @ n]]$ is an arbitrary activation, where
     $[[{D}-]] \equiv [[{D1}-,-A@n,{D2}-]]$ and $[[G']] \equiv [[{D1}-,{D2}-]]$.  This sequent
     is equivalent to $[[-Gr-,n1 <=+ n3 ; G' |- + A @ n]]$.  Furthermore, it is clear by definition that
     if $<<n1 Gr n2>>$ and $<<n2 Gr n3>>$, then $[[n1 <=+ n2 in -Gr-]]$ and $[[n2 <=+ n3 in -Gr-]]$.  Thus,
-    by the derived rule for transitivity (Lemma~\ref{lemma:transitivity}) we have $[[-Gr- ; G' |- + A @ n]]$,
+    by the admissible rule for transitivity (Lemma~\ref{lemma:transitivity}) we have $[[-Gr- ; G' |- + A @ n]]$,
     and we obtain our result.
     
 
@@ -863,8 +866,8 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G, n : A |- Gr n : A , D>>}
       \end{math}
     \end{center}
-    It suffices to show that every focusing of $<<G, n : A |- Gr n : A , D>>$ is derivable.  Clearly,
-    $[[-Gr-; {G}+,+{A}@n,{D}- |- + {A}@n]]$ is a focusing of $<<G, n : A |- Gr n : A , D>>$.  In addition,
+    It suffices to show that every activation of $<<G, n : A |- Gr n : A , D>>$ is derivable.  Clearly,
+    $[[-Gr-; {G}+,+{A}@n,{D}- |- + {A}@n]]$ is a activation of $<<G, n : A |- Gr n : A , D>>$.  In addition,
     it is derivable:
     \begin{center}
       \begin{math}
@@ -881,15 +884,15 @@ focusing of a derivable L-sequent is derivable in DIL.
       \end{math}
     \end{center}
     In the previous derivation we make use of the exchange rule which
-    is derivable by Lemma~\ref{lemma:exchange}.
+    is admissible by Lemma~\ref{lemma:exchange}.
 
-    Now consider any other focusing $[[-Gr- ; G' |- + B @ n']]$.  It must be the case that 
+    Now consider any other activation $[[-Gr- ; G' |- + B @ n']]$.  It must be the case that 
     $[[G']] = [[h(h(h({G}+ , + A @ n ) , {D1}-), -{A} @ n ),{D2}-]]$ for some $<<D1>>$ and $<<D2>>$.
     This sequent is then derivable as follows:
     \begin{center}
       \begin{math}
         $$\mprset{flushleft}
-        \inferrule* [right=Refocus] {
+        \inferrule* [right=Left-to-Right] {
           $$\mprset{flushleft}
           \inferrule* [right=Exchange] {
             $$\mprset{flushleft}
@@ -917,11 +920,11 @@ focusing of a derivable L-sequent is derivable in DIL.
       \end{math}
     \end{center}
     Certainly, if $<<n1 Gr n2>>$, then $[[n1 <=+ n2]] \in [[-Gr-]]$.
-    We know by the induction hypothesis that all focusings of $<<G , n1 : A , n2 : A |- Gr D>>$ are
-    derivable.  Suppose $[[-Gr- ; G' |- + B @ n]]$ is an arbitrary focusing.  Then it must be the case
+    We know by the induction hypothesis that all activations of $<<G , n1 : A , n2 : A |- Gr D>>$ are
+    derivable.  Suppose $[[-Gr- ; G' |- + B @ n]]$ is an arbitrary activation.  Then it must be the case
     that $[[G']] \equiv [[{G}+, +A@n1,+A@n2,{D1}-,{D2}-]]$, where $[[{D}-]] \equiv [[{D1}-,-B@n,{D2}-]]$.
-    Now we apply the monoL derived rule (Lemma~\ref{lemma:monol}) to obtain 
-    $[[-Gr- ; {G}+, +A@n1,{D1}-,{D2}- |- + B @ n]]$, which is an arbitrary focusing of 
+    Now we apply the monoL admissible rule (Lemma~\ref{lemma:monol}) to obtain 
+    $[[-Gr- ; {G}+, +A@n1,{D1}-,{D2}- |- + B @ n]]$, which is an arbitrary activation of 
     $<<G , n1 : A |- Gr D>>$.
 
   \item[Case.]\ \\ 
@@ -936,11 +939,11 @@ focusing of a derivable L-sequent is derivable in DIL.
       \end{math}
     \end{center}    
     If $<<n1 Gr n2>>$, then $[[n1 <=+ n2]] \in [[-Gr-]]$.  We know by the induction hypothesis that
-    all focusings of $<<G |- Gr n1 : A , n2 : A, D>>$ are derivable.  In particular, the focusing
+    all activations of $<<G |- Gr n1 : A , n2 : A, D>>$ are derivable.  In particular, the activation
     (modulo exchange (Lemma~\ref{lemma:exchange})) $[[-Gr-; {G}+, {D}-, -A@n1 |- + A @ n2]]$ is
     derivable.  It suffices to show that $[[-Gr-; {G}+, {D}- |- + A @ n2]]$. This follows from
-    the monoR derived rule (Lemma~\ref{lemma:monor}).  Finally, any other focusing of $<<G |- Gr n2 : A, D>>$
-    can be recused into $[[-Gr-; {G}+, {D}- |- + A @ n2]]$ (Lemma~\ref{lemma:refocus}).  Thus,
+    the monoR admissible rule (Lemma~\ref{lemma:monor}).  Finally, any other activation of $<<G |- Gr n2 : A, D>>$
+    can be activated into $[[-Gr-; {G}+, {D}- |- + A @ n2]]$ (Lemma~\ref{lemma:refocus}).  Thus,
     we obtain our result.
     
   \item[Case.]\ \\ 
@@ -952,12 +955,12 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G , n' : True |- Gr D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that all focusings of $<<G |- Gr D>>$
-    are derivable.  Suppose $[[-Gr- ; G' |- + A @ n]]$ is an arbitrary focusing of 
-    $<<G |- Gr D>>$.  Then it must be the case that $[[G']] = [[{G}+,{D1}-,{D2}-]]$, where
+    We know by the induction hypothesis that all activations of $<<G |- Gr D>>$
+    are derivable.  Suppose $[[-Gr- ; G' |- + A @ n]]$ is an arbitrary
+    activation of $<<G |- Gr D>>$.  Then it must be the case that $[[G']] = [[{G}+,{D1}-,{D2}-]]$, where
     $[[{D}-]] \equiv [[{D1}-,-A@n,{D2}-]]$.  Now by weakening (Lemma~\ref{lemma:weakening}) we know 
     $[[-Gr- ; G', + < + > @ n' |- + A @ n]]$, and by exchange (Lemma~\ref{lemma:exchange})
-    $[[-Gr- ; + < + > @ n', G' |- + A @ n]]$, which is exactly an arbitrary focusing of
+    $[[-Gr- ; + < + > @ n', G' |- + A @ n]]$, which is exactly an arbitrary activation of
     $<<G , n' : True |- Gr D>>$.
 
   \item[Case.]\ \\ 
@@ -969,10 +972,11 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G |- Gr n : True, D>>}
       \end{math}
     \end{center}
-    It suffices to show that every focusing of $<<G |- Gr n : True, D>>$ is derivable.
-    Consider the focusing $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$.  This is easily derivable
-    by applying the \ifrName{unit} rule.  Now any other focusing of $<<G |- Gr n : True, D>>$ can
-    be refocused by Lemma~\ref{lemma:refocus} into $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$, and hence,
+    It suffices to show that every activation of $<<G |- Gr n : True, D>>$ is derivable.
+    Consider the activation $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$.  This is easily derivable
+    by applying the \ifrName{unit} rule.  Now any other activation of
+    $<<G |- Gr n : True, D>>$ 
+    implies $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$ is derivable by Lemma~\ref{lemma:refocus}, and hence,
     are derivable.
 
 
@@ -985,7 +989,7 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G, n : False |- Gr D>>}
       \end{math}
     \end{center}
-    Suppose $[[-Gr-; {G}+, +{False}@n, {D1}-,{D2}- |- + A @ n']]$ is an arbitrary focusing of 
+    Suppose $[[-Gr-; {G}+, +{False}@n, {D1}-,{D2}- |- + A @ n']]$ is an arbitrary activation of 
     $<<G, n : False |- Gr D>>$, where $[[{D}-]] \equiv [[{D1}-,-A@n',{D2}-]]$.  
     We can easily see that by definition $[[-Gr-; {G}+, +{False}@n, {D1}-,{D2}- |- + A @ n']]$
     is equivalent to $[[-Gr-; {G}+, +<->@n, {D1}-,{D2}- |- + A @ n']]$. We can derive the latter as follows:
@@ -1003,8 +1007,8 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{[[-Gr-; {G}+, +<->@n, {D1}-,{D2}- |- + A @ n']]}
       \end{math}
     \end{center}
-    In the previous derivation $[[G']] \equiv [[{G}+, +<->@n, {D1}-,{D2}-]]$.  Thus, any focusing of $<<G, n : False |- Gr D>>$ is 
-    derivable.
+    In the previous derivation $[[G']] \equiv [[{G}+, +<->@n,
+    {D1}-,{D2}-]]$.  Thus, any activation of $<<G, n : False |- Gr D>>$ is  derivable.
     
 
   \item[Case.]\ \\ 
@@ -1016,11 +1020,11 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G |- Gr n' : False, D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that all focusings of $<<G |- Gr D>>$
-    are derivable.  Suppose $[[-Gr- ; G' |- + A @ n]]$ is an arbitrary focusing of 
+    We know by the induction hypothesis that all activations of $<<G |- Gr D>>$
+    are derivable.  Suppose $[[-Gr- ; G' |- + A @ n]]$ is an arbitrary activation of 
     $<<G |- Gr D>>$.  Then it must be the case that $[[G']] = [[{G}+,{D}-]]$.
     Now by weakening (Lemma~\ref{lemma:weakening}) we know $[[-Gr- ; G', - < - > @ n' |- + A @ n]]$,
-    and by refocusing (Lemma~\ref{lemma:refocus}) $[[-Gr- ; G', - A @ n |- + < - > @ n' ]]$, which --
+    and by the left-to-right lemma (Lemma~\ref{lemma:refocus}) $[[-Gr- ; G', - A @ n |- + < - > @ n' ]]$, which --
     modulo exchange -- is equivalent to $[[-Gr- ; {G}+,{D}- |- + { False} @ n' ]]$.  Thus, we obtain
     our result.
     
@@ -1034,15 +1038,15 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G , n : T1 /\ T2   |- Gr D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that all focusings of $<<G , n : T1, n : T2 |- Gr D>>$
+    We know by the induction hypothesis that all activations of $<<G , n : T1, n : T2 |- Gr D>>$
     are derivable.  In particular, we know $[[-Gr- ; {G}+,+T1@n, +T2@n, {D1}-,{D2}- |- + A @ n']]$ where
     $[[{D}-]] = [[{D1}-]],-A@n',[[{D2}-]]$. Using exchange we know $[[-Gr- ; {G}+,{D1}-,{D2}-,+T1@n, +T2@n |- + A @ n']]$, and
-    by refocusing $[[-Gr- ; {G}+, {D1}-,{D2}-, +T1@n, - A @ n' |- - T2@n]]$, and finally by one more application
+    by the left-to-right lemma $[[-Gr- ; {G}+, {D1}-,{D2}-, +T1@n, - A @ n' |- - T2@n]]$, and finally by one more application
     of exchange $[[-Gr- ; {G}+, {D1}-, {D2}-,- A @ n', +T1@n |- - T2@n]]$.  At this point we know 
-    $[[-Gr- ; {G}+, {D1}-, {D2}-, - A @ n' |- - T1 /\+ T2 @ n]]$ by the $\ifrName{andBar}$ rule.  Now using refocusing 
+    $[[-Gr- ; {G}+, {D1}-, {D2}-, - A @ n' |- - T1 /\+ T2 @ n]]$ by the $\ifrName{andBar}$ rule.  Now using left-to-right \\
     $[[-Gr- ; {G}+, {D1}-, {D2}-, + T1 /\+ T2 @ n  |- + A @ n']]$ is derivable. Lastly, by exchange 
     $[[-Gr- ; {G}+, + T1 /\+ T2 @ n, {D1}-, {D2}- |- + A @ n']]$ is derivable, which is clearly and an arbitrary
-    focusing of $<<G , n : T1 /\ T2   |- Gr D>>$.
+    activation of $<<G , n : T1 /\ T2   |- Gr D>>$.
 
   \item[Case.]\ \\ 
     \begin{center}
@@ -1055,13 +1059,13 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G |- Gr n : A /\ B, D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that all focusings of $<<G |- Gr n : A, D>>$ and
+    We know by the induction hypothesis that all activations of $<<G |- Gr n : A, D>>$ and
     $<<G |- Gr n : B, D>>$ are derivable.  In particular, $[[-Gr- ; {G}+,{D}- |- +A @ n]]$
     and $[[-Gr- ; {G}+,{D}- |- +B @ n]]$ are derivable. Now by applying the $\ifrName{and}$ rule
-    we obtain $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$, which is a particular focusing of 
-    $<<G |- Gr n : A /\ B, D>>$. Finally, consider any other focusing, then that focusing can be
-    refocused into $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$ using Lemma~\ref{lemma:refocus}, and hence,
-    is derivable. Thus, we obtain our result.
+    we obtain $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$, which is a particular activation of 
+    $<<G |- Gr n : A /\ B, D>>$. Finally, consider any other activation, then that sequent implies 
+    $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$ is derivable using Lemma~\ref{lemma:refocus}.  
+    Thus, we obtain our result.
 
   \item[Case.]\ \\ 
     \begin{center}
@@ -1074,21 +1078,21 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G, n : A \/ B |- Gr D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that all focusings of $<<G, n : A |- Gr D>>$ and
+    We know by the induction hypothesis that all activations of $<<G, n : A |- Gr D>>$ and
     $<<G, n : B |- Gr D>>$ are derivable.  So suppose $[[-Gr-; {G}+,+{A}@n,{D'}- |- + C @ n']]$ and
-    $[[-Gr-; {G}+,+{B}@n,{D'}- |- + E @ n'']]$ are particular focusings, 
+    $[[-Gr-; {G}+,+{B}@n,{D'}- |- + E @ n'']]$ are particular activations, 
     where $[[{D}-]] \equiv [[{D1}-,-C@n',{D2}-,-E@n'',{D3}-]]$, and $[[{D'}-]] \equiv [[{D1}-,{D2}-,{D3}-]]$.
     By exchange (Lemma~\ref{lemma:exchange}) we know \\
     $[[-Gr-; {G}+,{D'}-,+{A}@n |- + C @ n']]$ 
-    and  $[[-Gr-; {G}+,{D'}-,+{B}@n |- + E @ n'']]$.  Now by refocusing (Lemma~\ref{def:focusing}) we know 
+    and  $[[-Gr-; {G}+,{D'}-,+{B}@n |- + E @ n'']]$.  Now by the left-to-right lemma (Lemma~\ref{def:refocus}) we know 
     $[[-Gr-; {G}+,{D'}-, - C @ n' |- -{A}@n]]$ and $[[-Gr-; {G}+,{D'}-, - E @ n'' |- -{B}@n]]$, and by applying
     weakening (and exchange) we know $[[-Gr-; {G}+,{D'}-, - C @ n', - E @ n'' |- -{A}@n]]$ and 
     $[[-Gr-; {G}+,{D'}-, -C@n',- E @ n'' |- -{B}@n]]$.  At this point we can apply 
     the $\ifrName{and}$ rule to obtain $[[-Gr-; {G}+,{D'}-, - C @ n',- E @ n'' |- - {A} /\- {B} @ n]]$ to which we can apply
-    refocusing to and obtain \\
+    the left-to-right lemma to and obtain \\
     $[[-Gr-; {G}+,{D'}-,- E @ n'',+ {A} /\- {B} @ n |- + C @ n']]$.  Finally, we can apply 
     exchange again to obtain $[[-Gr-; {G}+, + {A} /\- {B} @ n, {D'}-,- E @ n'' |- + C @ n']]$, which -- modulo exchange -- is
-    an arbitrary focusing of $<<G, n : A \/ B |- Gr D>>$.   Thus, we obtain our result.
+    an arbitrary activation of $<<G, n : A \/ B |- Gr D>>$.   Thus, we obtain our result.
     
 
   \item[Case.]\ \\ 
@@ -1116,14 +1120,14 @@ focusing of a derivable L-sequent is derivable in DIL.
         }{<<G , n1 : T1 -> T2 |- Gr D>>}
       \end{math}
     \end{center}   
-    We know by the induction hypothesis that all focusings of $<<G |- Gr y : T1, D>>$ and 
+    We know by the induction hypothesis that all activations of $<<G |- Gr y : T1, D>>$ and 
     $<<G, y : T2 |- Gr D>>$ are derivable.  In particular, we know 
     $[[-Gr-;{G}+,{D}- |- +{T1}@n2]]$ is derivable, and so is $[[-Gr-;{G}+, {D}- |- -{T2}@n2]]$. The latter
     being derivable by applying the induction hypothesis followed by exchange 
-    (Lemma~\ref{lemma:exchange}) and refocusing (Lemma~\ref{lemma:refocus}). We know $<<n1 Gr n2>>$ by assumption
-    and so by Lemma~\ref{??} $[[-Gr- |- n1 <=+* n2]]$.  Thus, by applying the \ifrName{impBar} rule we obtain
-    $[[-Gr-;{G}+,{D}- |- - {T1}->+{T2} @ n1]]$.  At this point we can refocuse the previous sequent into any
-    focusing of $<<G , n1 : T1 -> T2 |- Gr D>>$, thus we obtain our result.
+    (Lemma~\ref{lemma:exchange}) and the left-to-right lemma (Lemma~\ref{lemma:refocus}). We know $<<n1 Gr n2>>$ by assumption
+    and so by Lemma~\ref{lemma:reach} $[[-Gr- |- n1 <=+* n2]]$.  Thus, by applying the \ifrName{impBar} rule we obtain
+    $[[-Gr-;{G}+,{D}- |- - {T1}->+{T2} @ n1]]$.  At this point we can apply left-to-right to the previous sequent and obtain 
+    and activation of $<<G , n1 : T1 -> T2 |- Gr D>>$, thus we obtain our result.
 
   \item[Case.]\ \\ 
     \begin{center}
@@ -1137,14 +1141,14 @@ focusing of a derivable L-sequent is derivable in DIL.
       \end{math}
     \end{center}
     This case follows the same pattern as the previous cases.  We know by the induction hypothesis
-    that all focusings of $<<G, y : T1 |- h(Gr U {(x,y)}) y : T2, D>>$ are derivable.  In particular,
-    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n2,{D}- |- +{T2}@n2]]$ is derivable.  By exchange (Lemma~\ref{lemma:exchange})
+    that all activations of $<<G, y : T1 |- h(Gr U {(x,y)}) y : T2, D>>$ are derivable.  In particular,
+    $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n2,{D}- |- +{T2}@n2]]$ is derivable.  By exchange (Lemma~\ref{lemma:exchange})\\
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n2 |- +{T2}@n2]]$ is derivable, and by applying the $\ifrName{imp}$ rule
-    we obtain $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$, which is a particular focusing of 
+    we obtain $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$, which is a particular activation of 
     $<<G |- Gr n1 : T1 -> T2, D>>$.  Note that in the previous application of $\ifrName{imp}$ we use
     the fact that if $<<n2 notin Gr, G, D>>$, then $[[n2 notin |-Gr-|,|{G}+,{D}-|]]$. 
-    Lastly, any other focusing of $<<G |- Gr n1 : T1 -> T2, D>>$ can be refocused
-    into $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$, and hence is derivable.
+    Lastly, any other activation of $<<G |- Gr n1 : T1 -> T2, D>>$ implies
+    $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$ is derivable by the left-to-right lemma, and hence is derivable.
 
   \item[Case.]\ \\ 
     \begin{center}
@@ -1158,14 +1162,15 @@ focusing of a derivable L-sequent is derivable in DIL.
       \end{math}
     \end{center}
     We know by the induction hypothesis
-    that all focusings of $<<G, n1 : T1 |- h(Gr U {(n1,n2)}) n1 : T2, D>>$ are derivable.  In particular,
+    that all activation of \\ $<<G, n1 : T1 |- h(Gr U {(n1,n2)}) n1 : T2, D>>$ are derivable.  In particular,
     $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n1,{D}- |- +{T2}@n1]]$ is derivable.  By exchange (Lemma~\ref{lemma:exchange})
-    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n1 |- +{T2}@n1]]$ is derivable.  Now by refocusing we know 
-    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,-{T2}@n1 |- -{T1}@n1]]$, and by assumption we know $<<y notin Gr, G, D>>$ which implies
-    $[[n1 notin |-Gr-|,|{G}+,{D}-|]]$.  Thus, by applying the $\ifrName{imp}$ rule we know  
-    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$ is derivable.  Clearly, this is a particular refocusing of
-    any focusing of $<<G, n2 : T1 - T2 |- Gr D>>$, and any other focusing can be refocused into 
-    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$, and hence are derivable.
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n1 |- +{T2}@n1]]$ is derivable.  Now by the left-to-right lemma we know 
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,-{T2}@n1 |- -{T1}@n1]]$, and by
+    assumption we know $<<y notin Gr, G, D>>$ which implies \\
+    $[[n1 notin |-Gr-|,|{G}+,{D}-|]]$ is derivable.  Thus, by applying the $\ifrName{imp}$ rule we know  
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$ is derivable.  Clearly, this is a particular activation of
+    $<<G, n2 : T1 - T2 |- Gr D>>$, and any other activation implies
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$ is derivable by the left-to-right lemma, and hence are derivable.
 
   \item[Case.]\ \\ 
     \begin{center}
@@ -1181,8 +1186,8 @@ focusing of a derivable L-sequent is derivable in DIL.
       \end{math}
     \end{center}
     This case follows in the same way as the case for $\ifrName{impL}$,
-    except the particular focusing of $<<G, y : T2 |- Gr D>>$ has to be refocused so
-    as to allow for the application of $\ifrName{impBar}$.
+    except the particular activation of $<<G, y : T2 |- Gr D>>$ has to have the active formulas such that the
+    rule $\ifrName{impBar}$ can be applied.
   \end{itemize}
 \end{proof}
 
@@ -1194,22 +1199,168 @@ focusing of a derivable L-sequent is derivable in DIL.
   Completeness of L is proved in \cite{Pinto:2009}, and by Theorem~\ref{thm:completeness} we know that
   every derivable sequent of L is derivable in DIL.
 \end{proof}
-% subsection completeness (end)
-
+% section completeness (end)
 % section dualized_intuitionistic_logic (end)
 
-\section{Dualized Type Theory}
+\section{Type Preservation and Strong Normalization of DTT}
 \label{sec:dualized_type_theory}
-We now present the basic metatheory of DTT, starting with
-type preservation (proof omitted).  
+We now present the basic metatheory of DTT, starting with type
+preservations. Throughout the remainder of this section we use
+the inversion lemma of the typing relation, but we do not state it or
+prove it here, because the proof is trivial.
+\begin{lemma}[Substitution for Typing]
+  \label{lemma:substitution_for_typing}
+  If $[[Gr ; H |- t1 : p1 A @ n1]]$ and $[[Gr ; H, x : p1 B @ n1 |- t2 : p2 B @ n2]]$, then
+  $[[Gr ; H |- [t1/x]t2 : p2 B @ n2]]$.
+\end{lemma}
+  \begin{proof}
+    This proof holds by a straightforward induction on the second
+    assumed typing relation. 
+    \begin{itemize}
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Ax}] {
+            [[Gr |- n <= p * n']]
+          }{[[Gr ; H1 , y : p C @ n , H2 |- y : p C @ n']]}
+        \end{math}
+      \end{center}
+      Trivial.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Unit}] {
+            \ 
+          }{[[Gr ; H' |- triv : p < p > @ n]]}
+        \end{math}
+      \end{center}
+      Trivial.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{And}] {
+            [[Gr ; H' |- t'1 : p A @ n && Gr ; H' |- t'2 : p B @ n]]
+          }{[[Gr ; H' |- ( t'1 , t'2 ) : p (C1 /\p C2) @ n]]}
+        \end{math}
+      \end{center}
+      Suppose $[[H']] \equiv [[H, x : p1 B @ n1]]$.  Then this case
+      follows from applying the induction hypothesis to each premise and
+      then reapplying the rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{AndBar}] {
+            [[Gr ; H' |- t : p C ! d @ n]]
+          }{[[Gr ; H' |- inj d t : p (C1 /\ bar p C2) @ n]]}
+        \end{math}
+      \end{center}
+      Suppose $[[H']] \equiv [[H, x : p1 B @ n1]]$. Then this case
+      follows from applying the induction hypothesis to the premise and
+      then reapplying the rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Imp}] {
+            [[n' notin | Gr | , | G |]]
+            \\\\
+            [[(Gr, n <= p n') ; H' , x : p C1 @ n' |- t : p C2 @ n']]
+          }{[[Gr ; H' |- \ x . t : p (C1 ->p C2) @ n]]}
+        \end{math}
+      \end{center}
+      Similarly to the previous case.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{ImpBar}] {
+            [[Gr |- n <= bar p * n']]
+            \\\\
+            [[Gr ; H' |- t'1 : bar p C1 @ n'  &&  Gr ; H' |- t'2 : p C2 @ n']]
+          }{[[Gr ; H' |- < t'1 , t'2 > : p (C1 ->bar p C2) @ n]]}
+        \end{math}
+      \end{center}
+      Suppose $[[H']] \equiv [[H, x : p1 B @ n1]]$.  Then this case
+      follows from applying the induction hypothesis to each premise and
+      then reapplying the rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Cut}] {
+            [[Gr ; H' , y : bar p C @ n |- t'1 : + C' @ n']]
+            \\\\
+            [[Gr ; H' , y : bar p C @ n |- t'2 : - C' @ n']]
+          }{[[Gr ; H' |- nu x . t'1 * t'2 : p C @ n]]}
+        \end{math}
+      \end{center}
+      Similarly to the previous case.
+    \end{itemize}  
+  \end{proof}
 \begin{lemma}[Type Preservation]
   \label{lemma:type_preservation}
-  If $[[Gr ; H |- t : p A@n]]$, and $[[t]] \redto^* [[t']]$, then $[[Gr ; H |- t' : p A@n]]$.
+  If $[[Gr ; H |- t : p A@n]]$, and $[[t]] \redto [[t']]$, then $[[Gr ; H |- t' : p A@n]]$.
 \end{lemma}
-\begin{proof}
-  This holds by straightforward induction on the form of the assumed
-  derivation $[[t]] \redto^* [[t']]$.
-\end{proof}
+  \begin{proof}
+    This is a proof by induction on the form of the assumed typing
+    derivation.  We only consider non-trivial cases.  All the other
+    cases either follow directly from assumptions or are similar to the
+    cases we provide below.
+
+    \begin{itemize}    
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Cut}] {
+            [[Gr ; H , x : bar p A @ n |- t1 : + B @ n']]
+            \\\\
+            [[Gr ; H , x : bar p A @ n |- t2 : - B @ n']]
+          }{[[Gr ; H |- nu x . t1 * t2 : p A @ n]]}
+        \end{math}
+      \end{center}
+      The interesting cases are the ones where the assumed cut is a
+      redex itself, otherwise this case holds by the induction
+      hypothesis.  Thus, we case split on the form of this redex. 
+      \begin{itemize}
+      \item[Case.] Suppose $[[nu x . t1 * t2 == nu x . \y.t'1 * <t'2,t''2>]]$, thus, $[[t1 == \y.t'1]]$ and $[[t2 == <t'2, t''2>]]$.  
+        This then implies that $[[B == B1 -> p' B2]]$ for some $[[B1]]$ and $[[B2]]$.  Then 
+        \[ [[h(t == nu x . t1 * t2) == nu x . \y.t'1 * <t'2,t''2>]] \redto [[nu x.[t'2/y]t'1 * t''2 == t']]. \]
+        Now by inversion we know the following:
+        \begin{center}
+          \begin{math}
+            \begin{array}{lll}
+              (1) & [[Gr, (n' <= + n'') ; H, x : bar p A @ n, y : p' B1 @ n'' |- t'1 : p' B2 @ n'']]\\
+              (2) & [[Gr ; H , x : bar p A @ n |- t'2 : p' B1 @ n'']]\\
+              (3) & [[Gr ; H , x : bar p A @ n |- t''2 : bar p' B2 @ n'']]\\
+            \end{array}
+          \end{math}
+        \end{center}
+      \end{itemize}
+      The remainder of this case follows from applying substitution
+      for typing (Lemma~\ref{lemma:substitution_for_typing}) to $(1)$
+      using $(2)$, and then applying $\dttdrulename{Cut}$ to the
+      result of the former and $(3)$.
+      
+    \item[Case.] Suppose $[[nu x . t1 * t2 == nu x. c * (nu y. t'2 * t''2)]]$ , thus, $[[t1 == c]]$ and $[[t2 == nu y. t'2 * t''2]]$.  
+      Then \[ [[h(t == nu x . t1 * t2) == nu x. c * (nu y. t'2 * t''2)]] \redto [[nu x.[c/y]t'2 * [c/y]t''2]]. \]
+      This case then follows the same pattern as the previous case.  We use inversion to obtain the types of $[[c]]$, $[[t'2]]$, and $[[t''2]]$.
+      Then we use substitution for typing (Lemma~\ref{lemma:substitution_for_typing}) to obtain the fact that $[[ [c/y]t'2]]$ and $[[ [c/y]t''2]]$ have the same type
+      as $[[t'2]]$ and $[[t''2]]$.  Finally, we obtain our result by applying $\dttdrulename{Cut}$ to the results of the former.
+      
+      
+    \end{itemize}
+  \end{proof}
 \begin{figure}
     \begin{mathpar}
       \dttdruleClassAx{}     \and
@@ -1248,9 +1399,9 @@ the definition of $\interp{A}^{+c}$ with the same type; and the
 definition of $\interp{A}^{+c}$ may invoke either of the other
 definitions at a strictly smaller type.  The reader familiar with
 such proofs will also recognize the debt owed to Girard~\cite{gtl90}.
-All missing proofs below may be found in the companion report~\cite{Eades:2014}.
 
 \begin{figure}
+\small
 \[
 \begin{array}{lll}
 t \in \interp{A}^+ & \Leftrightarrow & \forall x \in \textit{Var}.\ \forall t'\in\interp{A}^-.\ [[ nu x . t * t' ]] \in \SN\\
@@ -1391,33 +1542,6 @@ from the assumption that $t'\in\interp{A}^-$.
 If $[[ J |-c t : p A]]$ then for all $\sigma\in\interp{\Gamma}$, $\sigma t\in\interp{A}^p$.
 \end{thm}
 \begin{proof}
-  We consider one interesting case (see the companion report for all
-  the cases).  Define $\delta(t)$ to be the length of the longest
-  reduction sequence from $t$ to a normal form, for $t\in\SN$.
-
-\begin{center}
-\begin{math}
-\inferrule* [right=\ifrName{ClassCut}] {[[ J , x : + A  |-c t1 : + B ]]  \qquad [[  J , x : + A  |-c t2 : - B ]]}{[[  J |-c nu x . t1 * t2 : - A ]]}
-\end{math}
-\end{center}
-
-It suffices to consider arbitrary $y\in\textit{Vars}$ and
-$t'\in\interp{A}^{+c}$, and show $[[nu y. t' * (nu x . sigma t1 *
-sigma t2)]]\in\SN$.  By the IH and part 2 of Lemma~\ref{lem:sninterp},
-we have $\sigma t_1\in\interp{B}^+$ and $\sigma t_2\in\interp{B}^-$,
-which implies $\sigma t_1\in\SN$ and $\sigma t_2\in\SN$ by
-Lemma~\ref{lem:sninterp} again.  We proceed by inner induction on
-$\delta(t')+\delta(\sigma t_1)+\delta(\sigma t_2)$, using
-Lemma~\ref{lem:stepinterp}, to show that all one-step successors of
-$[[nu y. t' * (nu x . sigma t1 * sigma t2)]]$ are in $\SN$.  If it is
-$t'$, $\sigma t_1$, or $\sigma t_2$ which steps, then the result holds
-by inner IH.  The only other reduction possible is by
-\dttdrulename{RBetaR}, since $t'$ cannot be a cut term by the
-definition of $\interp{A}^{+c}$.  In this case, the IH gives us
-$[t'/x]\sigma t_1\in\interp{B}^+$ and $[t'/x]\sigma
-t_2\in\interp{B}^-$, and we then have $[[nu y . [t'/x]sigma t1 *
-[t'/x]sigma t2]]\in\SN$ by the definition of $\interp{B}^+$.
-
 The proof is by induction on the derivation of $[[ J |-c t : p A]]$.  We consider
 the two possible polarities for the conclusion of the typing judgment separately.
 
@@ -1687,6 +1811,7 @@ $[t'/x]\sigma t_1\in\interp{B}^+$ and $[t'/x]\sigma
 t_2\in\interp{B}^-$, and we then have $[[nu y . [t'/x]sigma t1 *
 [t'/x]sigma t2]]\in\SN$ by the definition of $\interp{B}^+$.
 \end{itemize}
+
 \end{proof}
 
 \begin{corollary}[Strong Normalization]
@@ -1725,21 +1850,10 @@ relation from $t$ are also in the reduction relation restricted to typable terms
 The result now follows from Newman's Lemma, using Lemma~\ref{lem:localconf} and
 Theorem~\ref{thm:strong_normalization}.
 \end{proof}
-
-\begin{comment}
-In \cite{crolard01} Crolard introduced the formula 
-$[[(A ->- <->) /\- A]]$.  This formula is equivalent to the
-double-negation translation of the law-of-excluded middle into
-intuitionistic logic.  Its inhabitant in DTT is 
-$[[nu y.y * (inj 1 (\x.triv))]]$.  Note that the previous term is a
-normal form, but contains a cut.  Thus, general canonicity fails for
-DTT, but this is to be expected, because DIL 
-does not have general cut elimination.  We conjecture that the cuts
-present in normal forms should all be axiom cuts.  Now following Stump
-in \cite{Stump:2014:RPD:2541568.2541575} we also conjecture that a
-fragment of DTT can be specified where general canonicity holds.  We
-leave this investigation for future work.  
-% section metatheory_of_dtt (end)
-\end{comment}
-
 % section dualized_type_theory (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% reftex-default-bibliography: ("/Users/hde/thesis/paper/thesis.bib")
+%%% TeX-master: "/Users/hde/thesis/paper/thesis.tex"
+%%% End: 

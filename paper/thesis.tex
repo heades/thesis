@@ -98,7 +98,7 @@
 \acknowledgements{The first person I would like to acknowledge is my
   advisor Aaron Stump.  He is one of the kindest and most intelligent
   people I have had the pleasure to work with, and without his
-  guidance I would have never made it this far. I can only hope I
+  guidance I would have never made it this far. I can only hope to
   acquire the insight and creativity you have when working on a
   research problem. Furthermore, I would like to thank him for
   introducing me to my research area in type
@@ -222,7 +222,7 @@ rules.  Ott generates a parser and a type checker which is used to
 check the accuracy of all objects definable with in the language given
 to Ott as input.  Ott's strongest application is to check for syntax
 errors within research articles.  Ott is a great example of a tool
-using the very theory we are presenting in this article.  It clearly
+using the very theory we are presenting in this thesis.  It clearly
 stands as a successful step towards the solution of the second major
 problem outlined above.
 % section introduction (end)
@@ -297,7 +297,7 @@ as an interpreter. This is a significant benefit of basing programming
 languages on type theories.  As we have seen a type theory must be
 rigorously defined.  
 
-Considering the motivation we gave in the introduction, a mathematical
+Considering the motivation we gave in the introduction, a mathematically
 rigorous design provides the necessary structure to allow programs to
 mathematical reason about the programs they write in the programming
 language.  In addition, this makes it possible for designers to reason
@@ -409,6 +409,16 @@ languages themselves.
 
 \chapter{Dualized Logic and Type Theory}
 \label{chap:dualized_type_theory_anal}
+
+In Section~\ref{chap:dualized_type_theory_de} we introduced Dualized
+Intuitionistic Logic (DIL) and its corresponding type theory Dualized
+Type Theory (DTT).  Now we present the basic metatheory of both DIL
+and DTT.  We start with proving consistency of DIL, and then prove
+completeness by reduction to Pinto and Uustalu's L. Then we move onto
+show type preservation and strong normalization for DTT.  We show the
+latter using a version of Krivine's classical realizability by
+translating DIL into a classical logic.
+
 \import*{dil-dtt/}{analysis-inc}
 % chapter dtt (end)
 % part basic-analysis (end)
@@ -582,7 +592,7 @@ The following list addresses future work related to each theory:
 % section godels_system_t (end)
 
 \newpage
-\section{Girard/Reynold's System F}
+\section{Girard-Reynold's System F}
 \label{sec:girard-reynolds_system_f}
 \Fall{}
 % section girard-reynolds_system_f (end)
@@ -831,6 +841,19 @@ The following defines the eraser functions.
   \end{itemize}
 \end{definition}
 % section annotated_separation_of_proof_from_program (end)
+
+\newpage
+\section{Pinto and Uustalu's L}
+\label{sec:pinto_and_uustalu's_l}
+\Lall{}
+% section pinto_and_uustalu's_l (end)
+
+\newpage
+\section{Dualized Intuitionistic Logic, Dualized Type Theory, and
+  Dualized Classical Logic}
+\label{sec:dualized_intuitionistic_logic}
+\dttall{}
+% section dualized_intuitionistic_logic (end)
 % section type_theories (end)
 
 %=============================================================================

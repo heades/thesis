@@ -9,6 +9,7 @@
 
 \newcommand{\To}[0]{\Rightarrow}
 \newcommand{\SN}[0]{\mathbf{SN}} 
+
 Classical logic is rich with duality.  Using the De Morgan dualities
 it is straightforward to prove that conjunction is dual to disjunction
 and negation is self dual.  In addition, it is also possible to prove
@@ -27,7 +28,7 @@ interpretation of implication in a Kripke model is as follows:
 Now Rauszer took the dual of the previous interpretation to obtain the following:
 \begin{center}
   \begin{math}
-    \interp{A - B}_w = \exists w'.w' \leq w \land \not\interp{A}_{w'} \land \interp{B}_{w'}
+    \interp{A - B}_w = \exists w'.w' \leq w \land \lnot\interp{A}_{w'} \land \interp{B}_{w'}
   \end{math}
 \end{center}
 This is called subtraction or exclusion.  Propositional
@@ -70,11 +71,12 @@ version of Crolard's subtractive logic for which he was able to
 construct a categorical model using linear categories in
 \cite{Bellin:2012}.
 
-\textbf{Contributions.} The contributions of this paper are a new BINT
-logic called Dualized Intuitionistic Logic (DIL) and a corresponding
-type theory called Dualized Type Theory (DTT).  DIL is a
-polarized-focused formulation of Pinto and Uustalu's labeled sequent
-calculus L.  DIL builds on L by removing the following rules:
+In this section we propose a new BINT logic called Dualized
+Intuitionistic Logic (DIL) and a corresponding type theory called
+Dualized Type Theory (DTT).  DIL is a single-sided polarized
+formulation of Pinto and Uustalu's labeled sequent calculus L.  DIL
+builds on L by removing the following rules (see Section~\ref{sec:L}
+for a complete definition of L):
 \begin{center}
   \begin{math}
     \begin{array}{lll}
@@ -84,29 +86,41 @@ calculus L.  DIL builds on L by removing the following rules:
     \end{array}
   \end{math}
 \end{center} 
-We show that in the absence of the previous rules DIL still maintains
-consistency and completeness.  Furthermore, DIL is defined using a
+We show in Chapter~\ref{chap:dualized_type_theory_anal} that in the
+absence of the previous rules DIL still maintains consistency
+(Section~\ref{subsec:consistency_of_dil}) and completeness
+(Section~\ref{sec:completeness}).  Furthermore, DIL is defined using a
 dualized syntax which reduces the number of inference rules needed to
-define the logic.  Again, DIL is a focused sequent calculus with
-multiple conclusions and thus must provide a means of refocusing
-conclusions.  Refocusing in DIL is done using cuts on hypotheses. We
-call these types of cuts ``axiom cuts.''  Thus, these cuts cannot be
-eliminated.  This then implies that DIL does not enjoy general cut
-elimination, but all cuts other than axiom cuts can be
+define the logic.  Again, DIL is a single-sided sequent calculus with
+multiple conclusions and thus must provide a means of moving
+conclusions from left to right. This is done in DIL using cuts on
+hypotheses. We call these types of cuts ``axiom cuts.''
+
+Now we consider BINT logic to be the closest extension of
+intuitionistic logic to classical logic while maintaining
+constructivity.  BINT has two forms of negation, one defined as usual,
+$\lnot A \stackrel{\mathsf{def}}{=} A \to \perp$, and a second defined
+interms of subtraction, $\mathop{\sim} A \stackrel{\mathsf{def}}{=}
+\top - A$.  The latter we call ``non-$A$''.  Now in BINT it is
+possible to prove $A \lor \mathop{\sim} A$ for any $A$
+\cite{crolard01}. Furthermore, when the latter is treated as a type in
+DTT, the inhabitant is a continuation without a canonical form,
+because the inhabitant contains as a subexpression an axiom cut.
+Thus, the presence of these continuations prevents the canonicity
+result for a type theory -- like DTT -- from holding.  Thus, if
+general cut elimination was a theorem of DIL, then $A \lor
+\mathop{\sim} A$ would not be provable.  So DIL must contain cuts
+that cannot be eliminated.  This implies that DIL does not enjoy
+general cut elimination, but all cuts other than axiom cuts can be
 eliminated. Throughout the sequel we define ``cut elimination'' as the
 elimination of all cuts other than axiom cuts, and we call DIL ``cut
 free'' with respect to this definition of cut elimination. The latter
-point is similar to Wadler's dual calculus \cite{Wadler:2005}.  In
-addition we present a computer-checked proof -- in Agda -- of
-consistency for DIL with respect to Rauszer's Kripke semantics for
-BINT logic, prove completeness of DIL by reduction to Pinto and
-Uustalu's L, and show type preservation and strong normalization for
-DTT.
+point is similar to Wadler's dual calculus \cite{Wadler:2005}.
 
-The contributions of this article are subgoals of a larger one.  Due
-to the rich duality in BINT logic we believe it shows promise of being
-a logical foundation for induction and coinduction, because induction
-is dual to coinduction. Our working hypothesis is that a logical
+The study of DIL and DTT are subgoals of a larger one.  Due to the
+rich duality in BINT logic we believe it shows promise of being a
+logical foundation for induction and coinduction, because induction is
+dual to coinduction. Our working hypothesis is that a logical
 foundation based on intuitionistic duality will allow the semantic
 duality between induction and coinduction to be expressed in type
 theory, yielding a solution to the problems with these important
@@ -115,32 +129,13 @@ inductive and coinductive types can be nested (see the discussion in
 \cite{abel+13}), while Coq supports general mixed inductive and
 coinductive data, but in doing so, sacrifices type preservation.
 
-\section{Labeled BINT}
+\section{Pinto and Uustalu's L}
 \label{sec:L}
-
-It is well known that deductive systems based on the Dragalin
-restriction, such as, Crolard's subtractive logic do not enjoy cut
-elimination.  A counterexample with respect to subtractive logic is
-given in \cite{Pinto:2009}.  As we mentioned in the introduction
-several BINT logics have been proposed that recover cut elimination.
-One particular calculus was proposed by Pinto and Uustalu in
-\cite{Pinto:2009} called L, which can be thought of as a restriction
-of Gentzen's sequent calculus LK extended with subtraction.  They
-restrict the calculus by labeling sequents with an abstract Kripke
-model in the form of a graph, and label every hypothesis and
-conclusion with a node in the graph.  The sequent has the form $<<G |-
-Gr n : A,D>>$, where $<<Gr>>$ is the abstract Kripke model, and
-$<<n>>$ is a node in $<<Gr>>$.  This labeling essentially adds
-constraints to the set of Kripke models.  This is evident in the proof
-of consistency for DIL in Section~\ref{subsec:consistency_of_dil}; see
-the definition of validity.  L is proven sound and complete with
-respect to Rauszer's Kripke semantics in~\cite{Pinto:2009}.
-
-
-The syntax for formulas, graphs, and
-contexts of L are defined in Figure~\ref{fig:L-syntax}, while the
-inference rules are defined in Figure~\ref{fig:L-ifr}.
-\begin{figure}[t]  
+In this section we briefly introduce Pinto and Uustalu's L from
+\cite{Pinto:2009}.  The syntax for formulas, graphs, and contexts of L
+are defined in Figure~\ref{fig:L-syntax}, while the inference rules
+are defined in Figure~\ref{fig:L-ifr}.
+\begin{figure} 
   \begin{center}
     \begin{math}
       \begin{array}{rrllllllllllllllllllll}
@@ -154,7 +149,7 @@ inference rules are defined in Figure~\ref{fig:L-ifr}.
   \caption{Syntax of L.}
   \label{fig:L-syntax}
 \end{figure}
-\begin{figure*}[b]
+\begin{figure}
   \begin{mathpar}
     \Ldrulerefl{}   \and
     \Ldruletrans{}  \and
@@ -177,41 +172,58 @@ inference rules are defined in Figure~\ref{fig:L-ifr}.
   
   \caption{Inference Rules for L.}
   \label{fig:L-ifr}
-\end{figure*}
+\end{figure} 
+The formulas include true and false denoted $<<True>>$ and $<<False>>$
+respectively, implication and subtraction denoted $<<A -> B>>$ and
+$<<A - B>>$ respectively, and finally, conjunction and disjunction
+denoted $<<A /\ B>>$ and $<<A \/ B>>$ respectively.  So we can see
+that for every logical connective its dual is a logical connective of
+the logic.  This is what we meant by BINT containing perfect
+intuitionistic duality in the introduction. Sequents have the form
+$<<G |- Gr n : A,D>>$, where $<<G>>$ and $<<D>>$ are multisets of
+formulas labeled by a node, $<<Gr>>$ is the abstract Kripke model or
+sometimes referred to as simply the graph of the sequent, and $<<n>>$
+is a node in $<<Gr>>$.
 
-We introduce DIL in the next section which provides several
-simplifications of L.  One simplification is the polarization of the
-syntax.  Another is that our formulation does not need analogs of the following
-rules of L:
-\begin{center}
-  \begin{math}
-    \begin{array}{lll}
-      \Ldrulerefl{} & \Ldruletrans{}\\
-      & \\
-      \LdrulemonL{} & \LdrulemonR{}   
-    \end{array}
-  \end{math}
-\end{center}
+Graphs are treated as sets of edges and we denote $<<(n1,n2)>> \in
+<<Gr>>$ by $<<n1 Gr n2>>$.  Furthermore, we denote the union of two
+graphs $<<Gr>>$ and $<<Gr'>>$ as $<<Gr U Gr'>>$. Now each formula
+present in a sequent is labelled with a node in the graph.  This
+labeling is denoted $<<n : A>>$ and should be read as the formula
+$<<A>>$ is true at the node $<<n>>$.  We denote the operation of
+constructing the list of nodes in a graph or context by $|<<Gr>>|$
+and $|<<G>>|$ respectively. The reader should note that it is possible
+for some nodes in the sequent to not appear in the graph.  For
+example, the sequent $<<n : A |- . n : A,.>>$ is a derivable sequent.
+Now the complete graph can always be recovered if needed by using the
+graph structural rules $\Ldrulename{refl}$, $\Ldrulename{trans}$,
+$\Ldrulename{monL}$, and $\Ldrulename{monR}$.
 
-
-Furthermore, we still maintain consistency and completeness, proven in
-Section~\ref{subsec:consistency_of_dil} and
-Section~\ref{subsec:completeness} respectively.  In addition, DIL's
-sequents are focused.  This is important for deriving a type theory;
-see Section~\ref{sec:dualized_type_theory_(dtt)}.  
+The labeling on formulas essentially adds constraints to the set of
+Kripke models.  This is evident in the proof of consistency for DIL in
+Section~\ref{subsec:consistency_of_dil}; see the definition of
+validity. Consistency of L is stated in \cite{Pinto:2009} without a
+detailed proof, but is proven complete with respect to Rauszer's
+Kripke semantics using a counter model construction.  In
+Section~\ref{sec:dualized_intuitionistic_logic_(dil)} we give a
+translation of the formulas of L into the formals of DIL, and in
+Section~\ref{sec:completeness} we will give a translation of the rest
+of L into DIL which will be used to conclude completeness of DIL.
 % section L (end)
 
-\section{Dualized Intuitionistic Logic (DIL)}
-\label{sec:dualized_intuitionistic_logic_dil}
-The syntax for polarities, formulas, and graphs -- sometimes called
-abstract Kripke models -- of DIL is defined in
+\section{Dualized Intuitionistic Logic}
+\label{sec:dualized_intuitionistic_logic_(dil)}
+The syntax for polarities, formulas, and graphs of DIL is defined in
 Figure~\ref{fig:dil-syntax}, where $[[a]]$ ranges over atomic
 formulas.  The following definition shows that DIL's formulas are
 simply polarized versions of L's formulas.
 \begin{definition}
   \label{def:L-form-to-DIL-form}
-  The following defines a translation of formulas of L to formulas of DIL:
+  The following defines a translation of formulas of L to formulas of
+  DIL:
+  \linespread{0.5}
   \begin{center}
+    \small
     \begin{tabular}{cccccccccccccc}
       \begin{math}
       \begin{array}{lll}
@@ -319,12 +331,68 @@ when $[[p]]$ is negative $[[n']]$ will be a future node. This is
 exactly dual to implication. Thus, existence of past and future worlds
 is modeled by the reachability judgment.
 
-\section{Dualized Type Theory (DTT)}
+Before moving on to proving consistency and completeness of DIL we
+first show that the formula $[[A /\- ~A]]$ has a proof in DIL that
+contains a cut that cannot be eliminated.  This also serves as an
+example of a derivation in DIL. Consider the following where we leave
+off the reachability derivations for clarity and $[[G']] \equiv
+[[h(-(A /\- ~A) @ n), h(-A@n)]]$:
+\begin{center}  
+  \scriptsize
+  \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=\tiny andBar] {
+        $$\mprset{flushleft}
+        \inferrule* [right=\tiny cut] {
+          $$\mprset{flushleft}
+          \inferrule* [right=\tiny andBar] {
+            $$\mprset{flushleft}
+            \inferrule* [right=\tiny impBar] {
+              $$\mprset{flushleft}
+              \inferrule* [right=\tiny ax] {
+                \,
+              }{[[Gr ; G, G' |- -A @ n]]}
+              \\
+              $$\mprset{flushleft}
+              \inferrule* [right=\tiny unit] {
+                \,
+              }{[[Gr ; G, G' |- +<+> @ n]]}
+            }{[[Gr ; G, G' |- + ~A @ n]]}
+          }{[[Gr ; G, G' |- +(A /\- ~A) @ n]]}
+          \\
+          $$\mprset{flushleft}
+          \inferrule* [right=\tiny ax] {
+            \,
+          }{[[Gr ; G, G' |- -(A /\- ~A) @ n]]}
+        }{[[Gr ; G, -(A /\- ~A) @ n |- +A @ n]]}
+      }{[[Gr ; G, -(A /\- ~A) @ n |- +(A /\- ~A) @ n]]}
+  \end{math}
+\end{center}
+Now using only an axiom cut we may conclude the following derivation:
+\begin{center}
+  \scriptsize
+  \begin{math}
+    $$\mprset{flushleft}
+    \inferrule* [right=\scriptsize cut] {
+      [[Gr ; G, -(A /\- ~A) @ n |- +(A /\- ~A) @ n]]
+      \\
+      $$\mprset{flushleft}
+      \inferrule* [right=\scriptsize ax] {
+        \,
+      }{[[Gr ; G, -(A /\- ~A) @ n |- -(A /\- ~A) @ n]]}
+    }{[[Gr ; G |- +(A /\- ~A) @ n]]}
+  \end{math}
+\end{center}
+The reader should take notice to the fact that all cuts within the
+previous two derivations are axiom cuts, where the inner most cut uses
+the hypothesis of the outter cut. Therefore, neither can be
+eliminated.
+
+\section{Dualized Type Theory }
 \label{sec:dualized_type_theory}
 In this section we give DIL a term assignment yielding Dualized Type
 Theory (DTT).  First, we introduce DTT, and give several examples
-illustrating how to program in DTT.  Then we present the metatheory of
-DTT.
+illustrating how to program in DTT.  
 
 The syntax for DIL is defined in Figure~\ref{fig:dtt-syntax}.
 \begin{figure}[t]
@@ -462,8 +530,8 @@ return value of the cut.
 %this instance can be seen as an axiom cut.
 
 There is one additional bit of intuition we can use when thinking about
-programming in DTT. We can think of cuts of the form
-$\nu z.(\lambda x_1\cdots\lambda x_i.t) \mathbin{\Cdot[2]} \langle t_1, \langle t_2, \cdots \langle t_i, z \rangle \cdots \rangle$ 
+programming in DTT. We can think of cuts of the form 
+\[ \nu z.(\lambda x_1\cdots\lambda x_i.t) \mathbin{\Cdot[2]} \langle t_1, \langle t_2, \cdots \langle t_i, z \rangle \cdots \rangle \]
 as an abstract machine, where $\lambda x_1\cdots\lambda x_i.t$ is the 
 functional part of the machine, and $\langle t_1, \langle t_2, \cdots \langle t_i, z \rangle \cdots \rangle$ is 
 the stack of inputs the abstract machine will apply the function to
@@ -474,13 +542,14 @@ Herbelin in \cite{Curien:2000}; see also \cite{Curien:2002}.
 
 Similarly to the eliminator for implication we can define the eliminator for disjunction in the form
 of the usual case analysis. Suppose $[[Gr ; H |- t : + (A /\- B)@n]]$, $[[Gr ; H, x : + A@n |- t1 : + C@n]]$, and
-$[[Gr ; H, x : + B@n |- t2 : + C@n]]$ are all derivable.  Then we can
+$[[Gr ; H, x : + B@n |- t2 : + C@n]]$ are all admissible.  Then we can
 derive the usual eliminator for disjunction.  Define 
-$[[case t of x.t1 , x.t2]] =^{\text{def}} [[nu z0 . (nu z1. (nu z2.t * (z1,z2)) * (nu x.t2 * z0)) * (nu x.t1 * z0)]]$.
+\[ [[case t of x.t1 , x.t2]] \stackrel{\mathsf{def}}{=} [[nu z0 . (nu z1. (nu z2.t
+* (z1,z2)) * (nu x.t2 * z0)) * (nu x.t1 * z0)]]. \]
 Then we have the following result.
 \begin{lemma}
   \label{lemma:disj-elim-adm}
-  The following rule is derivable:
+  The following rule is admissible:
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
@@ -512,14 +581,16 @@ Then we have the following result.
   \end{math} \\
 
   \noindent
-  Then the remainder of the derivation depends on the following sub-derivations:
-  
+  Then the remainder of the derivation depends on the following
+  sub-derivations:
+
+  \scriptsize
   \begin{math}
     \begin{array}{lcl}
       D_0:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
         D_3
         \\
         D_4
@@ -527,16 +598,16 @@ Then we have the following result.
     \end{array}
   \end{math} \\
 
-  \begin{math}
+  \begin{math}    
     \begin{array}{lcc}
       D_1: \\      
-      & 
-      D_2
-      \\
+      &       
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
+        D_2
+        \\
         $$\mprset{flushleft}
-        \inferrule* [right= \ifrName{ax}] {
+        \inferrule* [right=\scriptsize\ifrName{ax}] {
           \,
         }{[[Gr;H, z0 :- C @ n, x : + A@n |- z0 : - C@n]]}               
       }{[[Gr;H, z0 :- C @ n |- nu x.t1 * z0 : - A@n]]}
@@ -548,7 +619,7 @@ Then we have the following result.
       D_2: \\      
       & 
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{weakening}] {
+      \inferrule* [right=\scriptsize\ifrName{Weakening}] {
         [[Gr;H, x : + A@n |- t1 : + C@n]]
       }{[[Gr;H, z0 :- C @ n, x : + A@n |- t1 : + C@n]]}
     \end{array}
@@ -559,7 +630,7 @@ Then we have the following result.
       D_4:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
         D_5
         \\        
         [[Gr;H, z0 :- C @ n, z1 : - A @ n, x : + B@n |- z0 : - C@n]]
@@ -572,7 +643,7 @@ Then we have the following result.
       D_3:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{cut}] {
+      \inferrule* [right=\scriptsize\ifrName{cut}] {
         D_6
         \\
         D_7
@@ -585,18 +656,19 @@ Then we have the following result.
       D_5:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{weakening}] {
+      \inferrule* [right=\scriptsize\ifrName{Weakening}] {
         [[Gr;H, x : + B@n |- t2 : + C@n]]
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, x : + B@n |- t2 : + C@n]]}
     \end{array}
   \end{math} \\
 
   \begin{math}
+    \scriptsize
     \begin{array}{lcl}
       D_6:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{weakening}] {
+      \inferrule* [right=\scriptsize \ifrName{Weakening}] {
         [[Gr;H |- t : + (A /\ - B)@n ]]
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, z2 : - B @ n |- t : + (A /\ - B)@n ]]}
     \end{array}
@@ -607,7 +679,7 @@ Then we have the following result.
       D_7:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{and}] {
+      \inferrule* [right=\scriptsize \ifrName{and}] {
         D_8 
         \\
         D_9
@@ -620,7 +692,7 @@ Then we have the following result.
       D_8:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{ax}] {
+      \inferrule* [right=\scriptsize \ifrName{ax}] {
         \,
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, z2 : - B @ n |- z1 : - A @n ]]}
     \end{array}
@@ -631,23 +703,21 @@ Then we have the following result.
       D_9:\\
       &
       $$\mprset{flushleft}
-      \inferrule* [right= \ifrName{ax}] {
+      \inferrule* [right=\scriptsize \ifrName{ax}] {
         \,
       }{[[Gr;H, z0 :- C @ n, z1 : - A @ n, z2 : - B @ n |- z2 : - B @n ]]}
     \end{array}
   \end{math} \\
 \end{proof}
-%% One thing that is especially interesting about the definition of 
-%% \[ [[case t of x.t1,x.t2]] =^{\text{def}} [[nu z0 . (nu z1. (nu z2.t * (z1,z2)) * (nu x.t2 * z0)) * (nu x.t1 * z0)]] \] is 
-%% that this term exhibits the fact that the reduction relation defined
-%% in Figure~\ref{fig:dtt-red} would not be confluent if the rule
-%% $\ifrName{RBetaR}$ did not require the positive term in the cut to be
-%% canonical.  Thus, if we lift this restriction then the reduction rules
-%% $\ifrName{RBetaLeft}$ and $\ifrName{RBetaRight}$ would be overlapping.
-%% This is a common problem with classical type theories.  See for
-%% instance \cite{Curien:2000}.  This is due to the rich symmetries
-%% within these types of theories.  So to obtain a confluent relation one
-%% must enforce a precedence on the two rules, thus our restriction.
+
+Now consider the term $[[nu x . inj 1 (nu y. inj 2 <y,triv> * x) *
+x]]$.  This term is the inhabitant of the type $[[A /\- ~A]]$, and its
+typing derivation follows from the derivation given in
+Section~\ref{sec:dualized_intuitionistic_logic_(dil)}.  We can see by
+looking at the syntax that the cuts involved are indeed on the axiom
+$[[x]]$, thus this term has no canonical form.  In \cite{Crolard:2004}
+Crolard shows that inhabitants such as these amount to a constructive
+coroutine.  That is, it is a restricted form of a continuation.
 
 We now consider several example reductions in DTT. In the following
 examples we underline non-top-level redexes. The first example simply
@@ -671,20 +741,10 @@ $[[\x.(\y.y)]]$ to the arguments $[[triv]]$ and $[[triv]]$.
     \end{array}
   \end{math}
 \end{center}
-%% Note how the reduction rules essentially reorient the term --
-%% potentially introducing cuts, and eliminating pairs and injections --
-%% until one of the rules $\ifrName{RBetaLeft}$, $\ifrName{RBetaRight}$,
-%% or $\ifrName{RRet}$ can be applied.  The final example is the curried
-%% form of the previous example that shows how projections are modeled:
-%% \begin{center}
-%%   \begin{math}
-%%     \begin{array}{lcl}
-%%       [[nu z.(\x.(nu y.x * inj 2 y)) * <(triv, triv),z>]] 
-%%           & \redtoby{RImp}       & [[nu z.u((nu y.(triv,triv) * inj 2 y)) * z]]\\
-%%           & \redtoby{RAnd2}      & [[nu z.u((nu y.triv * y)) * z]]\\
-%%           & \redtoby{RRet}      & [[nu z.triv * z]]\\
-%%           & \redtoby{RRet}      & [[triv]]\\
-%%     \end{array}
-%%   \end{math}
-%% \end{center}
-% section dualized_type_theory (end)
+% section dualized_type_theory_(dtt) (end)
+
+%%% Local Variables: 
+%%% mode: latex
+%%% reftex-default-bibliography: ("/Users/hde/thesis/paper/thesis.bib")
+%%% TeX-master: "/Users/hde/thesis/paper/thesis.tex"
+%%% End: 

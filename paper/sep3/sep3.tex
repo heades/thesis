@@ -10,7 +10,7 @@ The previous chapter introduced the freedom of speech
 dependently-typed functional programming language. This language
 contained two fragments, the logical fragment and the programmatic
 fragment.  However, these fragments are judgmentally kept separate.
-That is the syntax was the same for both fragments, even more so the
+That is, the syntax was the same for both fragments, even more so, the
 syntax for programs and types are collapsed into a single syntactic
 category.  Thus, the fragments are not strictly separate, but rather,
 weakly so.  This particular design is very appealing because it has an
@@ -20,10 +20,10 @@ above, this makes programming very hard.
 
 Consider a design where instead of a weak separation of the two
 fragments -- logical and programmatic -- we insist on a strict one.
-That is the logical fragment and the programmatic fragment have
-completely distinct languages for types and programs, and then the two
-fragments are related using freedom of speech by typing rules.  So we
-go from a picture that looks like this:
+This means that the logical and programmatic fragments
+have completely distinct languages for types and programs, and then
+the two fragments are related using freedom of speech by typing rules.
+So we go from a picture that looks like this:
 \begin{center}
   \begin{tikzpicture}[scale=2.5,cap=round,>=latex]    
     \draw[thick] (2.8cm,0cm) circle(1cm);
@@ -74,7 +74,7 @@ for two appendices.
 
 $\Sep$ consists of two distinct phases: compile time and runtime, and
 $\Sep$ separates each phase into its own language.  The compile time
-phase uses the annotated $\Sep$ language, and the runtime phases uses
+phase uses the annotated $\Sep$ language, and the runtime phase uses
 the unannotated $\Sep$ language.  The former is then translated into
 the second using an meta-level function called the eraser.  This
 function removes the annotations from objects of the annotated
@@ -169,12 +169,12 @@ We can see that these rules look very much like the rules of freedom
 of speech, but there are some small differences.  First, we annotate
 bound variables by their stage annotations.  This facilitates
 reasoning as well as the definitions of the eraser
-functions. Secondly, in the $\Sepdrulename{TRM\_LamPL}$ we annotate the
-free variable $[[x]]$ in the context of the premise with the
+functions. Secondly, in the $\Sepdrulename{TRM\_LamPL}$ we annotate
+the free variable $[[x]]$ in the context of the premise with the
 $\mathsf{val}$ annotation.  This indicates that $[[x]]$ ranges over
-programmatic values, and this is used to enforce call by
-value. Compare this to the rule $\Sepdrulename{TRM\_LamMI}$ where
-$[[x]]$ does not only range over values, but also over diverging
+programmatic values, and this is used to enforce call-by-value
+applications. Compare this to the rule $\Sepdrulename{TRM\_LamMI}$
+where $[[x]]$ does not only range over values, but also over diverging
 terms.
 
 These rules include the freedom of speech property.  The type $[[A]]$
@@ -187,11 +187,11 @@ contain any value restriction.  The argument $[[a]]$ ranges over
 general terms, proofs, and predicates.  Thus, we have successfully
 lifted the value restriction in the programmatic fragment.
 
-\textbf{The logical fragment.}
-We would now like to introduce the logical fragment in a bit of
-detail so the reader can get an idea of how different it is from the
-logical fragment of the freedom of speech language.  The syntax of the
-logical fragment of $\Sep$ is defined as follows:
+\textbf{The logical fragment.}  We would now like to introduce the
+logical fragment in some detail so the reader can get an idea of how
+different it is from the logical fragment of the freedom of speech
+language.  The syntax of the logical fragment of $\Sep$ is defined as
+follows:
 
 \begin{center}  
   \begin{math}
@@ -364,7 +364,7 @@ Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
   \caption{Type-checking Rules for Proofs}
   \label{fig:proofs-ty}
 \end{figure}
-The read may wish to look over the typing rules for proofs to get an
+The reader may wish to look over the typing rules for proofs to get an
 idea of which proof construct introduces each of the new predicates.
 
 \textbf{The termination prediate.}  In the freedom of speech language
@@ -399,9 +399,9 @@ judgment.
 \end{figure}
 One may feel that the rule $\Sepdrulename{PRF\_Val}$ is a bit
 restrictive.  This rule is supposed to allow the proof that a
-terminating program is indeed terminating, but on the noise it seems
-as if they only things we can prove are terminating on semantics
-values which are trivially terminating.  However, this is not the
+terminating program is indeed terminating, but on the nose it seems
+that the only things we can prove are terminating are semantics
+values, which are trivially terminating.  However, this is not the
 case.  If one can prove that $[[t]]$ is terminating for some non-value
 $[[t]]$, then one must have constructed the value of $[[t]]$, say
 $[[v]]$.  Now it is trivially the case that $[[t]]$ and $[[v]]$ are
