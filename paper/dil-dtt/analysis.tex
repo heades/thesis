@@ -258,26 +258,42 @@ admissibility of those rules in DIL.
   \begin{proof}
     This holds by a straightforward induction on the form of the assumed derivation.
   \end{proof}
+\noindent
 Note that we often leave the application of exchange implicit for
-readablity.
-
-\begin{lemma}[Graph Weakening]
-  \label{lemma:graph_weakening}
-  If $[[Gr |- n1 <= p * n2]]$, then $[[Gr, n3 <= p' n4 |- n1 <= p * n2]]$.
-\end{lemma}
-  \begin{proof}
-    This holds by a straightforward induction on the form of the assumed derivation.
-  \end{proof}
+readablity.  Finally, we have the admissible for contraction.
 
 \begin{lemma}[Contraction]
   \label{lemma:contract}
   If $[[Gr ; G , p A @ n , p A @ n , G' |- p' B @ n']]$, then
   $[[Gr ; G , p A @ n , G' |- p' B @ n']]$.
 \end{lemma}
-  \begin{proof}
-    This holds by a straightforward induction on the form of the assumed derivation.
-  \end{proof}
-  
+\begin{proof}
+  This holds by a straightforward induction on the form of the assumed derivation.
+\end{proof}
+
+The proofs of the previous admissible rules depend on a general
+monotonicity result (Lemma~\ref{lemma:genmono}) for DIL.  The proof of
+this will require some auxiliary mathematical machinery. First, we
+show that arbitrary edges can be weakened into the reachability
+judgment.
+\begin{lemma}[Graph Weakening]
+  \label{lemma:graph_weakening}
+  If $[[Gr |- n1 <= p * n2]]$, then $[[Gr, n3 <= p' n4 |- n1 <= p * n2]]$.
+\end{lemma}
+\begin{proof}
+  This holds by a straightforward induction on the form of the assumed derivation.
+\end{proof}
+Now monotonicity is the notion of truths holding forever into the
+future, and falsehood holding forever into the past.  That is, if a
+formula is true in some current world, then it must remain true, and
+if a forumla is false in the current world, then it remains false
+forever into the past.  Thus, a false formula may eventually become true
+in the future, but a true formula cannot be true now and then become
+false in the future.  To capture this notion syntactically we require
+the definition of a function which will push edges forward in the
+abstract Kripke model -- the graph on the sequent.   This function is
+ultimately used to construct the reachability constraint on
+implication in the general monotonicity lemma.
 \begin{definition}
   \label{def:raise}
   We define the function $[[raise]]$ on abstract graphs as follows:
@@ -296,7 +312,8 @@ readablity.
     \end{math}
   \end{center}
 \end{definition}
-
+The following asserts that the orientation of an edge can be flipped,
+as long as the polarity is flipped. 
 \begin{lemma}[RelAssumFlip]
   \label{lemma:relassumflip}
   If $[[Gr1 , n1 <=p n2, Gr2 |- m <=p' m']]$, then $[[Gr1 , n2 <=bar p n1, Gr2 |- m <=p' m']]$.
@@ -327,7 +344,13 @@ readablity.
       $[[Gr1 , n2 <=bar p n1, Gr2 |- n1 <=p * n2]]$.    
     \end{itemize}
   \end{proof}
-
+Using the $[[raise]]$ function we can show that all nodes related to
+some node $[[n1]]$ which is related to a node $[[n2]]$ in some
+subgraph $[[Gr1]]$, are also related to $[[n2]]$.  Now using the
+following result we will be able to raise the lowerbound on edges in
+a DIL-sequent, which will then be used to construct the reachability
+requirements for implication in the general monotonicity lemma
+(Lemma~\ref{lemma:genmono}).
 \begin{lemma}[Raising the Lower Bound]
   \label{lemma:raise_lower}
   If $[[Gr |- n1 <=p* n2]]$ and $[[Gr, Gr1 |- m <=p' * m']]$, then $[[Gr, raise(n1,n2,Gr1) |- m <=p' * m']]$.
@@ -425,15 +448,16 @@ readablity.
       $[[Gr,raise(n1,n2,Gr) |- m <= p' * m']]$, but this easily follows by repeated applications of Lemma~\ref{lemma:relassumflip}.
     \end{itemize}
   \end{proof}
-
+\noindent
+We can now use the previous result to raise the lower bound on sequents.
 \begin{lemma}[Graph Node Containment]
   \label{lemma:graph_node_containment}
   If $[[Gr |- n1 <=p * n2]]$ and $[[n1]]$ and $[[n2]]$ are unique, then
   $[[n1]],[[n2]] \in [[| Gr |]]$.
 \end{lemma}
-  \begin{proof}
-    This holds by straightforward induction on the form of $[[Gr |- n1 <=p * n2]]$.
-  \end{proof}
+\begin{proof}
+  This holds by straightforward induction on the form of $[[Gr |- n1 <=p * n2]]$.
+\end{proof}
 
 \begin{lemma}[Raising the Lower Bound Logically]
   \label{lemma:raising_the_lower_bound_logically}
@@ -552,7 +576,9 @@ readablity.
       Similar to the previous case.
     \end{itemize}
   \end{proof}
-
+Finally, we have everything we need to prove that general
+monotonicity is admissible in DIL.  This implies the usual
+admissible monotonicity rule as a corollary.
 \begin{lemma}[General Monotonicity]
   \label{lemma:genmono}
   If $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, $[[Gr |- m <= p * m']]$, and
@@ -733,7 +759,7 @@ readablity.
       Similar to the previous case.
     \end{itemize}
   \end{proof}
-
+\noindent
 The proofs of the admissible rules MonoL and MonoR depend on the
 following monotonicity result.
 \begin{corollary}[Monotonicity]
@@ -1393,17 +1419,20 @@ If $[[Gr ; H |- t : p A @ n]]$, then $[[ drop H |-c t : p A]]$
 
 Let $\SN$ be the set of terms which are strongly normalizing with
 respect to the reduction relation.  Let \textit{Var} be the set of
-term variables, and let us use $x$ and $y$ as metavariables for variables.  We
-will prove strong normalization for classically typed terms using a
-version of Krivine's classical realizability~\cite{krivine09}.  We
-define three interpretations of types in Figure~\ref{fig:classreal}.
-The definition is by mutual induction, and can easily be seen to
-well-founded, as the definition of $\interp{A}^+$ invokes the
-definition of $\interp{A}^-$ with the same type, which in turn invokes
-the definition of $\interp{A}^{+c}$ with the same type; and the
-definition of $\interp{A}^{+c}$ may invoke either of the other
-definitions at a strictly smaller type.  The reader familiar with
-such proofs will also recognize the debt owed to Girard~\cite{gtl90}.
+term variables, and let us use $x$ and $y$ as metavariables for
+variables.  We will prove strong normalization for classically typed
+terms using a version of Krivine's classical
+realizability~\cite{krivine09}.  We define three interpretations of
+types in Figure~\ref{fig:classreal}.  The definition is by mutual
+induction, and can easily be seen to well-founded, as the definition
+of $\interp{A}^+$ invokes the definition of $\interp{A}^-$ with the
+same type, which in turn invokes the definition of $\interp{A}^{+c}$
+with the same type; and the definition of $\interp{A}^{+c}$ may invoke
+either of the other definitions at a strictly smaller type.  The
+reader familiar with such proofs will also recognize the debt owed to
+Girard~\cite{gtl90}.  That is we can see that this style of proof is
+very similar to proofs by the Tait-Girard reducibility methods -- See
+Section~\ref{sec:tait-griard_reduciblity}.
 
 \begin{figure}
 \small
@@ -1541,7 +1570,8 @@ For the latter, assume arbitrary $x\in\textit{Vars}$ and $t'\in\interp{A}^-$,
 and show $[[nu x . t * t']]\in\SN$.  This follows immediately
 from the assumption that $t'\in\interp{A}^-$.
 \end{proof}
-
+Finally, we have everything we need to conclude strong normalization
+of DTT.
 \begin{thm}[Soundness]
 \label{thm:sndinterp}
 If $[[ J |-c t : p A]]$ then for all $\sigma\in\interp{\Gamma}$, $\sigma t\in\interp{A}^p$.
@@ -1832,7 +1862,9 @@ If $[[Gr;H |- t : p A@n]]$, then there is normal $t'$ with
 $t\leadsto^* t'$ and $t'$ containing only cut terms of the form
 $[[nu x . y * t]]$ or $[[nu x . t * y]]$, for $y$ a variable.
 \end{corollary}
-
+Using the previous results we can see that the canonicity restrictions
+placed on the reduction relation enforces confluence of the reduction
+relation.
 \begin{lemma}[Local Confluence]
 \label{lem:localconf}
 The reduction relation of Figure~\ref{fig:dtt-red} is locally confluent.
