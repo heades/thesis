@@ -369,17 +369,17 @@ readablity.
       $[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <= bar p * n1]]$ 
       where $[[Gr1]] \equiv [[Gr1', m <=bar p n1,Gr1'']]$. This holds by the following derivation:
       \begin{center}
-        \footnotesize
+        \scriptsize
         \begin{math}
           $$\mprset{flushleft}
-          \inferrule* [right=\ifrName{rel\_trans}] {                       
+          \inferrule* [right=\scriptsize \ifrName{rel\_trans}] {                       
               $$\mprset{flushleft}
-            \inferrule* [right=\ifrName{rel\_ax}] {
+            \inferrule* [right=\scriptsize \ifrName{rel\_ax}] {
               \ 
             }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <=bar p * n2]]}
             \\
             $$\mprset{flushleft}
-            \inferrule* [right=\ifrName{rel\_flip}] {
+            \inferrule* [right=\scriptsize \ifrName{rel\_flip}] {
               [[Gr |- n1 <=p* n2]]
             }{[[Gr |- n2 <=bar p* n1]]}
           }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <= bar p * n1]]}
@@ -578,20 +578,21 @@ readablity.
       In addition we know $[[Gr |- ni <= pi * n'i]]$ and $[[Gr |- n' <= bar pi * m']]$.  It suffices to show 
       $[[Gr ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i |- bar pi Ai @ m']]$.  This is derivable as follows:
       \begin{center}
+        \footnotesize
         \begin{math}
           $$\mprset{flushleft}
-          \inferrule* [right=\ifrName{ax}] {
+          \inferrule* [right=\footnotesize\ifrName{ax}] {
             $$\mprset{flushleft}
-            \inferrule* [right=\ifrName{rel\_trans}] {
+            \inferrule* [right=\footnotesize\ifrName{rel\_trans}] {
               $$\mprset{flushleft}
-              \inferrule* [right=\ifrName{rel\_flip}] {
+              \inferrule* [right=\footnotesize\ifrName{rel\_flip}] {
                 [[Gr |- ni <= pi * n'i]]
               }{[[Gr |- n'i <= bar pi * ni]]}
               \\
               $$\mprset{flushleft}
-              \inferrule* [right=\ifrName{rel\_trans}] {
+              \inferrule* [right=\footnotesize\ifrName{rel\_trans}] {
                 [[Gr |- ni <= bar pi * n']]
-                \\
+                \\\\
                 [[Gr |- n' <= bar pi * m']]
               }{[[Gr |- ni <= bar pi * m']]}
             }{[[Gr |- n'i <= bar pi * m']]}
