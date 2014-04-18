@@ -10,6 +10,38 @@
 \newcommand{\To}[0]{\Rightarrow}
 \newcommand{\SN}[0]{\mathbf{SN}} 
 
+Freedom of Speech and $\Sep$ are two very powerful programming
+languages, but there is one feature they do not have, the ability to
+reason about infinite data structures in an elegant way.  Infinite
+data can be defined and reasoned about using corecursion and
+coinduction respectively.  Now both of the previous languages contain
+induction, but only $\Sep$ contained inductive data types.  This
+chapter is about the design of a new simply typed theory called
+Dualized Type Theory (DTT).
+
+DTT is based on a new bi-intuitionistic logic (BINT) called Dualized
+Intuitionistic Logic (DIL).  Bi-intuitionisim is a conservative
+extension of intuitionistic logic with prefect duality.  That is, for
+every logical connective of the logic its dual connective is also a
+logical connective of the logic.  Due to the rich duality in BINT we
+believe it shows promise of being a logical foundation for induction
+and coinduction, because induction is dual to coinduction. Our working
+hypothesis is that a logical foundation based on intuitionistic
+duality will allow the semantic duality between induction and
+coinduction to be expressed in type theory, yielding a solution to the
+problems with these important features in existing systems.  For
+example, Agda restricts how inductive and coinductive types can be
+nested (see the discussion in \cite{abel+13}), while Coq supports
+general mixed inductive and coinductive data, but in doing so,
+sacrifices type preservation.
+
+One particular difference in the design of DTT from Freedom of Speech
+and $\Sep$ is that we started from a logic, and then derived a
+corresponding type theory from it.  Thus, we make explicit use of the
+computational trinity (Chapter~\ref{chap:the_three_perspectives}) by
+starting on the logical side, and then moving to the type theoretic
+side.
+
 Classical logic is rich with duality.  Using the De Morgan dualities
 it is straightforward to prove that conjunction is dual to disjunction
 and negation is self dual.  In addition, it is also possible to prove
@@ -31,33 +63,33 @@ Now Rauszer took the dual of the previous interpretation to obtain the following
     \interp{A - B}_w = \exists w'.w' \leq w \land \lnot\interp{A}_{w'} \land \interp{B}_{w'}
   \end{math}
 \end{center}
-This is called subtraction or exclusion.  Propositional
-bi-intuitionistic logic is a conservative extension of propositional
-intuitionistic logic with perfect duality.  That is, it contains the
-logical connectives for disjunction, conjunction, implication, and
-subtraction, and it is sound and complete with respect to the
-Rauszer's extended Kripke semantics.
+This is called subtraction or exclusion.  Propositional BINT logic is
+a conservative extension of propositional intuitionistic logic with
+perfect duality.  That is, it contains the logical connectives for
+disjunction, conjunction, implication, and subtraction, and it is
+sound and complete with respect to the Rauszer's extended Kripke
+semantics.
 
-Propositional bi-intuitionistic (BINT) logic is fairly unknown in
-computer science.  Filinski studied a fragment of BINT logic in his
-investigation into first class continuations in \cite{Filinski:1989}.
-Crolard introduced a logic and corresponding type theory called
-subtractive logic, and showed it can be used to study constructive
-coroutines in \cite{crolard01,Crolard:2004}.  He initially defined
-subtractive logic in sequent style with the Dragalin restriction, and
-then defined the corresponding type theory in natural deduction style
-by imposing a restriction on Parigot's $\lambda\mu$-calculus in the
-form of complex dependency tracking.  Just as linear logicians have
-found -- in \cite{Schellinx:1991} -- Pinto and Uustalu were able to
-show that imposing the Dragalin restriction in subtractive logic
-results in a failure of cut elimination \cite{Pinto:2009}.  They
-recover cut elimination by proposing a new BINT logic called L that
-lifts the Dragalin restriction by labeling formulas and sequents with
-nodes and graphs respectively; this labeling corresponds to placing
-constraints on the sequents where the graphs can be seen as abstract
-Kripke models. Gor\'e et. al. also proposed a new BINT logic that
-enjoys cut elimination using nested sequents; however it is currently
-unclear how to define a type theory with nested sequents
+BINT logic is fairly unknown in computer science.  Filinski studied a
+fragment of BINT logic in his investigation into first class
+continuations in \cite{Filinski:1989}.  Crolard introduced a logic and
+corresponding type theory called subtractive logic, and showed it can
+be used to study constructive coroutines in
+\cite{crolard01,Crolard:2004}.  He initially defined subtractive logic
+in sequent style with the Dragalin restriction, and then defined the
+corresponding type theory in natural deduction style by imposing a
+restriction on Parigot's $\lambda\mu$-calculus in the form of complex
+dependency tracking.  Just as linear logicians have found -- in
+\cite{Schellinx:1991} -- Pinto and Uustalu were able to show that
+imposing the Dragalin restriction in subtractive logic results in a
+failure of cut elimination \cite{Pinto:2009}.  They recover cut
+elimination by proposing a new BINT logic called L that lifts the
+Dragalin restriction by labeling formulas and sequents with nodes and
+graphs respectively; this labeling corresponds to placing constraints
+on the sequents where the graphs can be seen as abstract Kripke
+models. Gor\'e et. al. also proposed a new BINT logic that enjoys cut
+elimination using nested sequents; however it is currently unclear how
+to define a type theory with nested sequents
 \cite{DBLP:conf/aiml/GorePT08}.  Bilinear logic in its intuitionistic
 form is a linear version of BINT and has been studied by Lambek in
 \cite{Lambek:1993,Lambek:1995}.  Biasi and Aschieri propose a term
@@ -71,12 +103,11 @@ version of Crolard's subtractive logic for which he was able to
 construct a categorical model using linear categories in
 \cite{Bellin:2012}.
 
-In this section we propose a new BINT logic called Dualized
-Intuitionistic Logic (DIL) and a corresponding type theory called
-Dualized Type Theory (DTT).  DIL is a single-sided polarized
-formulation of Pinto and Uustalu's labeled sequent calculus L.  DIL
-builds on L by removing the following rules (see Section~\ref{sec:L}
-for a complete definition of L):
+Throughout the remainder of this chapter we introduce the design of
+DIL and its corresponding type theory DTT.  DIL is a single-sided
+polarized formulation of Pinto and Uustalu's labeled sequent calculus
+L.  DIL builds on L by removing the following rules (see
+Section~\ref{sec:L} for a complete definition of L):
 \begin{center}
   \begin{math}
     \begin{array}{lll}
@@ -116,18 +147,6 @@ eliminated. Throughout the sequel we define ``cut elimination'' as the
 elimination of all cuts other than axiom cuts, and we call DIL ``cut
 free'' with respect to this definition of cut elimination. The latter
 point is similar to Wadler's dual calculus \cite{Wadler:2005}.
-
-The study of DIL and DTT are subgoals of a larger one.  Due to the
-rich duality in BINT logic we believe it shows promise of being a
-logical foundation for induction and coinduction, because induction is
-dual to coinduction. Our working hypothesis is that a logical
-foundation based on intuitionistic duality will allow the semantic
-duality between induction and coinduction to be expressed in type
-theory, yielding a solution to the problems with these important
-features in existing systems.  For example, Agda restricts how
-inductive and coinductive types can be nested (see the discussion in
-\cite{abel+13}), while Coq supports general mixed inductive and
-coinductive data, but in doing so, sacrifices type preservation.
 
 \section{Pinto and Uustalu's L}
 \label{sec:L}
