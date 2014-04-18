@@ -101,7 +101,7 @@ terminals :: '' ::=
   | x Gr y                  ::  :: GraphRel
   {{tex [[x]] [[Gr]] [[y]] }}
   | x notin Gr , G , D      ::  :: wnotin
-  {{tex [[x]] \not\in [[Gr]],[[G]],[[D]] }}
+  {{tex [[x]] \not\in |[[Gr]]|,|[[G]]|,|[[D]]| }}
   | ( x , y )               :: M :: Edges
   | n in Nodes ( Gr )       :: M :: Nodes1
   {{tex [[n]] \in \mathsf{Nodes}([[Gr]]) }}
