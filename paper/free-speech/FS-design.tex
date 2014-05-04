@@ -247,7 +247,7 @@ the type system.
       \begin{array}{lll}
         \mathsf{true}     & \defeq [[\x.\f1.\f2.\y.\z.f1 y]]\\
         \mathsf{false}    & \defeq [[\x.\f1.\f2.\y.\z.f2 z]]\\
-        \mathsf{case}     & \defeq [[\x.\b.\f1.\f2.\y.\z.(b x f1 f2 y z)]]\\
+        \mathsf{case}     & \defeq [[\x.\u.\f1.\f2.\y.\z.(u x f1 f2 y z)]]\\
       \end{array}
     \end{math}
   \end{center}
@@ -533,15 +533,15 @@ The rules \FSdrulename{Join} and \FSdrulename{Conv} have one
 particular disadvantage.  Suppose 
 \[ 
   \begin{array}{lll}
-    [[G]] \defeq [[z: L Type, y: L Type, x: L z, u: L ((a : L Nat) + -> z) = ((a : L Nat) + -> y)]], \\
-    [[G |- \a.x: (a : L Nat) + -> z L]] \text{, and }\\ 
+    [[G]] \defeq [[z: L Type, y: L Type, x: L z, u: L ((x1 : L Nat) + -> z) = ((x1 : L Nat) + -> y)]], \\
+    [[G |- \x1.x: (x1 : L Nat) + -> z L]] \text{, and }\\ 
     [[G |- Z : Nat L]].
   \end{array}
-\]  Then $[[G |- (\a.x) Z : z L]]$.  By applying $\FSdrulename{Conv}$ and using
-the assumption $u$, we may conclude $[[G |- (\a.x) Z : y L]]$, but 
-$[[(\a.x) Z ~> x]]$ and $[[G |- x:z L]]$.  Therefore, we have obtained a counterexample to type preservation!
+\]  Then $[[G |- (\x1.x) Z : z L]]$.  By applying $\FSdrulename{Conv}$ and using
+the assumption $u$, we may conclude $[[G |- (\x1.x) Z : y L]]$, but 
+$[[(\x1.x) Z ~> x]]$ and $[[G |- x:z L]]$.  Therefore, we have obtained a counterexample to type preservation!
 Notice that if we knew $[[z = y]]$ then this would no longer be a counterexample, but it is impossible to prove that $[[z = y]]$
-from knowing $[[((a : L Nat) + -> z) = ((a : L Nat) + -> y)]]$ using only \FSdrulename{Join} and \FSdrulename{Conv}.  So
+from knowing $[[((x1 : L Nat) + -> z) = ((x1 : L Nat) + -> y)]]$ using only \FSdrulename{Join} and \FSdrulename{Conv}.  So
 to prevent counterexamples such as these we add the following rules:
 \begin{center}  
   \begin{mathpar}

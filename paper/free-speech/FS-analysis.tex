@@ -13,65 +13,238 @@ and following this we will prove weak normalization.
 \section{Basic Results}
 \label{sec:basic_results}
 The main results depend on several auxiliary results, and we present
-each of them in this section.  The first basic result is kinding
-conversion.  This is allows the substitution of equals for equals in
-types, and is needed in the proof of the second basic result,
-regularity.
-\begin{lemma}[Kinding conversion]
-  \label{lemma:kinding_conversion}
-  If $\Gamma \tvdash{\theta} [a/y]b:[[Type]]$ and $\Gamma \tvdash{L} p:a = a'$ then
-  $\Gamma \tvdash{\theta} [a'/y]b:[[Type]]$.
+each of them in this section. The first two basic results are
+weakening and substitution for typing.  The latter states that if we
+know a term $[[e]]$ is well typed in an environment with a free
+variable $[[x]]$, and given an expression $[[a]]$ with the same type
+as the free variable, then $[[ [a/x]e]]$ has the same type as $[[e]]$.
+This is an important result for type preservation, because we want to
+insure that for any $[[(\x.e) v]]$ that has type $[[e']]$, its
+contractum $[[ [v/x]e]]$ has type $[[e']]$.
+
+\begin{lemma}[Weakening]
+  \label{lemma:FS-weakening}
+  If $[[G |- e : e' th]]$, then $[[G, G' |- e : e' th]]$.
+\end{lemma}
+\begin{proof}
+  This holds by straightforward induction on the form of the assumed
+  typing derivation.
+\end{proof}
+
+\begin{lemma}[Substitution for Typing]
+  \label{lemma:substitution}
+  If $\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e:e_2$ and 
+  $\Gamma \tvdash{\theta} a:e_1$, 
+  then $\Gamma,[a/x]\Gamma' \tvdash{\theta'} [a/x]e:[a/x]e_2$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the form of the assumed typing
-  derivation; we only give non-trivial cases.
+  derivation. We only give the non-trivial cases.  All other cases are
+  either similar to the cases given here or are trivial.
   \begin{itemize}
-  \item[Case.] \ \\
+  \item[Case.]\ \\
     \begin{center}
-      $\FSdruleKXXPi{}$
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=K\_Pi] {
+          \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta''} e'_1:[[Type]]
+          \\\\
+          \Gamma,x:^\theta e_1,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} e'_2:[[Type]]
+        }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{e'_1}{\epsilon}{e'_2}:[[Type]]}
+      \end{math}
     \end{center}
-    We first consider when $\theta \equiv P$ and $b \equiv y$ where $y$ is a variable.  Then
-    $[a/y]y \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$ and 
-    $a \equiv \arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}$.  Clearly, if 
-    $\Gamma \tvdash{P} [a/y]y:[[Type]]$ then $\Gamma, y:^P [[Type]] \tvdash{P} y:^P [[Type]]$.  By
-    the substitution lemma, $\Gamma \tvdash{P} [a'/y]y:[[Type]]$.
+    By the induction hypothesis, 
+    $\Gamma,[a/x]\Gamma' \tvdash{\theta''} [a/x]e'_1:[[Type]]$ and
+    $\Gamma,[a/x]\Gamma',y:^{\theta''} [a/x]e'_1 \tvdash{\theta'} [a/x]e'_2:[[Type]]$.  Now we can
+    apply $\FSdrulename{K\_Pi}$ to obtain, 
+    $\Gamma,[a/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[a/x]e'_1}{\epsilon}{[a/x]e'_2}:[[Type]]$,
+    which is equivalent to
+    $\Gamma,[a/x]\Gamma' \tvdash{\theta'} [a/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e'_2}):[[Type]]$.
+    
+    \item[Case.]\ \\
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=K\_Eq] {
+            \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta_1} e':e'_1
+            \\\\
+            \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta_2} e'':e'_2
+          }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{L} e' = e'':[[Type]]}
+        \end{math}
+      \end{center}
+      By the induction hypothesis we know 
+      $\Gamma,[a/x]\Gamma' \tvdash{\theta_1} [a/x]e':[a/x]e'_1$ and\\
+      $\Gamma,[a/x]\Gamma' \tvdash{\theta_2} [a/x]e'':[a/x]e'_2$.  We can now apply 
+      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[a/x]\Gamma' \tvdash{L} [a/x]e' = [a/x]e'':[[Type]]$,
+      which is equivalent to $\Gamma,[a/x]\Gamma' \tvdash{L} [a/x](e' = e''):[[Type]]$.
 
-    Now we consider when $\theta$ is arbitrary and 
-    $b \equiv \arrowT{x}{\theta'}{r}{\epsilon}{s}$.
-    Then $[a/y]b \equiv \arrowT{x}{\theta'}{[a/y]r}{\epsilon}{[a/y]s}$.  Here we can see that
-    $e_1 \equiv [a/y]r$ and $e_2 \equiv [a/y]s$ so by the induction 
-    hypothesis, $\Gamma \tvdash{\theta} [a'/y]r:[[Type]]$ and 
-    $\Gamma, x:^{\theta'} [a/y]r \tvdash{\theta} [a'/y]s:[[Type]]$.  Finally, by applying 
-    $\FSdrulename{K\_Pi}$, 
-    $\Gamma \tvdash{\theta} \arrowT{x}{\theta'}{[a'/y]r}{\epsilon}{[a'/y]s}:[[Type]]$ which is 
-    equivalent to 
-    $\Gamma \tvdash{\theta} [a'/y](\arrowT{x}{\theta'}{r}{\epsilon}{s}):[[Type]]$.
-  
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleKXXEq{}$
-    \end{center}
+  \item[Case.]\ \\
+     \begin{center}
+       \begin{math}
+         $$\mprset{flushleft}
+         \inferrule* [right=\FSdrulename{Var}]{
+           \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e'_1:[[Type]]
+           \\\\
+           y:^{\theta'} e'_1 \in (\Gamma,x:^\theta e_1,\Gamma')
+         }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} y:^{\theta'} e'_1}
+       \end{math}
+     \end{center}
+     If $[[x]]$ is distinct from $[[y]]$, then this case follows by first applying the
+     induction hypothesis to $\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e'_1:[[Type]]$
+     and then reapplying the $\FSdrulename{Var}$ rule.  Now suppose $[[x == y]]$.  Then the
+     previous typing assumption is equivalent to the following:
+     \begin{center}
+       \begin{math}
+         $$\mprset{flushleft}
+         \inferrule* [right=\FSdrulename{Var}]{
+           \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta} e_1:[[Type]]
+           \\\\
+           x:^{\theta} e_1 \in (\Gamma,x:^\theta e_1,\Gamma')
+         }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta} x:^{\theta} e_1}
+       \end{math}
+     \end{center}
+     It suffices to show that $[[G, [a/x]G' |- a : e1 th]]$ is
+     derivable.  We know by assumption that $[[G |- a : e1 th]]$ is
+     derivable, but by weakening (Lemma~\ref{lemma:FS-weakening}) we
+     know $[[G, [a/x]G' |- a : e1 th]]$.
+
+     The remainder of the cases follow similarly to the cases
+     presented above.
   \end{itemize}
-  Since we are dealing with a stricly logical type $b$ cannot be a variable.  Hence, 
-  $b \equiv r = s$, $[a/y]b \equiv [a/y]r = [a/y]s$, $e \equiv [a/y]r$ and $e' \equiv [a/y]s$.
-  By assumption we know $\Gamma \tvdash{\theta_1} [a/y]r:e_1$ and 
-  $\Gamma \tvdash{\theta_2} [a/y]s:e_2$.  Using $\FSdrulename{Conv}$ and 
-  $\Gamma \tvdash{L} p:a = a'$ we obtain $\Gamma \tvdash{\theta_1} [a'/y]r:e_1$ and 
-  $\Gamma \tvdash{\theta_2} [a'/y]s:e_2$.  Finally, by applying $\FSdrulename{K\_Eq}$,
-  $\Gamma \tvdash{L} [a'/y]r = [a'/y]s:[[Type]]$.  Since $[a'/y]r = [a'/y]s \equiv 
-  [a'/y](r = s) \equiv [a'/y]b$ we can conclude $\Gamma \tvdash{L} [a'/y]b:[[Type]]$.
-\end{proof} 
-The second result is regularity, which insures that if an expression has a
-type, then its type is well typed.  Recall that in the logical
+\end{proof}
+% The second basic result is kinding conversion.  This is allows the
+% substitution of equals for equals in types, and is needed in the proof
+% of the second basic result, regularity.
+% \begin{lemma}[Kinding conversion]
+%   \label{lemma:kinding_conversion}
+%   Suppose $[[G |- e : e' th]]$ and $\Gamma \tvdash{L} p:a = a'$.  Then
+%   \begin{itemize}
+%   \item[i.]  if $[[G]] \equiv [[ G', z : th' [a/y]b,G'']]$, then $[[G', z : th [a'/y]b,G'' |- e : e' th]]$, and 
+%   \item[ii.] if $[[e == [a/y]b ]]$, then $[[G |- [a'/y]b:e' th]]$.
+%   \end{itemize}
+% \end{lemma}
+% \begin{proof}
+%   The is a proof by mutual induction on the form of the first assumed
+%   typing derivation; we only give non-trivial cases.  We first prove
+%   part i, and then part ii.
+%   \begin{itemize}
+%   \item[i.] The two most interesting cases for this part are the case
+%     of the variable typing rule which uses both parts of the induction
+%     hypothesis, and the equality type kinding rule which uses the
+%     assumption that $[[a]]$ is equal to $[[a']]$.
+%     \begin{itemize}
+%     \item[Case.] \ \\
+%       \begin{center}
+%         \begin{math}
+%           $$\mprset{flushleft}
+%           \inferrule* [right=Var] {
+%             [[G |- e'  : Type  th]]
+%             \\\\
+%             [[x : th e' in G]]
+%           }{[[G |- x : e' th]]}        
+%         \end{math}
+%       \end{center}
+%       Now if $[[x]]$ is distinct from $[[z]]$, then this case follows by applying the induction hypothesis to
+%       the premise $[[G |- e'  : Type  th]]$, followed by the above rule.  So conisder when $[[x == z]]$.  Then
+%       the above assumption is equivalent to the following (by expanding all definitions):
+%       \begin{center}
+%         \begin{math}
+%           $$\mprset{flushleft}
+%           \inferrule* [right=Var] {
+%             [[G', z : th' [a/y]b,G'' |- [a/y]b : Type  th]]
+%             \\\\
+%             [[z : th' [a/y]b in (G', z : th' [a/y]b,G'')]]
+%           }{[[G', z : th' [a/y]b,G'' |- z : [a/y]b th']]}        
+%         \end{math}
+%       \end{center}
+%       Now by applying both parts of the induction hypothesis to \\
+%       $[[G', z : th' [a/y]b,G'' |- [a/y]b : Type  th]]$
+%       we may conclude $[[G', z : th' [a'/y]b,G'' |- [a'/y]b : Type  th]]$.  We may conclude this case by applying
+%       the $\FSdrulename{Var}$ typing rule using the previous fact.
+
+%     \item[Case.] \ \\
+%       \begin{center}
+%         \begin{math}
+%           $$\mprset{flushleft}
+%           \inferrule* [right=K\_Eq] {
+%             [[G |- e1 : e2 th1]]
+%             \\\\
+%             [[G |- e3 : e4 th2]]
+%           }{[[G |- e1 = e3 : Type  L]]}
+%         \end{math}
+%       \end{center}
+%       In this case we have $[[e == (e1 = e3)]]$ and $[[e' == Type]]$.  If neither $[[e1]]$ nor $[[e3]]$
+%       are $[[z]]$, then this case follows by the induction hypothesis followed by reapplying the 
+%       $\FSdrulename{K\_Eq}$ typing rule, so suppose $[[e1 == z]]$.  Then
+%       the previous typing assumption is equivalent to the following (expanding all definitions):
+%       \begin{center}
+%         \begin{math}
+%           $$\mprset{flushleft}
+%           \inferrule* [right=K\_Eq] {
+%             [[G', z : th' [a/y]b,G'' |- z : [a/y]b th']]
+%             \\\\
+%             [[G', z : th' [a/y]b,G'' |- e3 : e4 th2]]
+%           }{[[G', z : th' [a/y]b,G'' |- z = e3 : Type  L]]}
+%         \end{math}
+%       \end{center}
+%       Now by applying part i of the induction hypothesis to $[[G', z : th' [a/y]b,G'' |- z : [a/y]b th']]$ we may conclude
+%       $[[G', z : th' [a'/y]b,G'' |- z : [a/y]b th']]$.  By assumption we know $[[G |- p : a = a' L]]$. So by applying the
+%       $\FSdrulename{conv}$ typing rule using $[[G', z : th' [a'/y]b,G'' |- z : [a/y]b th']]$, we may conclude,
+%       $[[G', z : th' [a'/y]b,G'' |- z : [a'/y]b th']]$.  Finally, if $[[e3]]$ is distinct from $[[z]]$, then we may
+%       conclude our case by applying the induction to the typing assumption for $[[e3]]$ above followed by applying
+%       the $\FSdrulename{K\_Eq}$ rule to the previous fact and $[[G', z : th' [a'/y]b,G'' |- z : [a'/y]b th']]$.
+%       If $[[e3 == z]]$, then we may repeat our previous argument for $[[e1]]$, and then reapply the rule.
+%     \end{itemize}
+    
+    
+%     \item[ii.] \ \\
+    
+%     \begin{itemize}
+%     \item[Case.] \ \\
+%       \begin{center}
+%         \begin{math}
+%           $$\mprset{flushleft}
+%           \inferrule* [right=Var] {
+%             [[G |- e'  : Type  th]]
+%             \\\\
+%             [[x : th e' in G]]
+%           }{[[G |- x : e' th]]}        
+%         \end{math}
+%       \end{center}
+%       So suppose $[[x == [a/y]b]]$.  This implies that either $[[b]]$
+%       is a variable $[[x]]$ distinct from $[[y]]$ -- and this case
+%       follows trivially -- or $[[b == y]]$, and $[[a == x]]$.  Suppose
+%       the latter.  This implies that $[[a]]$ and $[[x]]$
+%       have the same type. 
+
+%     \item[Case.] \ \\
+%       \begin{center}
+%         \begin{math}
+%           $$\mprset{flushleft}
+%           \inferrule* [right=K\_Pi] {
+%             [[G |- e1 : Type th1]]
+%             \\\\
+%             [[G , x : th1 e1 |- e2 : Type th]]
+%           }{[[G |- ( x : th1 e1 ) ep -> e2 : Type th]]}
+%         \end{math}
+%       \end{center}
+      
+
+%     \end{itemize}
+    
+%   \end{itemize}
+% \end{proof} 
+The third result is regularity, which insures that if an expression
+has a type, then its type is well typed.  Recall that in the logical
 fragment $[[Type]] : [[Type]]$ does not hold, thus if $[[e]]$ is
 joinable with $[[Type]]$, then $[[G |- e' : e L]]$ does not imply that
 $[[G |- e : Type L]]$.  However, this does hold in the programmatic
 fragment.  Therefore, regularity has the following statement and
-proof.
+proof.  
 \begin{lemma}[Regularity]
   \label{lemma:regularity}
   \begin{itemize}
-  \item[i.] If $[[G |- e':e L]]$ and it is not the case that $[[e \v/ Type]]$, then $[[G |- e:Type L]]$.
+  \item[i.] If $[[G |- e':e L]]$ and it is not the case that $[[e == Type]]$, then $[[G |- e:Type L]]$.
   \item[ii.] If $[[G |- e':e P]]$ then $[[G |- e:Type P]]$.
   \end{itemize}
 \end{lemma}
@@ -79,147 +252,26 @@ proof.
   This is a proof by induction on the form of the assumed typing
   derivation.  The most interesting cases are presented below; all
   other cases are either similar to the cases given here or are
-  trivial.  If it is not the case that $[[e \v/ Type]]$, then both
+  trivial.  If it is not the case that $[[e == Type]]$, then both
   proofs can be given simultaneously.  In fact, the proof of part ii
-  when $[[e \v/ Type]]$ holds is trivial, thus we do not present it
+  when $[[e == Type]]$ holds is trivial, thus we do not present it
   here.
   
   \begin{itemize}
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleVar{}$
-  %   \end{center}
-  %   Trivial.
-
   \item[Case.] \ \\
     \begin{center}
-      $\FSdruleLam{}$
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=Lam] {
+          [[G |- e2 : Type th]]
+          \\\\
+          [[G, x : th e2 |- e1 : e3   th']]          
+        }{[[G |- \ x . e1 : (x :th e2) + -> e3   th']]}
+      \end{math}
     \end{center}
-    By assumption we know $\Gamma \tvdash{\theta} e_1:[[Type]]$ and by the induction hypothesis,
-    $\Gamma,x:^\theta e_1 \tvdash{\theta'} e_2:[[Type]]$. Finally by applying 
-    $\FSdrulename{K\_Pi}$, $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{+}{e_2}:[[Type]]$.
-
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleILam{}$
-  %   \end{center}
-  %   Similar to the previous case.
-
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleAppPiTerm{}$
-    \end{center}
-    By the induction hypothesis, $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{+}{e_2}:[[Type]]$
-    and by inversion of $\FSdrulename{K\_Pi}$, $\Gamma, x:^\theta e_1 \tvdash{\theta'} e_2:[[Type]]$.
-    Finally, by the subsitution lemma $\Gamma \tvdash{\theta'} [v/x]e_2:[[Type]]$.
-
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleAppAllTerm{}$ 
-  %   \end{center}
-  %   Similar to the previous case.
-
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdrulejoin{}$
-    \end{center}
-    By assumption $\Gamma \tvdash{\theta_1} e:e_1$ and $\Gamma \tvdash{\theta_2} e':e_2$.  
-    Therefore, by $\FSdrulename{K\_Eq}$ $\Gamma \tvdash e = e':[[Type]]$.
-
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleInjDom{}$
-    \end{center}
-    By the induction hypothesis, 
-    $\Gamma \tvdash{L} (\arrowT{x}{\theta}{e_1}{\epsilon}{e_2}) = 
-    (\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}):[[Type]]$, hence by inversion of 
-    $\FSdrulename{K\_Eq}$ we know
-    $\Gamma \tvdash{\theta_1} \arrowT{x}{\theta}{e_1}{\epsilon}{e_2}:[[Type]]$ and
-    $\Gamma \tvdash{\theta_2} \arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}:[[Type]]$ for some $\theta_1$
-    and $\theta_2$.  We can apply inversion one more time, but this time to 
-    $\FSdrulename{K\_Pi}$ to obtain $\Gamma \tvdash{\theta} e_1:[[Type]]$ and 
-    $\Gamma \tvdash{\theta} e'_1:[[Type]]$.  Now by 
-    $\FSdrulename{K\_Eq}$, $\Gamma \tvdash{L} e_1 = e'_1:[[Type]]$.
-
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleInjRan{}$
-    \end{center}
-    We first apply $\FSdrulename{InjDom}$ to obtain $\Gamma \tvdash{L} injdom:e_1 = e'_1$.
-    By the induction hypothesis, 
-    $\Gamma \tvdash{L} (\arrowT{x}{\theta}{e_1}{\epsilon}{e_2}) = 
-    (\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}):[[Type]]$, hence by inversion of 
-    $\FSdrulename{K\_Eq}$ we know
-    $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_1}{\epsilon}{e_2}:[[Type]]$ and
-    $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}:[[Type]]$ for some $\theta'$
-    and $\theta'$.  We can apply inversion one more time, but this time to 
-    $\FSdrulename{K\_Pi}$ to obtain $\Gamma,x:^\theta e_1 \tvdash{\theta'} e_2:[[Type]]$ and 
-    $\Gamma,x:^\theta e'_1 \tvdash{\theta} e'_1:[[Type]]$.  By assumption we know
-    $\Gamma \tvdash{\theta} v:e_1$, hence by the substitution lemma 
-    $\Gamma \tvdash{\theta'}[v/x]e_2:[[Type]]$.  Now by applying $\FSdrulename{Conv}$ using
-    $\Gamma \tvdash{\theta} v:e_1$ and $\Gamma \tvdash{L} injdom:e_1 = e'_1$ we obtain
-    $\Gamma \tvdash{\theta} v:e'_1$.  Again by the substitution lemma, 
-    $\Gamma \tvdash{\theta'} [v/x]e'_2$.  Finally, we apply $\FSdrulename{K\_Eq}$ to conclude
-    $\Gamma \tvdash{L} injran:[v/x]e_2 = [v/x]e'_2$.
-
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleConv{}$
-    \end{center}
-    By the induction hypothesis, $\Gamma \tvdash{\theta} [e_1/x]e_2:[[Type]]$ and by the kinding 
-    conversion lemma, $\Gamma \tvdash{\theta} [e'_1/x]e_2:[[Type]]$.
-
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleSucc{}$
-    \end{center}
-    By $\FSdrulename{K\_Nat}$, $\Gamma \tvdash{L} \nat:[[Type]]$ and 
-    $\Gamma,x:^L \nat \tvdash{L} \nat:[[Type]]$.  Finally, by $\FSdrulename{K\_Pi}$,
-    $\Gamma \tvdash{L} \arrowT{x}{L}{\nat}{+}{\nat}$.
-    
-    
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleZero{}$
-  %   \end{center}
-  %   Trivial.
-
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleAbort{}$  
-  %   \end{center}
-  %   Trivial.
-
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleContra{}$
-  %   \end{center}
-  %   Trivial.
-
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleContraAbort{}$
-  %   \end{center}
-  %   Trivial.
-
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleContraPiTh{}$
-  %   \end{center}
-  %   Trivial.
-
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleContraPiEp{}$
-  %   \end{center}
-  %   Trivial.
-
-  \item[Case.] \ \\
-    \begin{center}
-      $\FSdruleCoerce{}$
-    \end{center}
-    By the induction hypothesis, $\Gamma \tvdash{L} e_1:[[Type]]$ and by applying 
-    $\FSdrulename{Coerce}$, $\Gamma \tvdash{P} e_1:[[Type]]$.
+    By assumption we know $\Gamma \tvdash{\theta} e_2:[[Type]]$ and by the induction hypothesis,
+    $\Gamma,x:^\theta e_2 \tvdash{\theta'} e_3:[[Type]]$. Finally by applying 
+    $\FSdrulename{K\_Pi}$, $\Gamma \tvdash{\theta'} \arrowT{x}{\theta}{e_2}{+}{e_3}:[[Type]]$.
 
   \item[Case.] \ \\
     \begin{center}
@@ -232,15 +284,16 @@ proof.
     by $\FSdrulename{K\_Pi}$ using $\Gamma, x:^L \nat \tvdash{L} e_2:[[Type]]$ and
     $\FSdrulename{K\_Nat}$, $\Gamma \tvdash{L} \arrowT{x}{L}{\nat}{+}{e_2}:[[Type]]$.
 
-  % \item[Case.] \ \\
-  %   \begin{center}
-  %     $\FSdruleRecNatComp{}$
-  %   \end{center}
-  %   Similar to the previous case.
-
   \item[Case.] \ \\
     \begin{center}
-      $\FSdruleRec{}$
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=Rec] {
+          [[G |- e1 : Type th']]
+          \\\\
+          [[G, f : th (x : th' e1)+ -> e2, x : th' e1 |- e3 : e2   th]]          
+        }{[[G |- rec f x e3 : (x : th' e1)+ -> e2   P]]}
+      \end{math}
     \end{center}
     By assumption $\Gamma \tvdash{\theta'} e_1:[[Type]]$ and by the induction hypothesis
     $\Gamma, f:^\theta \arrowT{x}{\theta'}{e_1}{+}{e_2},x:^{\theta'} e_1 \tvdash{\theta} e_2:[[Type]]$.
@@ -252,436 +305,9 @@ proof.
   \end{itemize}
 \end{proof}
 
-Substitution for typing is the next result.  This states that if we
-know a term $[[e]]$ is well typed in an environment with a free
-variable $[[x]]$, and given a value $[[v]]$ with the same type as the
-free variable, then $[[ [v/x]e]]$ has the same type as $[[e]]$.  This
-is an important result for type preservation, because we want to
-insure that for any $[[(\x.e) v]]$ that has type $[[e']]$, its
-contractum $[[ [v/x]e]]$ has type $[[e']]$.
-
-\begin{lemma}[Substitution for Typing]
-  \label{lemma:substitution}
-  % \begin{itemize}
-  % \item[i.] If $\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e:[[Type]]$ and 
-  %   $\Gamma \tvdash{\theta} v:e_1$ 
-  %   then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[[Type]]$.
-  % \item[ii.]
-  If $\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:e_1$ and 
-  $\Gamma \tvdash{\theta} v:e_2$, 
-  then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]e_1$.
-  % \end{itemize}
-\end{lemma}
-\begin{proof}
-  This is a proof by induction on the form of the assumed typing
-  derivation. We only give the non-trivial cases.  All other cases are
-  either similar to the cases given here or are trivial.
-  \begin{itemize}
-  % \item[Case.] \ \\
-    % \begin{center}
-    %   \begin{math}
-    %     $$\mprset{flushleft}
-    %     \inferrule* [right=$K\_[[Type]]$ ] {
-    %       \ 
-    %     }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{P} [[Type]]:[[Type]]}
-    %   \end{math}
-    % \end{center}
-    % Trivial.
-
-  % \item[Case.]\ \\
-  %   \begin{center}
-  %     \begin{math}
-  %       $$\mprset{flushleft}
-  %       \inferrule* [right=K\_Nat] {
-  %         \ 
-  %       }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{L} \nat:[[Type]]}
-  %     \end{math}
-  %   \end{center}
-  %   Trivial.
-
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=K\_Pi] {
-          \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta''} e'_1:[[Type]]
-          \\\\
-          \Gamma,x:^\theta e_1,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} e_2:[[Type]]
-   }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{e'_1}{\epsilon}{e_2}:[[Type]]}
-      \end{math}
-    \end{center}
-    By the induction hypothesis, 
-    $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and
-    $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e_2:[[Type]]$.  Now we can
-    apply $\FSdrulename{K\_Pi}$ to obtain, 
- $\Gamma,[v/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[v/x]e'_1}{\epsilon}{[v/x]e_2}:[[Type]]$,
-    which is equivalent to
-  $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e_2}):[[Type]]$.
-    
-    \item[Case.]\ \\
-      \begin{center}
-        \begin{math}
-          $$\mprset{flushleft}
-          \inferrule* [right=K\_Eq] {
-            \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta_1} e:e'_1
-            \\\\
-            \Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta_2} e':e_2
-          }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{L} e = e':[[Type]]}
-        \end{math}
-      \end{center}
-      By the induction hypothesis we know 
-      $\Gamma,[v/x]\Gamma' \tvdash{\theta_1} [v/x]e:[v/x]e'_1$ and\\
-      $\Gamma,[v/x]\Gamma' \tvdash{\theta_2} [v/x]e':[v/x]e'_2$.  We can now apply 
-      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e = [v/x]e':[[Type]]$,
-      which is equivalent to $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x](e = e'):[[Type]]$.
-
-  \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Var}]{
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e_1:[[Type]]
-           \\\\
-           y:^{\theta'} e_1 \in (\Gamma,x:^\theta e_2,\Gamma')
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} y:^{\theta'} e_1}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e_1:[[Type]]$.  Clearly, if 
-     $y:^{\theta'} e_1 \in (\Gamma,x:^\theta e_2,\Gamma')$ then
-     $y:^{\theta'} [v/x]e_1 \in (\Gamma,[v/x]\Gamma')$.  Thus,
-     by applying $\FSdrulename{Var}$, 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]y:^{\theta'} [v/x]e_1$.     
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Lam}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta'} e'_1:[[Type]]
-           \\\\
-           \Gamma, x:^\theta e_2,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} e:e''_1
-         }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta'} 
-           \lambda y.e:\arrowT{y}{\theta''}{e'_1}{+}{e''_1}}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma, [v/x]\Gamma' \tvdash{\theta'} [v/x]e'_1:[[Type]]$ and\\ 
-     $\Gamma, [v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e:[v/x]e''_1$. Finally,
-     by applying \\
-     $\FSdrulename{Lam}$, $\Gamma, [v/x]\Gamma' \tvdash{\theta'} 
-     \lambda y.[v/x]e:\arrowT{y}{\theta''}{[v/x]e'_1}{+}{[v/x]e''_1}$, which is equivalent to
-     $\Gamma, [v/x]\Gamma' \tvdash{\theta'} 
-     [v/x](\lambda y.e):[v/x](\arrowT{y}{\theta''}{e'_1}{+}{e''_1})$.     
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{ILam}] {
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e'_1:[[Type]]
-           \\\\
-           \Gamma,x:^\theta e_2,\Gamma',y:^{\theta''} e'_1 \tvdash{\theta'} v':e''_1
-           \\\\
-           y \not \in fvs(v')
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} v':\arrowT{y}{\theta''}{e'_1}{-}{e''_1}}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and\\
-     $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]v':[v/x]e''_1$.  Finally,
-     by applying $\FSdrulename{ILam}$, \\
-   $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]v':\arrowT{y}{\theta''}{[v/x]e'_1}{-}{[v/x]e''_1}$
-     which is equivalent to 
-   $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]v':[v/x](\arrowT{y}{\theta''}{e'_1}{-}{e''_1})$.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule*[right=\FSdrulename{AppPiTerm}]{
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:\arrowT{y}{\theta''}{e'_1}{+}{e''_1}
-           \\\\
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} v':e''_1
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e\ v':[v'/y]e''_1}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:\arrowT{y}{\theta''}{[v/x]e'_1}{+}{[v/x]e''_1}$
-     and
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]v':[v/x]e''_1$.  By applying 
-     $\FSdrulename{AppPiTerm}$, 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x](e\ v'):[v/x]([v'/y]e''_1)$.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule*[right=\FSdrulename{AppAllTerm}]{
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:\arrowT{y}{\theta''}{e'_1}{-}{e''_1}
-           \\\\
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} v':e''_1
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:[v'/y]e''_1}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:\arrowT{y}{\theta''}{[v/x]e'_1}{-}{[v/x]e''_1}$
-     and
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]v':[v/x]e''_1$.  Lastly by applying 
-     $\FSdrulename{AppAllTerm}$,
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]([v'/y]e''_1)$.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Join}] {
-           e \join e'
-           \\\\
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta_1} e:e'_1
-           \\\\
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta_2} e':e''_1
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} join : e = e'}
-       \end{math}
-     \end{center}
-     It is a well-known property that if $e \join e'$ then $[v/x]e \join [v/x]e'$.  By the 
-     induction hypothesis, $\Gamma,[v/x]\Gamma' \tvdash{\theta_1} [v/x]e:[v/x]e'_1$ and
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta_2} [v/x]e':[v/x]e''_1$.  Finally by 
-     $\FSdrulename{Join}$, $\Gamma,[v/x]\Gamma' \tvdash{L} join : [v/x](e = e')$.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{InjDom}] {
-           \Gamma,x:^\theta e_2,\Gamma \tvdash{L} e':(\arrowT{x}{\theta}{e'_1}{+}{e'_2}) = 
-           (\arrowT{x}{\theta}{e''_1}{+}{e''_2})
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} injdom : e'_1 = e''_1}
-       \end{math}
-     \end{center}
-     By the induction of hypothesis, \\
-     $\Gamma,[v/x]\Gamma \tvdash{L} [v/x]e':(\arrowT{x}{\theta}{[v/x]e'_1}{+}{[v/x]e'_2}) = 
-     (\arrowT{x}{\theta}{[v/x]e''_1}{+}{[v/x]e''_2})$.  Now by applying $\FSdrulename{InjDom}$,
-     $\Gamma,[v/x]\Gamma' \tvdash{L} injdom : [v/x](e'_1 = e''_1)$.
-
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{InjRan}] {
-   %         \Gamma \tvdash{L} e':(\arrowT{x}{\theta}{e_1}{+}{e_2}) = 
-   %         (\arrowT{x}{\theta}{e'_1}{+}{e'_2})
-   %         \\\\
-   %         \Gamma \tvdash{\theta} v:e_1
-   %       }{\Gamma \tvdash{L} injran : [v/x]e_2 = [v/x]e'_2}
-   %     \end{math}
-   %   \end{center}
-   %   Similar to the previous case.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Conv}] {
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:[e'/y]e'_1
-           \\\\
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{L} p:e' = e''
-         }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta'} e:[e''/y]e'_1}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]([e'/y]e'_1)$ and
-     $\Gamma,[v/x]\Gamma' \tvdash{L} p:[v/x]e' = [v/x]e''$.  By applying $\FSdrulename{Conv}$,
-     $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]([e''/y]e'_1)$.
-
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{Succ}] {
-   %         \ 
-   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} S:\arrowT{y}{L}{\nat}{+}{\nat}}
-   %     \end{math}
-   %   \end{center}
-   %   Trivial.
-
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{Zero}] {
-   %         \ 
-   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} Z:\nat}
-   %     \end{math}
-   %   \end{center}
-   %   Trivial.
-     
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{Abort}] {
-           \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:[[Type]]
-         }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} abort:e_1}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma, [v/x]\Gamma' \tvdash{\theta} [v/x]e_1:[[Type]]$ and by applying
-     $\FSdrulename{Abort}$ we obtain 
-     $\Gamma, [v/x]\Gamma' \tvdash{P} abort:[v/x]e_1$.
-
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{Contra}] {
-   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:[[Type]]
-   %         \\\\
-   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:Z = S\ e'
-   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} contra:e_1}
-   %     \end{math}
-   %   \end{center}
-   %   Similar to the previous case.
-
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{ContraAbort}] {
-   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta} e_1:[[Type]]
-   %         \\\\
-   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:v = abort
-   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} contra:e_1}
-   %     \end{math}
-   %   \end{center}
-   %   Similar to the previous case.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \begin{math}
-     $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{ContraPiTh}] {
-           \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e:[[Type]]
-           \\\\
-     \Gamma,x:^\theta e_2,\Gamma' \tvdash{L} e':(\arrowT{x}{\theta}{e'_1}{\epsilon}{e'_2}) = 
-     (\arrowT{x}{\theta'}{e''_1}{\epsilon'}{e''_2})
-     \\\\
-     \theta \neq \theta'
-     }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} contra : e}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know $\Gamma,[v/x]\Gamma' \tvdash{\theta} [v/x]e:[[Type]]$ 
-     and \\ $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e':[v/x]((\arrowT{x}{\theta}{e'_1}{+}{e'_2}) = 
-     (\arrowT{x}{\theta}{e''_1}{+}{e''_2}))$ and by applying $\FSdrulename{ContrapiTh}$,
-     $\Gamma,[v/x]\Gamma' \tvdash{L} contra : [v/x]e$.
-
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{ContraPiEp}] {
-   %         \Gamma,x:^\theta e_2,\Gamma' \tvdash{\theta''} e:[[Type]]
-   %         \\\\
-   %   \Gamma,x:^\theta e_2,\Gamma' \tvdash{L} e':(\arrowT{x}{\theta'}{e_1}{\epsilon}{e_2}) = 
-   %   (\arrowT{x}{\theta}{e'_1}{\epsilon'}{e'_2})
-   %   \\\\
-   %   \epsilon \neq \epsilon'
-   %       }{\Gamma,x:^\theta e_2,\Gamma' \tvdash{L} contra : e}
-   %     \end{math}
-   %   \end{center}
-   %   Similar to the previous case.
-
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{Coerce}] {
-   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{L} e:e_1
-   %       }{\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} e:e_1}
-   %     \end{math}
-   %   \end{center}
-   %   Similar to the previous case.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \small
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{RecNat}] {
-           \Gamma, x:^\theta e_2,\Gamma',y:^L \nat \tvdash{L} 
-           \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}}:[[Type]]
-           \\\\
-           \Gamma, x:^\theta e_2,\Gamma',y:^L \nat,
-           f:^L \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}} \tvdash{L}
-           v':e_2
-           \\\\
-           f,p \not \in FV(e_2)
-         }
-         {\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} \rec{f}{y}{v'}:\arrowT{y}{L}{\nat}{+}{e_2}}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma, [v/x]\Gamma',y:^L \nat \tvdash{L} 
-     \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}}:[[Type]]$ and
-     $\Gamma,[v/x]\Gamma',y:^L \nat,
-     f:^L \arrowT{z}{L}{\nat}{+}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}} \tvdash{L} 
-     [v/x]v':[v/x]e_2$.  Clearly, $f,p \not \in \mathsf{FV}([v/x]e_2)$.  Finally, by applying 
-     $\FSdrulename{RecNat}$, 
-     $\Gamma, [v/x]\Gamma' \tvdash{L} [v/x](\rec{f}{y}{v'}):[v/x](\arrowT{y}{L}{\nat}{+}{e_2})$.
-
-   \item[Case.]\ \\
-     \begin{center}
-       \small
-       \begin{math}
-         $$\mprset{flushleft}
-         \inferrule* [right=\FSdrulename{RecNatComp}] {
-           \Gamma, x:^\theta e_2,\Gamma',y:^L \nat \tvdash{L} 
-           \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}}:[[Type]]
-           \\\\
-           \Gamma, x:^\theta e_2,\Gamma',y:^L \nat,
-           f:^L \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[z/y]e_2}} \tvdash{L}
-           v':e_2
-           \\\\
-           f,p \not \in FV(e_2)
-         }
-         {\Gamma, x:^\theta e_2,\Gamma' \tvdash{L} \recc{f}{x}{v'}:\arrowT{y}{L}{\nat}{-}{e_2}}
-       \end{math}
-     \end{center}
-     By the induction hypothesis we know 
-     $\Gamma, [v/x]\Gamma',y:^L \nat \tvdash{L} 
-     \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}}:[[Type]]$ and
-     $\Gamma, [v/x]\Gamma',y:^L \nat,
-     f:^L \arrowT{z}{L}{\nat}{-}{\arrowT{p}{L}{y=S\ z}{-}{[v/x][z/y]e_2}} \tvdash{L}
-     [v/x]v':[v/x]e_2$.  Now by applying $\FSdrulename{RecnatComp}$,
-     $\Gamma, [v/x]\Gamma' \tvdash{L} [v/x](\recc{f}{x}{v'}):[v/x](\arrowT{y}{L}{\nat}{-}{e_2})$.
-     
-   % \item[Case.]\ \\
-   %   \begin{center}
-   %     \begin{math}
-   %       $$\mprset{flushleft}
-   %       \inferrule* [right=\FSdrulename{Rec}] {
-   %         \Gamma, x:^\theta e_2,\Gamma' \tvdash{\theta''} e'_1:[[Type]]
-   %         \\\\
-   %        \Gamma, x:^\theta e_2,\Gamma',
-   %        f:^{\theta'} \arrowT{z}{\theta''}{e'_1}{+}{e''_1},y:^{\theta''} e'_1 \tvdash{\theta'}
-   %        e:e''_1
-   %       }
-   %       {\Gamma, x:^\theta e_2,\Gamma' \tvdash{P} 
-   %         \rec{f}{y}{e}:\arrowT{y}{\theta''}{e'_1}{+}{e''_1}}
-   %     \end{math}
-   %   \end{center}
-   %   Similar to the previous case.
-  \end{itemize}
-\end{proof}
-
-Inversion says that if we know the conclusion of a typing rule is
-true, then we know its premises are true.  The analysis in this
-section depends on two inversion principles.  The first is inversion
-for kinding, but if we know $[[G |- e : Type th]]$, then we know the
-premises of the kinding rules matching $[[e]]$ hold trivially, and so
-we do not state this result here.  The second inversion principle is
-needed to prove the case for \FSdrulename{AppPiTerm} in the proof of
-type preservation.  This principle states that if we know that some
+The next result is an inversion principle, and this is needed to prove
+the case for \FSdrulename{AppPiTerm} in the proof of type
+preservation.  This principle states that if we know that some
 $\lambda$-abstractions type is a dependent product, then we know the
 primise of the \FSdrulename{Lam} rule holds.
 
@@ -707,8 +333,9 @@ primise of the \FSdrulename{Lam} rule holds.
         }{\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}}
       \end{math}
     \end{center}
-    By assumption, $\Gamma,x:^{\theta} e_1 \tvdash{\theta'} e:e_2$.  Clearly we can conclude
-    $\Gamma \tvdash{L} p:(\arrowT{x}{\theta}{e_1}{+}{e_2}) = (\arrowT{x}{\theta}{e_1}{+}{e_2})$.
+    By assumption, $\Gamma,x:^{\theta} e_1 \tvdash{\theta'} e:e_2$.  Clearly, we can conclude
+    $\Gamma \tvdash{L} [[join]]:(\arrowT{x}{\theta}{e_1}{+}{e_2}) = (\arrowT{x}{\theta}{e_1}{+}{e_2})$
+    by the $\FSdrulename{Join}$ typing rule.
     
   \item[Case.]\ \\
     \begin{center}
@@ -722,7 +349,7 @@ primise of the \FSdrulename{Lam} rule holds.
       \end{math}
     \end{center}
     Here $e' \equiv \lambda x.e$ and 
-    $[e''_1/y]e'_2 \equiv \arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}$.  Clearly,
+    $[e''_1/y]e'_2 \equiv \arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}$ for some expressions $r$ and $s$.  Clearly,
     $[e'_1/y]e'_2 \equiv \arrowT{x}{\theta}{[e'_1/y]r}{+}{[e'_1/y]s}$.  By the induction
     hypothesis, $\Gamma \tvdash{\theta'} e':[e'_1/y]e'_2$ implies 
     $\Gamma,x:^\theta a \tvdash{\theta'} e:b$ and 
