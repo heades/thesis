@@ -71,8 +71,8 @@ evalCtx, C {{tex \mathcal{C} }} :: 'ectx_' ::=
   | rec f x C :: :: Rec
   | rec - f C ::   :: RecImp
   {{ tex [[rec]]^{-}\ [[f]]\ [[C]] }}
-  | e1 C      :: :: AppArg
-  | C v       :: :: AppFunc
+  | v C      :: :: AppArg
+  | C e       :: :: AppFunc
   | ( C )     :: :: Parens
 
 ctx, G {{ tex \Gamma }} :: 'ctx_' ::=

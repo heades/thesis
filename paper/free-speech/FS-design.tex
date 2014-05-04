@@ -121,7 +121,7 @@ Figure~\ref{fig:FS-syn-red}.
           [[e1 = e2]]\,|\,[[\x.e]]\,|\,\\
           & & & [[join]]\,|\,[[injdom]]\,|\,[[injran]]\,|\,[[rec f x v]]\,|\,[[rec - f v]]\\
           \text{(Evaluation Contexts)} & [[C]] & ::= & [[ [] ]]\,|\,[[( x : th C ) ep -> e2]]\,|\,[[( x : th e1 ) ep -> C]]\,|\,[[rec f x C]]\,|\,\\
-          & & & [[rec - f C]]\,|\,[[e1 C]]\,|\,[[C v]]\\
+          & & & [[rec - f C]]\,|\,[[v C]]\,|\,[[C e]]\\
           \text{(Typing Contexts)}     & [[G]] & ::= & [[.]]\,|\,[[x : th e]]\,|\,[[G1,G2]]\\        
         \end{array}
       \end{math}\\
@@ -219,8 +219,8 @@ operation that takes an evaluation context and an expression and
         [[(( x : th e1 ) ep -> C)[e] ]] & = & [[( x : th e1 ) ep -> (C[e]) ]]\\
         [[(rec f x C)[e] ]]             & = & [[rec f x (C[e]) ]]\\
         [[(rec - f C)[e] ]]             & = & [[rec - f (C[e]) ]]\\
-        [[(e1 C)[e] ]]                  & = & [[e1 (C[e]) ]]\\
-        [[(C v)[e] ]]                   & = & [[(C[e]) v]]\\
+        [[(v C)[e] ]]                   & = & [[v (C[e]) ]]\\
+        [[(C e')[e] ]]                  & = & [[(C[e]) e']]\\
       \end{array}
     \end{math}
   \end{center}

@@ -449,7 +449,7 @@ preservation.
     $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
 
     The third case follows similarly to the previous case.  First,
-    apply inversion (Lemma~\ref{lemma:substitution}) to the typing
+    apply inversion (Lemma~\ref{lemma:inversion}) to the typing
     assumption for $[[e]]$ followed by substitution for typing (Lemma~\ref{lemma:substitution}).
 
   \item[Case.]\ \\
@@ -646,7 +646,7 @@ proofs.
     interpretation of types, $t \in N$ and $t$ is closed.  Since CBV is deterministic,
     if $t \redto t'$ then $t' \in N$, and $t$ being closed implies $t'$ is closed.  At this
     point we still need show that $\cdot \tvdash{L} t':\nat$.  This easily follows from
-    type preservation. Thus, $t' \in \interp{\nat}^L_\rho$.
+    type preservation (Theorem~\ref{thm:preservation}). Thus, $t' \in \interp{\nat}^L_\rho$.
 
   \item[Case.] Let $e \equiv (x :^\theta e_1)^+ \rightarrow e_2$.    
     Suppose $t \in \interp{e}^L_\rho$.  By the definition of the interpretation of types we know 
