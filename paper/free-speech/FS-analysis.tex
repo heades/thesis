@@ -313,30 +313,29 @@ primise of the \FSdrulename{Lam} rule holds.
 
 \begin{lemma}[Inversion]
   \label{lemma:inversion}
-  If $\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}$ 
-  then 
-  $\Gamma \tvdash{L} p:\arrowT{x}{\theta}{e_1}{+}{e_2} = \arrowT{x}{\theta}{a}{+}{b}$
-  and
-  $\Gamma,x:^\theta a \tvdash{\theta'} e:b$.
+  \begin{itemize}
+  \item[i.] If $\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}$, then 
+    $\Gamma \tvdash{L} p:\arrowT{x}{\theta}{e_1}{+}{e_2} = \arrowT{x}{\theta}{a}{+}{b}$ and
+    $\Gamma,x:^\theta a \tvdash{\theta'} e:b$.
+
+  \item[ii.] If $[[G |- rec f x v : (x : L Nat) + -> e L]]$, then 
+    $[[G |- p : (x : L Nat) + -> e = (x : L a) + -> b L]]$ and
+    $[[G, x : L a, f : L (y : L a)+ -> (p : L x = S y)- -> [y/x]b |- v : b  L]]$.
+
+  \item[ii.] If $[[G |- rec f x e : (x : th' e1) + -> e2 P]]$, then 
+    $[[G |- p : (x : th' e1) + -> e2 = (x : th' a) + -> b L]]$ and
+    $[[G, x : th' a, f : th (x : th' a)+ -> b |- e : b  th]]$.
+    
+  \end{itemize}
 \end{lemma}
 \begin{proof}
-  We proceed by induction on the form of the assumed typing derivation.
-  \begin{itemize}
-  \item[Case.]\ \\
-    \begin{center}
-      \begin{math}
-        $$\mprset{flushleft}
-        \inferrule* [right=\FSdrulename{Lam}] {
-          \Gamma \tvdash{\theta} e_1:[[Type]]
-          \\\\
-          \Gamma,x:^{\theta} e_1 \tvdash{\theta'} e:e_2
-        }{\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}}
-      \end{math}
-    \end{center}
-    By assumption, $\Gamma,x:^{\theta} e_1 \tvdash{\theta'} e:e_2$.  Clearly, we can conclude
-    $\Gamma \tvdash{L} [[join]]:(\arrowT{x}{\theta}{e_1}{+}{e_2}) = (\arrowT{x}{\theta}{e_1}{+}{e_2})$
-    by the $\FSdrulename{Join}$ typing rule.
-    
+  We proceed by induction on the form of the assumed typing
+  derivation.  In each part there are exactly two cases.  The first is
+  when the assumed typing derivation ends with the introduction typing
+  rule for the respective term constructor, or when the derivation
+  ends with the conversion rule.  The former is trivial, so we only
+  give the cases for the latter.
+  \begin{itemize}    
   \item[Case.]\ \\
     \begin{center}
       \begin{math}
@@ -348,16 +347,51 @@ primise of the \FSdrulename{Lam} rule holds.
         }{\Gamma \tvdash{\theta'} e':[e''_1/y]e'_2}
       \end{math}
     \end{center}
-    Here $e' \equiv \lambda x.e$ and 
-    $[e''_1/y]e'_2 \equiv \arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}$ for some expressions $r$ and $s$.  Clearly,
-    $[e'_1/y]e'_2 \equiv \arrowT{x}{\theta}{[e'_1/y]r}{+}{[e'_1/y]s}$.  By the induction
-    hypothesis, $\Gamma \tvdash{\theta'} e':[e'_1/y]e'_2$ implies 
-    $\Gamma,x:^\theta a \tvdash{\theta'} e:b$ and 
-    $\Gamma \tvdash{\theta'} $
-    $p:(\arrowT{x}{\theta}{[e'_1/y]r}{+}{[e'_1/y]s}) = (\arrowT{x}{\theta}{a}{+}{b})$.  Finally, 
-    since $\Gamma \tvdash{L} e'':e'_1 = e''_1$ we can apply $\FSdrulename{Conv}$ to obtain
-    $\Gamma \tvdash{\theta'} $
-    $p:(\arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}) = (\arrowT{x}{\theta}{a}{+}{b})$.
+    \begin{itemize}
+    \item[i.] 
+      Here $e' \equiv \lambda x.e$ and $[e''_1/y]e'_2 \equiv \arrowT{x}{\theta}{e_1}{+}{e_2}$.  Now we have two cases to
+      consider, either $[[e'2]]$ is $[[y]]$ and $[[e'1]]$ is a
+      dependent product, or $[[e'2]]$ is a dependent product.  If the
+      former is true, then we know $[[e1'']]$ is a dependent product,
+      and this part follows by first applying the induction hypothesis
+      to $\Gamma \tvdash{\theta'} e':[e'_1/y]e'_2$, followed by
+      applying the $\FSdrulename{Conv}$ typing rule.
+
+      Suppose the $[[e'2]]$ is a dependent product. Then
+      $[e''_1/y]e'_2 \equiv
+      \arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}$ for some
+      expressions $r$ and $s$.  Clearly, $[e'_1/y]e'_2 \equiv
+      \arrowT{x}{\theta}{[e'_1/y]r}{+}{[e'_1/y]s}$.  By the induction
+      hypothesis, $\Gamma \tvdash{\theta'} e':[e'_1/y]e'_2$ implies
+      $\Gamma,x:^\theta a \tvdash{\theta'} e:b$ and $\Gamma \tvdash{L}
+      $ $p:(\arrowT{x}{\theta}{[e'_1/y]r}{+}{[e'_1/y]s}) =
+      (\arrowT{x}{\theta}{a}{+}{b})$.  Finally, since $\Gamma
+      \tvdash{L} e'':e'_1 = e''_1$ we can apply $\FSdrulename{Conv}$
+      to obtain $\Gamma \tvdash{\theta'} $
+      $p:(\arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}) =
+      (\arrowT{x}{\theta}{a}{+}{b})$.
+
+    \item[ii.] Here $[[e' == rec f x v]]$ and $[e''_1/y]e'_2 \equiv \arrowT{x}{L}{Nat}{+}{e}$.  
+      Just as we saw in the previous part we have two cases to consider, either $[[e'2]]$ is $[[y]]$ and $[[e'1]]$ is a
+      dependent product, or $[[e'2]]$ is a dependent product.  If the
+      former is true, then we know $[[e1'']]$ is a dependent product,
+      and this part follows by first applying the induction hypothesis
+      to $\Gamma \tvdash{\theta'} e':[e'_1/y]e'_2$, followed by
+      applying the $\FSdrulename{Conv}$ typing rule.
+
+
+      Suppose the $[[e'2]]$ is a dependent product.  Then 
+      $[e''_1/y]e'_2 \equiv \arrowT{x}{L}{[e''_1/y]r}{+}{[e''_1/y]s}$ for some
+      expressions $r$ and $s$.  Clearly, $[e'_1/y]e'_2 \equiv
+      \arrowT{x}{L}{[e'_1/y]r}{+}{[e'_1/y]s}$.  By the induction
+      hypothesis, $\Gamma \tvdash{\theta'} e':[e'_1/y]e'_2$ implies
+      $\Gamma,x:^\theta a, [[f : L (y : L a)+ -> (p : L x = S y)- -> [y/x]b]] \tvdash{\theta'} e:b$ and 
+      $\Gamma \tvdash{L} p:(\arrowT{x}{\theta}{[e'_1/y]r}{+}{[e'_1/y]s}) =
+      (\arrowT{x}{\theta}{a}{+}{b})$.  Finally, we know $\Gamma \tvdash{L} e'':e'_1 = e''_1$ by assumption
+      so we can apply $\FSdrulename{Conv}$ to obtain $\Gamma \tvdash{L} p:(\arrowT{x}{\theta}{[e''_1/y]r}{+}{[e''_1/y]s}) = (\arrowT{x}{\theta}{a}{+}{b})$.
+
+    \item[iii.] This part is similar to the previous part.
+    \end{itemize}
   \end{itemize}
 \end{proof}
 % section basic_results (end)
@@ -391,28 +425,32 @@ preservation.
  
 \begin{thm}[Preservation]
   \label{thm:preservation}
-  If $\Gamma \tvdash{\theta} e:e_1$ and $e \redto e'$ then $\Gamma \tvdash{\theta} e':e_1$.
+  If $\Gamma \tvdash{\theta} a:c$ and $a \redto b$ then $\Gamma \tvdash{\theta} b:c$.
 \end{thm}
 \begin{proof}
   We proceed by induction on the assumed typing derivation and only consider non-vacuous 
-  cases.  We will implicitly assume $e \redto e'$ in each case.
+  cases.  We will implicitly assume $a \redto b$ in each case.
 
   \begin{itemize}
   \item[Case.]\ \\
     \begin{center}
       $\FSdruleAppPiTerm{}$
     \end{center}
-    We have two cases to consider either $e \redto e'$ or $e \equiv \lambda x.e'$
-    and $e\ v \redto [v/x]e'$.  Consider the former, by the induction hypothesis, if 
-    $e \redto e'$ then 
+    We have three cases to consider either $e \redto e'$, $e \equiv \lambda x.e'$
+    and $e\ v \redto [v/x]e'$, or $[[e == rec x f v']]$ and $e\,v \redto [ [[rec f x v']]/f][v/x]v'$.  
+    Consider the former, by the induction hypothesis, if $e \redto e'$ then 
     $\Gamma \tvdash{L} e':\arrowT{x}{\theta}{e_1}{+}{e_2}$.  Now by applying the same
     rule, $\Gamma \tvdash{L} e'\ v:[v/x]e_2$.
     
     \noindent
-    Now suppose the latter, by assumption we know $\Gamma \tvdash{\theta} v:e_1$ and
-    $\Gamma \tvdash{L} \lambda x.e':\arrowT{x}{\theta}{e_1}{+}{e_2}$. By the Inversion Lemma, 
-    $\Gamma,x:^\theta e_1 \tvdash{L} e':e_2$.  Thus, by Lemma~\ref{lemma:substitution},
+    Now suppose the second case, by assumption we know $\Gamma \tvdash{\theta} v:e_1$ and
+    $\Gamma \tvdash{L} \lambda x.e':\arrowT{x}{\theta}{e_1}{+}{e_2}$. By the Inversion Lemma (Lemma~\ref{lemma:inversion}), 
+    $\Gamma,x:^\theta e_1 \tvdash{L} e':e_2$.  Thus, by substitution for typing (Lemma~\ref{lemma:substitution}),
     $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
+
+    The third case follows similarly to the previous case.  First,
+    apply inversion (Lemma~\ref{lemma:substitution}) to the typing
+    assumption for $[[e]]$ followed by substitution for typing (Lemma~\ref{lemma:substitution}).
 
   \item[Case.]\ \\
     \begin{center}
