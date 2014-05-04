@@ -970,7 +970,7 @@ call these expressions and values proofs, and their types formulas.
     $\rho\ \lambda x.e \equiv \lambda x.(\rho\ e) \in $
     $\interp{\arrowT{x}{\theta}{e_1}{+}{e_2}}^{L}_\rho$.  So by the
     definition of the interpretation of types, we must show for any
-    $e' \in \interp{e_1}^\theta_\rho$, $(\rho\ e)\ e' \in
+    $e' \in \interp{e_1}^\theta_\rho$, $(\lambda x.\rho\ e)\ e' \in
     \interp{e_2}^{L}_{\rho[x \mapsto e']}$.  Let $e' \in \interp{e_1}^\theta_\rho$. 
     By CR-Norm, $e'$ is closed and $e' \in V$, hence, $e' \normto v$ and
     by CR-Pres, $v \in \interp{e_1}^\theta_{\rho}$.  By the definition of the
@@ -1132,11 +1132,11 @@ call these expressions and values proofs, and their types formulas.
       \end{math}
 
     \end{center}
-    $\Gamma \tvdash{L} e':e_1 = e'_1$ implies $e_1 \join e'_1$, $\Gamma
-    \tvdash{\theta} e_1:A$ and $\Gamma \tvdash{\theta'} e'_1:A'$ for
-    some types $A$ and $A'$.  By the induction hypothesis, $e \in
-    \interp{[e_1/x]e_2}^L_\rho$.  By  
-    Lemma~\ref{lemma:lconv_in_interp_are_equiv},
+    Applying the induction hypothesis to $\Gamma \tvdash{L} e':e_1 = e'_1$ implies 
+    $\rho\,e_1 \join \rho\,e'_1$, and $\cdot \vdash^L \rho\,e_1 = \rho\,e'_1 : \mathsf{Type}$.  
+    The latter implies that $\cdot \vdash^{[[th']]}  e_1 : A$ an $\cdot \vdash^{[[th']]}  e'_1 : A'$. 
+    Now by the induction hypothesis, $e \in
+    \interp{[e_1/x]e_2}^L_\rho$, and by  Lemma~\ref{lemma:lconv_in_interp_are_equiv},
     $\interp{[e_1/x]e_2}^L_\rho = \interp{[e'_1/x]e_2}^L_\rho$,
     thus, $e \in \interp{[e'_1/x]e_2}^L_\rho$.
   
@@ -1325,7 +1325,7 @@ call these expressions and values proofs, and their types formulas.
   to obtain, $[n'/x][\rec{f}{x}{\rho\ v}/f]\rho\ v \in
   \interp{e_2}^L_{\rho[x \mapsto n'][f \mapsto
   \rec{f}{x}{\rho\ v}/f]} = \interp{e_2}^L_{\rho[x \mapsto
-  n']}$, because $f \not \in FV(e_2)$.
+  n']}$, because $f \not \in FV(e_2)$.  This concludes the proof of the proposition.
 
   By Proposition~\ref{prop:rec_interp_proof}, $\rec{f}{x}{\rho\ v}
   \in $ $\interp{\arrowT{y}{L}{\nat}{+}{\arrowT{p}{L}{x =
@@ -1436,7 +1436,7 @@ call these expressions and values proofs, and their types formulas.
   to obtain, $[\recc{f}{x}{\rho\ v}/f]\rho\ v \in
   \interp{e_2}^L_{\rho[x \mapsto n'][f \mapsto
   \recc{f}{x}{\rho\ v}/f]} = \interp{e_2}^L_{\rho[x \mapsto
-  n']}$, because $f \not \in FV(e_2)$.
+  n']}$, because $f \not \in FV(e_2)$.  This concludes the proof of the proposition.
 
   By Proposition~\ref{prop:rec_interp_proof}, $\recc{f}{x}{\rho\ v}
   \in $ $\interp{\arrowT{y}{L}{\nat}{-}{\arrowT{p}{L}{x =
