@@ -19,7 +19,7 @@ know a term $[[e]]$ is well typed in an environment with a free
 variable $[[x]]$, and given an expression $[[a]]$ with the same type
 as the free variable, then $[[ [a/x]e]]$ has the same type as $[[e]]$.
 This is an important result for type preservation, because we want to
-insure that for any $[[(\x.e) v]]$ that has type $[[e']]$, its
+ensure that for any $[[(\x.e) v]]$ that has type $[[e']]$, its
 contractum $[[ [v/x]e]]$ has type $[[e']]$.
 
 \begin{lemma}[Weakening]
@@ -234,7 +234,7 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
     
 %   \end{itemize}
 % \end{proof} 
-The third result is regularity, which insures that if an expression
+The third result is regularity, which ensures that if an expression
 has a type, then its type is well typed.  Recall that in the logical
 fragment $[[Type]] : [[Type]]$ does not hold, thus if $[[e]]$ is
 joinable with $[[Type]]$, then $[[G |- e' : e L]]$ does not imply that
@@ -402,7 +402,7 @@ We are now in a position to prove type preservation.  The proof is
 straightforward, and holds by induction on the typing derivation.
 Type preservation is definately a result that should be proven for any
 type theory or programming language being designed, implemented, or
-studied.  This result insures that reduction does not wonder outside
+studied.  This result ensures that reduction does not wonder outside
 the bounds of the type system.  If type preservation did not hold,
 then one could start with a proof $[[e]]$ of some type, and then use
 reduction to obtain that $[[e]]$ is a proof of some other type, or that
@@ -859,7 +859,7 @@ fragment respectfully:
   $\interp{[e/x]A}^P_\rho \subseteq \interp{[e'/x]A}^P_\rho$.
 \end{lemma}
 \begin{proof}
-  Let $\theta = P$.  We know that $a \in \interp{[e/x]A}^P_\rho$
+  We know that $a \in \interp{[e/x]A}^P_\rho$
   iff $\cdot \tvdash{P} a:\rho\ [e/x]A$ and $a\ is\ a\ value$ and $
   \cdot \tvdash{P} \rho\ [e/x]A:[[Type]]$ 
   by the definition of the interpretation of types.
@@ -892,7 +892,7 @@ fragment respectfully:
     $a' \in \interp{[e/x]a_1}^\theta_\rho$ we have
     $a\ a' \in \interp{[e/x]a_2}^L_{\rho[x \mapsto a']}$.
     Let $a''$ be an arbitrary element of $\interp{[e/x]a_1}^\theta_\rho$. We have two cases
-    to consider when $\theta = L$ and $\theta = P$.  If $\theta = L$ then by the induction 
+    to consider: when $\theta = L$ and $\theta = P$.  If $\theta = L$ then by the induction 
     hypothesis, 
     $\interp{[e/x]a_1}^L_\rho = \interp{[e'/x]a_1}^L_\rho$.  
     If $\theta = P$ then we apply  
@@ -915,7 +915,7 @@ fragment respectfully:
     $a \in \interp{[e/x]A}^L_\rho$ iff $a \in V$ and 
     $\rho[e/x]a_1 \join \rho[e/x]a_2$.
     Clearly, if $e \join e'$ and $\rho[e/x]a_1 \join \rho[e/x]a_2$ then 
-    $\rho['e/x]a_1 \join \rho['e/x]a_2$.
+    $\rho[e'/x]a_1 \join \rho[e'/x]a_2$.
     Thus, $a \in \interp{[e'/x]A}^L_\rho$.  Therefore,
     $\interp{[e/x]A}^L_\rho \subseteq \interp{[e'/x]A}^L_\rho$.
   \end{itemize}
