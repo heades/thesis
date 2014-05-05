@@ -1,4 +1,4 @@
-metavar var, b , a, x, y, z, f, g, u, p ::=
+metavar var, x, y, z, f, g, u, p ::=
 
 metavar cvar, c {{ tex \mathsf{c} }} ::=
   
@@ -13,7 +13,7 @@ sgn, ep {{tex \varepsilon}} :: 'sgn_' ::= {{ com compile time versus run time }}
   | + :: :: Plus
   | - :: :: Minus
 
-exp, e, t, A :: 'e_' ::=
+exp, e, t, A, a, b, c :: 'e_' ::=
   | x                    ::   :: Var
   | Type                 ::   :: Type {{ tex [[Type]] }}
   | ( x : th e1 ) ep -> e2  ::   :: arrow (+ bind x in e2 +)
@@ -71,8 +71,8 @@ evalCtx, C {{tex \mathcal{C} }} :: 'ectx_' ::=
   | rec f x C :: :: Rec
   | rec - f C ::   :: RecImp
   {{ tex [[rec]]^{-}\ [[f]]\ [[C]] }}
-  | e1 C      :: :: AppArg
-  | C v       :: :: AppFunc
+  | v C      :: :: AppArg
+  | C e       :: :: AppFunc
   | ( C )     :: :: Parens
 
 ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
@@ -80,8 +80,9 @@ ctx, G {{ tex \Gamma }} :: 'ctx_' ::=
   {{tex \cdot }}
   | x : th e        ::   :: decl_cons
   {{ tex [[x]]:^{[[th]]} [[e]] }}           
-  | ( G )               :: M :: parens
-  | G1 , G2             :: M :: concat
+  | ( G )               :: S :: parens
+  | G1 , G2             ::  :: concat
+  | [ a / x ] G         :: M :: Subst
 
 varset :: 'set_' ::=
   | FV ( e )        :: M :: FV
@@ -115,6 +116,8 @@ terminals :: 'terminals_' ::=
   | =>     :: :: patarrow {{tex \Rightarrow }}
   | abort  :: :: abort {{ tex \mathsf{abort} }}
   | ;      :: :: coloncolon {{ tex \,\ottkw{::}\, }}
+  | ==     :: :: deq
+  {{tex \equiv }}
 
 formula :: 'formula_' ::=
   | judgement                      :: :: judgement
@@ -126,13 +129,14 @@ formula :: 'formula_' ::=
   | x notin varset                  :: :: notin {{tex [[x]] \notin [[varset]] }}
   | x , y notin varset              :: :: mnotin {{tex [[x]],[[y]] \notin [[varset]] }}
   | x : th e in G                   :: :: ctxlookup
-    {{ tex [[x]]:^[[th]][[e]]\in[[G]] }}
+    {{ tex [[x]]:^{[[th]]} [[e]] \in [[G]] }}
   | th1 <= th2                      :: :: thcomp
   | th = { th1 , th2 }              :: :: ordering_elements
   | th , th' = { th1 , th2 }        :: :: orderings_elements
   | th , th' , th'' = { th1 , th2 } :: :: orderings_elements2
   | e ~>* e'                        :: :: multistep
   | e = e'                          :: :: metaeq
+  | e == e'                         :: :: deq
   | e \= e'                         :: :: metaneq
   | ep \= ep'                       :: :: epneq
   | th \= th'                       :: :: thneq
@@ -208,12 +212,13 @@ Jtyp :: '' ::=
   ----------------------------- :: ILam
   G |- v : (x : th' e1) - -> e2   th
 
+  G |- [v/x] e2 : Type th'
   G |- e : (x : th e1)+ -> e2   th'
   G |- v : e1   th
   ------------------------------- :: AppPiTerm
   G |- e v : [v/x] e2   th'
 
-
+  G |- [v/x] e2 : Type th'
   G |- e : (x : th e1)- -> e2   th'
   G |- v : e1   th
   ------------------------------- :: AppAllTerm
@@ -230,15 +235,18 @@ Jtyp :: '' ::=
   ------------------------- :: join
   G |- join : e = e'   L
 
+  G |- e1 = e1' : Type L
   G |- e' : ((x : th e1) ep -> e2) = ((x : th e1') ep -> e2') L
   ------------------------------------------------------------- :: InjDom
   G |- injdom : e1 = e1' L
 
+  G |- [v/x]e2 = [v/x]e2' : Type L
   G |- e' : ((x : th e1) ep -> e2) = ((x : th e1') ep -> e2') L  
   G |- v : e1 th
   -------------------------------------------------------------- :: InjRan
   G |- injran : [v/x]e2 = [v/x]e2' L
 
+  G |- [e'1/x] e2 : Type th
   G |- e : [e1/x] e2   th
   G |- e' : e1 = e1'   L
   -----------------------  :: Conv
