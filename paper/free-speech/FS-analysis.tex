@@ -305,11 +305,13 @@ proof.
   \end{itemize}
 \end{proof}
 
-The next result is an inversion principle, and this is needed to prove
-the case for \FSdrulename{AppPiTerm} in the proof of type
-preservation.  This principle states that if we know that some
-$\lambda$-abstractions type is a dependent product, then we know the
-primise of the \FSdrulename{Lam} rule holds.
+The next result is an inversion principle, and this is needed in the
+prove of type preservation.  This principle states that for certain
+term constructors if we know the conclusion of their typing rule is
+derivable, then we know the premises are derivable as well.  Inversion
+in general is very hard to prove for advanced type systems like
+Freedom of Speech, so we only prove the inversion principles that are
+actually needed.
 
 \begin{lemma}[Inversion]
   \label{lemma:inversion}
