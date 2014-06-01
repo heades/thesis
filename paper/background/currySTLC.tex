@@ -3,11 +3,52 @@ Church-style simply type $\lambda$-calculus except there is no type
 annotations on $\lambda$-abstractions.  That is we have $[[\x.t]]$
 instead of $\lambda [[x]]:[[T]].[[t]]$ in the syntax for terms.  This
 definition of STLC was an extension of Curry's work on combinator
-logic. The syntax and reduction relation of this theory is defined in
-Fig.~\ref{fig:cstlc_syntax} and the typing judgment is defined in
-Fig.~\ref{fig:cstlc_typing}. We call the typing judgment defined
-here an implicit typing paradigm.  The fact that it is implicit shows
-up in the application typing rule $\CSTLCdrulename{App}$:
+logic. 
+
+Now a large number of type theories can be either in Church-style or
+in Curry-style.  The lack of typing annotations has a syntactic
+benefit.  It prevents the programmer from having to fill in type
+annotations when defining functions.  This can be very beneficial when
+defining complicated functions.  Curry-style type theories also differ
+semantically.  Church-style type theories contain annotations to
+enforce the assignment of exactly one type to any given term.  Now
+Curry-style type theories do not contain annotations, thus any given
+term may have many different types.  Consider the identity function
+$[[\x.x]]$ this function may have the type $\mathsf{Nat} \to
+\mathsf{Nat}$, but it can also be given the type $\mathsf{Bool} \to
+\mathsf{Bool}$. In fact, there are infinitely main types one can give
+the Curry-style identity function.  We can also characterize this
+semantic difference by what John Reynolds called intrinsic and
+extrinsic meanings.  Church-style theories give an intrinsic meaning
+to terms.  This means that typeable terms are the only terms assigned
+a meaning.  Thus, the identity function $\lambda [[x]]:[[T]].[[x]]$
+always has a meaning, because we can give it the type $[[T -> T]]$,
+but the function $\lambda x:[[T]].[[x x]]$ has no meaning, because no
+matter how hard we try we can never give the correct type annotation
+$[[T]]$.  Now Curry-style theories give an extrinsic meaning to terms
+which amounts to the same meaning we give un-type (or uni-typed) type
+theories.  The identity function $[[\x.x]]$ can be assigned the
+meaning that it is the identity function on the entire domain of
+values, not just the typeable ones.  Note that we can give a
+Curry-style type theory both an extrinsic and an intrinsic semantics,
+but Church-style is always intrinsic \cite{Reynolds:2003}.  A last
+remark is that type annotations can actually make giving an intrinsic
+meaning difficult conducting the meta-theory of various expressive
+type theories and programming languages, and thus removing
+annotations, but still maintaining an intrinsic semantics may make
+meta-theoretic reasoning less difficult.  This is the benefit of using
+a type-annotation eraser function\footnote{This is often called ``type
+  erasure'', but the erasure is the image of the type-annotation
+  eraser function which is the result of applying the eraser, and
+  hence not the process of erasing.} to translate a Church-style type
+theory into a Curry-style type theory with an intrinsic semantics.
+This has been very beneficial in the study of dependent type theories.
+
+The syntax and reduction relation of the Curry-style STLC is defined
+in Fig.~\ref{fig:cstlc_syntax} and the typing judgment is defined in
+Fig.~\ref{fig:cstlc_typing}. We call the typing judgment defined here
+an implicit typing paradigm.  The fact that it is implicit shows up in
+the application typing rule $\CSTLCdrulename{App}$:
 \begin{center}
   \begin{math}
     \CSTLCdruleApp{}

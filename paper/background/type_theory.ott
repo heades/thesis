@@ -256,6 +256,19 @@ defns
     {{ tex [[G]] \vdash [[a]] = [[b]] : [[A]] }}
   by
 
+  G |- a : A
+  -------------- :: Refl
+  G |- a = a : A
+
+  G |- a = b : A
+  -------------- :: Sym
+  G |- b = a : A
+
+  G |- a = b : A
+  G |- b = c : A
+  -------------- :: Trans
+  G |- a = c : A
+  
   G |- a : 1
   --------------- :: Unit
   G |- a = tt : 1
@@ -296,3 +309,37 @@ defns
   G, x : T, y : A |- b : B
   ---------------------------------------------------- :: Case3
   G |- case (t,a) of x,y.b = [t/x][a/y]b : [t/x][a/y]B
+
+  G |- a1 = a2 : A
+  G |- b1 = b2 : [a1/x]B
+  -------------------------------------- :: SumCong
+  G |- (a1, b1) = (a2,b2) : {x : A} -> B
+
+  G |- c = c' : A x B
+  ----------------------- :: FstCong
+  G |- fst c = fst c' : A
+
+  G |- c = c' : A x B
+  ----------------------- :: SndCong
+  G |- snd c = snd c' : B
+
+  G, x : A |- b1 = b2 : B
+  ------------------------------------- :: LamCong
+  G |- \x:A.b1 = \x:A.b2 : (x : A) -> B
+
+  G |- a1 = a2 : (x : B) -> A
+  G |- b1 = b2 : B
+  ---------------------------- :: App
+  G |- a1 b1 = a2 b2 : [b2/x]A
+
+  G |- s1 = s2 : A + B
+  G, x : A |- c1 = c2 : C
+  G, y : B |- c'1 = c'2 : C
+  ------------------------------------------------------ :: CaseCong1
+  G |- case s1 of x.c1,y.c'1 = case s2 of x.c2,y.c'2 : C
+
+  x , y fresh in C
+  G |- s1 = s2 : {x : A} -> B
+  G, x : A, y : B |- c1 = c2 : C
+  ---------------------------------------------- :: CaseCong2
+  G |- case s1 of x,y.c1 = case s2 of x,y.c2 : C

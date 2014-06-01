@@ -2,14 +2,19 @@ The reason intuitionistic logic was the focus is that it lends itself
 very nicely to being interpreted as a system of computation.  That's
 the entire point behind the BHK-interpretation and the work of
 Brouwer.  This, it seemed, was not the case for classical logic, until
-Michel Parigot constructed the $\lambda\mu$-calculus in 1992
-\cite{Parigot:1992}.  Parigot was able to define a classical sequent
-calculus called free deduction which had a cut-elimination procedure
-validating the cut-theorem for classical logic \cite{Parigot:1992b}.
-This allowed for Parigot to define a computational perspective of free
-deduction which he called the $\lambda\mu$-calculus.  We now briefly
-introduce the $\lambda\mu$-calculus.  The syntax and reduction rules
-are in Fig.~\ref{fig:lamu_syntax}.
+Timothy Griffin's seminal paper titled ``A Formulae-as-Types Notion of
+Control'' \cite{Griffin:1990}.  This offered a typing to the control
+operator $\mathsf{call/cc}$, and to everyone surprise connected
+control operators to classical proofs. Later, Michel Parigot
+constructed the $\lambda\mu$-calculus in 1992 \cite{Parigot:1992}.
+Parigot was able to define a classical sequent calculus called free
+deduction which had a cut-elimination procedure validating the
+cut-theorem for classical logic \cite{Parigot:1992b}.  This allowed
+for Parigot to define a computational perspective of free deduction
+which he called the $\lambda\mu$-calculus.  This type theory can be
+considered the first type-safe strongly normalizing classical type
+theory. We now briefly introduce the $\lambda\mu$-calculus.  The
+syntax and reduction rules are in Fig.~\ref{fig:lamu_syntax}.
 
   \begin{figure}
   \begin{center}

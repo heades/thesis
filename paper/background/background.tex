@@ -71,24 +71,29 @@ morphism.  Hence, in hindsight it is not surprising that type theory
 and category theory are equals each offering a unique perspective of
 computation.  Less intuitive is the connection between these two
 fields and that of logic.  Calling this beautiful relationship the
-computational trinity is non-standard.  In fact I am
-proposing that this terminology become standard.  The standard names
-for this relationship is the Curry-Howard correspondence (or
-isomorphism) or the proofs-as-programs propositions-as-types
-correspondence.  The first pays tribute to Haskell Curry and William
-Howard. As we will see both Curry and Howard did have a hand in making
-this ternary relationship explicit, but they were not the only ones.
-Hence, this former name is unsatisfactory. The second only signifies
-the connection between logic and type theory; it does not mention
-category theory.  Thus, it is unsatisfactory.  Therefore, a better
-name for this relationship must become standard and I propose the
-computational trinity.  We now move onto making this
-relationship more precise.  We only discuss the details of the
-correspondence of type theory and logic, and type theory and category
-theory.  The other correspondence between logic and category theory
-follows similarly. Furthermore, we do not go into complete detail of
-each of these correspondences, but we give plenty of references for
-the curious reader.
+computational trinity is non-standard.  In fact I am proposing that
+this terminology become standard.  The standard names for this
+relationship is the Curry-Howard correspondence (or isomorphism) or
+the proofs-as-programs propositions-as-types correspondence.  The
+first pays tribute to Haskell Curry and William Howard. As we will see
+both Curry and Howard did have a hand in making this ternary
+relationship explicit, but they were not the only ones.  Hence, this
+former name is unsatisfactory. The second only signifies the
+connection between logic and type theory; it does not mention category
+theory.  Thus, it is unsatisfactory.  Therefore, a better name for
+this relationship must become standard and I propose the computational
+trinity.  Robert Harper calls this connection the ``Holy Trinity'' and
+the three way connection given above computational trinitarianism, but
+we have chosen to not use religious metafors in computational research.
+Thus, we propose the name ``computational trinity'' to emphasize the
+common structure between each point, and the fact that it is a three
+way connection.  We now move onto making this relationship more
+precise.  We only discuss the details of the correspondence of type
+theory and logic, and type theory and category theory.  The other
+correspondence between logic and category theory follows
+similarly. Furthermore, we do not go into complete detail of each of
+these correspondences, but we give plenty of references for the
+curious reader.
 
 \section{Type Theory and Logic}
 \label{sec:type_theory_logic}
@@ -151,26 +156,25 @@ correspondence with logic in Section~\ref{chap:dependent_type_theory} where
 we discuss dependent types.
 
 There is one requirement a type theory must meet in order for it to
-correspond to a logic.  We know from logic that proofs must be finite.
-So if computational constructs such as objects of type theory are to
-be considered proofs then they must be total (terminating).  That is
-they must always produce a result.  One part of the correspondence
-between type theory and logic is that the reduction rules of the type
-theory amount to the cut-elimination algorithm for the logic.  That is,
-reducing terms amounts to normalizing proofs.  The validity of the cut
-theorem -- states that any non-cut-free proof can always be reduced to
-a cut-free one -- implies consistency of the logic.  The cut theorem
-in type theory amounts to being able to prove that all terms in the
-type theory are terminating.  Speaking of cut elimination one might
-think that this correspondence only holds for sequent calculi, but one
-can normalize natural deduction proofs as well \cite{Prawitz:1965}.
-It is widely known that showing a type theory to be consistent --
-through the remainder of the thesis we will use the words consistent
-and normalizing interchangeably -- can be a very difficult task, and
-often requires advanced mathematical tools.  In fact a lot of the work
-going into defining new type theories goes into showing it consistent.
-The type theories we have seen up till now are all consistent.  We
-will discuss in detail how to show type theories to be normalizing in
+correspond to a consistent logic. Computational constructs such as
+objects of type theory must be total (terminating).  That is they must
+always produce a result.  One part of the correspondence between type
+theory and logic is that the reduction rules of the type theory amount
+to the cut-elimination algorithm for the logic.  That is, reducing
+terms amounts to normalizing proofs.  The validity of the cut theorem
+-- states that any non-cut-free proof can always be reduced to a
+cut-free one -- implies consistency of the logic.  The cut theorem in
+type theory amounts to being able to prove that all terms in the type
+theory are terminating.  Speaking of cut elimination one might think
+that this correspondence only holds for sequent calculi, but one can
+normalize natural deduction proofs as well \cite{Prawitz:1965}.  It is
+widely known that showing a type theory to be consistent -- through
+the remainder of the thesis we will use the words consistent and
+normalizing interchangeably -- can be a very difficult task, and often
+requires advanced mathematical tools.  In fact a lot of the work going
+into defining new type theories goes into showing it consistent.  The
+type theories we have seen up till now are all consistent.  We will
+discuss in detail how to show type theories to be normalizing in
 Section~\ref{chap:metatheory_of_programming_languages}.
 % subsection type_theory_logic  (end)
 
@@ -281,7 +285,7 @@ from a type theoretic perspective.
 \chapter{Dependent Type Theory}
 \label{chap:dependent_type_theory}
 All the type theories we have seen thus far consist of what are called
-``simple types''.  These are types which do not depend on terms.
+``nondependent types''.  These are types which do not depend on terms.
 System $\Fw$ is an advance where there is a copy of STLC at the type
 level, but this is not a dependency, hence, system $\Fw$ is still
 simply typed.  So it is natural to wonder if it is beneficial to allow
@@ -327,9 +331,9 @@ written on using type theory for programming by Benjamin Pierce
 mind.  Some programming languages are general purpose languages and
 others are domain specific.  For example, ML, Haskell, Epigram, Idris,
 Guru and OCaml are examples of general purpose programming
-languages. ACL2, Isabelle, Coq, and Agda are more domain
-specific, because they are proof assistants. New programming languages
-are designed usually to provide new advancements in the field.  These
+languages. ACL2, Isabelle, Coq, and Agda are more domain specific,
+because they are proof assistants. New programming languages are
+designed usually to provide new advancements in the field.  These
 advancements usually arise from programming language research or
 research on type theory.  In this section we discuss the current
 applications of dependent type theories in both proof assistants and
@@ -342,7 +346,7 @@ language designs is using dependent types to verify properties of
 programming languages.  To cite just a few references
 \cite{Vytiniotis:2007,Brady:2011,Mcbride:2004,Altenkirch:2003,Norell:2007,Stump:2009,Licata:2005}.
 Now dependent types are very powerful and provide a rich environment
-for verification.  They also are very hard to reason about.  So it is
+for verification, but they are very hard to reason about.  So it is
 natural to wonder if we can obtain some of the features of dependent
 type theories without having to adopt full dependent types.  This is
 the chosen path the inventors of Haskell took.  Tim Sheard showed that
@@ -356,19 +360,19 @@ checking versus during run-time.  The kind of types which allow the
 encoding of these types of features are called indexed types and are
 investigated in \cite{Fogarty:2007,Zenger:1997}.  Indexed types are
 just types which depend on some data.  However, this data is in no way
-connected to the language of terms.  This directly implies some indexed
-types are indeed definable in system $\Fw$, while other indexed types
-may require an extension of the type language with other typing
-features, e.g. existential types, natural numbers, etc.  It has been
-conjectured that indexed types may be computationally as powerful as
-dependent types.  However, to make indexed types as strong as
+connected to the language of terms.  This directly implies some
+indexed types are indeed definable in system $\Fw$, while other
+indexed types may require an extension of the type language with other
+typing features, e.g. existential types, natural numbers, etc.  It has
+been conjectured that indexed types may be computationally as powerful
+as dependent types.  However, to make indexed types as strong as
 dependent types the resulting type system would be very cluttered.
 One would have to add a lot of new operators and duplications at the
 type level.  Another approach that provides dependent like features to
-a simple type theory are Algebraic Data Types (GADT) \cite{Xi:2003}.
-These have been added to Haskell \cite{Jones:2006}.  These provide a
-way of guarding recursive data types.  The main feature of GADTs are
-enforcement of local constraints.
+a simple type theory are Generalized Algebraic Data Types (GADT)
+\cite{Xi:2003}.  These have been added to Haskell \cite{Jones:2006}.
+These provide a way of guarding recursive data types.  The main
+feature of GADTs are enforcement of local constraints.
 
 There are alternatives to type-based verification.  A large
 body of work has been done using model checking and testing to verify
@@ -389,17 +393,17 @@ languages, domain specific languages, and an entire arsenal of
 features can be encoded in them.
 
 There are several well-known proof assistants based on dependent type
-theory.  The proof assistant Coq is based on an extension of Coquand's
-CoC called the Calculus of Inductive Constructions
+theory.  One of the first is called NuPrl which is based on
+Martin-L\"of's Type Theory \cite{Constable:1986}. The proof assistant
+Coq is another proof assistant and is based on an extension of
+Coquand's CoC called the Calculus of Inductive Constructions
 \cite{CoqRefMan:2008}.  Coq has been used to verify the correctness of
 very large scale mathematics and programs.  The proof of the four
 colour theorem has been fully checked in it \cite{Gonthier:2005}.  A C
 compiler has been formally verified with in Coq
 \cite{Leroy:2009,Leroy:2006}.  This project is called CompCert.  Agda
-is the second proof assistant based on dependent type theory.  The
-core of Agda is Martin-L\"of's Type Theory.  However, we are not aware
-of any large scale mathematics in Agda.  NuPrl is another proof
-assistant based on Martin-L\"of's Type Theory \cite{Constable:1986}.
+is the second proof assistant based on Martin-L\"of's Type Theory.
+However, we are not aware of any large scale mathematics in Agda.
 Finally, Twelf is a proof assistant based on a restricted version of
 Martin-L\"of's Type Theory called LF \cite{Pfenning:1999}.  More
 information on proof assistants can be found in \cite{Geuvers:2009}.
@@ -786,6 +790,11 @@ following result implies that STLC is normalizing.
   If $\Gamma \vdash t:T$ then $t \in \interp{T}_\Gamma$.
   \label{thm:soundness_stlc}
 \end{thm}
+\begin{proof}
+  This holds by a straightforward proof by induction on the structure
+  of the assumed typing derivation where the application case uses the
+  previous lemma.
+\end{proof}
 
 \begin{corollary}
   If $\Gamma \vdash t:T$, then there exists a normal form $n$, such
@@ -796,10 +805,35 @@ This proof method has been applied to a number of different type
 theories.  Eades and Stump show that SSF is weakly normalizing using
 this proof technique in \cite{Eades:2010}.  The advantage of
 hereditary substitution is that it shows promise of being less complex
-than other normalization techniques.  This means that it would be
-easier to formalize in proof assistants.  However, there is a big
-drawback of hereditary substitution and that is it is not known how
-many type theories can be proven normalizing using it.
+than other normalization techniques.  For example, when proving
+normalization using the Tait-Girard reducibility method -- discussed
+in the next section -- the main soundness theorem must universally
+quantify over the domain of well-formed substitutions, but this is not
+needed in the proof using hereditary substitution. In addition, the
+interpretation of types do not require advanced mathematical
+machinerary like the reducibility method where they require
+quantification over types as well as recursion over types (large
+eliminations).  This implies that it would be easier to formalize in
+hereditary substitution proofs in proof assistants.  However, it is
+currently unknown which type theories can be proven normalizing using
+hereditary substitution.  
+
+The type theories currently known to be proven normalizing using the
+hereditary substitution proof technique are relatively simple.  For
+example, the simply-typed $\lambda$-calculus, predicative polymorphic
+versions of system F, and the LF family of dependent types have all
+been shown to be weakly-normalizing using hereditary substitution.
+However, it is currently unknown how to prove normalization of system
+T using hereditary substitution, because the usual ordering on types
+is not proof theoretically strong enough.  The termination ordinal of
+the ordering on types would have to be at least $\epsilon_0$, but such
+an ordering is non-trivial to construct.  Furthermore, impredicative
+theories like system F pose a similar problem.  It is currently
+unknown how to construct the ordering for second order types.  The
+hereditary substitution technique heavily depends on the ordering on
+types and the lack of one prevent its use.  As the type theory becomes
+more expressive through extensions the harder the ordering on types
+becomes to construct.
 
 Hereditary substitution can be used to maintain canonical forms and
 even prove weak normalization of predicative simple type theories.  It
@@ -851,17 +885,22 @@ but they can be found in \cite{Girard:1989}.
 \section{Logical Relations}
 \label{sec:logical_relations}
 Logical relations are straightforward extensions of reducibility sets.
-They can be thought of as unary predicates defined by recursion on
-their parameter.  Usually, this is the type.  They are always closed
-under eliminations and a usually defined in the same way as we defined
-the interpretation of types for STLC and system F.  They are called
-``logical'', because of the fact that they are closed under
+They were first proposed as generalizations of Tait's reducibility
+candidates by Gordon Plotkin in 1973 \cite{Plotkin:1973}.  They were
+further generalized by Richard Statman in 1985 \cite{Statman:1985}.
+Logical relations can be thought of as predicates defined by recursion
+on their parameter.  Usually, this is the type.  They are always
+closed under eliminations and a usually defined in the same way as we
+defined the interpretation of types for STLC and system F.  They are
+called ``logical'', because of the fact that they are closed under
 eliminations.  This allows us to prove properties that are not
 preserved by elimination.  Termination is an example of this.  Logical
 relations are not required to be unary.  However, we have not seen any
-applications of $n$-arity logical relations where $n > 2$.  Logical
-relations have been used in a wide range of applications, from
-consistency proofs all the way to encryption.
+applications of $n$-arity logical relations where $n > 2$.  An example
+where Binary logical relations have been used is the study program
+equivalence.  Logical relations have been used in a wide range of
+applications in fact, from consistency proofs all the way to
+encryption.
 
 Andrew Pitts used logical relations to show when two inhabitants of
 the disjoint union type are equivalent in \cite{Pitts:1998}.  Karl

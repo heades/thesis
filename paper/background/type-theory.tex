@@ -32,7 +32,10 @@ Fig.~\ref{fig:lof_syntax}.
       \begin{array}{lll}
         [[S]] & ::= & \mathsf{Type}\,|\,\mathsf{True}\\
         [[T]], [[A]], [[B]], [[C]]        & ::= & [[X]]\,|\,[[1]]\,|\,[[0]]\,|\,[[A + B]]\,|\,[[( x : A ) -> B]]\,|\,[[{ x : A } -> B]]\\
-        [[t]], [[s]], [[a]], [[b]], [[c]] & ::= & [[x]]\,|\,[[tt]]\,|\,[[\ x : A . t]]\,|\,[[t1 t2]]\,|\,[[( t1 , t2 )]]\,|\,[[case s of x , y . t]]\,|\,[[case s of x . t1 , y . t2]]\,|\,[[abort]]
+        [[t]], [[s]], [[a]], [[b]], [[c]] & ::= &
+        [[x]]\,|\,[[tt]]\,|\,[[\ x : A . t]]\,|\,[[t1 t2]]\,|\,[[( t1
+        , t2 )]]\,|\,[[case s of x , y . t]]\,|\,[[case s of x . t1 ,
+        y . t2]]\,|\,\\& & [[abort]]
       \end{array}
     \end{math}
   \end{center}
@@ -169,6 +172,9 @@ The typing rules are defined in Fig.~\ref{fig:lof_typing}.
 \begin{figure}
   \begin{center}
     \begin{mathpar}
+        \TTdruleEqXXRefl{}      \and
+        \TTdruleEqXXSym{}       \and
+        \TTdruleEqXXTrans{}     \and
         \TTdruleEqXXUnit{}      \and
         \TTdruleEqXXFst{}       \and
         \TTdruleEqXXSnd{}       \and
@@ -254,7 +260,7 @@ rules:
       $$\mprset{flushleft}
       \inferrule* [right=] {
         [[G |- t : Id A a b]]
-      }{[[G |- a = b : Id A a b]]}
+      }{[[G |- a = b : A]]}
     \end{array}
   \end{math}
 \end{center}
@@ -333,9 +339,8 @@ to define the Burali-Forti paradox in Type Theory with
 $\mathsf{Type}:\mathsf{Type}$ \cite{Coquand:1986,Coquand:1994}.  Now
 $\mathsf{Type}:\mathsf{Type}$ is inconsistent when the type theory
 needs to correspond to logic, but if it is used purely for programming
-it is a very nice feature.  It can be used in generic programming,
-because it allows for impredicativity over terms as well as types.  In
-Martin-L\"of's Type Theory without the $\mathsf{Type}:\mathsf{Type}$
-axiom types are program specifications, hence, the theory can be seen
-as a terminating functional programming
-language \cite{Nordstrom:1990}.  
+it is a very nice feature.  It can be used in generic programming
+\cite{Cardelli-1986}.  In Martin-L\"of's Type Theory without the
+$\mathsf{Type}:\mathsf{Type}$ axiom types are program specifications,
+hence, the theory can be seen as a terminating functional programming
+language \cite{Nordstrom:1990}.
