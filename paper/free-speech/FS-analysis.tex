@@ -618,6 +618,123 @@ substitutions which are defined in Figure~\ref{fig:fs-wf-subs}.
   \label{fig:fs-wf-subs}
 \end{figure}
 
+Before we can move on we must justify why the interpretation of types
+covers all cases, especially, for the logical fragment.  We must show
+that there is no type-level computation, and that the
+$[[Type]]:[[Type]]$ axiom is purely programmatic.  The following two
+lemmata establish this fact:
+
+\begin{lemma}[$[[Type]]:[[Type]]$ is not Logical]
+  \label{lemma:type:type_is_not_logical}
+  It is not the case that $[[. |- Type : Type L]]$.
+\end{lemma}
+\begin{proof}
+  Suppose it is the case that $[[. |- Type : Type L]]$ is derivable.
+  Then it must be the case that its derivation ends with the one of
+  $\FSdrulename{AppAllTerm}$ or $\FSdrulename{Conv}$, but both of
+  which would have $[[. |- Type : Type L]]$ as a premise.  No other
+  rules are applicabile.  Thus, $[[. |- Type : Type L]]$ is a
+  non-terminating derivation, a contradiction.
+\end{proof}
+
+\begin{lemma}[Characterization of Logical Types]
+  \label{lemma:characterization}
+  If $[[. |- e : Type L]]$, then $[[e]] \equiv [[Nat]]$, $[[e]] \equiv
+  [[e1 = e2]]$, or $[[e]] \equiv [[(x : th e1) ep -> e2]]$ for some
+  expressions $[[e1]]$, $[[e2]]$, staging classifier $[[th]]$ and
+  consistency classifier $[[ep]]$.
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the assumed typing derivation.
+  The previous lemma imples that $[[e]]$ cannot be $[[Type]]$.  Thus,
+  we only have the following non-trivial cases:
+  \begin{itemize}
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{K\_Nat}] {
+          \,
+        }{[[. |- Nat : Type L]]}
+      \end{math}
+    \end{center}
+    In this case $[[e]] \equiv [[Nat]]$, thus we obtain our result.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{K\_Pi}] {
+          [[. |- e1 : Type th']]
+          \\\\
+          [[. , x : th' e1 |- e2 : Type L]]
+        }{[[. |- ( x : th' e1 ) ep -> e2 : Type L]]}
+      \end{math}
+    \end{center}        
+    Similar to the previous case.
+
+    \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{K\_Eq}] {
+          [[. |- e : e1    th1]]
+          \\\\
+          [[. |- e' : e2   th2]]
+        }{[[. |- e = e' : Type  L]]}
+      \end{math}
+    \end{center}
+    Similar to the previous case.
+    
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{AppPiTerm}] {
+          [[. |- [v/x] Type : Type L]]
+          \\\\
+          [[. |- e : (x : th e1)+ -> Type   L]]
+          \\\\
+          [[. |- v : e1 th]]
+        }{[[. |- e v : [v/x] Type  L]]}
+      \end{math}
+    \end{center}
+    This case is impossible, because it requires $[[. |- [v/x] Type :
+    Type L]]$ which is equivalent to $[[. |- Type : Type L]]$ to be
+    derivable, but by the previous lemma this is impossible.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{AppAllTerm}] {
+          [[. |- [v/x] Type : Type L]]
+          \\\\
+          [[. |- e : (x : th e1)- -> e2   L]]
+          \\\\
+          [[. |- v : e1   th]]
+        }{[[. |- e : [v/x] Type   L]]}
+      \end{math}
+    \end{center}
+    Similar to the previous case.
+
+    \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{Conv}] {
+          [[. |- [e'1/x] Type : Type L]]
+          \\\\
+          [[. |- e : [e1/x] Type  L]]
+          \\\\
+          [[. |- e' : e1 = e1'   L]]
+        }{[[. |- e : [e1'/x] Type  L]]}
+      \end{math}
+    \end{center}
+    Similar to the previous case.  
+  \end{itemize}
+\end{proof}
+
 We now state and prove the critical properties of the interptretation
 of types.  These are standard, and so we simply list them with their
 proofs.
