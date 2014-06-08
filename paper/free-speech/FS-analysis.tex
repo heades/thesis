@@ -447,12 +447,16 @@ preservation.
     \noindent
     Now suppose the second case, by assumption we know $\Gamma \tvdash{\theta} v:e_1$ and
     $\Gamma \tvdash{L} \lambda x.e':\arrowT{x}{\theta}{e_1}{+}{e_2}$. By the Inversion Lemma (Lemma~\ref{lemma:inversion}), 
-    $\Gamma,x:^\theta e_1 \tvdash{L} e':e_2$.  Thus, by substitution for typing (Lemma~\ref{lemma:substitution}),
-    $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
+    $\Gamma,x:^\theta e'_1 \tvdash{L} e':e'_2$, and $[[G |- p : ( x : th e1) ep -> e2 = ( x : th e'1) ep -> e'2 L]]$.  
+    Now we may conclude $\Gamma,x:^\theta a \tvdash{L} e':e_2$ and $\Gamma \tvdash{\theta} v:a$
+    using the assumption $\Gamma \tvdash{\theta} v:e_1$, the injection rules $\FSdrulename{InjDom}$ and $\FSdrulename{InjRan}$, 
+    and $\FSdrulename{Conv}$. Thus, by substitution for typing (Lemma~\ref{lemma:substitution}), $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
 
     The third case follows similarly to the previous case.  First,
     apply inversion (Lemma~\ref{lemma:inversion}) to the typing
-    assumption for $[[e]]$ followed by substitution for typing (Lemma~\ref{lemma:substitution}).
+    assumption for $[[e]]$ followed by conversion using the injection
+    rules and the conversion rules, and then finally apply
+    substitution for typing (Lemma~\ref{lemma:substitution}).
 
   \item[Case.]\ \\
     \begin{center}
