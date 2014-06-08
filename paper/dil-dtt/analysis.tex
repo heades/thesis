@@ -24,7 +24,7 @@ formulas resulting in a Kripke model.
 Now we can interpret formulas in a Kripke model as follows:
 \begin{definition}
   \label{def:interpretation}
-  The interpretation of the formulas of DIL in some Kripke model $(W, R, V)$
+  The interpretation of the formulas of DIL in a Kripke model $(W, R, V)$
   is defined by recursion on the structure of the formula as follows:
   \begin{center}
     \begin{tabular}{lll}
@@ -153,13 +153,19 @@ can prove consistency.
 \label{sec:completeness}
 In this section we prove that every derivable sequent in L can be
 translated to a derivable sequent of DIL.  We will call a sequent in L
-a L-sequent and a sequent in DIL a DIL-sequent. Along the way, we will
-see admissibility of the analogs of the rules we mentioned in
-Section~\ref{sec:dualized_intuitionistic_logic_(dil)}.  The proof of
-consistency was with respect to DIL including the cut rule, but we
-prove completeness with respect to DIL where the general cut rule has
-been replaced with the following two inference rules, which can be
-seen as restricted instances of the cut rule:
+a L-sequent and a sequent in DIL a DIL-sequent. Throughout this
+section we assume without loss of generality that all L-sequents have
+non-empty right-hand sides.  That is, for every L-sequent, 
+$<<G |- Gr D>>$, we assume that $<<D>> \not= <<.>>$.  We do not loose generality
+because it is possible to prove that $<<G |- Gr .>>$ holds if and only
+if $<<G |- Gr n : False>>$ for any node $<<n>>$ (proof omitted).
+
+Along the way, we will see admissibility of the analogs of the rules
+we mentioned in Section~\ref{sec:dualized_intuitionistic_logic_(dil)}.
+The proof of consistency was with respect to DIL including the cut
+rule, but we prove completeness with respect to DIL where the general
+cut rule has been replaced with the following two inference rules,
+which can be seen as restricted instances of the cut rule:
 \begin{center}
   \footnotesize
   \begin{math}
@@ -228,6 +234,87 @@ admissibility of those rules in DIL.
   \begin{proof}
     This holds by a straightforward induction on the form of the assumed derivation.
   \end{proof}
+
+\begin{lemma}[AndL]
+  \label{lemma:andl}
+  If $[[Gr ; G, bar p A @ n |- p B @ n]]$ is derivable, then 
+  $[[Gr ; G |- p (A /\bar p B) @ n]]$ is derivable.
+\end{lemma}
+\begin{proof}
+  Suppose $[[Gr ; G, bar p A @ n |- p B @ n]]$ is derivable. By weakening
+  we know $[[Gr ; G,bar p (A /\bar p B)@n, bar p B @ n, bar p A @ n |- p B @ n]]$. 
+  Then $[[Gr ; G |- p (A /\bar p B) @ n]]$ is derivable as follows:
+  \begin{center}
+    \small
+    \begin{math}
+      $$\mprset{flushleft}
+      \inferrule* [right=\scriptsize Cut] {
+        $$\mprset{flushleft}
+        \inferrule* [right=\scriptsize AndBar] {
+          $$\mprset{flushleft}
+          \inferrule* [right=\scriptsize Cut] {
+            D_1
+            \\
+            D_2
+          }{[[Gr ; G, bar p (A /\bar p B)@n |- p B @ n]]}
+        }{[[Gr ; G, bar p (A /\bar p B)@n |- p (A /\bar p B) @ n]]}
+        \\
+        $$\mprset{flushleft}
+        \inferrule* [right=ax] {
+          \,
+        }{[[Gr ; G, bar p (A /\bar p B)@n |- bar p (A /\bar p B) @ n]]}
+      }{[[Gr ; G |- p (A /\bar p B) @ n]]}
+    \end{math}
+  \end{center}
+  where we have the following subderivations:  
+
+  \begin{math}
+      \small
+      \begin{array}{lll}
+        D_0: \\
+        & $$\mprset{flushleft}
+              \inferrule* [right=\scriptsize AndBar] {
+                $$\mprset{flushleft}
+                \inferrule* [right=\scriptsize ax] {
+                  \,
+                }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, p A @ n |- p A@n]]}
+              }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, p A @ n |- p (A /\bar p B)@n]]}
+      \end{array}
+    \end{math}
+    
+    \begin{math}
+      \small
+      \begin{array}{lll}
+        D_1: \\
+        &
+        $$\mprset{flushleft}
+      \inferrule* [right=\scriptsize Cut] {              
+        [[Gr ; G,bar p (A /\bar p B)@n, bar p B @ n, bar p A @ n |- p B @ n]]
+        \\
+        $$\mprset{flushleft}
+        \inferrule* [right=\scriptsize ax] {
+          \,
+        }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, bar p A @ n |- bar p B @ n]]}
+      }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n |- p A @ n]]}
+      \end{array}
+    \end{math}
+      
+    \begin{math}
+      \small
+      \begin{array}{lll}
+        D_2: \\
+      & $$\mprset{flushleft}
+            \inferrule* [right=\scriptsize Cut] {
+              $$\mprset{flushleft}
+              \inferrule* [right=\scriptsize ax] {
+                \,
+              }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, p A @ n |- bar p (A /\bar p B)@n]]}
+              \\
+              D_0
+            }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n |- bar p A @ n]]}
+      \end{array}
+    \end{math}
+\end{proof}
 
 \begin{lemma}[MonoL]
   \label{lemma:monol}
@@ -790,8 +877,8 @@ Definition~\ref{def:L-form-to-DIL-form} we can easily translate
 contexts.  Right contexts $<<G>>$ in L are translated to positive
 hypotheses, while left contexts, not including the formula chosen as
 the active formula, are translated into negative hypotheses.  The
-following definition defines the translation of both types of contexts
-simultaneously.
+following definition defines the translation of both types of
+contexts.
 \begin{definition}
   \label{def:trans-L-ctx-to-DIL-ctx}
   We extend the translation of formulas to contexts $<<G>>$ and
@@ -1067,12 +1154,13 @@ activation of a derivable L-sequent is derivable in DIL.
         }{<<G , n : T1 /\ T2   |- Gr D>>}
       \end{math}
     \end{center}
-    We know by the induction hypothesis that all activations of $<<G , n : T1, n : T2 |- Gr D>>$
+        We know by the induction hypothesis that all activations of $<<G , n : T1, n : T2 |- Gr D>>$
     are derivable.  In particular, we know $[[-Gr- ; {G}+,+T1@n, +T2@n, {D1}-,{D2}- |- + A @ n']]$ where
     $[[{D}-]] = [[{D1}-]],-A@n',[[{D2}-]]$. Using exchange we know $[[-Gr- ; {G}+,{D1}-,{D2}-,+T1@n, +T2@n |- + A @ n']]$, and
     by the left-to-right lemma $[[-Gr- ; {G}+, {D1}-,{D2}-, +T1@n, - A @ n' |- - T2@n]]$, and finally by one more application
     of exchange $[[-Gr- ; {G}+, {D1}-, {D2}-,- A @ n', +T1@n |- - T2@n]]$.  At this point we know 
-    $[[-Gr- ; {G}+, {D1}-, {D2}-, - A @ n' |- - T1 /\+ T2 @ n]]$ by the $\ifrName{andBar}$ rule.  Now using left-to-right \\
+    $[[-Gr- ; {G}+, {D1}-, {D2}-, - A @ n' |- - T1 /\+ T2 @ n]]$ by the using the admissible $\ifrName{andL}$ rule (Lemma~\ref{lemma:andl}).
+    Now using left-to-right \\
     $[[-Gr- ; {G}+, {D1}-, {D2}-, + T1 /\+ T2 @ n  |- + A @ n']]$ is derivable. Lastly, by exchange 
     $[[-Gr- ; {G}+, + T1 /\+ T2 @ n, {D1}-, {D2}- |- + A @ n']]$ is derivable, which is clearly and an arbitrary
     activation of $<<G , n : T1 /\ T2   |- Gr D>>$.
@@ -1236,12 +1324,318 @@ activation of a derivable L-sequent is derivable in DIL.
 \section{Type Preservation and Strong Normalization of DTT}
 \label{sec:dualized_type_theory}
 We now present the basic metatheory of DTT, starting with type
-preservations. Throughout the remainder of this section we use
-the inversion lemma of the typing relation, but we do not state it or
-prove it here, because the proof is trivial.
+preservations. We begin with the inversion lemma which is necessary
+for proving type preservation.
+\begin{lemma}[Inverstion]
+  \label{lemma:inverstion}
+  \begin{itemize}
+  \item[] 
+  \item[i.] If $[[Gr;H, x : p A @ n, H' |- x : p A @ n']]$, then 
+    $[[Gr |- n <=p* n']]$.
+  \item[ii.] If $[[Gr;H |- (t1,t2) : p (A /\p B) @ n]]$, then 
+    $[[Gr;H |- t1 : p A @ n]]$ and $[[Gr;H |- t2 : p B @ n]]$.
+  \item[iii.] If $[[Gr;H |- inj d t : p (A1 /\bar p A2) @ n]]$, then 
+    $[[Gr;H |- t : p A!d @ n]]$.
+  \item[iv.] If $[[Gr;H |- \x.t : p (A ->p B)@n]]$, then 
+    $[[(Gr, n <=p n');H,x : p A @ n' |- t : p B @ n']]$ for any
+    $[[n' notin |Gr|,|G|]]$.
+  \item[v.] If $[[Gr;H |- <t1,t2> : p (A ->bar p B) @ n]]$, then
+    $[[Gr |- n <=bar p * n']]$, $[[Gr;H |- t1 : bar p A @ n']]$, and
+    $[[Gr;H |- t2 : p B @ n']]$ for some node $[[n']]$.
+  \end{itemize}
+\end{lemma}
+\begin{proof}
+  Each case of the above lemma holds by a trivial proof by induction
+  on the assumed typing derivation.
+\end{proof}
+\noindent The lemmas node substitution for typing and substitution for
+typing are essential for the cases of type preservation that reduce a
+top-level redex. Node substitution, denoted $[[ [n1/n2]n]]$, is defined as
+follows: 
+\begin{center}
+  \begin{math}
+    \begin{array}{lll}
+      [[ [n1/n2] n2 ]] & = & [[n1]]\\
+      [[ [n1/n2] n  ]] & = & [[n]] \text{ where } [[n]] \text{ is
+        distinct from } [[n2]]
+    \end{array}
+  \end{math}
+\end{center}
+The following lemmas are necessary in the proof of node substitution
+for typing.
+\begin{lemma}[Node Renaming]
+  \label{lemma:renaming_nodes_in_graph}
+  If $[[Gr1, Gr2 |- n1 <=p* n3]]$, then for any nodes $[[n4]]$ and
+  $[[n5]]$, where $[[n5]]$ is distinct from $[[n1]]$ and $[[n3]]$,
+  we have $[[ [n4/n5]Gr1, [n4/n5]Gr2 |- n1 <=p* n3]]$.
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the assumed reachability
+  derivation.  Throughout each case suppose we have nodes $[[n4]]$
+  and $[[n5]]$.
+  
+  \begin{itemize}
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{ax}] {
+          \ 
+        }{[[Gr , n1 <= p n3 , Gr' |- n1 <= p * n3]]}
+      \end{math}
+    \end{center}
+    Trivial.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{refl}] {
+          \ 
+        }{[[Gr1,Gr2 |- n <= p * n]]}
+      \end{math}
+    \end{center}
+    Trivial.
+    
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{trans}] {
+          [[Gr1,Gr2 |- n1 <= p * n' &&  Gr1,Gr2 |- n' <= p * n3]]
+        }{[[Gr1,Gr2 |- n1 <= p * n3]]}
+      \end{math}
+    \end{center}
+    By the induction hypothesis we know that for any nodes $[[n'4]]$ and $[[n'5]]$ that
+    $[[ [n'4/n'5]Gr1,[n'4/n'5]Gr2 |- n1 <= p * n']]$, and for any nodes $[[n''4]]$ and $[[n''5]]$ that
+    $[[ [n''4/n''5]Gr1, [n''4/n''5]Gr2 |- n' <= p * n3]]$.  Choose $[[n4]]$ for $[[n'4]]$ and $[[n''4]]$ and
+    $[[n5]]$ for $[[n'5]]$ and $[[n''5]]$ to obtain $[[ [n4/n5]Gr1,[n4/n5]Gr2 |- n1 <= p * n']]$ and
+    $[[ [n4/n5]Gr1, [n4/n5]Gr2 |- n' <= p * n3]]$.  Finally, this case follows by reapplying the 
+    rule to the previous two facts.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{flip}] {
+          [[Gr |- n' <= bar p * n]]
+        }{[[Gr |- n <= p * n']]}
+      \end{math}
+    \end{center}
+    Similar to the previous case.
+
+  \end{itemize}
+\end{proof}
+
+\begin{lemma}[Node Substitution for Reachability]
+  \label{lemma:node_substitution_for_reachability}
+  If $[[Gr, n1 <=p1 n2,Gr' |-n4 <=p* n5]]$ and $[[Gr, Gr' |- n1 <=p1* n3]]$, then 
+  $[[ [n3/n2]Gr,[n3/n2]Gr' |- [n3/n2]n4 <=p* [n3/n2]n5]]$. 
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the form of the assumed reachability
+  derivation.  Throughout the following cases we assume $[[Gr, Gr' |-
+  n1 <=p1* n3]]$ holds.
+  
+  \begin{itemize}
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{ax}] {
+          \ 
+        }{[[Gr1 , n4 <= p n5 , Gr2 |- n4 <= p * n5]]}
+      \end{math}
+    \end{center}
+    Suppose $[[Gr1, n4 <= p n5, Gr2]] = [[Gr, n1 <=p1 n2,Gr']]$.  Then
+    either $[[n1 <=p1 n2]] \in [[Gr1]]$, $[[n1 <=p1 n2]] \in [[Gr2]]$,
+    or $[[n1 <=p1 n2]] \equiv [[n4 <=p n5]]$.  Suppose $[[n1 <=p1 n2]] \in [[Gr1]]$,
+    then $[[Gr1]] = [[Gr'1, n1 <=p n2,Gr''1]]$.  Then it is easy to see that
+    $[[ [n3/n2]Gr'1,[n3/n2]Gr''1 , [n3/n2]n4 <= p [n3/n2]n5 , [n3/n2]Gr2 |- [n3/n2]n4 <= p * [n3/n2]n5]]$
+    is derivable by applying $\dttdrulename{Ax}$.  The case where $[[n1 <=p1 n2]] \in [[Gr2]]$ is
+    similar.
+
+    Now suppose $[[n1 <=p1 n2]] \equiv [[n4 <=p n5]]$.  Then we know by assumption that 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{ax}] {
+          \ 
+        }{[[Gr1 , n1 <= p n2 , Gr2 |- n1 <= p * n2]]}
+      \end{math}
+    \end{center}
+    Then it suffices to show $[[ [n3/n2]Gr1 , [n3/n2]Gr2 |- [n3/n2]n1 <= p * [n3/n2]n2]]$, which is equivalent
+    to $[[ [n3/n2]Gr1 , [n3/n2]Gr2 |- [n3/n2]n1 <= p * n3]]$.  Now if $[[n1]]$ is equivalent to $[[n2]]$, then
+    $[[ [n3/n2]Gr1 , [n3/n2]Gr2 |- [n3/n2]n1 <= p * n3]]$ holds by reflexivity, and if $[[n1]]$ is distinct from $[[n2]]$,
+    then $[[ [n3/n2]Gr1 , [n3/n2]Gr2 |- [n3/n2]n1 <= p * n3]]$ is equivalent to 
+    $[[ [n3/n2]Gr1 , [n3/n2]Gr2 |- n1 <= p * n3]]$.  We know by assumption that $[[Gr, Gr' |- n1 <=p1* n3]]$ holds, which
+    is equivalent to $[[Gr1, Gr2 |- n1 <=p* n3]]$.  Now if $[[n3]]$ is equal to $[[n2]]$, then 
+    $[[ [n3/n2]Gr1 , [n3/n2]Gr2 |- n1 <= p * n3]]$ is equivalent to $[[Gr1, Gr2 |- n1 <=p* n3]]$.  So suppose
+    $[[n3]]$ is distinct from $[[n2]]$, then by Lemma~\ref{lemma:renaming_nodes_in_graph} we know 
+    $[[ [n3/n2]Gr1 , [n3/n2]Gr2 |- n1 <= p * n3]]$.        
+    
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{refl}] {
+          \ 
+        }{[[Gr, n1 <=p1 n2,Gr' |- n <= p * n]]}
+      \end{math}
+    \end{center}
+    Trivial.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{trans}] {
+          [[Gr, n1 <=p1 n2,Gr' |- n4 <= p * n6 &&  Gr |- n6 <= p * n5]]
+        }{[[Gr, n1 <=p1 n2,Gr' |- n4 <= p * n5]]}
+      \end{math}
+    \end{center}
+    This case by applying the induction to each premise, and then
+    reapplying the rule.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{flip}] {
+          [[Gr, n1 <=p1 n2,Gr' |- n5 <= bar p * n4]]
+        }{[[Gr, n1 <=p1 n2,Gr' |- n4 <= p * n5]]}
+      \end{math}
+    \end{center}
+    This case holds by applying the induction hypothesis to the
+    premise, and then reapplying the rule.    
+  \end{itemize}
+\end{proof}
+
+\begin{lemma}[Node Substitution for Typing]
+  \label{lemma:node_substitution_for_typing}
+  If $[[Gr, n1 <=p1 n2,Gr' ; H |- t : p2 A @ n3]]$ and $[[Gr,Gr' |- n1 <=p1 * n4]]$, then
+  $[[ [n4/n2]Gr,[n4/n2]Gr'; [n4/n2]H |- t : p2 A @ [n4/n2]n3]]$. 
+\end{lemma}
+  \begin{proof}
+    This is a proof by induction on the form of the assumed typing
+    derivation.  Throughout each of the following cases we assume
+    $[[Gr,Gr' |- n1 <=p1 * n4]]$ holds.
+
+    \begin{itemize}
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Ax}] {
+            [[Gr, n1 <=p1 n2,Gr' |- n <= p * n3]]
+          }{[[Gr, n1 <=p1 n2,Gr' ; H1 , y : p2 A @ n , H2 |- y : p2 A @ n3]]}
+        \end{math}
+      \end{center}
+      First, by node substitution for reachability (Lemma~\ref{lemma:node_substitution_for_reachability}) we know
+      $[[ [n4/n2]Gr,[n4/n2]Gr' |- [n4/n2]n <= p * [n4/n2]n3]]$.  Thus, by applying the $\dttdrulename{Ax}$ rule we may derive
+      $[[ [n4/n2]Gr,[n4/n2]Gr' ; [n4/n2]H1 , y : p2 A @ [n4/n2]n , [n4/n2]H2 |- y : p2 A @ [n4/n2]n3]]$.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Unit}] {
+            \ 
+          }{[[Gr, n1 <=p1 n2,Gr' ; H |- triv : p2 < p2 > @ n3]]}
+        \end{math}
+      \end{center}
+      Trivial.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{And}] {
+            [[Gr, n1 <=p1 n2 ; H |- t1 : p2 A1 @ n3 && Gr, n1 <=p1 n2 ; H |- t2 : p2 A2 @ n3]]
+          }{[[Gr, n1 <=p1 n2 ; H |- ( t1 , t2 ) : p2 (A1 /\p2 A2) @ n3]]}
+        \end{math}
+      \end{center}
+      This case holds by applying the induction hypothesis to each
+      premise, and then reapplying the rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{AndBar}] {
+            [[Gr, n1 <=p1 n2 ; H |- t' : p2 A ! d @ n3]]
+          }{[[Gr, n1 <=p1 n2 ; H |- inj d t' : p2 (A1 /\ bar p2 A2) @ n3]]}
+        \end{math}
+      \end{center}
+      This case holds by applying the induction hypothesis to the
+      premise, and then reapplying the rule.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Imp}] {
+            [[n' notin | Gr, n1 <=p1 n2,Gr' | , | G |]]
+            \\\\
+            [[(Gr, n1 <=p1 n2,Gr', n3 <= p n') ; H , x : p2 A1 @ n' |- t' : p2 A2 @ n']]
+          }{[[Gr, n1 <=p1 n2,Gr' ; H |- \ x . t' : p2 (A1 ->p2 A2) @ n3]]}
+        \end{math}
+      \end{center}
+      First, if $[[n' notin | Gr, n1 <=p1 n2,Gr' | , | G |]]$, then $[[n' notin | Gr,Gr' | , | G |]]$.  Furthermore,
+      we know that $[[ [n4/n2]n' notin | [n4/n2]Gr, [n4/n2]Gr' | , | [n4/n2]G |]]$, because we know 
+      $[[n']]$ is distinct from $[[n2]]$ by assumption, and if $[[n']]$ is equal to $[[n4]]$, then 
+      $[[n' notin | Gr, n1 <=p1 n2,Gr' | , | G |]]$ implies that $[[n1]]$ must also be $[[n4]]$, because we know by assumption 
+      that $[[Gr,Gr' |- n1 <=p1 * n4]]$ which could
+      only be derivide by reflexivity since $[[n' notin | Gr,Gr' | , | G |]]$, but we know by assumption that 
+      $[[n' notin | Gr, n1 <=p1 n2,Gr' | , | G |]]$ which implies that $[[n']]$ must be distinct from $[[n1]]$, 
+      and hence a contradiction, thus $[[n']]$ cannot be $[[n4]]$.  Therefore, we know 
+      $[[ n' notin | [n4/n2]Gr, [n4/n2]Gr' | , | [n4/n2]G |]]$.   
+
+      \ \\
+      By the induction hypothesis we know 
+      \[ [[([n4/n2]Gr,[n4/n2]Gr', [n4/n2]n3 <= p [n4/n2]n') ; [n4/n2]H , x : p2 A1 @ [n4/n2]n' |- t' : p2 A2 @ [n4/n2]n']] \] which
+      is equivalent to 
+      \[ [[([n4/n2]Gr,[n4/n2]Gr', [n4/n2]n3 <= p n') ; [n4/n2]H , x : p2 A1 @ n' |- t' : p2 A2 @ n']]. \] 
+      Finally, this case follows by applying the $\dttdrulename{Imp}$ rule using
+      $[[ n' notin | [n4/n2]Gr, [n4/n2]Gr' | , | [n4/n2]G |]]$ and the previous fact.
+      
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{ImpBar}] {
+            [[Gr, n1 <=p1 n2,Gr' |- n3 <= bar p2 * n']]
+            \\\\
+            [[Gr, n1 <=p1 n2,Gr' ; H |- t1 : bar p2 A1 @ n'  &&  Gr, n1 <=p1 n2,Gr' ; H |- t2 : p2 A2 @ n']]
+          }{[[Gr, n1 <=p1 n2,Gr' ; H |- < t1 , t2 > : p2 (A1 ->bar p2 A2) @ n3]]}
+        \end{math}
+      \end{center}
+      We now by assumption that $[[Gr,Gr' |- n1 <=p1 * n4]]$ holds.  So by node substitution for reachability
+      (Lemma~\ref{lemma:node_substitution_for_reachability}) we know $[[ [n4/n2]Gr,[n4/n2]Gr' |- [n4/n2]n3 <= bar p2 * [n4/n2]n']]$.
+      Now by the induction hypothesis we know $[[ [n4/n2]Gr,[n4/n2]Gr' ; [n4/n2]H |- t1 : bar p2 A1 @ [n4/n2]n']]$  and \\
+      $[[ [n4/n2]Gr,[n4/n2]Gr' ; [n4/n2]H |- t2 : p2 A2 @ [n4/n2]n']]$.  This case then follows by applying the rule
+      $\dttdrulename{ImBar}$ to the previous three facts.
+
+    \item[Case.]\ \\ 
+      \begin{center}
+        \begin{math}
+          $$\mprset{flushleft}
+          \inferrule* [right=\ifrName{Cut}] {
+            [[Gr, n1 <=p1 n2,Gr' ; H , y : bar p2 A @ n3 |- t1 : + C @ n]]
+            \\\\
+            [[Gr, n1 <=p1 n2,Gr' ; H , y : bar p2 A @ n3 |- t2 : - C @ n]]
+          }{[[Gr, n1 <=p1 n2,Gr' ; H |- nu x . t1 * t2 : p2 A @ n3]]}
+        \end{math}
+      \end{center}
+      This case follows by applying the induction hypothesis to each premise, and then reapplying
+      the rule.
+    \end{itemize}  
+  \end{proof}
+
 \begin{lemma}[Substitution for Typing]
   \label{lemma:substitution_for_typing}
-  If $[[Gr ; H |- t1 : p1 A @ n1]]$ and $[[Gr ; H, x : p1 B @ n1 |- t2 : p2 B @ n2]]$, then
+  If $[[Gr ; H |- t1 : p1 A @ n1]]$ and $[[Gr ; H, x : p1 A @ n1 |- t2 : p2 B @ n2]]$, then
   $[[Gr ; H |- [t1/x]t2 : p2 B @ n2]]$.
 \end{lemma}
   \begin{proof}
@@ -1338,6 +1732,8 @@ prove it here, because the proof is trivial.
       Similarly to the previous case.
     \end{itemize}  
   \end{proof}
+\noindent
+Finally, we prove type preservation.
 \begin{lemma}[Type Preservation]
   \label{lemma:type_preservation}
   If $[[Gr ; H |- t : p A@n]]$, and $[[t]] \redto [[t']]$, then $[[Gr ; H |- t' : p A@n]]$.
@@ -1365,29 +1761,35 @@ prove it here, because the proof is trivial.
       hypothesis.  Thus, we case split on the form of this redex. 
       \begin{itemize}
       \item[Case.] Suppose $[[nu x . t1 * t2 == nu x . \y.t'1 * <t'2,t''2>]]$, thus, $[[t1 == \y.t'1]]$ and $[[t2 == <t'2, t''2>]]$.  
-        This then implies that $[[B == B1 -> p' B2]]$ for some $[[B1]]$ and $[[B2]]$.  Then 
+        This then implies that $[[B == B1 -> + B2]]$ for some $[[B1]]$ and $[[B2]]$.  Then 
         \[ [[h(t == nu x . t1 * t2) == nu x . \y.t'1 * <t'2,t''2>]] \redto [[nu x.[t'2/y]t'1 * t''2 == t']]. \]
         Now by inversion we know the following:
         \begin{center}
           \begin{math}
             \begin{array}{lll}
-              (1) & [[Gr, (n' <= + n'') ; H, x : bar p A @ n, y : p' B1 @ n'' |- t'1 : p' B2 @ n'']]\\
-              (2) & [[Gr ; H , x : bar p A @ n |- t'2 : p' B1 @ n'']]\\
-              (3) & [[Gr ; H , x : bar p A @ n |- t''2 : bar p' B2 @ n'']]\\
+              (1) & [[Gr, (n' <= + n'') ; H, x : bar p A @ n, y : + B1 @ n'' |- t'1 : + B2 @ n'']] \text{ for some } [[n'' notin |Gr|,|H,x : bar p A @ n|]]\\
+              (2) & [[Gr ; H , x : bar p A @ n |- t'2 : + B1 @ n''']] \\
+              (3) & [[Gr ; H , x : bar p A @ n |- t''2 : - B2 @ n''']]\\
+              (4) & [[Gr |- n' <=+* n''']]\\
             \end{array}
           \end{math}
         \end{center}
       \end{itemize}
-      The remainder of this case follows from applying substitution
-      for typing \\ (Lemma~\ref{lemma:substitution_for_typing}) to $(1)$
-      using $(2)$, and then applying $\dttdrulename{Cut}$ to the
-      result of the former and $(3)$.
+      Using (1) and (4) we may apply node substitution for typing (Lemma~\ref{lemma:node_substitution_for_typing}) to obtain
+      \[ (5)\,[[ [n'''/n'']Gr; [n'''/n'']H, x : bar p A @ n, y : + B1 @ n''' |- t'1 : + B2 @ n''']]. \]
       
-    \item[Case.] Suppose $[[nu x . t1 * t2 == nu x. c * (nu y. t'2 * t''2)]]$ , thus, $[[t1 == c]]$ and $[[t2 == nu y. t'2 * t''2]]$.  
-      Then \[ [[h(t == nu x . t1 * t2) == nu x. c * (nu y. t'2 * t''2)]] \redto [[nu x.[c/y]t'2 * [c/y]t''2]]. \]
-      This case then follows the same pattern as the previous case.  We use inversion to obtain the types of $[[c]]$, $[[t'2]]$, and $[[t''2]]$.
-      Then we use substitution for typing (Lemma~\ref{lemma:substitution_for_typing}) to obtain the fact that $[[ [c/y]t'2]]$ and $[[ [c/y]t''2]]$ have the same type
-      as $[[t'2]]$ and $[[t''2]]$.  Finally, we obtain our result by applying $\dttdrulename{Cut}$ to the results of the former.
+      Finally, by applying substitution for typing using (2) and (5) we obtain
+      \[ (6)\,[[ [n'''/n'']Gr; [n'''/n'']H, x : bar p A @ n |- [t'2/y]t'1 : + B2 @ n''']],  \]  and since
+      $[[n'']]$ is a fresh in $[[Gr]]$ and $[[H]]$ we know (6) is equivalent to
+      \[ (7)\,[[ Gr; H, x : bar p A @ n |- [t'2/y]t'1 : + B2 @ n''']].  \]
+      Finally, by applying the $\dttdrulename{Cut}$ rule using (7) and (3) we obtain 
+      \[ [[ Gr; H |- nu x . [t'2/y]t'1 * t''2 : p A @ n]]. \]
+      
+    % \item[Case.] Suppose $[[nu x . t1 * t2 == nu x. c * (nu y. t'2 * t''2)]]$ , thus, $[[t1 == c]]$ and $[[t2 == nu y. t'2 * t''2]]$.  
+    %   Then \[ [[h(t == nu x . t1 * t2) == nu x. c * (nu y. t'2 * t''2)]] \redto [[nu x.[c/y]t'2 * [c/y]t''2]]. \]
+    %   This case then follows the same pattern as the previous case.  We use inversion to obtain the types of $[[c]]$, $[[t'2]]$, and $[[t''2]]$.
+    %   Then we use substitution for typing (Lemma~\ref{lemma:substitution_for_typing}) to obtain the fact that $[[ [c/y]t'2]]$ and $[[ [c/y]t''2]]$ have the same type
+    %   as $[[t'2]]$ and $[[t''2]]$.  Finally, we obtain our result by applying $\dttdrulename{Cut}$ to the results of the former.
       
       
     \end{itemize}
@@ -1408,10 +1810,10 @@ prove it here, because the proof is trivial.
 A more substantial property is strong normalization of reduction for
 typed terms.  To prove this result, we will prove a stronger property,
 namely strong normalization for reduction of terms which are typable
-using the system of classical typing rules in
-Figure~\ref{fig:classtp}.  This is justified by the following easy
-result (proof omitted), where $[[drop H]]$ just drops the world
-annotations from assumptions in $\Gamma$:
+using the system of classical typing rules in Figure~\ref{fig:classtp}
+\cite{crolard01}.  This is justified by the following easy result
+(proof omitted), where $[[drop H]]$ just drops the world annotations
+from assumptions in $\Gamma$:
 \begin{thm}
 \label{thm:inttoclass}
 If $[[Gr ; H |- t : p A @ n]]$, then $[[ drop H |-c t : p A]]$
@@ -1504,7 +1906,7 @@ The other cases for $A\equiv [[A1 /\p A2]]$ are similar to the previous one.
 \end{tabular}
 \end{lemma}
 \begin{proof}
-  For purposes of this proof and subsequent ones, define $\delta(t)$ to be
+    For purposes of this proof and subsequent ones, define $\delta(t)$ to be
   the length of the longest reduction sequence from $t$ to a normal form, for
   $t\in\SN$.
 
@@ -1512,7 +1914,7 @@ The other cases for $A\equiv [[A1 /\p A2]]$ are similar to the previous one.
   pair $(A,n)$, where $n$ is the number of the proposition in the
   statement of the lemma; the well-founded ordering in question is the
   lexicographic combination of the structural ordering on types (for $A$) 
-  and the ordering $3 < 2 < 1 < 4$ (for $n$).
+  and the ordering $1 > 2 > 4 > 3$ (for $n$).
 
   For proposition (1): assume $t\in\interp{A}^+$, and show $t\in\SN$.
   Let $x$ be a variable.  By IH(2), $x\in\interp{A}^-$, so by the
@@ -1526,7 +1928,7 @@ The other cases for $A\equiv [[A1 /\p A2]]$ are similar to the previous one.
   $x\in\interp{A}^-$.  For the latter, it suffices to assume arbitrary
   $y\in\textit{Vars}$ and $t'\in\interp{A}^{+c}$, and show $[[nu y
   . t' * x]] \in \SN$.  We will prove this by inner induction on
-  $\delta(t')$, which is defined by IH(3).  By the definition of
+  $\delta(t')$, which is defined by IH(4).  By the definition of
   $\interp{A}^{+c}$ for the various cases of $A$, we see that $[[nu y
   . t' * x]]$ cannot be a redex itself, as $t'$ cannot be a cut.  If
   $t'$ is a normal form we are done.  If $t\leadsto t''$, then we have
