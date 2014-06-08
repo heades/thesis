@@ -79,17 +79,17 @@ be used to study constructive coroutines in
 in sequent style with the Dragalin restriction, and then defined the
 corresponding type theory in natural deduction style by imposing a
 restriction on Parigot's $\lambda\mu$-calculus in the form of complex
-dependency tracking.  Just as linear logicians have found -- in
-\cite{Schellinx:1991} -- Pinto and Uustalu were able to show that
-imposing the Dragalin restriction in subtractive logic results in a
-failure of cut elimination \cite{Pinto:2009}.  They recover cut
-elimination by proposing a new BINT logic called L that lifts the
-Dragalin restriction by labeling formulas and sequents with nodes and
-graphs respectively; this labeling corresponds to placing constraints
-on the sequents where the graphs can be seen as abstract Kripke
-models. Gor\'e et. al. also proposed a new BINT logic that enjoys cut
-elimination using nested sequents; however it is currently unclear how
-to define a type theory with nested sequents
+dependency tracking.  Just as linear logicians have found -- for
+example in \cite{Schellinx:1991} -- Pinto and Uustalu were able to
+show that imposing the Dragalin restriction in subtractive logic
+results in a failure of cut elimination \cite{Pinto:2009}.  They
+recover cut elimination by proposing a new BINT logic called L that
+lifts the Dragalin restriction by labeling formulas and sequents with
+nodes and graphs respectively; this labeling corresponds to placing
+constraints on the sequents where the graphs can be seen as abstract
+Kripke models. Gor\'e et. al. also proposed a new BINT logic that
+enjoys cut elimination using nested sequents; however it is currently
+unclear how to define a type theory with nested sequents
 \cite{DBLP:conf/aiml/GorePT08}.  Bilinear logic in its intuitionistic
 form is a linear version of BINT and has been studied by Lambek in
 \cite{Lambek:1993,Lambek:1995}.  Biasi and Aschieri propose a term
@@ -225,7 +225,7 @@ validity. Consistency of L is stated in \cite{Pinto:2009} without a
 detailed proof, but is proven complete with respect to Rauszer's
 Kripke semantics using a counter model construction.  In
 Section~\ref{sec:dualized_intuitionistic_logic_(dil)} we give a
-translation of the formulas of L into the formals of DIL, and in
+translation of the formulas of L into the formulas of DIL, and in
 Section~\ref{sec:completeness} we will give a translation of the rest
 of L into DIL which will be used to conclude completeness of DIL.
 % section L (end)
@@ -272,7 +272,7 @@ We represent graphs as lists of edges denoted $[[n1 <=p n2]]$, where
 we consider the edge $[[n1 <=+ n2]]$ to mean that there is a path from
 $[[n1]]$ to $[[n2]]$, and the edge $[[n1 <=- n2]]$ to mean that there
 is a path from $[[n2]]$ to $[[n1]]$.  Lastly, contexts denoted $[[G]]$
-are represented as multisets of formulas.
+are represented as lists of formulas.
 \begin{figure}[t]
   
   \begin{center}

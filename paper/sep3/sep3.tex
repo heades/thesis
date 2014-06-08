@@ -8,22 +8,22 @@
 
 The previous chapter introduced the freedom of speech
 dependently-typed functional programming language. This language
-contained two fragments, the logical fragment and the programmatic
+contains two fragments, the logical fragment and the programmatic
 fragment.  However, these fragments are judgmentally kept separate.
 That is, the syntax was the same for both fragments, even more so, the
 syntax for programs and types are collapsed into a single syntactic
-category.  Thus, the fragments are not strictly separate, but rather,
-weakly so.  This particular design is very appealing because it has an
+category.  This particular design is very appealing because it has an
 elegant definition, but this elegance comes at a cost.  The type
 system suffers from many value restrictions, and as we have said
 above, this makes programming very hard.
 
-Consider a design where instead of a weak separation of the two
-fragments -- logical and programmatic -- we insist on a strict one.
-This means that the logical and programmatic fragments
-have completely distinct languages for types and programs, and then
-the two fragments are related using freedom of speech by typing rules.
-So we go from a picture that looks like this:
+Consider a design where instead of a judgmental separation of the two
+fragments -- logical and programmatic -- we insist on a syntactic one.
+This means that the logical and programmatic fragments have completely
+distinct languages for types and programs -- but the semantics are not
+, and then the two fragments
+are related using freedom of speech by typing rules.  So we go from a
+picture that looks like this:
 \begin{center}
   \begin{tikzpicture}[scale=2.5,cap=round,>=latex]    
     \draw[thick] (2.8cm,0cm) circle(1cm);

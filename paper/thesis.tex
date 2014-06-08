@@ -83,7 +83,7 @@
 \memberThree{Stephanie Weirich}
 \memberFour{Gregory Landini}
 \memberFive{Kasturi Varadarajan}
-\submitdate{June 30}
+\submitdate{August}
 \copyrightyear{2014}
 
 \Abstract{
@@ -201,10 +201,10 @@ constraints on the system nearly automatically, and in some cases
 fully automatically.  As an example Andr\'{e} Platzer and Edmund
 Clarke in 2009 used automated theorem proving to verify the
 correctness of the in flight collision detection systems used in
-airplanes.  They actually found that there were cases where two plans
+airplanes.  They actually found that there were cases where two planes
 could collide, and gave a way to fix the problem resulting in a fully
 verified algorithm for collision detection.  That is he mathematically
-proved that there is no possible way for two plans to collide if the
+proved that there is no possible way for two planes to collide if the
 systems are operational \cite{DBLP:conf/fm/PlatzerC09}.  Automated
 theorem provers, however, are tools used to verify the correctness of
 software externally to the programming language and compiler one uses
@@ -247,11 +247,15 @@ outlines each contribution:
   Chapter~\ref{chap:freedom_of_speech_anal}.
 
 \item The full design of a core dependently-typed functional
-  programming language called Separation of Proof from Program ($\Sep$) that
-  remedies several short comings of the freedom of speech language.
-  This is a full programming language that has been implemented, but
-  this implementation is not a contribution of this thesis.  See
-  Chapter~\ref{chap:separation_of_proof_from_program}.
+  programming language called Separation of Proof from Program
+  ($\Sep$) that remedies several short comings of the freedom of
+  speech language.  This is a full programming language that has been
+  implemented, but this implementation is not a contribution of this
+  thesis.  See Chapter~\ref{chap:separation_of_proof_from_program}.
+  Part of $\Sep$'s design as well as several real-world examples of
+  verification carried out in $\Sep$ were published in the special
+  issue on advanced programming techniques for construction of robust,
+  general and evolutionary programs \cite{Kimmel:2012}.
 
 \item The design and analysis of a new logic and corresponding type
   theory called Dualized Intuitionistic Logic (DIL) and Dualized Type
@@ -263,12 +267,18 @@ outlines each contribution:
 \item We prove weak normalization of an entire family of predicative
   type theories based on Stratified System F using a proof technique
   called hereditary substitution. See
-  Chapter~\ref{chap:stratified_system_f_and_beyond}.
+  Chapter~\ref{chap:stratified_system_f_and_beyond}.  A slightly
+  different version of the proof of normalization using hereditary
+  substitution of Stratified System F given in this thesis was
+  presented at the workshop on proof-search in type theories
+  \cite{Eades:2010}.
 
 \item Similarly, we show that hereditary substitution can be extended
   to prove normalization of a classical type theory called the
   $\lambda\Delta$-calculus. See
-  Chapter~\ref{chap:the_lambdadelta-calculus}.
+  Chapter~\ref{chap:the_lambdadelta-calculus}.  This work first
+  appeared at the workshop on control operators and their semantics
+  \cite{Eades:2013}.
 
 \item The final contribution is the brief history of type theory given
   in Part~\ref{part:background}.  There we try and highlight the
@@ -292,21 +302,22 @@ of a rigorous definition which makes mathematically precise all of the
 structure of the programming language.  This provides a means for
 researchers and implementors to fully understand the limits of the
 language.  Contrary to what programming language designers have done
-in the past this rigors definition does not only include the syntax,
+in the past this rigorous definition does not only include the syntax,
 but also includes mathematical definitions of the type system as well
 as an interpreter. This is a significant benefit of basing programming
 languages on type theories.  As we have seen a type theory must be
 rigorously defined.  
 
-Considering the motivation we gave in the introduction, a mathematically
-rigorous design provides the necessary structure to allow programs to
-mathematical reason about the programs they write in the programming
-language.  In addition, this makes it possible for designers to reason
-about the correctness of the language itself, and thus allow them to
-make strong guarantees of the correctness of the language to their
-programmers.  To prevent major bugs programming languages must be
-rigorously defined.  If we do not know what the programming language
-allows, then we cannot be sure what is safe.
+Considering the motivation we gave in the introduction, a
+mathematically rigorous design provides the necessary structure to
+allow programmers to mathematically reason about the programs they
+write in the programming language.  In addition, this makes it
+possible for designers to reason about the correctness of the language
+itself, and thus allow them to make strong guarantees of the
+correctness of the language to their programmers.  To prevent major
+bugs programming languages must be rigorously defined.  If we do not
+know what the programming language allows, then we cannot be sure what
+is safe.
 
 Recall from Chapter~\ref{chap:the_three_perspectives} that the
 computational trinity states that type theories are simultaneously a

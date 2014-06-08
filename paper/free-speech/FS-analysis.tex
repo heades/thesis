@@ -34,8 +34,8 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
 \begin{lemma}[Substitution for Typing]
   \label{lemma:substitution}
   If $\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e:e_2$ and 
-  $\Gamma \tvdash{\theta} a:e_1$, 
-  then $\Gamma,[a/x]\Gamma' \tvdash{\theta'} [a/x]e:[a/x]e_2$.
+  $\Gamma \tvdash{\theta} v:e_1$, 
+  then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]e_2$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the form of the assumed typing
@@ -54,12 +54,12 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
       \end{math}
     \end{center}
     By the induction hypothesis, 
-    $\Gamma,[a/x]\Gamma' \tvdash{\theta''} [a/x]e'_1:[[Type]]$ and
-    $\Gamma,[a/x]\Gamma',y:^{\theta''} [a/x]e'_1 \tvdash{\theta'} [a/x]e'_2:[[Type]]$.  Now we can
+    $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and
+    $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e'_2:[[Type]]$.  Now we can
     apply $\FSdrulename{K\_Pi}$ to obtain, 
-    $\Gamma,[a/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[a/x]e'_1}{\epsilon}{[a/x]e'_2}:[[Type]]$,
+    $\Gamma,[v/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[v/x]e'_1}{\epsilon}{[v/x]e'_2}:[[Type]]$,
     which is equivalent to
-    $\Gamma,[a/x]\Gamma' \tvdash{\theta'} [a/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e'_2}):[[Type]]$.
+    $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e'_2}):[[Type]]$.
     
     \item[Case.]\ \\
       \begin{center}
@@ -73,10 +73,10 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
         \end{math}
       \end{center}
       By the induction hypothesis we know 
-      $\Gamma,[a/x]\Gamma' \tvdash{\theta_1} [a/x]e':[a/x]e'_1$ and\\
-      $\Gamma,[a/x]\Gamma' \tvdash{\theta_2} [a/x]e'':[a/x]e'_2$.  We can now apply 
-      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[a/x]\Gamma' \tvdash{L} [a/x]e' = [a/x]e'':[[Type]]$,
-      which is equivalent to $\Gamma,[a/x]\Gamma' \tvdash{L} [a/x](e' = e''):[[Type]]$.
+      $\Gamma,[v/x]\Gamma' \tvdash{\theta_1} [v/x]e':[v/x]e'_1$ and\\
+      $\Gamma,[v/x]\Gamma' \tvdash{\theta_2} [v/x]e'':[v/x]e'_2$.  We can now apply 
+      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e' = [v/x]e'':[[Type]]$,
+      which is equivalent to $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x](e' = e''):[[Type]]$.
 
   \item[Case.]\ \\
      \begin{center}
@@ -103,10 +103,10 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
          }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta} x:^{\theta} e_1}
        \end{math}
      \end{center}
-     It suffices to show that $[[G, [a/x]G' |- a : e1 th]]$ is
-     derivable.  We know by assumption that $[[G |- a : e1 th]]$ is
+     It suffices to show that $[[G, [v/x]G' |- v : e1 th]]$ is
+     derivable.  We know by assumption that $[[G |- v : e1 th]]$ is
      derivable, but by weakening (Lemma~\ref{lemma:FS-weakening}) we
-     know $[[G, [a/x]G' |- a : e1 th]]$.
+     know $[[G, [v/x]G' |- v : e1 th]]$.
 
      The remainder of the cases follow similarly to the cases
      presented above.
@@ -447,12 +447,16 @@ preservation.
     \noindent
     Now suppose the second case, by assumption we know $\Gamma \tvdash{\theta} v:e_1$ and
     $\Gamma \tvdash{L} \lambda x.e':\arrowT{x}{\theta}{e_1}{+}{e_2}$. By the Inversion Lemma (Lemma~\ref{lemma:inversion}), 
-    $\Gamma,x:^\theta e_1 \tvdash{L} e':e_2$.  Thus, by substitution for typing (Lemma~\ref{lemma:substitution}),
-    $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
+    $\Gamma,x:^\theta e'_1 \tvdash{L} e':e'_2$, and $[[G |- p : ( x : th e1) ep -> e2 = ( x : th e'1) ep -> e'2 L]]$.  
+    Now we may conclude $\Gamma,x:^\theta a \tvdash{L} e':e_2$ and $\Gamma \tvdash{\theta} v:a$
+    using the assumption $\Gamma \tvdash{\theta} v:e_1$, the injection rules $\FSdrulename{InjDom}$ and $\FSdrulename{InjRan}$, 
+    and $\FSdrulename{Conv}$. Thus, by substitution for typing (Lemma~\ref{lemma:substitution}), $\Gamma \tvdash{L}[v/x]e':[v/x]e_2$.
 
     The third case follows similarly to the previous case.  First,
     apply inversion (Lemma~\ref{lemma:inversion}) to the typing
-    assumption for $[[e]]$ followed by substitution for typing (Lemma~\ref{lemma:substitution}).
+    assumption for $[[e]]$ followed by conversion using the injection
+    rules and the conversion rules, and then finally apply
+    substitution for typing (Lemma~\ref{lemma:substitution}).
 
   \item[Case.]\ \\
     \begin{center}
@@ -617,6 +621,123 @@ substitutions which are defined in Figure~\ref{fig:fs-wf-subs}.
   \caption{Well-formed substitutions}
   \label{fig:fs-wf-subs}
 \end{figure}
+
+Before we can move on we must justify why the interpretation of types
+covers all cases, especially, for the logical fragment.  We must show
+that there is no type-level computation, and that the
+$[[Type]]:[[Type]]$ axiom is purely programmatic.  The following two
+lemmata establish this fact:
+
+\begin{lemma}[$[[Type]]:[[Type]]$ is not Logical]
+  \label{lemma:type:type_is_not_logical}
+  It is not the case that $[[. |- Type : Type L]]$.
+\end{lemma}
+\begin{proof}
+  Suppose it is the case that $[[. |- Type : Type L]]$ is derivable.
+  Then it must be the case that its derivation ends with the one of
+  $\FSdrulename{AppAllTerm}$ or $\FSdrulename{Conv}$, but both of
+  which would have $[[. |- Type : Type L]]$ as a premise.  No other
+  rules are applicabile.  Thus, $[[. |- Type : Type L]]$ is a
+  non-terminating derivation, a contradiction.
+\end{proof}
+
+\begin{lemma}[Characterization of Logical Types]
+  \label{lemma:characterization}
+  If $[[. |- e : Type L]]$, then $[[e]] \equiv [[Nat]]$, $[[e]] \equiv
+  [[e1 = e2]]$, or $[[e]] \equiv [[(x : th e1) ep -> e2]]$ for some
+  expressions $[[e1]]$, $[[e2]]$, staging classifier $[[th]]$ and
+  consistency classifier $[[ep]]$.
+\end{lemma}
+\begin{proof}
+  This is a proof by induction on the assumed typing derivation.
+  The previous lemma imples that $[[e]]$ cannot be $[[Type]]$.  Thus,
+  we only have the following non-trivial cases:
+  \begin{itemize}
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{K\_Nat}] {
+          \,
+        }{[[. |- Nat : Type L]]}
+      \end{math}
+    \end{center}
+    In this case $[[e]] \equiv [[Nat]]$, thus we obtain our result.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{K\_Pi}] {
+          [[. |- e1 : Type th']]
+          \\\\
+          [[. , x : th' e1 |- e2 : Type L]]
+        }{[[. |- ( x : th' e1 ) ep -> e2 : Type L]]}
+      \end{math}
+    \end{center}        
+    Similar to the previous case.
+
+    \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{K\_Eq}] {
+          [[. |- e : e1    th1]]
+          \\\\
+          [[. |- e' : e2   th2]]
+        }{[[. |- e = e' : Type  L]]}
+      \end{math}
+    \end{center}
+    Similar to the previous case.
+    
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{AppPiTerm}] {
+          [[. |- [v/x] Type : Type L]]
+          \\\\
+          [[. |- e : (x : th e1)+ -> Type   L]]
+          \\\\
+          [[. |- v : e1 th]]
+        }{[[. |- e v : [v/x] Type  L]]}
+      \end{math}
+    \end{center}
+    This case is impossible, because it requires $[[. |- [v/x] Type :
+    Type L]]$ which is equivalent to $[[. |- Type : Type L]]$ to be
+    derivable, but by the previous lemma this is impossible.
+
+  \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{AppAllTerm}] {
+          [[. |- [v/x] Type : Type L]]
+          \\\\
+          [[. |- e : (x : th e1)- -> e2   L]]
+          \\\\
+          [[. |- v : e1   th]]
+        }{[[. |- e : [v/x] Type   L]]}
+      \end{math}
+    \end{center}
+    Similar to the previous case.
+
+    \item[Case.]\ \\ 
+    \begin{center}
+      \begin{math}
+        $$\mprset{flushleft}
+        \inferrule* [right=\ifrName{Conv}] {
+          [[. |- [e'1/x] Type : Type L]]
+          \\\\
+          [[. |- e : [e1/x] Type  L]]
+          \\\\
+          [[. |- e' : e1 = e1'   L]]
+        }{[[. |- e : [e1'/x] Type  L]]}
+      \end{math}
+    \end{center}
+    Similar to the previous case.  
+  \end{itemize}
+\end{proof}
 
 We now state and prove the critical properties of the interptretation
 of types.  These are standard, and so we simply list them with their

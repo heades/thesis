@@ -22,14 +22,18 @@ The sets defined in the previous definition are called parameterized
 reducibility sets.  Recall that system F has type variables so when we
 interpret types we must interpret type variables.  The naive extension
 would just replace type variables with types, but Girard quickly
-realized this would not work.  So instead we replace type variables
-with reducibility candidates.  A reducibility candidate is just a
-reducibility set which satisfies the four \textbf{CR} properties
-above.  We denote the set of all reducibility candidates as
-$\mathsf{Red}$.  Then in the definition of $\interp{[[Forall
-      X.T]]}_\rho$ we quantify over all reducibility sets.  This is
-where set comprehension is coming in; also note that this is a second
-order quantification.  We need two forms of substitutions:
+realized this would not work, because the final case of the above
+definition of the interpretation of types would then be
+$\interp{[[Forall X.T]]} = \{ t\,|\,\forall T'.  t[T'] \in \interp{[[
+  [T'/X]T]]} \} $ and we can no longer consider this a well-defined
+definition, because it is not structurally recursive over the type.
+So instead we replace type variables with reducibility candidates.  A
+reducibility candidate is just a reducibility set which satisfies the
+four \textbf{CR} properties above.  We denote the set of all
+reducibility candidates as $\mathsf{Red}$.  Then in the definition of
+$\interp{[[Forall X.T]]}_\rho$ we quantify over all reducibility sets.
+This is where set comprehension is coming in; also note that this is a
+second order quantification.  We need two forms of substitutions:
 substitutions mapping term variables to terms and type variables to
 types, but also substitutions mapping type variables to reducibility
 candidates called reducibility candidate substitutions.  We denote the

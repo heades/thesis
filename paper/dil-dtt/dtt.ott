@@ -16,7 +16,7 @@ pol, p :: 'polarity_' ::=
 
 rel :: 'rel_' ::=
   | <= p :: :: RelTR
-  {{ tex \preccurlyeq^{[[p]]} }}
+  {{ tex \preccurlyeq_{[[p]]} }}
 
 prel :: 'prel_' ::=
   | rel :: :: Rel
@@ -24,12 +24,14 @@ prel :: 'prel_' ::=
   {{ tex \preccurlyeq^*_{[[p]]} }}
 
 node, n , m :: 'node_' ::=
-  | n i + 1  :: :: indexSuc
+  | n i + 1       ::   :: indexSuc
   {{tex [[n]]_{[[i]]+1} }}
-  | h( n ) :: :: HParen
+  | h( n )        ::   :: HParen
   {{tex [[n]] }}
-  | | Gr | :: M :: Nodes
-  | | G |  :: M :: Nodes2
+  | | Gr |        :: M :: Nodes
+  | | G |         :: M :: Nodes2
+  | | H |         :: M :: Nodes3
+  | [ n1 / n2 ] n :: M :: NSub
 
 % Types.
 form, type, A, B, C, E, T :: 'type_' ::=
@@ -103,14 +105,15 @@ value, u :: 'val_' ::=
   | triv          :: :: Triv
 
 Gr {{tex G }} :: 'E_' ::= {{com abstract Kripke models}}   
-  | .          ::   :: Empty
+  | .              ::   :: Empty
   {{tex \cdot }}
-  | n rel n'   ::   :: El
-  | Gr , Gr'   ::   :: Ex
-  | ( Gr )     ::   :: Paren
-  | ( n , n' ) :: M :: El2
-  | - Gr -     :: M :: Trans
+  | n rel n'       ::   :: El
+  | Gr , Gr'       ::   :: Ex
+  | ( Gr )         ::   :: Paren
+  | ( n , n' )     :: M :: El2
+  | - Gr -         :: M :: Trans
   {{tex \ulcorner [[Gr]] \urcorner }}
+  | [ n1 / n2 ] Gr :: M :: NSub
 
 G {{tex \Gamma}}, D {{tex \Delta}} :: 'G_' ::= {{com logical contexts}}
   | .             ::   :: Empty
@@ -130,14 +133,16 @@ G {{tex \Gamma}}, D {{tex \Delta}} :: 'G_' ::= {{com logical contexts}}
   | p1 A1 @ n1 dots p2 A2 @ n2 :: :: HypDots
   {{tex [[p1]] [[A1]] @ [[n1]] , \ldots , [[p2]] [[A2]] @ [[n2]] }}
   | p T           :: M :: SL
+  | [ n1 / n2 ] G :: M :: NSub
 
 H {{ tex \Gamma }} :: 'H_' ::= {{com typing contexts}}
   | .           ::   :: Empty
   {{tex \cdot }}
-  | x : p T @ n ::   :: El 
-  | H , H'      ::   :: Ext
-  | ( H )       :: S :: Paren
-  | h( H )      :: M :: HiddenParens {{ tex [[H]] }} 
+  | x : p T @ n   ::   :: El 
+  | H , H'        ::   :: Ext
+  | ( H )         :: S :: Paren
+  | h( H )        :: M :: HiddenParens {{ tex [[H]] }} 
+  | [ n1 / n2 ] H :: M :: NSub
 
 J {{ tex \Gamma }} :: 'J_' ::= {{com classical typing contexts}}
   | .           ::   :: Empty
@@ -192,6 +197,7 @@ terminals :: '' ::=
   | n notin | Gr |    ::  :: FreshName
   | n in | Gr |       ::  :: In
   | n notin | Gr | , | G |  ::  :: FreshName2
+  | n notin | Gr | , | H |  ::  :: FreshName3
   | x notin FV ( t )  ::  :: FreeVars
   | p X >> T @ n in G :: :: AssumpRec
   | x : p X >> T @ n in H :: :: AssumpTpRec
@@ -298,7 +304,7 @@ by
  G |- p (T1 /\p T2)
 
  G |- p T ! d
- ------------------------------ :: andBar
+ ----------------------- :: andBar
  G |- p (T1 /\ bar p T2)
 
  G p, p T1 |- p T2
@@ -325,7 +331,7 @@ by
  Gr ; G |- p (A /\p B) @ n
 
  Gr ; G |- p A ! d @ n
- ------------------------------------------- :: andBar
+ -------------------------------- :: andBar
  Gr ; G |- p (A1 /\ bar p A2) @ n
 
  n' notin | Gr | , | G | 
@@ -366,7 +372,7 @@ by
  Gr ; H |- ( t1 , t2 ) : p (A /\p B) @ n
 
  Gr ; H |- t : p A ! d @ n
- ------------------------------------------ :: AndBar
+ -------------------------------------------------- :: AndBar
  Gr ; H |- inj d t : p (A1 /\ bar p A2) @ n
 
  n' notin | Gr | , | G | 
