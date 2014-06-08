@@ -34,8 +34,8 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
 \begin{lemma}[Substitution for Typing]
   \label{lemma:substitution}
   If $\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta'} e:e_2$ and 
-  $\Gamma \tvdash{\theta} a:e_1$, 
-  then $\Gamma,[a/x]\Gamma' \tvdash{\theta'} [a/x]e:[a/x]e_2$.
+  $\Gamma \tvdash{\theta} v:e_1$, 
+  then $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x]e:[v/x]e_2$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the form of the assumed typing
@@ -54,12 +54,12 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
       \end{math}
     \end{center}
     By the induction hypothesis, 
-    $\Gamma,[a/x]\Gamma' \tvdash{\theta''} [a/x]e'_1:[[Type]]$ and
-    $\Gamma,[a/x]\Gamma',y:^{\theta''} [a/x]e'_1 \tvdash{\theta'} [a/x]e'_2:[[Type]]$.  Now we can
+    $\Gamma,[v/x]\Gamma' \tvdash{\theta''} [v/x]e'_1:[[Type]]$ and
+    $\Gamma,[v/x]\Gamma',y:^{\theta''} [v/x]e'_1 \tvdash{\theta'} [v/x]e'_2:[[Type]]$.  Now we can
     apply $\FSdrulename{K\_Pi}$ to obtain, 
-    $\Gamma,[a/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[a/x]e'_1}{\epsilon}{[a/x]e'_2}:[[Type]]$,
+    $\Gamma,[v/x]\Gamma' \tvdash{\theta'} \arrowT{y}{\theta''}{[v/x]e'_1}{\epsilon}{[v/x]e'_2}:[[Type]]$,
     which is equivalent to
-    $\Gamma,[a/x]\Gamma' \tvdash{\theta'} [a/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e'_2}):[[Type]]$.
+    $\Gamma,[v/x]\Gamma' \tvdash{\theta'} [v/x](\arrowT{y}{\theta''}{e'_1}{\epsilon}{e'_2}):[[Type]]$.
     
     \item[Case.]\ \\
       \begin{center}
@@ -73,10 +73,10 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
         \end{math}
       \end{center}
       By the induction hypothesis we know 
-      $\Gamma,[a/x]\Gamma' \tvdash{\theta_1} [a/x]e':[a/x]e'_1$ and\\
-      $\Gamma,[a/x]\Gamma' \tvdash{\theta_2} [a/x]e'':[a/x]e'_2$.  We can now apply 
-      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[a/x]\Gamma' \tvdash{L} [a/x]e' = [a/x]e'':[[Type]]$,
-      which is equivalent to $\Gamma,[a/x]\Gamma' \tvdash{L} [a/x](e' = e''):[[Type]]$.
+      $\Gamma,[v/x]\Gamma' \tvdash{\theta_1} [v/x]e':[v/x]e'_1$ and\\
+      $\Gamma,[v/x]\Gamma' \tvdash{\theta_2} [v/x]e'':[v/x]e'_2$.  We can now apply 
+      $\FSdrulename{K\_Eq}$ to obtain $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x]e' = [v/x]e'':[[Type]]$,
+      which is equivalent to $\Gamma,[v/x]\Gamma' \tvdash{L} [v/x](e' = e''):[[Type]]$.
 
   \item[Case.]\ \\
      \begin{center}
@@ -103,10 +103,10 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
          }{\Gamma,x:^\theta e_1,\Gamma' \tvdash{\theta} x:^{\theta} e_1}
        \end{math}
      \end{center}
-     It suffices to show that $[[G, [a/x]G' |- a : e1 th]]$ is
-     derivable.  We know by assumption that $[[G |- a : e1 th]]$ is
+     It suffices to show that $[[G, [v/x]G' |- v : e1 th]]$ is
+     derivable.  We know by assumption that $[[G |- v : e1 th]]$ is
      derivable, but by weakening (Lemma~\ref{lemma:FS-weakening}) we
-     know $[[G, [a/x]G' |- a : e1 th]]$.
+     know $[[G, [v/x]G' |- v : e1 th]]$.
 
      The remainder of the cases follow similarly to the cases
      presented above.
