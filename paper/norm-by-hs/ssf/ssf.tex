@@ -622,9 +622,10 @@ of SSF.  It consists of essentially the strict-subexpression ordering
 with an additional case for universal types.  For the case of
 universal types the ordering states that a they are always larger than
 their instantiation.  Now this seems odd, because syntactically the
-instantiation could have increased, but it turns out that the level of
-the type actually decreases.  That is, we know the level of the
-universal type is larger than the level of the instantiation.
+level of the instantiation could have increased, but it turns out that
+the level of the type actually decreases.  That is, we know the level
+of the universal type is larger than the level of the instantiation.
+This is exactly the point of stratification!
 \begin{definition}
   The ordering $>_\Gamma$ is defined as the least relation satisfying the universal closures of 
   the following formulas:
