@@ -407,12 +407,11 @@ running it, the result has the same type.  Lastly, consistency -- as
 we have mentioned before -- ensures that the objects of the language
 we call proofs really are proof.  These sound like commonsense
 properties, and they are, but many programming language implementors
-fail to establish them.  A programming language without such
-guarantees would amount to a large number of significant bugs;
-e.g. the ones we mentioned in the introduction.  Therefore, a basic
-meta-theoretic analysis is necessary to be able to trust the programs
-we write, and the verification of programs carried out within the
-languages themselves.
+fail to establish them.  A programming language with such guarantees
+higers one confidence in the correctness and consistency of the
+language.  Therefore, a basic meta-theoretic analysis is necessary to
+be able to trust the programs we write, and the verification of
+programs carried out within the languages themselves.
 
 \chapter{Freedom of Speech}
 \label{chap:freedom_of_speech_anal}
@@ -449,27 +448,15 @@ would have to contain some notion of a logic, and this logic must be
 trusted.  That is, the proofs written in this logic must be true; this
 corresponds to logical consistency.
 
-We have seen several ways of proving consistency both in the
-background section of this thesis and in the previous part on the
-basic syntactic analysis of the freedom of speech language, as well as
-DTT.  The usual method of proving consistency is through proving weak
-normalization (or simply normalization) of the programming language or
-type theory.  Often Tait's reducibility or Girard's reducibility
-candidates are the proof techniques used for showing both weak and
-strong normalization, but these techniques are very complex, and
-require advanced logical features to be able to formalize arguments
-using such techniques in a proof assistant like Coq or Agda.  Thus, it
-is worthwhile to investigate other proof techniques for proving
-normalization that show promise of being less complex.  The hereditary
-substitution proof technique fits this goal perfectly.  For example,
-in general, large eliminations are not needed when formalizing a
-hereditary substitution based proof of normalization, but this is not
-the case for a proof using reducibility.
-
-There is one caveat when it comes to the hereditary substitution proof
-technique, it is not known which type theories it can be applied to.
-This is the contribution of each of the following chapters.  We first
-give several proofs of normalization using hereditary substitution for
+In Section~\ref{sec:hereditary_substitution} we introduce the
+hereditay substitution proof technique for showing normalization and
+metioned that has one caveat, it is not known which type theories it
+can be applied to -- see Section~\ref{sec:hereditary_substitution} for
+a list of type theories that are known to be proven normalizing using
+hereditary substitution, and a list of some that are not.  The
+contribution of each of the following chapters is to widen the set of
+type theories hereditay substitution can be applied to.  We first give
+several proofs of normalization using hereditary substitution for
 several extensions of stratified system F (SSF), and then give the
 first proof of normalization by hereditary substitution for a
 classical type theory called the $\lambda\Delta$-calculus.  Throughout
@@ -495,7 +482,7 @@ read Section~\ref{sec:hereditary_substitution}.
 \chapter{Conclusion}
 \label{chap:conclusion}
 
-Bugs are the bain of software development, and in order to rid the
+Bugs are the bane of software development, and in order to rid the
 world of such problems we must revisit the very foundations of
 programming languages.  We have argued that a programming language
 must be mathematically defined.  This allows programmers and language
@@ -551,9 +538,9 @@ The following list addresses future work related to each theory:
   extended with such features and maintain type safety and
   consistency.  An exploration of these features is an important
   future goal.  Furthermore, the language design containing
-  abstrctions from the semantics (abstract Kripke graphs, and worlds
+  abstractions from the semantics (abstract Kripke graphs, and worlds
   on types) is an unfortunate consequence of the failure of
-  cut-elimination due to subtraction, are their alternate designs that
+  cut-elimination due to subtraction, are there alternate designs that
   could be used which prevent the need for these abstractions?
 
 \item[-] Hereditary substitution still needs to be explored with
@@ -680,178 +667,7 @@ The following list addresses future work related to each theory:
 \label{sec:unannotated_separation_of_proof_from_program}
 \SepUall{}
 
-\noindent
-The following defines the eraser functions.
-\begin{definition}
-  \label{def:eraser_function}
-  The erasers are defined as follows:
-  \begin{itemize}
-  \item Super Kinds:\\
-    \begin{math}
-      \begin{array}{lll}
-        |\mathsf{LogicalKind}_{[[i]]}| & = & \mathsf{LogicalKind}_{[[i]]}
-      \end{array}
-    \end{math}
-  \item Logical Kinds:\\
-    \begin{math}
-      \begin{array}{lll}
-        |[[x]]|                   & = & x\\
-        |\mathsf{Formula}_{[[i]]}| & = & \mathsf{Formula}_{{[[i]]}}\\
-        |[[Forall x : A . LK]]|   & = & \forall [[x]] : |[[A]]|.|[[LK]]|
-      \end{array}
-    \end{math}
-    
-  \item Predicates:\\
-    \begin{math}
-      \begin{array}{lll}
-        |[[\ L x : A . P]]|       & = & \Lambda [[x]] . |[[P]]|\\
-        |[[P a]]|                 & = & |P|\ |a|\\
-        |[[Forall x : A . P]]|    & = & \forall [[x]]:|[[A]]|.|[[P]]|\\
-        |[[t1 = t2]]|             & = & |[[t1]]| = |[[t2]]|\\
-        |[[t !]]|                 & = & |[[t]]|!\\
-        |[[let x = p in P]]|      & = & \mathsf{let}\,[[x]] = |[[p]]|\,in\,|[[P]]|\\
-        |[[let x = P in P']]|     & = & \mathsf{let}\,[[x]] = |[[P]]|\,in\,|[[P']]|\\
-        |[[let x = t [x'] in P]]| & = & \mathsf{let}\,[[x]] = |[[t]]|\,in\,|[[P]]|\\
-        |[[P1 + P2]]|             & = & |[[P1]]| + |[[P2]]|\\
-        |[[Exists x : A . P]]|    & = & \exists [[x]]:|[[A]]|.|[[P]]|\\
-        |[[bot i]]|               & = & [[bot i]]\\
-        |[[t < t']]|              & = & |[[t]]| < |[[t']]|
-      \end{array}
-    \end{math}
-    
-  \item Proofs:\\
-    \begin{math}
-      \begin{array}{lll}
-        |[[x]]| & = & x\\
-        |[[\ L x : A . p]]| & = & \Lambda [[x]].|[[p]]|\\
-        |[[p p']]| & = & |[[p]]|\,|[[p']]|\\
-        |[[p t]]| & = & |[[p]]|\,|[[t]]|\\
-        |[[injl p with P]]| & = & \mathsf{injl}\,|[[p]]|\\
-        |[[injr p with P]]| & = & \mathsf{injr}\,|[[p]]|\\
-        |[[case p of x . p' , y . p'']]| & = & \mathsf{case}\,|[[p]]|\,\mathsf{of}\,[[x]] . |[[p']]| , [[y]] . |[[p'']]|\\
-        |[[(a , p ) as P]]| & = & (|[[a]]|,|[[p]]|)\\
-        |[[case p1 of ( x , y ) . p2]]| & = & \mathsf{case}\,|[[p1]]|\,\mathsf{of}\,( [[x]] , [[y]] ) . |[[p2]]|\\
-        |[[let x = p' in p]]| & = & \mathsf{let}\,[[x]] = |[[p']]|\,in\,|[[p]]|\\
-        |[[let x = P in p]]| & = & \mathsf{let}\,[[x]] = |[[P]]|\,in\,|[[p]]|\\
-        |[[let x = t [x'] in p]]| & = & \mathsf{let}\,[[x]] = |[[t]]|\,in\,|[[p]]|\\
-        |[[join t1 t2]]| & = & \mathsf{join}\\
-        |[[conv p by q1 ... qn at x1 ... xn . P]]| & = & (\lambda x_1.\cdots.\lambda x_m.|[[p]]|)\,|q_1|\,\cdots\,|q_m|\\
-        |[[predconv p P]]| & = & |[[p]]|\\
-        |[[valax t]]| & = & \mathsf{valax}\\
-        |[[case t [ x ] p of R]]| & = & \mathsf{case}\,|[[t]]|\,\mathsf{of}\,|[[R]]|\\
-        |[[tcase t [ x ] of abort -> p1 | ! -> p2]]| & = & 
-        \mathsf{tcase}\,|[[t]]|\,\mathsf{of}\,[[abort]] \to |[[p1]]|\,|\,! \to |[[p2]]|\\
-        |[[ind f x : t , p1 . p2]]| & = & \mathsf{ind}\,f\,[[x]].|[[p2]]|\\
-        |[[contra p1]]| & = & \mathsf{contra}\,|[[p1]]|\\
-        |[[contraval p1 p2]]| & = & \mathsf{contraval}\,|[[p1]]|\,|[[p2]]|\\
-      \end{array}
-    \end{math}
-    
-  \item Proof branches ($[[R]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |[[Ctor C x1 ep1 dots xn epn => p | R]]| & = & |[[Ctor C x1 ep1 dots xn epn]]| \Rightarrow |[[p]]|\,|\,|[[R]]|\\
-        |[[done]]| & = & done 
-      \end{array}
-    \end{math}
-
-  \item Terms: \\
-    \begin{math}
-      \begin{array}{lll}
-        |[[x]]| & = & x\\
-        |\mathsf{Type}_{[[i]]}| & = & \mathsf{Type}_{[[i]]}\\
-        |[[Pi + x : A . t]]| & = & \Pi [[x]]_{+} : |[[A]]|.|[[t]]|\\
-        |[[Pi - x : A . t]]| & = & \Pi [[x]]_{-} : |[[A]]|.|[[t]]|\\
-        |[[\ P + x : LK . t]]| & = & |[[t]]|\\
-        |[[\ P - x : LK . t]]| & = & |[[t]]|\\
-        |[[\ P + x : P . t]]| & = & |[[t]]|\\
-        |[[\ P - x : P . t]]| & = & |[[t]]|\\
-        |[[\ P + x : t' . t]]| & = & \lambda [[x]].|[[t]]|\\
-        |[[\ P - x : t' . t]]| & = & |[[t]]|\\
-        |[[conv t by q1 ... qn at x1 ... xm . t']]| & = & |[[t']]|\\
-        |[[case t [ x ] of H]]| & = & \mathsf{case}\,|[[t]]|\,\mathsf{of}\,|[[H]]|\\
-        |[[t t' +]]| & = & |[[t]]|\,|[[t']]|\\
-        |[[t t' -]]| & = & |[[t]]|\\
-        |[[t p +]]| & = & |[[t]]|\\
-        |[[t p -]]| & = & |[[t]]|\\
-        |[[t P +]]| & = & |[[t]]|\\
-        |[[t P -]]| & = & |[[t]]|\\
-        |[[let x = p in t]]|      & = & |[[ [p/x]t]]|\\
-        |[[let x = P in t']]|     & = & |[[ [P/x]t']]|\\
-        |[[let x = t [y] in t']]| & = & \mathsf{let}\,[[x]] = |[[t]]|\,in\,|[[t']]|\\
-        |[[tcast t by p]]| & = & \mathsf{tcast}\,|[[t]]|\\
-        |[[abort t]]| & = & \mathsf{abort}\\
-        |[[rec f x : t1 . t2]]| & = & \mathsf{rec}\,[[f]]\,[[x]].|[[t2]]|\\
-        |[[Ctor C ]]| & = & \Sepkw{C}\\
-      \end{array}
-    \end{math}
-    
-  \item Term branches ($[[H]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |[[Ctor C x1 ep1 dots xn epn => t | H]]| & = & |[[Ctor C x1 ep1 dots xn epn]]| \Rightarrow |[[t]]|\,|\,|[[H]]|\\
-        |[[done]]| & = & done 
-      \end{array}
-    \end{math}
-
-  \item Logical Contexts ($[[G]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |\cdot| = \cdot\\
-        |[[G,x : g A]]| = |[[G]]|,[[x]]:^[[g]] |[[A]]|
-      \end{array}
-    \end{math}
-
-  \item Programmatic Contexts ($[[G]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |\cdot| = \cdot\\
-        |[[G, x : g t]]| = |[[G]]|,[[x]]:^[[g]] |[[t]]|\\
-        |[[G, x : g P]]| = |[[G]]|\\
-        |[[G, x : g LK]]| = |[[G]]|\\
-      \end{array}
-    \end{math}
-    
-  \item Constructor Sets ($[[l]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |[[empty]]|                 = \emptyset\\
-        |\{ [[Ctor C]] : [[t']]\}|  = \{ [[Ctor C]]:|[[t]]| \}\\
-        |[[l1]] \cap |[[l2]]|       = |[[l1]]| \cap |[[l2]]|\\
-        |[[l1]] - [[l2]]|           = |[[l1]]| - |[[l2]]|\\
-        |[[l1]] = [[l2]]|           = |[[l1]]| = |[[l2]]|\\\\
-      \end{array}
-    \end{math}
-
-  \item Sets of Datatype Constructors ($[[M]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |\mathsf{nil}| = \mathsf{nil}\\
-        |[[(Ctor C : t') :: M]]| = ([[Ctor C]] : |[[t']]|)::|[[M]]| \\
-      \end{array}
-    \end{math}
-    
-  \item Logical Signatures ($[[D]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |\cdot| = \cdot\\
-        |[[D , ( C , t , M )]]| = |[[D]]|, ([[C]], |[[t]]|, |[[M]]|)\\
-        |[[D , x = ( a , A )]]| = |[[D]]| , [[x]] = ( |[[a]]| , |[[A]]| )
-      \end{array}
-    \end{math}
-
-  \item Programmatic Signatures ($[[D]]$):\\
-    \begin{math}
-      \begin{array}{lll}
-        |\cdot| = \cdot\\
-        |[[D , ( C , t , M )]]| = |[[D]]|, ([[C]], |[[t]]|, |[[M]]|)\\
-        |[[D , x = ( P , LK )]]| = |[[D]]|\\
-        |[[D , x = ( p , P )]]| = |[[D]]|\\
-        |[[D , x = ( t , t' )]]| = |[[D]]| , [[x]] = ( |[[t]]| , |[[t']]| )
-      \end{array}
-    \end{math}
-  \end{itemize}
-\end{definition}
+\import*{sep3/}{sep3-app-inc}
 % section annotated_separation_of_proof_from_program (end)
 
 \newpage

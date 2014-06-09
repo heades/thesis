@@ -13,12 +13,18 @@ ifdef SEPREF
 	 $(OTT) $(OTT_FLAGS) -i sep3-annotated-norules.ott -tex_name_prefix Sep \
 	 	-tex_filter sep3.tex sep3-inc1.tex
 
+	 $(OTT) $(OTT_FLAGS) -i sep3-annotated-norules.ott -tex_name_prefix Sep \
+	 	-tex_filter sep3-app.tex sep3-app-inc.tex
+
 	$(OTTEX_HELPER) -remove_rules sep3-unannotated.ott > sep3-unannotated-norules.ott
 	 $(OTT) $(OTT_FLAGS) -i sep3-unannotated-norules.ott -tex_name_prefix SepU \
 	 	-tex_filter sep3-inc1.tex sep3-inc.tex
 else
 	$(OTT) $(OTT_FLAGS) -i sep3-annotated.ott -o sep3-annotated-ott.tex -tex_name_prefix Sep \
 	-tex_filter sep3.tex sep3-inc1.tex
+
+	$(OTT) $(OTT_FLAGS) -i sep3-annotated.ott -tex_name_prefix Sep \
+	 	-tex_filter sep3-app.tex sep3-app-inc.tex
 
 	$(OTT) $(OTT_FLAGS) -i sep3-unannotated.ott -o sep3-unannotated-ott.tex \
 	-tex_name_prefix SepU \

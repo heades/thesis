@@ -46,9 +46,9 @@ We have seen this diagram before in the previous chapter, but there it
 was used to give an intuitive understanding of the free speech
 property, but the two fragments are not strictly separate.  Now we
 insist that they are in fact strictly separate, and the first diagram
-above is no longer applicable; unlike the freedom of speech language.  We
-will see that this separation allows for the lifting of all value
-restrictions from the typing rules.  
+above is no longer applicable; unlike the freedom of speech language.
+We will see that this separation allows for the lifting of most of the
+value restrictions from the typing rules.
 
 The freedom of speech language is not a very expressive programming
 language.  For example, we did not show how to construct full
@@ -400,7 +400,7 @@ judgment.
 One may feel that the rule $\Sepdrulename{PRF\_Val}$ is a bit
 restrictive.  This rule is supposed to allow the proof that a
 terminating program is indeed terminating, but on the nose it seems
-that the only things we can prove are terminating are semantics
+that the only things we can prove are terminating are semantic
 values, which are trivially terminating.  However, this is not the
 case.  If one can prove that $[[t]]$ is terminating for some non-value
 $[[t]]$, then one must have constructed the value of $[[t]]$, say
