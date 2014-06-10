@@ -70,14 +70,16 @@ LDT : $(LD_FILES)
 DTT : $(DTT_FILES)
 	cd dil-dtt; $(MAKE)
 
-thesis.pdf : background.tex FS SEP LDT DTT thesis.tex thesis.bib $(SSF_FILES)
+thesis.pdf : background.tex FS SEP LDT DTT thesis.tex thesis.bib $(SSF_FILES)	
 ifndef QUICKPROC
 	$(PDFLATEX) thesis.tex
+	makeindex thesis
 	$(PDFLATEX) thesis.tex
 	$(BIBTEX) thesis
 	$(PDFLATEX) thesis.tex
 endif
 	$(PDFLATEX) thesis.tex
+	makeindex thesis
 ifeq ($(SKIM), skim_revert.sh)
 	$(SKIM) $(CURDIR)/thesis.pdf
 endif
@@ -85,7 +87,7 @@ endif
 root : all
 
 clean : 
-	rm -f *.bbl *.blg *.aux *.dvi *.ps *.log *-output.tex *~
+	rm -f *.bbl *.blg *.aux *.dvi *.ps *.log *-output.tex *~ *.ind *.idx
 
 clean-stuck : 
 	rm -f *.aux
