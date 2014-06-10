@@ -53,7 +53,7 @@
 \usepackage{supertabular}
 \usepackage{stmaryrd}
 \usepackage{chronology}
-
+\usepackage{makeidx}            % Enable indexing.
 \input{type-theory_inc}
 
 \newcommand{\defeq}{\stackrel{\mathsf{def} }{\equiv}}
@@ -130,6 +130,8 @@
   forgot anyone, then I am sorry, and I thank you. }
 
 \newcommand{\LBMMT}[0]{\bar{\lambda}\mu\tilde\mu}
+
+\makeindex
 
 \begin{document}
 
@@ -690,6 +692,10 @@ The following list addresses future work related to each theory:
 \interlinepenalty=10000	% prevents bib items from splitting across pages
 \bibliographystyle{uithesis}
 \bibliography{thesis}
+
+\clearpage
+\addcontentsline{toc}{chapter}{Index}
+\IfFileExists{thesis.ind}{\input{thesis.ind}}{}
 
 \end{document}
 
