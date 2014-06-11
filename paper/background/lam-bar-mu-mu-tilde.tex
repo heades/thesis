@@ -22,7 +22,7 @@ while following them is the work of Philip Wadler.  Below we discuss
 Curien and Herbelin's work then Wadler's.  Before going into their work
 we first define call-by-value and call-by-name reduction.
 
-The call-by-value reduction strategy is a restriction of full
+The call-by-value reduction strategy\index{Call-by-value Reduction (CBV)} is a restriction of full
 $\beta$-reduction.  It is defined for the $\lambda\mu$-calculus
 as follows.  We first extend the language of the $\lambda\mu$-calculus
 by defining two new syntactic categories called values
@@ -104,7 +104,7 @@ but we redefine the evaluation contexts.
 \end{definition}
 \noindent
 The difference between CBN and CBV is that in CBN no reduction takes
-place within the argument to a function.  Instead we wait and reduce
+place within the argument to a function\index{Call-by-name Reduction (CBN)}.  Instead we wait and reduce
 the argument if it is needed within a function.  If the argument is
 never used it is never reduced.  CBN in general is less efficient than
 CBV, but it can terminate more often than CBV.  If the argument to a
@@ -184,6 +184,7 @@ the $\LBMMT$-calculus.  Despite the ugly name it is a beautiful type
 theory.  Its syntax and reduction rules are in
 Fig.~\ref{fig:lbmmt_syntax} and its typing rules are in Fig.~\ref{fig:lbmmt_typing}.
 \begin{figure}
+  \index{$\LBMMT$-Calculus}
   \begin{center}
     \begin{tabular}{lll}
       Syntax:
@@ -242,7 +243,7 @@ Fig.~\ref{fig:lbmmt_syntax} and its typing rules are in Fig.~\ref{fig:lbmmt_typi
 \end{figure}
 
 The new type $[[A - B]]$ is the dual to implication called
-subtraction.  It is logically equivalent to $[[A]] \land [[{-B}]]$
+subtraction\index{Subtraction}.  It is logically equivalent to $[[A]] \land [[{-B}]]$
 which is the dual to $[[{-A}]] \lor [[B]]$ which is logically
 equivalent to $[[A -> B]]$.  The syntactic category $[[c]]$ are called
 commands.  They have the form of $[[< v | e >]]$ where $[[v]]$ is a

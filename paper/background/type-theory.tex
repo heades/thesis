@@ -1,7 +1,7 @@
 Martin-L\"of is a Swedish mathematical logician and philosopher who
 was interested in defining a constructive foundations of mathematics.
-The foundation he defined he called Type Theory, but what is now
-referred to as Martin-L\"of's Type Theory
+The foundation he defined he called Type Theory\index{Martin-L\"of
+  Type Theory (MLTT)}, but what is now referred to as Martin-L\"of's Type Theory
 \cite{Martin:1982,Martin:1984}.  It is considered the first full
 dependent type theory.  Type Theory is defined by giving a syntax and
 deriving three judgments.  Martin-L\"of placed particular attention
@@ -50,23 +50,24 @@ types as propositions to classify which formulas are true. The second
 part of the language are types $[[T]]$.  Types consist of
 propositional variables $[[X]]$, true or top $[[1]]$, false or bottom
 $[[0]]$, sum types $[[A + B]]$ which correspond to constructive
-disjunction, dependent products $[[(x : A) -> B]]$ which correspond to
-function types, universal quantification, and implication, and
-disjoint union $[[{ x : A} -> B]]$ which correspond to pairs,
-constructive conjunction and existential quantification.  We can see
+disjunction\index{Sum Type}, dependent products $[[(x : A) -> B]]$ which correspond to
+function types\index{Dependent Product Type}\index{Polymorphism/Universal Types}, universal quantification, and implication, and
+disjoint union $[[{ x : A} -> B]]$ which correspond to
+pairs\index{Disjoint Union Types}, constructive conjunction and existential quantification.  We can see
 that dependent products and disjoint union bind terms in types, hence,
 types do depend on terms.  The third and final part of the language
 are terms.  We only comment on the term constructs we have not seen
 before.  The term $[[tt]]$ is the inhabitant of $[[1]]$ and is called
 unit.  We have a term which corresponds to a contradiction called
 $[[abort]]$. Finally, we have two case constructs: $[[case s of
-    x,y.t]]$ and $[[case s of x.t1,y.t2]]$.  The former is the
+    x,y.t]]$ and $[[case s of x.t1,y.t2]]$\index{Case Constructs}.  The former is the
 elimination form for disjoint union and says if $[[s]]$ is a pair then
 substitute the first projection for $[[x]]$ in $[[t]]$ and the second
 projection for $[[y]]$ in $[[t]]$.  Having the ability to project out
 both pieces of a pair results in the disjoint union also called
-$\Sigma$-types being strong.  A weak disjoint union type is one in
-which only the first projection of a pair is allowed.  The second case
+$\Sigma$-types being strong\index{Strong
+  $\Sigma$-types}\index{Disjoint Union Types!Strong}.  A weak disjoint union type is one in
+which only the first projection of a pair is allowed \index{Disjoint Union Types!Weak}.  The second case
 construct $[[case s of x.t1,y.t2]]$ is the elimination form for the
 sum type.  This says that if $[[s]]$ is a term of type $[[A+B]]$, but
 is an inhabitant of the type $[[A]]$ then substitute $[[a]]$ for
@@ -205,7 +206,7 @@ rule tells us.  The computational correspondence is that the case
 construct gives us away to case split over terms of two types.
 
 As it stands Martin-L\"of's Type Theory is a very powerful logic.  The
-axiom of choice must be an axiom of set theory, because it cannot be
+axiom of choice\index{Axiom of Choice} must be an axiom of set theory, because it cannot be
 proven from the other axioms.  The axiom of choice states that the
 cartesian product of a family of non-empty sets is non-empty.
 Martin-L\"of showed in \cite{Martin:1984} that the axiom of choice can
@@ -220,7 +221,7 @@ The final judgment of Martin-L\"of's Type Theory is the definitional
 equality judgment. It has the form $[[G |- a = b : A]]$. The rules
 deriving this judgment tell us when we can consider two terms as being
 equal.  Then two types whose elements are equal based on this judgment
-are equal.  The equality rules are defined in Fig.~\ref{fig:lof_eq} where
+are equal.  The equality\index{Equality} rules are defined in Fig.~\ref{fig:lof_eq} where
 we leave the congruence rules implicit for presentation purposes.
 
 These rules look very much like full $\beta$-reduction, but these are
@@ -235,7 +236,8 @@ it can be used during type checking implicitly at will using the following rule:
 We now describe when Martin-L\"of's Type Theory is extensional or
 intensional.
 
-\textbf{Extensional Type Theory.} In extensional type theory our
+\textbf{Extensional Type Theory.} In extensional type
+theory\index{Extensional Type Theory} our
 equality judgment is not distinct from propositional equality.  To
 make Martin-L\"of's type theory extensional we add the following
 rules:
@@ -266,7 +268,8 @@ rules:
 \end{center}
 Using these rules we can prove all of the usual axioms of identity:
 reflexivity, transitivity, and symmetry \cite{Martin:1984}.  Notice
-that these rules collapse definitional equality into propositional equality. 
+that these rules collapse definitional equality into propositional
+equality\index{Propositional Equality}. 
 The right most typing rule is where extensional type theory gets its power.
 This rule states that propositional equations can be used interchangeably anywhere. 
 This power comes with sacrifice, some meta-theoretic properties one may wish to have like
@@ -330,7 +333,7 @@ infinite types called universes much like $\mathsf{Type}$.  He also
 included rules for defining inductive types which in the design of
 programming languages are very useful \cite{Dybjer:1997}.
 
-The universe $\mathsf{Type}$ contains all well-formed types.  It is
+The universe $\mathsf{Type}$\index{Type Universe} contains all well-formed types.  It is
 quite natural to think of $\mathsf{Type}$ as a type itself.  This is
 called the $\mathsf{Type}:\mathsf{Type}$ axiom.  In fact Martin-L\"of
 did that in his original theory, but Girard was able to prove that

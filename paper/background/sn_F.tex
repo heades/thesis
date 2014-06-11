@@ -1,8 +1,9 @@
 Girard extended this method into a more powerful one called
 reducibility candidates to be able to prove strong normalization for
-system F.  We first extend the definition of a neutral term to include
-$[[ t [T] ]]$.  The definition of the interpretation of types are defined
-next.
+system F\index{Girard/Reynolds System F}.  We first extend the definition of a neutral term to include
+$[[ t [T] ]]$.  The definition of the interpretation of
+types\index{Interpretation of Types} are
+defined next.
 \begin{definition}
   \label{def:stlc_interpretation_taits}
   The interpretation of types are defined as follows:
@@ -19,7 +20,7 @@ next.
   \end{center}
 \end{definition}
 The sets defined in the previous definition are called parameterized
-reducibility sets.  Recall that system F has type variables so when we
+reducibility sets\index{Reducibility Sets}.  Recall that system F has type variables so when we
 interpret types we must interpret type variables.  The naive extension
 would just replace type variables with types, but Girard quickly
 realized this would not work, because the final case of the above
@@ -114,7 +115,7 @@ respect to reducibility candidate substitutions.
 We are now set to prove some new lemmas.  The following proofs depend
 on the lemmas we have proven above about STLC.  We do not repeat them
 here.  We say a parameterized reducibility set $\interp{[[T]]}_\rho$
-is a reducibility candidate of type $\sigma\,[[T]]$ if and only if
+is a reducibility candidate\index{Reducibility Candidate} of type $\sigma\,[[T]]$ if and only if
 $\interp{\sigma\,[[T]]} \in \mathsf{Red}$ and $\rho \vdash \sigma$.
 First, we prove that parameterized reducibility sets are
 members of $\mathsf{Red}$.

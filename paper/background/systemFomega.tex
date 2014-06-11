@@ -5,6 +5,7 @@ and reduction rules are in Fig.~\ref{fig:Fw_syntax}, the kinding rules
 in Fig.~\ref{fig:Fw_kinding}, and the typing rules in
 Fig.~\ref{fig:Fw_typing}.
 \begin{figure}
+  \index{System $\Fw$}
   \begin{center}
     \begin{tabular}{lll}
       Syntax: 
@@ -75,7 +76,8 @@ are type constructors.  However, applications may be considered a type
 when $[[T1 T2]]$ has type $[[Type]]$, but this is not always the case,
 because STLC allows for partial applications of functions.
 
-The ability to compute types is known as type computation.  Type level
+The ability to compute types is known as type
+computation\index{Type-level Computation}.  Type-level
 computation adds a lot of power.  It can be used to write generic
 function specifications.  We mentioned above that system F allows one
 to write functions with more generic types which allows one to define

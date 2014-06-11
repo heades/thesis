@@ -46,7 +46,8 @@ action of computing : calculation'', ``the use or operation of a
 computer'', ``system of reckoning'', or ``an amount computed''.  These
 meanings suggest computation is nothing more than the process of
 mathematical calculation, but computation is so much more than this.
-In fact there are three perspectives of computation:
+In fact there are three perspectives of computation\index{Three
+  Perspectives of Computation}:
 \begin{center}
   \begin{tikzpicture}       
     \node at (-1.87,3.1) {\text{Type Theory}};
@@ -73,47 +74,50 @@ computation.  Less intuitive is the connection between these two
 fields and that of logic.  Calling this beautiful relationship the
 computational trinity is non-standard.  In fact I am proposing that
 this terminology become standard.  The standard names for this
-relationship is the Curry-Howard correspondence (or isomorphism) or
-the proofs-as-programs propositions-as-types correspondence.  The
-first pays tribute to Haskell Curry and William Howard. As we will see
-both Curry and Howard did have a hand in making this ternary
-relationship explicit, but they were not the only ones.  Hence, this
-former name is unsatisfactory. The second only signifies the
-connection between logic and type theory; it does not mention category
-theory.  Thus, it is unsatisfactory.  Therefore, a better name for
-this relationship must become standard and I propose the computational
-trinity.  Robert Harper calls this connection the ``Holy Trinity'' and
-the three way connection given above computational trinitarianism, but
-we have chosen to not use religious metafors in computational research.
-Thus, we propose the name ``computational trinity'' to emphasize the
-common structure between each point, and the fact that it is a three
-way connection.  We now move onto making this relationship more
-precise.  We only discuss the details of the correspondence of type
-theory and logic, and type theory and category theory.  The other
-correspondence between logic and category theory follows
-similarly. Furthermore, we do not go into complete detail of each of
-these correspondences, but we give plenty of references for the
-curious reader.
+relationship is the Curry-Howard correspondence\index{Curry-Howard
+  Isomorphism} (or isomorphism) or the proofs-as-programs
+propositions-as-types correspondence\index{Proofs-as-programs
+  Propositions-as-types Correspondence}.  The first pays tribute to
+Haskell Curry and William Howard. As we will see both Curry and Howard
+did have a hand in making this ternary relationship explicit, but they
+were not the only ones.  Hence, this former name is
+unsatisfactory. The second only signifies the connection between logic
+and type theory; it does not mention category theory.  Thus, it is
+unsatisfactory.  Therefore, a better name for this relationship must
+become standard and I propose the computational trinity.  Robert
+Harper calls this connection the ``Holy Trinity''\index{Holy Trinity}
+and the three way connection given above computational trinitarianism,
+but we have chosen to not use religious metafors in computational
+research.  Thus, we propose the name ``computational trinity'' to
+emphasize the common structure between each point, and the fact that
+it is a three way connection.  We now move onto making this
+relationship more precise.  We only discuss the details of the
+correspondence of type theory and logic, and type theory and category
+theory.  The other correspondence between logic and category theory
+follows similarly. Furthermore, we do not go into complete detail of
+each of these correspondences, but we give plenty of references for
+the curious reader.
 
 \section{Type Theory and Logic}
 \label{sec:type_theory_logic}
-Intuitionism began with Luitzen Brouwer.  Implicit in his work was an
-interpretation of the formulas of propositional and predicate
-intuitionistic logic as computational objects.  Brouwer's student
-Arend Heyting made this interpretation explicit for intuitionistic
-predicate logic against the advice of Brouwer.  Brouwer believed that
-intuitionistic logic should never be written down, but only exist in
-the mind of the mathematician.  Additionally, Andrey Kolmogorov
-defined this interpretation for intuitionistic propositional logic.
-This interpretation has become known as the
-Brouwer-Heyting-Kolmogorov-interpretation or the BHK-interpretation of
-intuitionistic logic.  Let's consider this interpretation for
-intuitionistic propositional logic with conjunction, disjunction, and
-implication.  We denote arbitrary computational constructions as $c$
-which can be built up from pairs of proof terms $(t_0,t_1)$, unary
-functions denoted by $\lambda$-abstractions, and injections for proof
-terms for sums $inl(t)$ for inject left and $inr(t)$ for inject right.
-The BHK-interpretation defined in Def.~\ref{def:bhk-interpretation}
+Intuitionism\index{Intuitionism} began with Luitzen Brouwer.  Implicit
+in his work was an interpretation of the formulas of propositional and
+predicate intuitionistic logic as computational objects.  Brouwer's
+student Arend Heyting made this interpretation explicit for
+intuitionistic predicate logic against the advice of Brouwer.  Brouwer
+believed that intuitionistic logic should never be written down, but
+only exist in the mind of the mathematician.  Additionally, Andrey
+Kolmogorov defined this interpretation for intuitionistic
+propositional logic.  This interpretation has become known as the
+Brouwer-Heyting-Kolmogorov-interpretation or the
+BHK-interpretation\index{BHK-interpretation} of intuitionistic logic.
+Let's consider this interpretation for intuitionistic propositional
+logic with conjunction, disjunction, and implication.  We denote
+arbitrary computational constructions as $c$ which can be built up
+from pairs of proof terms $(t_0,t_1)$, unary functions denoted by
+$\lambda$-abstractions, and injections for proof terms for sums
+$inl(t)$ for inject left and $inr(t)$ for inject right.  The
+BHK-interpretation defined in Def.~\ref{def:bhk-interpretation}
 defines the assignment of proof terms using these constructs to
 formulas of intuitionistic propositional logic.
 
@@ -135,25 +139,26 @@ formulas of intuitionistic propositional logic.
 \end{definition}
 This was the first step towards the correspondence between type theory
 and logic.  The second was due to Curry.  We mentioned in
-Section~\ref{chap:the_history_of_type_theory} that Curry noticed that the
-types of the combinatory logic correspond to the formulas of
-intuitionistic propositional logic.  This suggested that combinatory
-logic can be seen as a proof assignment to propositional logic.  This
-was Curry's main contribution to this line of work.  The third step
-was due to Howard.  In \cite{Howard:1980} Howard revealed the
-correspondence between STLC and intuitionistic propositional logic in
-natural deduction style.  He essentially uses the BHK-interpretation
-to assign proof terms to natural deduction and then shows that this
-really is STLC.  It is a beautiful result.  More on this can be found
-in
+Section~\ref{chap:the_history_of_type_theory} that Curry noticed that
+the types of the combinatory logic\index{Combinatory Logic} correspond
+to the formulas of intuitionistic propositional logic.  This suggested
+that combinatory logic can be seen as a proof assignment to
+propositional logic.  This was Curry's main contribution to this line
+of work.  The third step was due to Howard.  In \cite{Howard:1980}
+Howard revealed the correspondence between STLC and intuitionistic
+propositional logic in natural deduction style.  He essentially uses
+the BHK-interpretation to assign proof terms to natural deduction and
+then shows that this really is STLC.  It is a beautiful result.  More
+on this can be found in
 \cite{Griffin:1990,Howard:1980,Mints:2000,Murthy:1991,Sorensen:2006,Troelstra:1991}.
 Since these early steps the correspondence between logic and type
 theory has been developed quite extensively.  Reynolds' and Girard
 extended this correspondence to second order predicate logic using
 system F, and to higher order logic using system $\text{F}^\omega$ by
-Girard \cite{Wadler:2007,Girard:1971}.  We will see other advances to this
-correspondence with logic in Section~\ref{chap:dependent_type_theory} where
-we discuss dependent types.
+Girard \cite{Wadler:2007,Girard:1971}.  We will see other advances to
+this correspondence with logic in
+Section~\ref{chap:dependent_type_theory} where we discuss dependent
+types.
 
 There is one requirement a type theory must meet in order for it to
 correspond to a consistent logic. Computational constructs such as
@@ -171,10 +176,11 @@ normalize natural deduction proofs as well \cite{Prawitz:1965}.  It is
 widely known that showing a type theory to be consistent -- through
 the remainder of the thesis we will use the words consistent and
 normalizing interchangeably -- can be a very difficult task, and often
-requires advanced mathematical tools.  In fact a lot of the work going
-into defining new type theories goes into showing it consistent.  The
-type theories we have seen up till now are all consistent.  We will
-discuss in detail how to show type theories to be normalizing in
+requires advanced mathematical tools\index{Logical Consistency}.  In
+fact a lot of the work going into defining new type theories goes into
+showing it consistent.  The type theories we have seen up till now are
+all consistent.  We will discuss in detail how to show type theories
+to be normalizing in
 Section~\ref{chap:metatheory_of_programming_languages}.
 % subsection type_theory_logic  (end)
 
@@ -209,17 +215,17 @@ proving properties of these programs.
 
 The first use of the correspondence between logic and type theory for
 programming and mathematics -- that is proving theorems -- was
-Automath.  Automath was a formal language much like a type theory
-devised by Nicolaas de Bruijn in the late sixties.  A large body of
-ideas in modern type theory came from Automath.  It allowed for the
-specification of complete mathematical theories and was equipped with
-a automated proof checker which was used to check the correctness of
-the formalized theories.  In fact Automath can be thought of as the
-grandfather to dependent type theory.  It was a wonderful line of work
-that resulted in a large number of great ideas.  One important thing
-was that de Bruijn independently from Howard stated the correspondence
-between intuitionistic propositional logic and type theory
-\cite{Sorensen:2006}.
+Automath\index{Automath}.  Automath was a formal language much like a
+type theory devised by Nicolaas de Bruijn in the late sixties.  A
+large body of ideas in modern type theory came from Automath.  It
+allowed for the specification of complete mathematical theories and
+was equipped with a automated proof checker which was used to check
+the correctness of the formalized theories.  In fact Automath can be
+thought of as the grandfather to dependent type theory.  It was a
+wonderful line of work that resulted in a large number of great ideas.
+One important thing was that de Bruijn independently from Howard
+stated the correspondence between intuitionistic propositional logic
+and type theory \cite{Sorensen:2006}.
 
 The correspondence between type theory and category theory has many
 benefits.  The biggest benefit is that category theory is a very
@@ -255,11 +261,11 @@ question is what about classical logic?
 
 \section{Beautiful Dualities}
 \label{sec:beautiful_dualities}
-There are some beautiful dualities present in classical logic.  We say
+There are some beautiful dualities present in classical logic\index{Duality}.  We say
 a mathematical or logical construct is dual to another if there exists
 an involution translating each construct to each other.  An involution
 is a self invertible one-to-one correspondence.  That is if $i$ is an
-involution then $i(i(x)) = x$.  Now in classical logic negation is
+involution then $i(i(x)) = x$\index{Involution}.  Now in classical logic negation is
 self dual, by De Morgan's laws conjunction is dual to disjunction and
 vice versa, and existential quantification is dual to universal
 quantification and vice versa.  These dualities lead to wonderful
@@ -285,21 +291,22 @@ from a type theoretic perspective.
 \chapter{Dependent Type Theory}
 \label{chap:dependent_type_theory}
 All the type theories we have seen thus far consist of what are called
-``nondependent types''.  These are types which do not depend on terms.
-System $\Fw$ is an advance where there is a copy of STLC at the type
-level, but this is not a dependency, hence, system $\Fw$ is still
-simply typed.  So it is natural to wonder if it is beneficial to allow
-types to depend on terms.  The answer it turns out is yes. Much like
-the history of System F, dependent types came out of two fields:
-programming language research and mathematical logic.  As we mentioned
-above, the first practical application of the computational trinity
-was a system called Automath which was pioneered by de Bruijn in the
-1970's \cite{DeBruijn:1970}.  It also turns out that Automath's core
-type theory employed dependent types, and many claim it to be the
-beginning of the research area under the umbrella term ``dependent
-type theory''.  Since the work of de Bruijn a large body of research
-on dependent type theory has been conducted.  We start with the work
-of Per Martin-L\"of.
+``nondependent types''\index{Nondependent Types}.  These are types
+which do not depend on terms.  System $\Fw$ is an advance where there
+is a copy of STLC at the type level, but this is not a dependency,
+hence, system $\Fw$ is still simply typed.  So it is natural to wonder
+if it is beneficial to allow types to depend on terms.  The answer it
+turns out is yes. Much like the history of System F, dependent types
+came out of two fields: programming language research and mathematical
+logic\index{Dependent Types}.  As we mentioned above, the first
+practical application of the computational trinity was a system called
+Automath which was pioneered by de Bruijn in the 1970's
+\cite{DeBruijn:1970}.  It also turns out that Automath's core type
+theory employed dependent types, and many claim it to be the beginning
+of the research area under the umbrella term ``dependent type
+theory''\index{Dependent Type Theory}.  Since the work of de Bruijn a large body of research on
+dependent type theory has been conducted.  We start with the work of
+Per Martin-L\"of.
 
 \section{Martin-L\"of's Type Theory}
 \label{sec:martin-lofs_type_theory}
@@ -393,7 +400,7 @@ languages, domain specific languages, and an entire arsenal of
 features can be encoded in them.
 
 There are several well-known proof assistants based on dependent type
-theory.  One of the first is called NuPrl which is based on
+theory\index{Dependent Type Theory}.  One of the first is called NuPrl which is based on
 Martin-L\"of's Type Theory \cite{Constable:1986}. The proof assistant
 Coq is another proof assistant and is based on an extension of
 Coquand's CoC called the Calculus of Inductive Constructions
@@ -405,7 +412,7 @@ compiler has been formally verified with in Coq
 is the second proof assistant based on Martin-L\"of's Type Theory.
 However, we are not aware of any large scale mathematics in Agda.
 Finally, Twelf is a proof assistant based on a restricted version of
-Martin-L\"of's Type Theory called LF \cite{Pfenning:1999}.  More
+Martin-L\"of's Type Theory called LF \cite{Pfenning:1999}\index{LF}.  More
 information on proof assistants can be found in \cite{Geuvers:2009}.
 These projects show that dependent types are powerful enough to do
 real-world large scale mathematics, but what about general purpose
@@ -426,7 +433,7 @@ eliminated.  All of this and more can be found in Xi's thesis
 \cite{Xi:1999a}.  
 
 One promising idea is to take a very expressive dependent type theory
-and add general recursion and $\mathsf{Type:Type}$.  Then, either
+and add general recursion and $\mathsf{Type:Type}$\index{Type:Type}.  Then, either
 identify through a judgment or syntactically identify a sublanguage of
 the dependent type theory which is consistent.  This consistent
 sublanguage will correspond to a logic by computational trinity, and
@@ -434,7 +441,8 @@ is called the proof fragment.  Garrin Kimmel et al. show in
 \cite{Kimmel:2012} that crafting such a type theory where the proof
 fragment is syntactically separated from the general purpose
 programming language can be done and provides interesting features.
-The language they use is called $\text{Sep}^3$ which stands for
+The language they use is called $\text{Sep}^3$\index{Separation of
+  Proof from Program ($\text{Sep}^3$)} which stands for
 Separation of Proof and Program. Kimmel uses $\text{Sep}^3$ to verify
 the correctness of a call-by-value $\lambda$-calculus interpreter.
 The unique feature of $\text{Sep}^3$ is that it allows for constraints
@@ -444,18 +452,19 @@ one writes in them are terminating.  This makes it very difficult to
 formalize and verify properties of non-terminating programs.  However,
 $\text{Sep}^3$ is a language which allows for non-terminating programs
 to be defined in the programming language and even be mentioned in
-propositions.  This is called freedom of speech.  It turns out that
+propositions.  This is called freedom of speech\index{Freedom of Speech}.  It turns out that
 the proof fragment can be completely erased after type checking.  This
 means that proofs are really just specificational.  This erasing is
 done by defining a meta-level function called the eraser
-\cite{Mishra-Linger:2008}.  The erasure was investigated in a similar
+\cite{Mishra-Linger:2008}.  The erasure\index{Erasure} was investigated in a similar
 setting as $\text{Sep}^3$ in \cite{Sjoberg:2012}.  It is then applied
 to a program after being type checked.  This will make running
 programs more efficient.  $\text{Sep}^3$ also contains
 $\mathsf{Type:Type}$ this axiom while inconsistent is wonderful for
 programming.  It is shown in \cite{Cardelli-1986} that this axiom can
 be used to encode lots of extra programming features.
-$\mathsf{Type:Type}$ is also very useful for generic programming.
+$\mathsf{Type:Type}$ is also very useful for generic
+programming\index{Generic Programming}.
 This axiom, which allows for large eliminations, that is types defined
 by recursion, allow for the definition of very generic programs.  An
 example is a completely generic zipwith function.  This function would
@@ -493,7 +502,7 @@ To show a type theory consistent it is enough to show that it is
 weakly normalizing \cite{Sorensen:2006}.
 \begin{definition}
   \label{def:weak_norm}
-  A type theory is \emph{weakly normalizing} if and only for all terms $t$
+  A type theory is \emph{weakly normalizing}\index{Weak Normalization} if and only for all terms $t$
   there exists a term $t'$ such that $t \redto^* t'$ and there does
   not exists any term $t''$ such that $t' \redto t''$.  We
   call $t'$ a \emph{normal form}.
@@ -510,7 +519,7 @@ reduction sequence. Based on this fact some require their type
 theories to be strongly normalizing.
 \begin{definition}
   \label{def:strong_norm}
-  A type theory is \emph{strongly normalizing} or \emph{terminating}
+  A type theory is \emph{strongly normalizing}\index{Strong Normalization} or \emph{terminating}
   if and only for all terms $t$ there are no infinite descending
   chains beginning with $t$.  That is, it is never the case that $t
   \redto t_1 \redto t_2 \redto \cdots$.
@@ -602,7 +611,7 @@ function used in \cite{Watkins:2004}. It is defined by the following
 definition.
 \begin{definition}
   \label{def:ctype_stlc}
-  The partial function $ctype$ is defined with respect to a fixed type $T$
+  The partial function is defined with respect to a fixed type $T$
   and has two arguments, a free variable $x$, and a term $t$, where $x$
   may be free in $t$.  We define $ctype$ by induction on the form of $t$.
   \begin{itemize}
@@ -820,14 +829,14 @@ hereditary substitution.
 
 The type theories currently known to be proven normalizing using the
 hereditary substitution proof technique are relatively simple.  For
-example, the simply-typed $\lambda$-calculus, predicative polymorphic
-versions of system F, and the LF family of dependent types have all
+example, the simply-typed $\lambda$-calculus, predicative polymorphic\index{Predicativity}
+versions of system F\index{Girard/Reynolds System F}, and the LF\index{LF} family of dependent types have all
 been shown to be weakly-normalizing using hereditary substitution.
 However, it is currently unknown how to prove normalization of system
-T using hereditary substitution, because the usual ordering on types
+T\index{G\"odel's System T} using hereditary substitution, because the usual ordering on types
 is not proof theoretically strong enough.  The termination ordinal of
 the ordering on types would have to be at least $\epsilon_0$, but such
-an ordering is non-trivial to construct.  Furthermore, impredicative
+an ordering is non-trivial to construct.  Furthermore, impredicative\index{Impredicativity}
 theories like system F pose a similar problem.  It is currently
 unknown how to construct the ordering for second order types.  The
 hereditary substitution technique heavily depends on the ordering on
@@ -835,14 +844,15 @@ types and the lack of one prevent its use.  As the type theory becomes
 more expressive through extensions the harder the ordering on types
 becomes to construct.
 
-Hereditary substitution can be used to maintain canonical forms and
+Hereditary substitution can be used to maintain canonical
+forms\index{Canonical Form} and
 even prove weak normalization of predicative simple type theories.  It
 can also be used as a normalization function.  A normalization
 function is a function that when given a term it returns the normal
 form of the input term.  Andreas Abel and Dulma Rodriguez used
 hereditary substitution in this manner in \cite{Abel:2008}.  They used
-it to normalize types in a type theory with type level computation
-much like system $\Fw$.  In that paper the authors were investigating
+it to normalize types in a type theory with type-level computation
+much like system $\Fw$\index{Type-level computation}\index{System $\Fw$}.  In that paper the authors were investigating
 subtyping in the presence of type level computation.  They found that
 hereditary substitution could be used to normalize types and then do
 subtyping.  This allowed them to only define subtyping on normal
@@ -860,15 +870,16 @@ scale.
 \label{sec:tait-griard_reduciblity}
 The Tait-Girard reducibility method is a technique for showing weak and
 strong normalization of type theories.  It originated from the work of
-William Tait.  He showed strong normalization of system T using an
+William Tait.  He showed strong normalization\index{Strong Normalization} of system
+T\index{G\"odel's System T}using an
 interpretation of types based on set theory with comprehension.  He
 called this interpretation saturated sets.  Later, John Yves Girard,
 against popular belief\footnote{It has been said that while Girard was
   working on extending Tait's method other researchers, notably
   Stephen Kleene, criticized him for trying.  They thought it was an
-  impossible endeavor.}, extended Tait's method to be able to prove
+  impossible endeavor.}, extended Tait's method\index{Tait's Method} to be able to prove
 system F strongly normalizing.  He called his method reducibility
-candidates. The reducibility candidates method is based on second order
+candidates. The reducibility candidates\index{Reducibility Candidates} method is based on second order
 set theory with comprehension.  It turns out that the genius work of
 Girard extends to a large class of type theories. The standard
 reference on all the topics of this section is Girard's wonderful book
@@ -903,10 +914,10 @@ applications in fact, from consistency proofs all the way to
 encryption.
 
 Andrew Pitts used logical relations to show when two inhabitants of
-the disjoint union type are equivalent in \cite{Pitts:1998}.  Karl
+the disjoint union type\index{Disjoint Union Types} are equivalent in \cite{Pitts:1998}.  Karl
 Crary gives a nice introduction to logical relations in
 \cite{Pierce:2004} where he shows how to solve the equivalence problem
-for terms.  The equivalence problem is being able to decide
+for terms.  The equivalence problem\index{Equivalence Problem} is being able to decide
 operational equivalence of terms.  Eijiro Sumii and Benjamin Pierce
 use logical relations to prove properties of a type theory used for
 encryption in \cite{Sumii:2003}.  They prove behavior equivalences
@@ -921,17 +932,18 @@ logical relations to prove such equivalences.
 There is one last extension to logical relations.  So far we have
 introduced the reducibility method and its extension to reducibility
 candidates.  We briefly summarized the fact that reducibility
-candidates gives rise to logical relations.  However, we have used
+candidates\index{Reducibility Candidates} gives rise to logical relations.  However, we have used
 logical relations only to prove properties about terminating theories.
 Can logical relations be used to reason about non-terminating type
 theories?  It turns out that we can, but it requires yet another
 extension of logical relations.
 
-Adding the ability to define general recursive types to a type theory
+Adding the ability to define general recursive\index{General Recursion} types to a type theory
 results in the theory being non-terminating.  That is, one can define a
 diverging term.  In the field of programming languages recursive
 types are a very powerful feature.  One property one may wish to prove
-about a type theory with recursive types is contextual equivalence of
+about a type theory with recursive types is contextual
+equivalence\index{Contextual Equivalence} of
 terms.  Logical relations are usually used to prove such a property,
 but they turn out not to work in the presence of recursive types.
 This was an outstanding open problem until Andrew Appel and David
@@ -964,7 +976,8 @@ a programmatic world within the same language.  They then prove
 normalization of the logical world using step-indexed logical relations.
 
 We briefly describe what step-indexed logical relations are through an
-example.  We extend the CBV STLC with iso-recursive types and then try
+example.  We extend the CBV STLC with iso-recursive
+types\index{Call-by-value Reduction (CBV)} and then try
 to prove type safety of this extension using logical relations.  We
 will run into trouble and will be forced to use step-indexed logical
 relations instead.

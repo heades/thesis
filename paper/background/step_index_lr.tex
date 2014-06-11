@@ -1,4 +1,4 @@
-Type safety is a property of a programming language which guarantees
+Type safety\index{Type Safety} is a property of a programming language which guarantees
 that computation never gets stuck.  We can always either complete the
 computation (hit a value) or continue computing (take another
 step). Type safety is defined by the following theorem:
@@ -105,7 +105,7 @@ To summarize we have shown how to prove type safety using logical
 relations of CBV STLC.  Next we extend CBV STLC with iso-recursive
 types.  To the types we add $\mu \alpha . T$ and type variables
 $\alpha$.  Do not confuse this operator with that of the operator of
-the $\lambda\mu$-calculus.  It is unfortunate, but this operator is used to
+the $\lambda\mu$-calculus\index{$\lambda\mu$-Calculus}.  It is unfortunate, but this operator is used to
 capture many different notions throughout the literature.  The terms
 are extended to include $\text{fold}\ t$ and $\text{unfold}\ t$, and
 values are extended to include $\text{fold}\ v$.  Finally, we add
@@ -186,7 +186,7 @@ We first have to extend the definition of the logical relations to deal with rec
 \end{definition}
 
 This definition is slightly different from the previous.  Since we
-have type variables we need to use Girard's trick to handle
+have type variables we need to use Girard's trick\index{Girard's Trick} to handle
 reducibility-candidates substitutions.  Then we added the case for
 recursive types.  Here we took the usual idea of using the elimination
 form for $\mu$-types.  Now is this definition well-founded?  Recall

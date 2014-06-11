@@ -9,7 +9,7 @@ first define the type theories and then we will comment on the
 differences between the two theories.  The first step in defining a
 type theory is to define its language or syntax.  Following the syntax
 are several judgments assigning some meaning to the language.  A
-judgment is a statement about the object language derived from a set
+judgment\index{Judgement} is a statement about the object language derived from a set
 of inference rules.  In the following type theories we will derive two
 judgments: the reduction relation and the type-assignment relation.
 The syntax and reduction relation of the Church-style simply typed
@@ -31,12 +31,12 @@ that if a $\lambda$-abstraction $[[\x:T.t]]$ is applied to some term
 $[[t']]$, then that term may be reduced to the term resulting from
 substituting $[[t']]$ for $[[x]]$ in $[[t]]$ which is the English
 interpretation for $[[ [t'/x]t]]$. We call $[[ [t'/x] t]]$ the capture
-avoiding substitution function. It is a meta-level function. That is,
+avoiding substitution function \index{Capture Avoiding Substitution}. It is a meta-level function. That is,
 it is not part of the object language. In STLC the types and terms are
 disjoint, but in type theories the types are used to enforce
-particular properties on the terms.  To enforce these properties we
+particular properties on the terms \index{Type}.  To enforce these properties we
 need a method for assigning types to terms.  This is the job of what
-we will call the typing judgment, type-checking judgment, or
+we will call the typing judgment \index{Typing Judgement}, type-checking judgment, or
 type-assignment judgment\footnote{Throughout the literature one may
   find the typing judgment being called the typing algorithm,
   type-checking algorithm, or type-assignment algorithm.  However,
@@ -49,7 +49,7 @@ typing judgment for STLC is defined in Figure~\ref{fig:chstlc_typing}.
 The typing judgment depends on a typing context $[[G]]$ which for now
 can be considered as a list of ordered pairs consisting of a variable
 and a type.  This list is used to keep track of the types of the free
-variables in a term.  The grammar for context is as follows:
+variables in a term \index{Typing Context}.  The grammar for context is as follows:
 \begin{center}
   \begin{math}
     \begin{array}{lll}
@@ -60,6 +60,7 @@ variables in a term.  The grammar for context is as follows:
 Here the empty context is denoted $[[.]]$ and context extension is denoted $[[G1,G2]]$.
 
 \begin{figure}
+  \index{Simply Typed $\lambda$-Calculus!Church Style}
   \begin{center}
     \begin{tabular}{lll}
       Syntax: 

@@ -35,6 +35,7 @@ The syntax for terms, types, and the reduction rules are defined in
 Fig.~\ref{fig:F_syntax} and the definition of the typing relation is
 defined in Fig.~\ref{fig:F_typing}.
 \begin{figure}
+  \index{Girard/Reynolds System F}
   \begin{center}
     \begin{tabular}{lll}
       Syntax:
@@ -77,11 +78,12 @@ defined in Fig.~\ref{fig:F_typing}.
 \end{figure}
 Similar to system T we can easily see that system F is an extension of
 STLC.  Types now contain a new type $[[Forall X.T]]$ which binds the
-type variable $[[X]]$ in the type $[[T]]$.  This allows one to define
-more universal types allowing for the definition of single functions
-that can work on data of multiple different types.  Terms are extended
-with two new terms the $[[\\X.t]]$ and $[[t [T] ]]$.  The former is
-the introduction form for the $\forall$-type while the latter is the
+type variable $[[X]]$ in the type $[[T]]$
+\index{Polymorphism/Universal Types}.  This allows one to define more
+universal types allowing for the definition of single functions that
+can work on data of multiple different types.  Terms are extended with
+two new terms the $[[\\X.t]]$ and $[[t [T] ]]$.  The former is the
+introduction form for the $\forall$-type while the latter is the
 elimination form for the $\forall$-type. The former binds the type
 variable $[[X]]$ in $[[t]]$ similarly to the
 $\lambda$-abstraction. The latter is read, ``instantiate the type of
@@ -160,7 +162,7 @@ and pairs by defining
 addition, multiplication, exponentiation, and even primitive
 recursion, but we leave those to the interested reader.  For more
 examples, see \cite{Girard:1989}.  The encodings we use are the famous
-Church encodings of pairs and natural numbers.  What is remarkable
+Church encodings\index{Church Encodings} of pairs and natural numbers.  What is remarkable
 about the encoding of natural numbers is that they act as function
 iteration.  That is for any function $f$ from any type $[[X]]$ to
 $[[X]]$ and value $v$ of type $[[X]]$ we have $n\,[X]\,f\,v \redto^* f^n
@@ -170,7 +172,7 @@ There is one important property of $\Fdrulename{TypeApp}$ which the
 reader should take notice of.  Notice that there are no restrictions
 on what types $[[T]]$ ranges over.  That is there is nothing
 preventing $[[T]]$ from being $[[Forall X.T']]$.  This property is
-known as impredicativity and system F is an impredicative system.  The
+known as impredicativity\index{Impredicativity} and system F is an impredicative system.  The
 reader may now be questioning whether or not this type theory is
 terminating.  That is can we use impredicativity to obtain a looping
 term?  The answer was settled negatively by Girard and we will see how

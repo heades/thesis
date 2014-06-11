@@ -8,7 +8,7 @@ some basic definitions of category theory.  We begin with the definition of a
 category.
 \begin{definition}
   \label{def:category}
-  A \emph{category} denoted $\mathcal{C}, \mathcal{D},\cdots$ is an
+  A \emph{category} \index{Category} denoted $\mathcal{C}, \mathcal{D},\cdots$ is an
   abstract mathematical structure consisting of a set of objects $Obj$
   denoted $A,B,C,\cdots$ and a set of morphisms $Mor$ denoted
   $f,g,h,\cdots$.  Two functions assigning objects to morphisms called
@@ -56,9 +56,9 @@ In order to interpret STLC we will need a category with some special
 features.  The first of these is the final object. 
 \begin{definition}
   \label{def:terminal_object}
-  An object $1$ of a category $\mathcal{C}$ is the \emph{final}
-  object if and only if there exists exactly one morphism $\Diamond_A : A \to 1$
-  for every object $A$.
+  An object $1$ of a category $\mathcal{C}$ is the
+  \emph{final}\index{Final/Terminal Object} object if and only if there exists
+  exactly one morphism $\Diamond_A : A \to 1$ for every object $A$.
 \end{definition}
 \noindent
 We will use the final object and finite products to interpret
@@ -66,6 +66,7 @@ typing contexts. Finite products are a generalization of the cartesian
 product in set theory.
 \begin{definition}
   \label{def:finite_products}
+  \index{Finite Binary Product}
   An object of a category $\mathcal{C}$ denoted $A \times B$ is called a
   binary product of the objects $A$ and $B$ iff there exists morphisms
   $\pi_1 : A \times B \to A$ and $\pi_1 : A \times B \to B$ such that
@@ -87,7 +88,7 @@ to interpret typing contexts in the category.  We need one more categorical
 structure to interpret STLC in a category.  We need a special object that can
 be used to model implication or the arrow type.
 \begin{definition}
-  \label{def:exponentials}
+  \label{def:exponentials} \index{Exponential Object}
   An \emph{exponential} of two objects $A$ and $B$ in a category
   $\mathcal{C}$ is an object $B^A$ and an arrow $\epsilon : B^A \times
   A \to B$ called the evaluator.  The evaluator must satisfy the
@@ -110,8 +111,9 @@ any two objects in $\mathcal{C}$ the product of those two objects
 exists in $\mathcal{C}$ and similarly for exponentials.
 \begin{definition}
   \label{def:cartesian}
-  A category $\mathcal{C}$ is \emph{cartesian closed} if and only if 
-  it has a terminal object $1$, all products, and all exponentials.
+  A category $\mathcal{C}$ is \emph{cartesian closed}\index{Cartesian
+    Closed Category} if and only if it has a terminal object $1$, all
+  products, and all exponentials.
 \end{definition}
 \noindent
 This is all the category theory we introduce in this thesis.  The
@@ -127,6 +129,7 @@ lack a source and a target object.  So instead we interpret only
 typeable terms in a typing context.  That is we interpret triples
 $\langle [[G]], [[t]], [[T]] \rangle$ where $[[G |- t : T]]$.
 \begin{definition}
+  \index{Categorical Interpretation of STLC}
   \label{def:cat_interp_stlc}
   Suppose $\mathcal{C}$ is a cartesian closed category.  Then we interpret
   STLC in the category $\mathcal{C}$ by first interpreting types as follows:

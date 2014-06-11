@@ -1,6 +1,7 @@
-An entire class of type theories called Pure Type Systems may be
-expressed by a very simple core type theory, a set of type universes
-called sorts, a set of axioms, and a set of rules.  The rules specify
+An entire class of type theories called Pure Type Systems\index{Pure
+  Type System} may be
+expressed by a very simple core type theory, a set of type
+universes\index{Type Universe} called sorts, a set of axioms, and a set of rules.  The rules specify
 how the sorts are to be used, and govern what dependencies are allowed
 in the type theory.  There is a special class of eight pure type
 systems with only two sorts called $\Box$ and $*$\footnote{ It is also
@@ -32,7 +33,7 @@ set of sorts and is a subset of the constants of the language, $A$
 is a set of axioms, and $R$ is a set of rules.  In the $\lambda$-cube
 $\{*, \Box\} \subseteq S$, $A = \{(*, \Box)\}$, and $R$ varies depending on
 the system. The axioms stipulate which sorts the constants of the
-language have.  In the $\lambda$-cube there are at least two constants
+language have.  In the $\lambda$-cube\index{$\lambda$-Cube} there are at least two constants
 $\Box$ and $*$.  The set of rules are subsets of the set 
 $\{(*,*),(*,\Box),(\Box,*),(\Box,\Box)\}$. These rules represent four forms of dependencies:
 \begin{center}
@@ -49,7 +50,7 @@ on a term and $\lambda [[x]]:[[Type]].[[b]]$ where $[[b]]$ is a type
 is a type depending on a type.  An example of a term depending on a
 type is the $\Lambda$-abstraction of system F.  Finally, an example of
 a type depending on a term is the product type of Martin-L\"of's Type
-Theory.  Now using the notion of dependency we define the core set of
+Theory\index{Dependent Type}.  Now using the notion of dependency we define the core set of
 inference rules in the next definition.
 \begin{definition}
   \label{def:pst_rules}
