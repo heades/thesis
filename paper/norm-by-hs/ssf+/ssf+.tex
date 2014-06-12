@@ -22,8 +22,8 @@ Stratified System $\Fp$ is an extension of SSF with sum types denoted
 $T_1 + T_2$, whose elimination form $\textit{case}\ t\
 \textit{of}\ x_1.t_1,x_2.t_2$ is used to case split on a whether or
 not term $t$ with a sum type is truly $x_1$ of type $T_1$, or else
-$x_2$ of type $T_2$.  We consider sum types with so-called
-commuting conversions, which allow independent cases to be permuted
+$x_2$ of type $T_2$.  We consider sum types\index{Sum Type} with so-called
+commuting conversions\index{Commuting Conversion}, which allow independent cases to be permuted
 past each other (see Fig~\ref{fig:syntax_ssfp} below).  Commuting
 conversions are well-known to pose technical difficulties for
 normalization proofs based on reducibility (see~\cite{tatsuta+05} and
@@ -237,7 +237,7 @@ similar to the proofs for SSF):
 In this section we define the ordering on types. It is a
 straightforward extension of the ordering for SSF.
 
-\begin{definition}
+\begin{definition}\index{Ordering on Types}
   Suppose $\text{op} \in \{+,\to\}$.  Then the ordering $>_\Gamma$ is
   defined as the least relation satisfying the universal closures of
   the following formulas:\\
@@ -321,7 +321,8 @@ definitions of all these functions depend the same definition of
 $ctype_T(x, t)$ as the proof of normalization of SSF
 (Definition~\ref{def:ctype_function_ssf}).  So we do not repeat it
 here.
-\begin{figure} 
+\begin{figure}\index{Stratified System $\Fp$ (SS$\Fp$)!Hereditary
+    Substitution Function}
   \small
   \begin{itemize}
   \item[] $app_T\ t_1\ t_2 = t_1\ t_2$

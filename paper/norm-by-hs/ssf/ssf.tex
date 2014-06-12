@@ -1,6 +1,7 @@
 \section{Normalization of Stratified System F (SSF)}
 \label{subsec:normalization_stratified_system_f}
-In \cite{Eades:2010} Harley Eades and Aaron Stump show that SSF is
+In \cite{Eades:2010} Harley Eades and Aaron Stump show that
+SSF\index{Stratified System F (SSF)} is
 normalizing using a proof method which uses the hereditary
 substitution function implicitly.  We find it apparent that the
 hereditary substitution technique we have introduced in
@@ -15,11 +16,12 @@ substitution.  For a brief introduction to SSF and its history see
 Section~\ref{sec:moderen_type_theory}.
 
 Stratified System F, consists of types which are stratified into
-levels (or ranks) based on type-quantification.  The types that belong
+levels (or ranks) based on
+type-quantification\index{Polymorphism/Universal Types}.  The types that belong
 to level zero have no type-quantification, the types at level one only
 quantify over types of level zero, and the types at level $n$ quantify
 over the types of level $n-1$.  Stratifying System F into levels
-prevents impredicativity.  That is a type $\forall X.T'$ is no
+prevents impredicativity\index{Impredicativity}.  That is a type $\forall X.T'$ is no
 longer allowed quantify over itself.  This restriction is similar to
 Russell's simple theory of types.
 
@@ -626,7 +628,7 @@ level of the instantiation could have increased, but it turns out that
 the level of the type actually decreases.  That is, we know the level
 of the universal type is larger than the level of the instantiation.
 This is exactly the point of stratification!
-\begin{definition}
+\begin{definition}\index{Ordering on Types}
   The ordering $>_\Gamma$ is defined as the least relation satisfying the universal closures of 
   the following formulas:
   \begin{center}
@@ -768,7 +770,7 @@ type applications.
 
 \noindent
 Finally, we can define the hereditary substitution function for SSF.
-\begin{definition}
+\begin{definition}\index{Stratified System F (SSF)!Hereditary Substitution Function}
   \label{def:hereditary_substitution_ssf}
   We define the hereditary substitution function for SSF as follows:
   \begin{itemize}
@@ -1320,7 +1322,7 @@ conseqences of inversion.
 \subsection{Substitution for the Interpretation of Types.}
 \label{subsec:substitution_for_the_interpretation_of_types_ssf}
 The definition of the interpretation of types is identical to the
-definition for STLC (Definition~\ref{def:interpretation_of_types_stlc}),
+definition for STLC\index{Simply Typed $\lambda$-Calculus} (Definition~\ref{def:interpretation_of_types_stlc}),
 so we do not repeat it here.  Before concluding normalization we state
 the main substitution lemma for the interpretation of types.
 \begin{lemma}[Substitution for the Interpretation of Types]
@@ -1459,7 +1461,7 @@ We are now ready to present our main result.  The next theorem shows
 that the type assignment rules are sound with respect to the
 interpretation of types.  
 
-\begin{thm}[Type Soundness]
+\begin{thm}[Type Soundness]\index{Type Soundness}
   If $\Gamma \vdash t:T$ then $t \in \interp{T}_\Gamma$.
   \label{thm:soundness_ssf}
 \end{thm}
@@ -1569,7 +1571,7 @@ interpretation of types.
 \end{itemize}
 \end{proof}
 \noindent Therefore, we conclude normalization of SSF.
-\begin{corollary}[Normalization]
+\begin{corollary}[Normalization]\index{Weak Normalization}
   If $\Gamma \vdash t:T$, then there exists a normalform $n$, such
   that $t \normto n$.
 \end{corollary}
