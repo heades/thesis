@@ -43,6 +43,7 @@ LD_FILES := norm-by-hs/lam-delta/lam-delta.tex \
 SSF_FILES := norm-by-hs/ssf/ssf.tex \
 	     norm-by-hs/ssf+/ssf+.tex \
 	     norm-by-hs/dep-ssf/dep-ssf.tex \
+	     norm-by-hs/dep-ssf/dep-SSF.ott \
 	     norm-by-hs/ssf-omega/ssf-omega.tex
 
 DTT_FILE := dil-dtt/L.ott \
@@ -70,7 +71,13 @@ LDT : $(LD_FILES)
 DTT : $(DTT_FILES)
 	cd dil-dtt; $(MAKE)
 
-thesis.pdf : background.tex FS SEP LDT DTT thesis.tex thesis.bib $(SSF_FILES)	
+dep-SSF : norm-by-hs/dep-ssf/dep-SSF.ott
+	$(OTT) $(OTT_FLAGS) -i norm-by-hs/dep-ssf/dep-SSF.ott -o norm-by-hs/dep-ssf/dep-SSF-ott.tex -tex_name_prefix DepSSF		
+
+SSF+ : norm-by-hs/ssf+/SSF+.ott
+	$(OTT) $(OTT_FLAGS) -i norm-by-hs/ssf+/SSF+.ott -o norm-by-hs/ssf+/SSF+-ott.tex -tex_name_prefix SSFp
+
+thesis.pdf : background.tex FS SEP LDT DTT dep-SSF SSF+ thesis.tex thesis.bib $(SSF_FILES)	
 ifndef QUICKPROC
 	$(PDFLATEX) thesis.tex
 	makeindex thesis
