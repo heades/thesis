@@ -4,19 +4,21 @@ the entire point behind the BHK-interpretation and the work of
 Brouwer.  This, it seemed, was not the case for classical logic, until
 Timothy Griffin's seminal paper titled ``A Formulae-as-Types Notion of
 Control'' \cite{Griffin:1990}.  This offered a typing to the control
-operator $\mathsf{call/cc}$, and to everyone surprise connected
-control operators to classical proofs. Later, Michel Parigot
-constructed the $\lambda\mu$-calculus in 1992 \cite{Parigot:1992}.
-Parigot was able to define a classical sequent calculus called free
-deduction which had a cut-elimination procedure validating the
-cut-theorem for classical logic \cite{Parigot:1992b}.  This allowed
-for Parigot to define a computational perspective of free deduction
-which he called the $\lambda\mu$-calculus.  This type theory can be
-considered the first type-safe strongly normalizing classical type
-theory. We now briefly introduce the $\lambda\mu$-calculus.  The
-syntax and reduction rules are in Fig.~\ref{fig:lamu_syntax}.
+operator $\mathsf{call/cc}$\index{call/cc}, and to everyone surprise
+connected control operators\index{Control Operators} to classical
+proofs. Later, Michel Parigot constructed the $\lambda\mu$-calculus in
+1992 \cite{Parigot:1992}.  Parigot was able to define a classical
+sequent calculus called free deduction\index{Free Deduction} which had a cut-elimination
+procedure validating the cut-theorem for classical logic
+\cite{Parigot:1992b}.  This allowed for Parigot to define a
+computational perspective of free deduction which he called the
+$\lambda\mu$-calculus.  This type theory can be considered the first
+type-safe strongly normalizing classical type theory. We now briefly
+introduce the $\lambda\mu$-calculus.  The syntax and reduction rules
+are in Fig.~\ref{fig:lamu_syntax}.
 
   \begin{figure}
+    \index{$\lambda\mu$-Calculus}
   \begin{center}
     \begin{tabular}{lll}
       Syntax: 
@@ -97,7 +99,8 @@ theories we have seen, $[[G]]$ is the typing context or the set of
 assumptions (input ports).  Keeping to the style of Parigot we denote elements of $[[G]]$ by $[[A]]^{[[x]]}$ instead
 of $[[x]] : [[A]]$.  The environment $[[D]]$ is either empty
 $[[.]]$, a formula $[[A]]$, one or more co-assumptions or output
-ports, or a formula $[[A]]$ followed by one or more output ports.  Negation is defined
+ports, or a formula $[[A]]$ followed by one or more output
+ports\index{Co-assumption/output port}.  Negation is defined
 in the same way as it is in intuitionistic logic.  That is $[[{- A}]] =^{def} [[A -> _|_]]$.
 Note that in $[[D]]$ we always have $[[_|_ a]]$ (false) and in $[[G]]$ we
 always have $\top^[[x]]$ (true) where $\top \equiv [[_|_ -> _|_]]$ for any
@@ -135,8 +138,10 @@ truth of the statement.  This implies the following lemma.
 \end{lemma}
 
 The $\lambda\mu$-calculus is a classical type theory so it should be
-the case that the law of excluded middle (LEM), $[[A]] \lor [[{-A}]]$,
-holds, or equivalently the law of double negation (LDN) $[[{- {- A}} -> A]]$.
+the case that the law of excluded middle (LEM)\index{Law of Excluded
+  Middle (LEM)}, $[[A]] \lor [[{-A}]]$,
+holds, or equivalently the law of double negation (LDN)\index{Law of
+  Double Negation (LDN)} $[[{- {- A}} -> A]]$.
 Since we do not have disjunction as a primitive we show LDN.
 Before showing the derivation of the LDN we first define some
 derived rules for handling negation and sequent manipulation rules.
@@ -228,7 +233,7 @@ presentation cleaner.  This example shows that the
 $\lambda\mu$-calculus really is classical.  So from the logical
 perspective of computation we gain classical reasoning, but do we
 gain anything programmatically?  It turns out that we do.  We can
-think of the $\mu$-abstraction and naming application as continuations
+think of the $\mu$-abstraction and naming application as continuations\index{Continuation}
 which allow us to define exceptions.  In fact a great way of thinking
 about the $\mu$-abstraction $[[\m a.[b]t]]$ is due to Geuvers et al.:
 \begin{center}

@@ -1,4 +1,4 @@
-% Stratified System F.
+% Dependent Stratified System F=.
 metavar term_var, x, y, z, f, u, v ::=
 metavar type_var, X, Y ::= 
 indexvar level_var, l ::= 
@@ -17,8 +17,12 @@ type, T  :: 'Type_' ::=
     {{ tex [[T]] \to [[T']] }}
   | Forall X : p . T ::   :: Forall
     {{ tex \forall [[X]]:*_{[[p]]} . [[T]] }}
+  | ( x : T ) -> T' :: :: Pi
+  {{tex \Pi [[x]]:[[T]].[[T']] }}
+  | t = t'       ::   :: Eq
   | ( T )        :: S :: Parens
   | [ T / X ] T' :: M :: Substitution
+  | [ t / x ] T  :: M :: Substitution2
 
 term, t :: 'Term_' ::= 
   | x              ::   :: Variables
@@ -27,6 +31,8 @@ term, t :: 'Term_' ::=
   | \\ X : p . t       ::   :: TypeAbs
     {{ tex \Lambda [[X]] : *_{[[p]]} . [[t]] }}
   | t1 t2          ::   :: App
+  | join           ::   :: Join
+  {{tex join }}
   | t [ T ]        ::   :: TypeApp
   | [ t / x ] t'   :: M :: Substitution
   | [ T / X ] t    :: M :: TypeSubstitution
@@ -38,15 +44,18 @@ G {{ tex \Gamma }} :: 'Context_' ::=
   {{tex [[X]] : *_{[[p]]} }}
   | .           :: :: Empty
   | G , G'      :: :: Extension
-  | ( G )       :: :: Paren
+  | ( G )       :: S :: Parens
 
 formula :: 'formula_' ::=
   | judgement   ::  :: judgement
   | ( formula ) ::  :: parens
+  | t1 ! t2     ::  :: Join
+  {{tex [[t1]] \join [[t2]] }}
   | x notin G   ::  :: Notin1
   {{tex [[x]] \not\in [[G]] }}
   | X notin G   ::  :: Notin2
   {{tex [[X]] \not\in [[G]] }}
+  
 
 defns
   JTyping :: '' ::=
@@ -59,13 +68,19 @@ defns
   G, X : p, G' |- X : p
 
   G |- T1 : p
-  G |- T2 : q
-  ------------------------- :: Arrow
-  G |- T1 -> T2 : max(p,q)
+  G, x : T1 |- T2 : q
+  ------------------------------ :: Arrow
+  G |- (x : T1) -> T2 : max(p,q)
 
   G, X:p |- T : q
   ------------------------------- :: Forall
   G |- Forall X:p.T : max(p+1,q)
+
+  G |- T : p
+  G |- t1 : T
+  G |- t2 : T
+  ---------------- :: Eq
+  G |- t1 = t2 : p
 
 defns
  Opsem :: '' ::=
@@ -101,22 +116,42 @@ defns
   t[T] ~> t'[T]
   
   defn
+  G Ok :: :: ok :: ''
+  {{tex [[G]]\,Ok }}
+  by
+  
+  ---- :: Empty
+  . Ok
+
+  x notin G,G'
+  (G,G') Ok
+  G |- T : p
+  ------------- :: VarExt
+  (G,x:T,G') Ok
+
+  X notin G,G'
+  (G,G') Ok
+  ------------- :: TyVarExt
+  (G,X:p,G') Ok
+
+  defn
   G |- t : T :: :: typing :: '' 
     {{ tex [[G]] \vdash [[t]] : [[T]] }}
   by
 
+  G Ok
   G |- T : p  
   --------------------- :: Var
   G, x : T, G' |- x : T
 
   G, x : T1 |- t : T2
-  ----------------------- :: Lam
-  G |- \x:T1.t : T1 -> T2
+  ----------------------------- :: Lam
+  G |- \x:T1.t : (x : T1) -> T2
 
-  G |- t1 : T1 -> T2
+  G |- t1 : (x : T1) -> T2
   G |- t2 : T1
-  ------------------ :: App
-  G |- t1 t2 : T2
+  --------------------- :: App
+  G |- t1 t2 : [t2/x]T2
 
   G, X:p |- t : T
   ------------------------------- :: TypeAbs
@@ -127,3 +162,14 @@ defns
   ---------------------- :: TypeApp
   G |- t[T] : [T/X]T'
 
+  G Ok
+  t1 ! t2  
+  G |- t1 : T
+  G |- t2 : T
+  ------------------- :: Join
+  G |- join : t1 = t2
+
+  G |- t0 : t1 = t2
+  G |- t : [t1/x]T
+  ----------------- :: Conv
+  G |- t : [t2/x]T

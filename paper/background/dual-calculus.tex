@@ -1,7 +1,7 @@
 Philip Wadler invented a type theory equivalent to Curien and
 Herbelin's $\LBMMT$-calculus called the dual calculus
 \cite{Wadler:2003}.  What we mean by equivalent here is that both
-correspond to Gentzen's classical sequent calculus LK, but both type
+correspond to Gentzen's classical sequent calculus LK\index{Gentzen's LK}, but both type
 theories are definitionally inequivalent.  The difference between the
 two type theories is that the $\LBMMT$-calculus is defined with only
 negation, implication, and subtraction.  Then using De Morgan's laws
@@ -13,6 +13,7 @@ classical logic.
 
 The syntax of the dual calculus is defined in Fig.~\ref{fig:dc_syntax}.
 \begin{figure}
+  \index{Dual Calculus}
   \begin{center}
     \begin{math}
       \begin{array}{rll}
@@ -48,7 +49,7 @@ formula and routes its output to some output port.  Finally, the dual to binding
 an output port is binding an input port.  This is denoted $[[x.(s)]]$.  Now statements
 are the introduction of a cut and are denoted $[[t * k]]$.  Computationally, we
 can think of this as a command which runs the term $[[t]]$ and routes its output
-to the continuation $[[k]]$ which continues the computation.
+to the continuation $[[k]]$ which continues the computation\index{Continuation}.
 
 The reduction rules for the dual calculus are in Fig.~\ref{fig:dc_red}
 and the typing rules are in Fig.~\ref{fig:dc_typing}.  
@@ -72,7 +73,7 @@ and the typing rules are in Fig.~\ref{fig:dc_typing}.
 The reduction rules correspond to cut-elimination and can be thought
 of a simplification process on proofs.  Computationally they can be
 thought of as running programs with their continuations.  We derive
-three judgments from the typing rules for terms, coterms, and
+three judgments from the typing rules for terms, coterms\index{Coterms}, and
 statements.  They have the following forms:
 \begin{center}
   \begin{math}
@@ -166,7 +167,8 @@ is used.
   \end{center}
 \end{definition}
 Notice that the two ways of defining implication in the previous
-definition are duals.  Wadler used the dual calculus to show that CBV
+definition are duals.  Wadler used the dual calculus to show that
+CBV\index{Call-by-value Reduction (CBV)}\index{Call-by-name Reduction (CBN)}
 is dual to CBN in \cite{Wadler:2003} just like Curien and Herbelin did
 in \cite{Curien:2000}.  However, in a follow up paper Wadler showed
 that his duality of the dual calculus into itself is an involution

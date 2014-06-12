@@ -1,4 +1,4 @@
-% Stratified System F.
+% Stratified System F+.
 metavar term_var, x, y, z, f, u, v ::=
 metavar type_var, X, Y ::= 
 indexvar level_var, l ::= 
@@ -15,6 +15,8 @@ type, T  :: 'Type_' ::=
   | X            ::   :: Var
   | T -> T'      ::   :: Arrow
     {{ tex [[T]] \to [[T']] }}
+  | T + T'       ::   :: Sum
+    {{ tex [[T]] + [[T']] }}
   | Forall X : p . T ::   :: Forall
     {{ tex \forall [[X]]:*_{[[p]]} . [[T]] }}
   | ( T )        :: S :: Parens
@@ -27,6 +29,12 @@ term, t :: 'Term_' ::=
   | \\ X : p . t       ::   :: TypeAbs
     {{ tex \Lambda [[X]] : *_{[[p]]} . [[t]] }}
   | t1 t2          ::   :: App
+  | inl( t )       ::   :: Inl
+  {{tex inl( [[t]] ) }}
+  | inr( t )       ::   :: Inr
+  {{tex inr( [[t]] ) }}
+  | case t of x . t1 , y . t2 :: :: Case
+  {{tex case\,[[t]]\,of\,[[x]].[[t1]],[[y]].[[t2]] }}
   | t [ T ]        ::   :: TypeApp
   | [ t / x ] t'   :: M :: Substitution
   | [ T / X ] t    :: M :: TypeSubstitution
@@ -47,6 +55,8 @@ formula :: 'formula_' ::=
   {{tex [[x]] \not\in [[G]] }}
   | X notin G   ::  :: Notin2
   {{tex [[X]] \not\in [[G]] }}
+  | p <= q      ::  :: Leq
+  {{tex [[p]] \leq [[q]] }}
 
 defns
   JTyping :: '' ::=
@@ -55,8 +65,10 @@ defns
     {{ tex [[G]] \vdash [[T]] : *_{[[p]]} }}
   by
 
+  G Ok
+  p <= q
   --------------------- :: Var
-  G, X : p, G' |- X : p
+  G, X : q, G' |- X : p
 
   G |- T1 : p
   G |- T2 : q
@@ -66,6 +78,11 @@ defns
   G, X:p |- T : q
   ------------------------------- :: Forall
   G |- Forall X:p.T : max(p+1,q)
+
+  G |- T1 : p
+  G |- T2 : q
+  ----------------------- :: Sum
+  G |- T1 + T2 : max(p,q)
 
 defns
  Opsem :: '' ::=
@@ -79,6 +96,18 @@ defns
 
   ---------------------- :: TypeRed
   (\\X:p.t)[T] ~> [T/X]t
+
+  ----------------------------------- :: CaseInl
+  case inl(t) of x.t1,x.t2 ~> [t/x]t1
+
+  ----------------------------------- :: CaseInr
+  case inr(t) of x.t1,x.t2 ~> [t/x]t2
+
+  --------------------------------------------------------- :: CaseApp
+  (case t of x.t1,x.t2) t' ~> case t of x.(t1 t'),x.(t2 t')
+
+  ------------------------------------------------------------------------------------------------------- :: CaseCase
+  case (case t of x.t1,x.t2) of y.t3,y.t4 ~> case t of x.(case t1 of y.t3,y.t4), x.(case t2 of y.t3,y.t4)
 
   t ~> t'
   ----------------- :: Lam
@@ -99,6 +128,45 @@ defns
   t ~> t'
   ------------- :: TypeApp
   t[T] ~> t'[T]
+
+  t ~> t'
+  ----------------- :: Inl
+  inl(t) ~> inl(t')
+
+  t ~> t'
+  ----------------- :: Inr
+  inr(t) ~> inr(t')
+
+  t ~> t'
+  ------------------------------------------- :: Case1
+  case t of x.t1,x.t2 ~> case t' of x.t1,x.t2
+
+  t1 ~> t'1
+  ------------------------------------------- :: Case2
+  case t of x.t1,x.t2 ~> case t of x.t'1,x.t2
+
+  t2 ~> t'2
+  ------------------------------------------- :: Case3
+  case t of x.t1,x.t2 ~> case t of x.t1,x.t'2
+
+  defn
+  G Ok :: :: ok :: ''
+  {{tex [[G]]\,Ok }}
+  by
+  
+  ---- :: Empty
+  . Ok
+
+  x notin G
+  G Ok
+  G |- T : p
+  ------------- :: VarExt
+  (G,x:T) Ok
+
+  X notin G,G'
+  G Ok
+  ------------- :: TyVarExt
+  (G,X:p) Ok
   
   defn
   G |- t : T :: :: typing :: '' 
@@ -127,3 +195,18 @@ defns
   ---------------------- :: TypeApp
   G |- t[T] : [T/X]T'
 
+  G |- t : T1
+  G |- T2 : p
+  --------------------- :: Inl
+  G |- inl(t) : T1 + T2
+
+  G |- t : T2
+  G |- T1 : p
+  --------------------- :: Inr
+  G |- inr(t) : T1 + T2
+
+  G |- t : T1 + T2
+  G,x:T1 |- t1 : T
+  G,x:T2 |- t2 : T
+  ---------------------------- :: Case
+  G |- case t of x.t1,x.t2 : T

@@ -1,12 +1,15 @@
+\input{dep-SSF-ott}
 \section{Dependent Stratified System $\F$ (DSS$\F$)}
 \label{sec:dependent_ssf_with_type_equality}
-DSS$\F$ is SSF extended with dependent types and equations between
-terms.  Equations between terms are an important concept in
-Martin-L\"of type theory~\cite{hofmann+94,nps90}, and play a central
+DSS$\F$ is SSF extended with dependent types\index{Dependent Type} and equations between
+terms\index{Equality Type}.  Equations between terms are an important concept in
+Martin-L\"of type theory~\cite{hofmann+94,nps90}\index{Martin-L\"of's
+  Type Theory (MLTT)}, and play a central
 role also in dependently typed programming languages, such as the
-\textsc{Guru} language~\cite{stump+09}, $\Sep$
+\textsc{Guru} language~\cite{stump+09}, $\Sep$\index{Separation of
+  Proof from Proof ($\Sep$)}
 (Section~\ref{chap:separation_of_proof_from_program}), the freedom of
-speech language (Section~\ref{chap:freedom_of_speech}), Coq
+speech language\index{Freedom of Speech} (Section~\ref{chap:freedom_of_speech}), Coq
 \cite{CoqRefMan:2008}, and many more.  The syntax and reduction rules
 are defined in Fig.~\ref{fig:syntax_ssfe}.  The kind-assignment rules
 are defined in Fig.~\ref{fig:kinding_rules_ssfe}.  One thing to note
@@ -737,7 +740,8 @@ The hereditary substitution function is fully defined in
 Fig.~\ref{fig:hereditary_substitution_function_ssfe}.  We do not
 repeat the definition of $ctype_T$ for DSS$\F$, because it is
 exactly the same as the previous system. 
-\begin{figure}[t]
+\begin{figure}[t]\index{Dependent Stratified System $\F$
+    (DSS$\F$)!Hereditary Substitution Function}
   \small
   \begin{itemize}
   \item[] $[t/x]^T x = t$

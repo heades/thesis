@@ -28,19 +28,19 @@ fragment. That is, we have a picture that looks something like:
 The logical fragment will then be considered the ``logical framework''
 of the language. This is where the programs are proofs and the types
 are propositions; that is, the logical fragment makes use of the
-computational trinity (Chapter~\ref{chap:the_three_perspectives}).
-Now the programmatic fragment is where all the usual programming will
-take place. One can then use the logical fragment to verify properties
-of the programs written in the programmatic fragment.  Alternately,
-one can understand the fragments as worlds in the sense of possible
-world semantics of modal logics.  Below we will see how these two
-worlds are connected.  In fact, Chris Casinghino et al. have
-constructed a programming language very much like freedom of speech,
-but they add modal operators to the type system to distinguish the
-logical and programmatic fragments in \cite{Casinghino:2012,
-  ccasin:popl14}.  Then they characterize which programs can be moved
-from one fragment to another, they call the types of these programs
-mobile types.
+computational trinity\index{Computational Trinity}
+(Chapter~\ref{chap:the_three_perspectives}).  Now the programmatic
+fragment is where all the usual programming will take place. One can
+then use the logical fragment to verify properties of the programs
+written in the programmatic fragment.  Alternately, one can understand
+the fragments as worlds in the sense of possible world semantics of
+modal logics.  Below we will see how these two worlds are connected.
+In fact, Chris Casinghino et al. have constructed a programming
+language very much like freedom of speech, but they add modal
+operators to the type system to distinguish the logical and
+programmatic fragments in \cite{Casinghino:2012, ccasin:popl14}.  Then
+they characterize which programs can be moved from one fragment to
+another, they call the types of these programs mobile types.
 
 Once the logical fragment has been identified three additional
 features will need to be added.  The first feature is that types in
@@ -50,7 +50,7 @@ to prevent these programs from being applied to any arguments or this
 would prevent the logical fragment from being logically consistent.
 For an overview of logical consistency and how it can be proven see
 Chapter~\ref{chap:metatheory_of_programming_languages}.  We call this
-feature freedom of speech, because it intuitively states that logical
+feature freedom of speech\index{Freedom of Speech}, because it intuitively states that logical
 types and programs can talk about potentially non-terminating
 programs, but they are never allowed to actually run them.
 
@@ -98,7 +98,7 @@ move on to the type system.  The features discussed in the
 introduction to this chapter will be made explicit when we introduce
 the type system, but we will see hints of them in the syntax.
 
-The syntax and the CBV reduction relation is defined in
+The syntax and the CBV\index{Call-by-value Reduction (CBV)} reduction relation is defined in
 Figure~\ref{fig:FS-syn-red}.
 \begin{figure}
   \begin{center}
@@ -140,10 +140,12 @@ Figure~\ref{fig:FS-syn-red}.
   \caption{Syntax and reduction rules for freedom of speech}
   \label{fig:FS-syn-red}
 \end{figure}
-The syntax is collapsed similarly to the Calculus of Constructions --
+The syntax is collapsed similarly to the Calculus of
+Constructions\index{Calculus of Constructions (CoC)} --
 see Chapter~\ref{sec:the_calculus_of_constructions} for more about the
 Calculus of Constructions. So we distinguish between types and terms
-(programs) judgmentally.  Expressions and the typing judgment will
+(programs) judgmentally.  Expressions and the typing
+judgment\index{Typing Judgment} will
 depend on two annotations.  The first is called the consistency
 classifier and is denoted $[[th]]$ which can be one of $[[L]]$ or
 $[[C]]$ where an expression tagged with the former is interpreted to
@@ -326,12 +328,12 @@ Notice that by wrapping the division function up in a
 $\lambda$-abstraction we prevent the reduction relation from reducing
 it until it is actually needed.  If the $\mathsf{isZero}$ function
 returns true then the division function is never needed and thus is
-never ran.  This shows how call-by-name reduction can be simulated by
-CBV reduction.  
+never ran.  This shows how call-by-name\index{Call-by-name Reduction
+  (CBN)} reduction can be simulated by CBV\index{Call-by-value Reduction (CBV)} reduction.  
 
 There is one final judgment defined with the reduction relation in
 Figure~\ref{fig:FS-syn-red}, and it is denoted $[[e1 \v/ e2]]$. We
-call this the joinability judgment and is defined by only one rule
+call this the joinability judgment\index{Join}\index{Equality} and is defined by only one rule
 \FSdrulename{ComputeJoin}. This rule states that whenever there exists
 an expression $[[e]]$ such that the expressions $[[e1]]$ and $[[e2]]$
 both reduce to $[[e]]$ in any number of steps, then $[[e1]]$ and
@@ -376,7 +378,7 @@ We begin introducing the type system with the kinding rules:
     \FSdruleKXXEq{}          
   \end{mathpar}
 \end{center}
-The expression $[[Type]]$ is a universe containing all of the
+The expression $[[Type]]$ is a universe\index{Type Universe} containing all of the
 expressions that can be considered well-defined types with respect to
 an environment.  Throughout the sequel we sometimes denote expressions
 of type $[[Type]]$ as $[[A]]$ instead of $[[e]]$ for readability. We
@@ -470,7 +472,7 @@ The typing rule \FSdrulename{ILam} has a restriction on the body of
 the implicit $\lambda$-abstraction. In fact, there are a number of value
 restrictions in the definition of the typing relation.  This
 restriction is necessary in order to maintain the meta-theoretic
-property called progress. This property states that every well-typed
+property called progress\index{Progress}. This property states that every well-typed
 program can either take a computational step or is already a value.
 Suppose the restriction on \FSdrulename{ILam} is lifted. Then the
 judgment $[[. |- Z Z : (x : L Nat = (y : L Nat) + -> Nat)- -> Nat L]]$
@@ -546,7 +548,7 @@ to prevent counterexamples such as these we add the following rules:
     \FSdruleInjRan{}
   \end{mathpar}
 \end{center}
-These rules are known as injectivity rules for dependent products.
+These rules are known as injectivity\index{Injectivity} rules for dependent products.
 The second rule may seem a bit strange, especially the second premise,
 because we are substituting a value $[[v]]$ for two free variables of
 possibly different types.  This is, however, not a problem, because
