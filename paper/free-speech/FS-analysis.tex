@@ -1,8 +1,8 @@
 In Chapter~\ref{chap:freedom_of_speech} we defined the Freedom of
 Speech language in its entirety.  We now introduce its analysis.  The
-main results consist of logical consistency of the logical fragment
-and type preservation.  The former is shown by proving weak
-normalization of the logical fragment -- the reader may wish to recall
+main results consist of logical consistency\index{Logical Consistency} of the logical fragment
+and type preservation\index{Type Preservation}.  The former is shown by proving weak
+normalization\index{Weak Normalization} of the logical fragment -- the reader may wish to recall
 the definition of weak normalization; see
 Definition~\ref{def:weak_norm} of
 Chapter~\ref{chap:metatheory_of_programming_languages}.  The remainder
@@ -22,7 +22,7 @@ This is an important result for type preservation, because we want to
 ensure that for any $[[(\x.e) v]]$ that has type $[[e']]$, its
 contractum $[[ [v/x]e]]$ has type $[[e']]$.
 
-\begin{lemma}[Weakening]
+\begin{lemma}[Weakening]\index{Freedom of Speech!Weakening}
   \label{lemma:FS-weakening}
   If $[[G |- e : e' th]]$, then $[[G, G' |- e : e' th]]$.
 \end{lemma}
@@ -236,12 +236,12 @@ contractum $[[ [v/x]e]]$ has type $[[e']]$.
 % \end{proof} 
 The third result is regularity, which ensures that if an expression
 has a type, then its type is well typed.  Recall that in the logical
-fragment $[[Type]] : [[Type]]$ does not hold, thus if $[[e]]$ is
+fragment $[[Type]] : [[Type]]$\index{Type:Type} does not hold, thus if $[[e]]$ is
 joinable with $[[Type]]$, then $[[G |- e' : e L]]$ does not imply that
 $[[G |- e : Type L]]$.  However, this does hold in the programmatic
 fragment.  Therefore, regularity has the following statement and
 proof.  
-\begin{lemma}[Regularity]
+\begin{lemma}[Regularity]\index{Freedom of Speech!Regularity}
   \label{lemma:regularity}
   \begin{itemize}
   \item[i.] If $[[G |- e':e L]]$ and it is not the case that $[[e == Type]]$, then $[[G |- e:Type L]]$.
@@ -313,7 +313,7 @@ in general is very hard to prove for advanced type systems like
 Freedom of Speech, so we only prove the inversion principles that are
 actually needed.
 
-\begin{lemma}[Inversion]
+\begin{lemma}[Inversion]\index{Freedom of Speech!Inversion}
   \label{lemma:inversion}
   \begin{itemize}
   \item[i.] If $\Gamma \tvdash{\theta'} \lambda x.e:\arrowT{x}{\theta}{e_1}{+}{e_2}$, then 
@@ -425,7 +425,8 @@ the interpretation of types to depend on type preservation.  We
 conclude this section with the statement and proof of type
 preservation.
  
-\begin{thm}[Preservation]
+\begin{thm}[Preservation]\index{Freedom of Speech!Type
+    Preservation}\index{Type Preservation}
   \label{thm:preservation}
   If $\Gamma \tvdash{\theta} a:c$ and $a \redto b$ then $\Gamma \tvdash{\theta} b:c$.
 \end{thm}
@@ -506,11 +507,13 @@ thus we must show that this fragment is consistent.  The proof of
 logical consistency is the topic of this section.
 
 We prove logical consistency using reducibility candidates first
-proposed by Girard.  For an overview of the reducibility method see
+proposed by Girard.  For an overview of the
+reducibility\index{Reducibility Candidates} method see
 Section~\ref{sec:tait-griard_reduciblity}.  We begin with the
 definition of the interpretation of types.
 
-\begin{definition}
+\begin{definition}\index{Freedom of Speech!Interpretation of
+    Types}\index{Interpretation of Types}
   \label{def:FS-interp}
   Let $J = \{e\ |\ e \join join \vee e \join injdom \vee e \join
   injran\}$ be the set of all the proofs of equations and $V$ be the
@@ -625,10 +628,11 @@ substitutions which are defined in Figure~\ref{fig:fs-wf-subs}.
 Before we can move on we must justify why the interpretation of types
 covers all cases, especially, for the logical fragment.  We must show
 that there is no type-level computation, and that the
-$[[Type]]:[[Type]]$ axiom is purely programmatic.  The following two
+$[[Type]]:[[Type]]$\index{Type:Type} axiom is purely programmatic.  The following two
 lemmata establish this fact:
 
-\begin{lemma}[$[[Type]]:[[Type]]$ is not Logical]
+\begin{lemma}[$[[Type]]:[[Type]]$ is not Logical]\index{Freedom of
+    Speech!Type:Type is not Logical}
   \label{lemma:type:type_is_not_logical}
   It is not the case that $[[. |- Type : Type L]]$.
 \end{lemma}
@@ -641,7 +645,8 @@ lemmata establish this fact:
   non-terminating derivation, a contradiction.
 \end{proof}
 
-\begin{lemma}[Characterization of Logical Types]
+\begin{lemma}[Characterization of Logical Types]\index{Freedom of
+    Speech!Characterization of Logical Types}
   \label{lemma:characterization}
   If $[[. |- e : Type L]]$, then $[[e]] \equiv [[Nat]]$, $[[e]] \equiv
   [[e1 = e2]]$, or $[[e]] \equiv [[(x : th e1) ep -> e2]]$ for some
@@ -743,7 +748,7 @@ We now state and prove the critical properties of the interpretation
 of types.  These are standard, and so we simply list them with their
 proofs.
 
-\begin{lemma}[$\CRI$]
+\begin{lemma}[$\CRI$]\index{Freedom of Speech!$\CRI$}
   \label{lemma:cri}
   If $t \in \interp{e}^\theta_\rho$ then $t$ is closed and $t \in V$.
 \end{lemma}
@@ -751,7 +756,7 @@ proofs.
   This holds by definition of the interpretation of types.
 \end{proof}
 
-\begin{lemma}[$\CRII$]
+\begin{lemma}[$\CRII$]\index{Freedom of Speech!$\CRII$}
   \label{lemma:crii}
   If $t \in \interp{e}^\theta_\rho$ and $t \redto t'$ then $t' \in \interp{e}^\theta_\rho$
 \end{lemma}
@@ -799,7 +804,7 @@ proofs.
   \end{itemize}
 \end{proof}
 
-\begin{lemma}[$\CRIII$]
+\begin{lemma}[$\CRIII$]\index{Freedom of Speech!$\CRIII$}
   \label{lemma:criii}
   If $t \redto t'$, $\cdot \tvdash{L} t:\rho\ e$, and $t' \in \interp{e}^L_\rho$ 
   then $t \in \interp{e}^L_\rho$.
@@ -841,7 +846,8 @@ proofs.
 \end{proof}
 \noindent
 The following results about substitution are also standard.
-\begin{lemma}[Substitution Distribution]
+\begin{lemma}[Substitution Distribution]\index{Freedom of
+    Speech!Substitution Distribution}
   \label{lemma:movable_subs}
   $\interp{e}^\theta_{\rho[x \mapsto e']} = \interp{[e'/x]e}^\theta_\rho$
 \end{lemma}
@@ -909,7 +915,8 @@ The following results about substitution are also standard.
 %     $\cdot \tvdash{\theta} \rho\ v:\rho\ e$.
 %   \end{itemize}
 % \end{lemma}
-\begin{lemma}[Well-formed substitution for typing]
+\begin{lemma}[Well-formed substitution for typing]\index{Freedom of
+    Speech!Well-formed Substitution for Typing}
   \label{lemma:substitution_kinding_typing}
   If $\rho \in \interp{\Gamma}$ and $\Gamma,\Gamma' \tvdash{\theta} e:e'$ then $\Gamma' \tvdash{\theta} \rho\ e:\rho\ e'$.
 \end{lemma}
@@ -964,7 +971,7 @@ The following results about substitution are also standard.
   \end{itemize}
 \end{proof}
 
-In order to prove that the \FSdrulename{Join} and \FSdrulename{Conv}
+In order to prove that the \FSdrulename{Join} and \FSdrulename{Conv}\index{Equality}
 are logically consistent, we need to know that if a type is equivalent
 to another, then their interpretations are equivalent.  It turns out
 that instead of proving the equality directly we can prove a much
@@ -975,7 +982,8 @@ proof we can obtain that they are in fact equal.  The following two
 lemmas prove this for both the programmatic fragment and the logical
 fragment respectfully:
 
-\begin{lemma}[Computational Semantic Conversion]
+\begin{lemma}[Computational Semantic Conversion]\index{Freedom of
+    Speech!Computational Semantic Conversion}
   \label{lemma:pconv_in_interp_are_equiv}
   If $e \join e'$ and $\Gamma \tvdash{\theta'} e:B$ and 
   $\Gamma \tvdash{\theta''} e':C$ then 
@@ -993,7 +1001,8 @@ fragment respectfully:
   $\interp{[e/x]A}^P_\rho \subseteq \interp{[e'/x]A}^P_\rho$.
 \end{proof}
 
-\begin{lemma}[Logical Semantic Conversion]
+\begin{lemma}[Logical Semantic Conversion]\index{Freedom of
+    Speech!Logical Semantic Conversion}
   \label{lemma:lconv_in_interp_are_equiv}
   If $e \join e'$ and $\Gamma \tvdash{\theta'} e:B$ and $\Gamma \tvdash{\theta''} e':C$ then 
   $\interp{[e/x]A}^L_\rho \subseteq \interp{[e'/x]A}^L_\rho$.
@@ -1049,7 +1058,7 @@ be closed using a series of well-typed expressions, and this closed
 expression is joinable with a well-typed value.  Thus, all expressions
 of the logical fragment terminate with a value, and we are free to
 call these expressions and values proofs, and their types formulas.
-\begin{thm}[Type soundness]
+\begin{thm}[Type soundness]\index{Freedom of Speech!Type Soundness}
   \label{thm:type_soundness}
   If $\Gamma \tvdash{L} e:e'$ then for all 
   $\rho \in \interp{\Gamma}, \rho\ e \in \interp{e'}^L_\rho$.

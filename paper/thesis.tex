@@ -322,18 +322,19 @@ know what the programming language allows, then we cannot be sure what
 is safe.
 
 Recall from Chapter~\ref{chap:the_three_perspectives} that the
-computational trinity states that type theories are simultaneously a
-logic as well as a programming language, and this double perspective
-provides the means of verifying properties of the programs we write in
-the theory, but this feature comes with a strong invariant, every
-program must terminate.  Now suppose we are working on a large
-development in a programming language based on type theory like
-Martin-L\"of's Type Theory or CCC which has come to a difficult
-problem that can be solved by the definition of some terminating
-function.  Furthermore, suppose we have found the solution in some
-research paper, but the termination proof is very complex and uses an
-advanced semantic proof technique, and lastly suppose that this
-termination proof is not formalized in a type theory, but is an
+computational trinity\index{Computational Trinity} states that type
+theories are simultaneously a logic as well as a programming language,
+and this double perspective provides the means of verifying properties
+of the programs we write in the theory, but this feature comes with a
+strong invariant, every program must terminate.  Now suppose we are
+working on a large development in a programming language based on type
+theory like Martin-L\"of's Type Theory\index{Martin-L\"of's Type
+  Theory (MLTT)} or CoC\index{Calculus of Constructions (CoC)} which has come to a
+difficult problem that can be solved by the definition of some
+terminating function.  Furthermore, suppose we have found the solution
+in some research paper, but the termination proof is very complex and
+uses an advanced semantic proof technique, and lastly suppose that
+this termination proof is not formalized in a type theory, but is an
 informal proof that we trust.  Since we are conducting our development
 in a terminating type theory there is only one course of action.  We
 have to formalize this complex termination argument. This can be
@@ -362,11 +363,11 @@ the notion of coinduction which is dual to induction.  Coinduction
 provides a means to define and observe infinite streams of data.
 Furthermore, coinductive types push the notion of non-termination into
 the types. There are a large number of applications of coinduction,
-and even more when we allow the mixture of induction and coinduction,
+and even more when we allow the mixture of induction and coinduction,\index{Induction}\index{Coinduction}
 for example the definition of an infinite stream of trees requires
 their mixture.  However, currently there is no known type theory that
 supports both induction and coinduction, and supports their
-(unrestricted) mixture while maintaining type safety.  In the third
+(unrestricted) mixture while maintaining type safety\index{Type Safety}.  In the third
 chapter of Design we introduce a new logic and corresponding type
 theory called Dualized Intuitionistic Logic and Dualized Type Theory
 respectively that is based on a logic rich in duality that shows
@@ -400,20 +401,21 @@ for any programming language.
 
 At least a basic meta-theoretic analysis of a programming language is
 very important.  Every programming language should at least have been
-proven type safe, and if the language contains a logical fragment,
-then it should be proven consistent.  These give strong guarantees to
-the programmer.  Type safety ensures that if a program has a type,
-then it can either compute something, or is the answer itself.
-Furthermore, it ensures that if a program has a type, then after
-running it, the result has the same type.  Lastly, consistency -- as
-we have mentioned before -- ensures that the objects of the language
-we call proofs really are proof.  These sound like commonsense
-properties, and they are, but many programming language implementors
-fail to establish them.  A programming language with such guarantees
-higers one confidence in the correctness and consistency of the
-language.  Therefore, a basic meta-theoretic analysis is necessary to
-be able to trust the programs we write, and the verification of
-programs carried out within the languages themselves.
+proven type safe\index{Type Safety}, and if the language contains a
+logical fragment, then it should be proven consistent.  These give
+strong guarantees to the programmer.  Type safety ensures that if a
+program has a type, then it can either compute something, or is the
+answer itself.  Furthermore, it ensures that if a program has a type,
+then after running it, the result has the same type.  Lastly,
+consistency\index{Consistency} -- as we have mentioned before --
+ensures that the objects of the language we call proofs really are
+proof.  These sound like commonsense properties, and they are, but
+many programming language implementors fail to establish them.  A
+programming language with such guarantees higers one confidence in the
+correctness and consistency of the language.  Therefore, a basic
+meta-theoretic analysis is necessary to be able to trust the programs
+we write, and the verification of programs carried out within the
+languages themselves.
 
 \chapter{Freedom of Speech}
 \label{chap:freedom_of_speech_anal}
@@ -448,7 +450,7 @@ never been released, and thus no accidents would have occurred.  A
 programming language that contains the ability to verify programs
 would have to contain some notion of a logic, and this logic must be
 trusted.  That is, the proofs written in this logic must be true; this
-corresponds to logical consistency.
+corresponds to logical consistency\index{Consistency}.
 
 In Section~\ref{sec:hereditary_substitution} we introduce the
 hereditay substitution proof technique for showing normalization and

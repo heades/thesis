@@ -20,9 +20,9 @@ above, this makes programming very hard.
 Consider a design where instead of a judgmental separation of the two
 fragments -- logical and programmatic -- we insist on a syntactic one.
 This means that the logical and programmatic fragments have completely
-distinct languages for types and programs -- but the semantics are not
-, and then the two fragments
-are related using freedom of speech by typing rules.  So we go from a
+distinct languages for types and programs -- but their semantics are
+not -- and then the two fragments are related using freedom of
+speech\index{Freedom of Speech} by typing rules.  So we go from a
 picture that looks like this:
 \begin{center}
   \begin{tikzpicture}[scale=2.5,cap=round,>=latex]    
@@ -75,7 +75,9 @@ for two appendices.
 $\Sep$ consists of two distinct phases: compile time and runtime, and
 $\Sep$ separates each phase into its own language.  The compile time
 phase uses the annotated $\Sep$ language, and the runtime phase uses
-the unannotated $\Sep$ language.  The former is then translated into
+the unannotated $\Sep$ language\index{Separation of Proof from Program
+  ($\Sep$)!Annotated Language}\index{Separation of Proof from Program
+  ($\Sep$)!Unannotated Language}.  The former is then translated into
 the second using an meta-level function called the eraser.  This
 function removes the annotations from objects of the annotated
 language yielding objects of the unannotated language, furthermore, the
@@ -134,7 +136,7 @@ Each of these will be discussed further below.  Now the programmatic
 fragment consists of only a single judgment, because it has a
 collapsed syntax very much like the freedom of speech language.  In
 fact, the programmatic fragment is basically an extension of the
-freedom of speech language, and so is not really that different. For
+freedom of speech\index{Freedom of Speech} language, and so is not really that different. For
 this reason we do not discuss the programmatic fragment in detail, but
 only discuss a few important aspects of the fragment.  
 
@@ -142,9 +144,9 @@ In the freedom of speech language the connection between the two
 fragments is very explicit.  The connection from the logical fragment
 to the programmatic fragment is modeled by the $\Sepdrulename{Coerce}$
 rule, and the connection from the programmatic fragment was modeled by
-the dependent product types, which allowed arguments to functions to be
+the dependent product types\index{Dependent Product Type}, which allowed arguments to functions to be
 programs from the programmatic fragment.  However, $\Sep$ does not
-have a coercion rule from the logical fragment to the programmatic
+have a coercion\index{Coercion} rule from the logical fragment to the programmatic
 fragment.  Instead both fragments are related via the dependent
 product types.  Logical programs are allowed to have programmatic
 inputs, and programmatic programs are allowed to have logical
@@ -172,12 +174,13 @@ reasoning as well as the definitions of the eraser
 functions. Secondly, in the $\Sepdrulename{TRM\_LamPL}$ we annotate
 the free variable $[[x]]$ in the context of the premise with the
 $\mathsf{val}$ annotation.  This indicates that $[[x]]$ ranges over
-programmatic values, and this is used to enforce call-by-value
+programmatic values, and this is used to enforce
+call-by-value\index{Call-by-value Reduction (CBV)}
 applications. Compare this to the rule $\Sepdrulename{TRM\_LamMI}$
 where $[[x]]$ does not only range over values, but also over diverging
 terms.
 
-These rules include the freedom of speech property.  The type $[[A]]$
+These rules include the freedom of speech property\index{Freedom of Speech}.  The type $[[A]]$
 is an alias for one of $[[t]]$, $[[P]]$, or $[[LK]]$, which means
 compile-time functions -- using $\Sepdrulename{TRM\_LamMI}$ -- can
 take in programmatic arguments, proof arguments, or even predicates.
@@ -262,12 +265,12 @@ follows:
     \end{array}
   \end{math}
 \end{center}
-Super kinds are the types of logical kinds, which are themselves the
+Super kinds\index{Super Kind} are the types of logical kinds, which are themselves the
 types of predicates.  Finally, predicates are the types of proofs.
 The definition of the logical fragment is very reminiscent of the
-definition of system $\text{F}^\omega$ -- see
+definition of system $\Fw$\index{System $\Fw$} -- see
 Section~\ref{sec:moderen_type_theory} for an introduction of $\Fw$.
-In fact, predicates can be computed using $[[x]]$, $[[\ L x : A
+In fact, predicates\index{Predicate} can be computed using $[[x]]$, $[[\ L x : A
 . P]]$, $[[P a]]$, $[[let x = p in P]]$, $[[let x = P in P']]$, and
 $[[let x = t [ p ] in P]]$; we have three different let expressions,
 because of the strict separation of the various languages.  This
@@ -275,8 +278,8 @@ implies that the logical fragment is indeed a higher order language,
 but a predicative one.  We have stratified the super kinds and logical
 kinds into an infinite hierarchy of kinds.  We denote this by
 $[[Logical i]]$ and $\mathsf{Formula}_{i}$.  This stratification is similar
-to levels in SSF -- see Section~\ref{sec:moderen_type_theory} for more
-information on SSF.  
+to levels in SSF\index{Stratified System F (SSF)} -- see
+Section~\ref{sec:moderen_type_theory} for more information on SSF.  
 
 Now in comparison with the freedom of speech language we can see that
 $\Sep$ has three new predicates: $[[t !]]$, $[[P1 + P2]]$, $[[Exists x
@@ -285,8 +288,9 @@ predicate and we will discuss this further below.  The second is the
 type of sum types or, logically, the type for disjunction, and the third
 is the type for existential quantification.  Note that we can
 existentially quantify over logical kinds, predicates, proofs, and
-terms.  Thus, the existential type makes use of the freedom of speech
-property similar to the dependent product type.  The final new
+terms.  Thus, the existential type\index{Existential Type} makes use of the freedom of speech
+property similar to the dependent product type\index{Dependent Product
+  Type}.  The final new
 predicate is the structural ordering type $[[t < t']]$ which says that
 $[[t]]$ is structurally smaller than $[[t']]$.  The structural
 ordering type will be discussed further below.
@@ -441,8 +445,8 @@ inconsistent, because it simply captures the notion that either a
 program terminates or it diverges, and this is no more inconsistent
 then adding the law-of-excluded middle to our logic.  In fact, one
 might expect that adding termination case could imply the
-law-of-excluded middle making our logic classical, but this is an open
-problem.
+law of excluded middle\index{Law of Excluded Middle (LEM)}
+making our logic classical, but this is an open problem.
 
 \textbf{Structural ordering.}  There is one final interesting feature
 that sets $\Sep$ apart from the freedom of speech language, and many
@@ -491,4 +495,3 @@ Thus, programming in $\Sep$ is more enjoyable.  Lastly, $\Sep$
 contains inductive datatypes with pattern matching.  Therefore,
 real-world programming examples can be carried out in $\Sep$; in fact,
 several examples can be found in the paper \cite{Kimmel:2012}.
-

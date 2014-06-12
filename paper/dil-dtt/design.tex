@@ -12,14 +12,15 @@
 
 Freedom of Speech and $\Sep$ are two very powerful programming
 languages, but there is one feature they do not have, the ability to
-reason about infinite data structures in an elegant way.  Infinite
-data can be defined and reasoned about using corecursion and
-coinduction respectively.  Now both of the previous languages contain
-induction, but only $\Sep$ contained inductive data types.  This
-chapter is about the design of a new simply typed theory called
-Dualized Type Theory (DTT).
+reason about infinite data structures\index{Infinite Data Structures}
+in an elegant way.  Infinite data can be defined and reasoned about
+using corecursion and coinduction respectively\index{Coinduction}.
+Now both of the previous languages contain induction, but only $\Sep$
+contained inductive data types.  This chapter is about the design of a
+new simply typed theory called Dualized Type Theory (DTT).
 
-DTT is based on a new bi-intuitionistic logic (BINT) called Dualized
+DTT is based on a new bi-intuitionistic logic
+(BINT)\index{bi-intuitionistic Logic (BINT)} called Dualized
 Intuitionistic Logic (DIL).  Bi-intuitionisim is a conservative
 extension of intuitionistic logic with prefect duality.  That is, for
 every logical connective of the logic its dual connective is also a
@@ -38,17 +39,17 @@ sacrifices type preservation.
 One particular difference in the design of DTT from Freedom of Speech
 and $\Sep$ is that we started from a logic, and then derived a
 corresponding type theory from it.  Thus, we make explicit use of the
-computational trinity (Chapter~\ref{chap:the_three_perspectives}) by
+computational trinity\index{Computational Trinity} (Chapter~\ref{chap:the_three_perspectives}) by
 starting on the logical side, and then moving to the type theoretic
 side.
 
-Classical logic is rich with duality.  Using the De Morgan dualities
+Classical logic is rich with duality\index{Duality}.  Using the De Morgan dualities
 it is straightforward to prove that conjunction is dual to disjunction
 and negation is self dual.  In addition, it is also possible to prove
 that $\lnot A \land B$ is dual to implication.  In intuitionistic
 logic these dualities are no longer provable, but in
 \cite{Rauszer:1974} Rauszer gives a conservative extension of the
-Kripke semantics for intuitionistic logic that not only models
+Kripke semantics\index{Kripke Semantics} for intuitionistic logic that not only models
 conjunction, disjunction, negation, and implication, but also the dual
 to implication, by introducing a new logical connective. The usual
 interpretation of implication in a Kripke model is as follows:
@@ -63,18 +64,18 @@ Now Rauszer took the dual of the previous interpretation to obtain the following
     \interp{A - B}_w = \exists w'.w' \leq w \land \lnot\interp{A}_{w'} \land \interp{B}_{w'}
   \end{math}
 \end{center}
-This is called subtraction or exclusion.  Propositional BINT logic is
-a conservative extension of propositional intuitionistic logic with
-perfect duality.  That is, it contains the logical connectives for
-disjunction, conjunction, implication, and subtraction, and it is
-sound and complete with respect to the Rauszer's extended Kripke
-semantics.
+This is called subtraction or exclusion\index{Subtraction}.
+Propositional BINT logic is a conservative extension of propositional
+intuitionistic logic with perfect duality.  That is, it contains the
+logical connectives for disjunction, conjunction, implication, and
+subtraction, and it is sound and complete with respect to the
+Rauszer's extended Kripke semantics.
 
 BINT logic is fairly unknown in computer science.  Filinski studied a
 fragment of BINT logic in his investigation into first class
-continuations in \cite{Filinski:1989}.  Crolard introduced a logic and
-corresponding type theory called subtractive logic, and showed it can
-be used to study constructive coroutines in
+continuations\index{Continuation} in \cite{Filinski:1989}.  Crolard
+introduced a logic and corresponding type theory called subtractive
+logic, and showed it can be used to study constructive coroutines in
 \cite{crolard01,Crolard:2004}.  He initially defined subtractive logic
 in sequent style with the Dragalin restriction, and then defined the
 corresponding type theory in natural deduction style by imposing a
@@ -90,7 +91,7 @@ constraints on the sequents where the graphs can be seen as abstract
 Kripke models. Gor\'e et. al. also proposed a new BINT logic that
 enjoys cut elimination using nested sequents; however it is currently
 unclear how to define a type theory with nested sequents
-\cite{DBLP:conf/aiml/GorePT08}.  Bilinear logic in its intuitionistic
+\cite{DBLP:conf/aiml/GorePT08}.  Bilinear logic\index{Bilinear Logic} in its intuitionistic
 form is a linear version of BINT and has been studied by Lambek in
 \cite{Lambek:1993,Lambek:1995}.  Biasi and Aschieri propose a term
 assignment to polarized bi-intuitionistic logic in
@@ -118,8 +119,9 @@ Section~\ref{sec:L} for a complete definition of L):
   \end{math}
 \end{center} 
 We show in Chapter~\ref{chap:dualized_type_theory_anal} that in the
-absence of the previous rules DIL still maintains consistency
-(Section~\ref{subsec:consistency_of_dil}) and completeness
+absence of the previous rules DIL still maintains
+consistency\index{Consistency}
+(Section~\ref{subsec:consistency_of_dil}) and completeness\index{Completeness}
 (Section~\ref{sec:completeness}).  Furthermore, DIL is defined using a
 dualized syntax which reduces the number of inference rules needed to
 define the logic.  Again, DIL is a single-sided sequent calculus with
@@ -128,14 +130,14 @@ conclusions from left to right. This is done in DIL using cuts on
 hypotheses. We call these types of cuts ``axiom cuts.''
 
 Now we consider BINT logic to be the closest extension of
-intuitionistic logic to classical logic while maintaining
+intuitionistic logic to classical logic\index{Classical Logic} while maintaining
 constructivity.  BINT has two forms of negation, one defined as usual,
 $\lnot A \stackrel{\mathsf{def}}{=} A \to \perp$, and a second defined
 interms of subtraction, $\mathop{\sim} A \stackrel{\mathsf{def}}{=}
 \top - A$.  The latter we call ``non-$A$''.  Now in BINT it is
 possible to prove $A \lor \mathop{\sim} A$ for any $A$
 \cite{crolard01}. Furthermore, when the latter is treated as a type in
-DTT, the inhabitant is a continuation without a canonical form,
+DTT, the inhabitant is a continuation\index{Continuation} without a canonical form,
 because the inhabitant contains as a subexpression an axiom cut.
 Thus, the presence of these continuations prevents the canonicity
 result for a type theory -- like DTT -- from holding.  Thus, if
@@ -146,7 +148,7 @@ general cut elimination, but all cuts other than axiom cuts can be
 eliminated. Throughout the sequel we define ``cut elimination'' as the
 elimination of all cuts other than axiom cuts, and we call DIL ``cut
 free'' with respect to this definition of cut elimination. The latter
-point is similar to Wadler's dual calculus \cite{Wadler:2005}.
+point is similar to Wadler's dual calculus\index{Dual Calculus} \cite{Wadler:2005}.
 
 \section{Pinto and Uustalu's L}
 \label{sec:L}
@@ -489,9 +491,9 @@ Programming in DTT is not functional programming as usual, so we now
 give several illustrative examples.  The reader familiar with type
 theories based on sequent calculi will find the following very
 familiar. The encodings are very similar to that of Curien and
-Herbelin's $\bar\lambda\mu\tilde\mu$-calculus \cite{Curien:2000}.  The
-locus of computation is the cut term, so naturally, function
-application is modeled using cuts.  Suppose
+Herbelin's $\bar\lambda\mu\tilde\mu$-calculus\index{$\LBMMT$-Calculus}
+\cite{Curien:2000}.  The locus of computation is the cut term, so
+naturally, function application is modeled using cuts.  Suppose
 \[
 \begin{array}{lll}
 D_1 & =^{\text{def}} & [[Gr ; H |- \x.t : + (A ->+ B)@n]]\\
@@ -528,7 +530,7 @@ as output ports. Clearly, these notions are dual.  Then a cut of the
 form $[[nu z.t * t']]$ can be intuitively understood as a device
 capable of routing information.  We think of this term as first
 running the term $[[t]]$, and then plugging its value into the
-continuation $[[t']]$.  Thus, negative terms are
+continuation\index{Continuation} $[[t']]$.  Thus, negative terms are
 continuations. Now consider the instance of the previous term 
 $[[nu z.t * y]]$ where $[[t]]$ is a positive term and $[[y]]$ is a negative
 variable (an output port).  This can be intuitively understood as
@@ -560,7 +562,7 @@ This intuition is not new, but was first observed by Curien and
 Herbelin in \cite{Curien:2000}; see also \cite{Curien:2002}.
 
 Similarly to the eliminator for implication we can define the eliminator for disjunction in the form
-of the usual case analysis. Suppose $[[Gr ; H |- t : + (A /\- B)@n]]$, $[[Gr ; H, x : + A@n |- t1 : + C@n]]$, and
+of the usual case analysis\index{Case Constructs}. Suppose $[[Gr ; H |- t : + (A /\- B)@n]]$, $[[Gr ; H, x : + A@n |- t1 : + C@n]]$, and
 $[[Gr ; H, x : + B@n |- t2 : + C@n]]$ are all admissible.  Then we can
 derive the usual eliminator for disjunction.  Define 
 \[ [[case t of x.t1 , x.t2]] \stackrel{\mathsf{def}}{=} [[nu z0 . (nu z1. (nu z2.t
@@ -736,7 +738,7 @@ Section~\ref{sec:dualized_intuitionistic_logic_(dil)}.  We can see by
 looking at the syntax that the cuts involved are indeed on the axiom
 $[[x]]$, thus this term has no canonical form.  In \cite{Crolard:2004}
 Crolard shows that inhabitants such as these amount to a constructive
-coroutine.  That is, it is a restricted form of a continuation.
+coroutine\index{Coroutine}.  That is, it is a restricted form of a continuation.
 
 We now consider several example reductions in DTT. In the following
 examples we underline non-top-level redexes. The first example simply

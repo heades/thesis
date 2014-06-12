@@ -2,7 +2,7 @@
 \label{subsec:consistency_of_dil}
 
 In this section we prove consistency of DIL with respect to Rauszer's
-Kripke semantics for BINT logic.  All of the results in this section
+Kripke semantics\index{Kripke Semantics} for BINT logic.  All of the results in this section
 have been formalized in the Agda proof assistant\footnote{Agda source
   code is available at
   \url{https://github.com/heades/DIL-consistency}}.  We begin by first
@@ -10,14 +10,14 @@ defining a Kripke frame.
 
 \begin{definition}
   \label{def:kripke_frame}
-  A \textbf{Kripke frame} is a pair $(W, R)$ of a set of worlds $W$, and
+  A \textbf{Kripke frame}\index{Kripke Frame} is a pair $(W, R)$ of a set of worlds $W$, and
   a preorder $R$ on $W$.  
 \end{definition}
 Then we extend the notion of a Kripke frame to include an evaluation for atomic
 formulas resulting in a Kripke model.
 \begin{definition}
   \label{def:kripke_model}
-  A \textbf{Kripke model} is a tuple $(W, R, V)$, such that, $(W, R)$ is
+  A \textbf{Kripke model}\index{Kripke Model} is a tuple $(W, R, V)$, such that, $(W, R)$ is
   a Kripke frame, and $V$ is a binary monotone relation on $W$ and the
   set of atomic formulas of DIL.
 \end{definition}
@@ -50,7 +50,7 @@ Now we can interpret formulas in a Kripke model as follows:
 The interpretation of formulas really highlights the fact that implication is dual to coimplication.  Monotonicity
 holds for this interpretation.
 
-\begin{lemma}[Monotonicity]
+\begin{lemma}[Monotonicity]\index{Monotonicity}
   \label{lemma:monotonicity}
   Suppose $(W, R, V)$ is a Kripke model, $[[A]]$ is some DIL formula, and $w,w' \in W$.
   Then $[[R w w']]$ and $[[ [| A |] w]]$ imply $[[ [| A |] w']]$.
@@ -61,7 +61,7 @@ for the interpretation of sequents in a Kripke model.  This will
 require the interpretation of graphs, and hence, nodes.  We interpret
 nodes as worlds in the model using a function we call a node
 interpreter.
-\begin{definition}
+\begin{definition}\index{Node Interpreter}
   \label{def:node_interpreter}
   Suppose $(W, R, V)$ is a Kripke model and $S$ is a set of nodes of
   an abstract Kripke model $[[Gr]]$.  Then a \textbf{node interpreter} on
@@ -126,7 +126,7 @@ interpretation of contexts.
 \end{definition}
 Combining these interpretations results in the following
 definition of validity.
-\begin{definition}
+\begin{definition}\index{Validity}
   \label{def:validity}
   Suppose $(W, R, V)$ is a Kripke model, $[[G]]$ is a context, 
   and $[[N]]$ is a node interpreter on the set of nodes in $[[G]]$.
@@ -141,8 +141,8 @@ Notice that in the definition of validity the graph $[[Gr]]$ is
 interpreted as a set of constraints imposed on the set of Kripke models, thus
 reinforcing the fact that the graphs on sequents really are abstract
 Kripke models.  Finally, using the previous definition of validity we
-can prove consistency.
-\begin{thm}[Consistency]
+can prove soundness.
+\begin{thm}[Soundness]\index{Soundness}
   \label{thm:consistency}
   Suppose $[[Gr ; G |-p A @ n]]$. 
   Then for any Kripke model $(W, R, V)$ and node interpreter $N$ on $|[[Gr]]|$, $[[ [|Gr ; G |- p A @ n |] N]]$.
@@ -189,7 +189,7 @@ which can be seen as restricted instances of the cut rule:
     \end{proof}
 Note that we will use admissible rules as if they are inference rules
 of the logic throughout the sequel.
-\begin{lemma}[Left-to-Right]
+\begin{lemma}[Left-to-Right]\index{Left-to-Right}
   \label{lemma:refocus}
   If $[[Gr ; G1 , bar p A @ n , G2 |- bar p' B @ n']]$ is derivable, then \\
   so is $[[Gr ; G1 , G2 , p' B @ n' |- p A @ n]]$.  
@@ -666,7 +666,7 @@ We can now use the previous result to raise the lower bound on sequents.
 Finally, we have everything we need to prove that general
 monotonicity is admissible in DIL.  This implies the usual
 admissible monotonicity rule as a corollary.
-\begin{lemma}[General Monotonicity]
+\begin{lemma}[General Monotonicity]\index{General Monotonicity}
   \label{lemma:genmono}
   If $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, $[[Gr |- m <= p * m']]$, and
   $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]$, then \\
@@ -925,7 +925,7 @@ such a translation in the following definition.
 \end{definition}
 Finally, the following theorem is the main result showing that any
 activation of a derivable L-sequent is derivable in DIL.
-\begin{thm}[Containment of L in DIL]
+\begin{thm}[Containment of L in DIL]\index{Containment of L in DIL}
   \label{thm:completeness}
   If $[[-Gr- ; G' |- + A @ n]]$ is an activation of the derivable L-sequent 
   $<<G |- Gr D>>$, then $[[-Gr- ; G' |- + A @ n]]$ is derivable.
@@ -1310,7 +1310,7 @@ activation of a derivable L-sequent is derivable in DIL.
   \end{itemize}
 \end{proof}
 
-\begin{corollary}[Completeness]
+\begin{corollary}[Completeness]\index{Completeness}
   \label{corollary:completeness}
   DIL is complete.
 \end{corollary}
@@ -1326,7 +1326,7 @@ activation of a derivable L-sequent is derivable in DIL.
 We now present the basic metatheory of DTT, starting with type
 preservations. We begin with the inversion lemma which is necessary
 for proving type preservation.
-\begin{lemma}[Inverstion]
+\begin{lemma}[Inverstion]\index{Dualized Type Theory!Inversion}
   \label{lemma:inverstion}
   \begin{itemize}
   \item[] 
@@ -1363,7 +1363,7 @@ follows:
 \end{center}
 The following lemmas are necessary in the proof of node substitution
 for typing.
-\begin{lemma}[Node Renaming]
+\begin{lemma}[Node Renaming]\index{Dualized Type Theory!Node Renaming}
   \label{lemma:renaming_nodes_in_graph}
   If $[[Gr1, Gr2 |- n1 <=p* n3]]$, then for any nodes $[[n4]]$ and
   $[[n5]]$, where $[[n5]]$ is distinct from $[[n1]]$ and $[[n3]]$,
@@ -1427,7 +1427,8 @@ for typing.
   \end{itemize}
 \end{proof}
 
-\begin{lemma}[Node Substitution for Reachability]
+\begin{lemma}[Node Substitution for Reachability]\index{Dualized Type
+    Theory!Node Substitution for Reachability}
   \label{lemma:node_substitution_for_reachability}
   If $[[Gr, n1 <=p1 n2,Gr' |-n4 <=p* n5]]$ and $[[Gr, Gr' |- n1 <=p1* n3]]$, then 
   $[[ [n3/n2]Gr,[n3/n2]Gr' |- [n3/n2]n4 <=p* [n3/n2]n5]]$. 
@@ -1511,7 +1512,8 @@ for typing.
   \end{itemize}
 \end{proof}
 
-\begin{lemma}[Node Substitution for Typing]
+\begin{lemma}[Node Substitution for Typing]\index{Dualized Type
+    Theory!Node Substitution for Typing}
   \label{lemma:node_substitution_for_typing}
   If $[[Gr, n1 <=p1 n2,Gr' ; H |- t : p2 A @ n3]]$ and $[[Gr,Gr' |- n1 <=p1 * n4]]$, then
   $[[ [n4/n2]Gr,[n4/n2]Gr'; [n4/n2]H |- t : p2 A @ [n4/n2]n3]]$. 
@@ -1633,7 +1635,8 @@ for typing.
     \end{itemize}  
   \end{proof}
 
-\begin{lemma}[Substitution for Typing]
+\begin{lemma}[Substitution for Typing]\index{Dualized Type
+    Theory!Substitution for Typing}
   \label{lemma:substitution_for_typing}
   If $[[Gr ; H |- t1 : p1 A @ n1]]$ and $[[Gr ; H, x : p1 A @ n1 |- t2 : p2 B @ n2]]$, then
   $[[Gr ; H |- [t1/x]t2 : p2 B @ n2]]$.
@@ -1734,7 +1737,8 @@ for typing.
   \end{proof}
 \noindent
 Finally, we prove type preservation.
-\begin{lemma}[Type Preservation]
+\begin{lemma}[Type Preservation]\index{Dualized Type
+    Theory!Type Preservation}\index{Type Preservation}
   \label{lemma:type_preservation}
   If $[[Gr ; H |- t : p A@n]]$, and $[[t]] \redto [[t']]$, then $[[Gr ; H |- t' : p A@n]]$.
 \end{lemma}
@@ -1807,10 +1811,10 @@ Finally, we prove type preservation.
 \caption{Classical typing of DTT terms}
 \label{fig:classtp}
 \end{figure}
-A more substantial property is strong normalization of reduction for
+A more substantial property is strong normalization\index{Strong Nomralization} of reduction for
 typed terms.  To prove this result, we will prove a stronger property,
 namely strong normalization for reduction of terms which are typable
-using the system of classical typing rules in Figure~\ref{fig:classtp}
+using the system of classical\index{Classical Logic} typing rules in Figure~\ref{fig:classtp}
 \cite{crolard01}.  This is justified by the following easy result
 (proof omitted), where $[[drop H]]$ just drops the world annotations
 from assumptions in $\Gamma$:
