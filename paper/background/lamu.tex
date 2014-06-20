@@ -31,17 +31,22 @@ are in Fig.~\ref{fig:lamu_syntax}.
         \end{array}
       \end{math} \\
       & \\
-      Full $\beta$-reduction: \\
-      \begin{mathpar}
-        \LamudruleRXXBeta{}       \and
-        \LamudruleRXXStruct{}     \and
-        \LamudruleRXXRenaming{}   \and
-        \LamudruleRXXLam{}        \and
-        \LamudruleRXXMu{}         \and
-        \LamudruleRXXNaming{}     \and
-        \LamudruleRXXAppOne{}     \and
-        \LamudruleRXXAppTwo{}
-      \end{mathpar}
+      Full $\beta$-reduction: \\      
+        \begin{math}
+          \begin{array}{lll}
+            \LamudruleRXXBeta{}       &
+            \LamudruleRXXStruct{}     \\
+            & \\
+            \LamudruleRXXRenaming{}   &
+            \LamudruleRXXLam{}        \\
+            & \\
+            \LamudruleRXXMu{}         &
+            \LamudruleRXXNaming{}     \\
+            & \\
+            \LamudruleRXXAppOne{}     &
+            \LamudruleRXXAppTwo{}
+          \end{array}
+        \end{math}
     \end{tabular}
   \end{center}
 
@@ -150,16 +155,17 @@ these as primitive to make things cleaner.  We do not show the
 derivations here, because they are rather straightforward.
 \begin{lemma}
   \label{lemma:lamu_derived_rules}
-  The following rules are derivable using the typing rules and the rules of
+  The following rules are derivable using the typing rules and the rules of\\
   Lemma~\ref{lemma:lamu_neg}:
+  \ \\
   \begin{center}
     \begin{math}
-      \begin{array}{lll}
+      \begin{array}{ccc}
         $$\mprset{flushleft}
         \inferrule* [right=NegInt1] {
           [[t : G,A x |- _|_,D]]
-        }{[[\x.t:G |- {-A},D]]}
-        &
+        }{[[\x.t:G |- {-A},D]]} \\
+        & \\
         $$\mprset{flushleft}
         \inferrule* [right=NegElim1] {
           [[t1 : G |- {-A},D]]
@@ -172,8 +178,8 @@ derivations here, because they are rather straightforward.
           [[a fresh in D]]
           \\
           [[s : G, A x |- D]]
-        }{[[\x.\m a.s : G |- {-A},D]]}
-        &
+        }{[[\x.\m a.s : G |- {-A},D]]} \\
+        & \\
         $$\mprset{flushleft}
         \inferrule* [right=NegElim2] {
           [[t1 : G |- {-A},D]]

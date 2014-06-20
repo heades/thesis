@@ -31,8 +31,9 @@ logical relations.
 \begin{definition}
   \label{def:logical_relations}
   We define logical relations for values and then we extend this definition to
-  terms.\\
-  \ \\
+  terms.
+  
+  \noindent
   Logical relations for values: \\
   \begin{math}
     \small
@@ -44,9 +45,10 @@ logical relations.
       \forall v.v \in \mathcal{V} \interp{T_1} \implies 
               [v/x]t \in \mathcal{E}\interp{T_2} \}\\
     \end{array}
-  \end{math}
-  \ \\
-  \ \\
+  \end{math}\\
+  
+  \vspace{-20px}
+  \noindent
   Logical relations extended to terms:\\
   \begin{math}
     \begin{array}{lll}
@@ -54,8 +56,8 @@ logical relations.
       \exists v.t \redto^* v \land v \in \mathcal{V}\interp{T} \}
     \end{array}
   \end{math}
-  \ \\
-  \ \\
+  
+  \noindent
   Well-formed substitutions:\\
   \begin{math}
     \begin{array}{lllll}
@@ -78,6 +80,7 @@ This judgment can be read as $t$ models type $T$ in context $\Gamma$.
 \noindent
 We now turn to the fundamental property of logical relations.  We state this property as
 follows:
+\vspace{-17px}
 \begin{lemma}
   \label{lemma:fundamental_property}
   If $\Gamma \vdash t : T$ then $\Gamma \models e : T$.

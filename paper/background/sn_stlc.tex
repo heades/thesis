@@ -27,6 +27,7 @@ term is reducible if it is a member of one of these sets.  Next we
 have some constraints the previous definition must satisfy.  Girard
 called these the \textbf{CR 1-4} properties.  Their proofs can be
 found in \cite{Girard:1989}.
+\vspace{-20px}
 \begin{lemma}
   \label{lemma:stlc_sn_cr1}
   If $[[t]] \in \interp{[[T]]}$, then $[[t]] \in \mathsf{SN}$.
@@ -63,9 +64,9 @@ The proof is by case analysis on the possible reductions of
 $[[(\x:T1.t1) t2]]$.  To prove that all terms are reducible we must
 first define sets of well-formed substitutions.  We denote the empty
 substitution as $\emptyset$.
+\vspace{-30px}
 \begin{definition}
   \label{def:stlc_well-formed_subs}
-  %% Why not just define G |- \sigma instead of doing it two pieces?
   Well-formed substitutions are defined as follows:
   \begin{center}
     \begin{math}

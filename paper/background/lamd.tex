@@ -137,13 +137,13 @@ the $\lambda\Delta$-calculus.
 \end{definition}
 Using the previous definition we can now prove that if a term is typeable in the $\lambda\mu$-calculus
 then we can construct a corresponding term of the same type in the $\lambda\Delta$-calculus. 
-\begin{lemma}
+\begin{lemmaItem}
   \label{lemma:lamu_is_lamd}
   \begin{itemize}
   \item[i.] If $[[t]]:\Gamma \vdash [[A]],\Delta$ then $[[G]],|\Delta| \vdash |[[t]]|:[[A]]$.
   \item[ii.] If $[[t]]:\Gamma \vdash .,\Delta$ then $[[G]],|\Delta| \vdash |[[t]]|:[[_|_]]$.
   \end{itemize}
-\end{lemma}
+\end{lemmaItem}
 \noindent
 The previous lemma establishes that the $\lambda\Delta$-calculus is at
 least as expressive -- in terms of typeability -- than the
@@ -159,23 +159,19 @@ the form $[[{-A}]]$.
   \label{def:embed_lamd_lamu}
   The following embeds the Church style formulation of the $\lambda\Delta$-calculus into the
   $\lambda\mu$-calculus:
-  
-  \ \\
-  Contexts:\\  
-  If $[[G]] \equiv [[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]], [[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]$, then
   \begin{center}
+    \begin{tabular}{lll}
+    Contexts:\\  
+    \,\,\,If $[[G]] \equiv [[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]], [[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]$, then\\
     \begin{math}
       \begin{array}{lll}
-        |[[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]]| & := & [[A1]]^{[[x1]]}, \ldots, [[Ai]]^{[[xi]]} \equiv [[G]]_\mu\\
+        \,\,\,\,|[[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]]| & := & [[A1]]^{[[x1]]}, \ldots, [[Ai]]^{[[xi]]} \equiv [[G]]_\mu\\
         &\\
-        |[[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]| & := & [[B1]]^{\alpha_1},\ldots,[[Bj]]^{\alpha_j} \equiv \Delta\\
+        \,\,\,\,|[[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]| & := & [[B1]]^{\alpha_1},\ldots,[[Bj]]^{\alpha_j} \equiv \Delta\\
       \end{array}
-    \end{math}
-  \end{center}
-  
-  \ \\
-  Terms:
-  \begin{center}
+    \end{math}\\
+    & \\
+    Terms:\\    
     \begin{math}
       \begin{array}{lll}
         |[[x]]|  & := & [[x]]\\
@@ -188,6 +184,7 @@ the form $[[{-A}]]$.
           \text{, where } \alpha \not \equiv \beta
       \end{array}
     \end{math}
+  \end{tabular}
   \end{center}
 \end{definition}
 \noindent

@@ -17,8 +17,8 @@ type, T :: 'Type_' ::=
   | T1 T2        ::   :: App
   | T -> T'      ::   :: Arrow
     {{ tex [[T]] \to [[T']] }}
-  | Forall X . T ::   :: Forall
-    {{ tex \forall [[X]] . [[T]] }}
+  | Forall X : K . T ::   :: Forall
+    {{ tex \forall [[X]] : [[K]] . [[T]] }}
   | ( T )        :: S :: Parens
   | [ T / X ] T' :: M :: Substitution
 
@@ -26,8 +26,8 @@ term, t :: 'Term_' ::=
   | x              ::   :: Variables
   | \ x : T . t    ::   :: Lam (+ bind x in t +)
     {{ tex \lambda [[x]] : [[T]] . [[t]] }}
-  | \\ X . t       ::   :: TypeAbs
-    {{ tex \Lambda [[X]] . [[t]] }}
+  | \\ X : K . t       ::   :: TypeAbs
+    {{ tex \Lambda [[X]] : [[K]] . [[t]] }}
   | t1 t2          ::   :: App
   | t [ T ]        ::   :: TypeApp
   | [ t / x ] t'   :: M :: Substitution
@@ -51,17 +51,17 @@ defns
     {{ tex [[G]] \vdash [[T]] : [[K]] }}
   by
 
-  --------------------------- :: Var
-  G, X : Type, G' |- X : Type
+  --------------------- :: Var
+  G, X : K, G' |- X : K
 
   G |- T1 : Type
   G |- T2 : Type
   -------------------- :: Arrow
   G |- T1 -> T2 : Type
 
-  G, X:Type |- T : Type
-  ---------------------- :: Forall
-  G |- Forall X.T : Type
+  G, X:K |- T : Type
+  ------------------------- :: Forall
+  G |- Forall X:K.T : Type
 
   G, X : K1 |- T : K2
   ----------------------- :: Lam
@@ -71,6 +71,44 @@ defns
   G |- T2 : K1
   ------------------ :: App
   G |- T1 T2 : K2
+
+  defn
+  T1 = T2 :: :: BetaEq :: 'Eq_'
+  {{tex [[T1]] \equiv_\beta [[T2]] }}
+  by
+  
+  ----- :: Refl
+  T = T
+
+  T2 = T1
+  ------- :: Sym
+  T1 = T2
+
+  T1 = T2
+  T2 = T3
+  ------- :: Trans
+  T1 = T3
+
+  T1 = T2
+  ----------------- :: Lam
+  \X:K.T1 = \X:K.T2
+
+  T1 = T'1
+  T2 = T'2
+  --------------- :: App
+  T1 T2 = T'1 T'2
+
+  T1 = T'1
+  T2 = T'2
+  --------------------- :: Imp
+  T1 -> T2 = T'1 -> T'2
+
+  T1 = T2
+  ----------------------------- :: Forall
+  Forall X:K.T1 = Forall X:K.T2
+
+  ----------------------- :: Beta
+  (\X:K.T2) T1 = [T1/X]T2  
 
   defn
   G |- t : T :: :: typing :: '' 
@@ -90,13 +128,19 @@ defns
   ------------------ :: App
   G |- t1 t2 : T2
 
-  G, X : Type |- t : T2
-  ------------------------ :: TypeAbs
-  G |- \\X.t : Forall X.T
+  G, X : K |- t : T2
+  -------------------------- :: TypeAbs
+  G |- \\X:K.t : Forall X:K.T
 
-  G |- t : Forall X.T'
+  G |- t : Forall X:K.T'
   -------------------- :: TypeApp
   G |- t[T] : [T/X]T'
+  
+  T1 = T2
+  G |- T2 : Type
+  G |- t : T1
+  ------------- :: Conv
+  G |- t : T2
 
 defns
  Opsem :: '' ::=
@@ -129,7 +173,7 @@ defns
   (\x : T . t) t' ~> [t'/x]t  
 
   ---------------------- :: TypeRed
-  (\\X.t)[T] ~> [T/X]t  
+  (\\X:K.t)[T] ~> [T/X]t  
 
   t ~> t'
   ----------------- :: Lam
@@ -137,7 +181,7 @@ defns
 
   t ~> t'
   --------------- :: TypeAbs
-  \\X.t ~> \\X.t'
+  \\X:K.t ~> \\X:K.t'
 
   t1 ~> t'1
   --------------- :: App1

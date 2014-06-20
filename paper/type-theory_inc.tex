@@ -11,40 +11,51 @@
 
 \newenvironment{thm}{
  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Theorem \thethm.}} \begin{em}
+   \begin{changemargin}{1px}{2px}\noindent
 }{
+  \end{changemargin}
   \end{em} \par \addvspace{\baselineskip} 
 }
 \newenvironment{lemma}{
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Lemma \thethm.}} \begin{em}
+    \begin{changemargin}{1px}{2px}\noindent
+}{
+  \end{changemargin}
+  \end{em} \par \addvspace{\baselineskip}
+}
+\newenvironment{lemmaItem}{
   \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Lemma \thethm.}} \begin{em}
 }{
   \end{em} \par \addvspace{\baselineskip}
 }
 \newenvironment{proposition}{
   \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Proposition \thethm.}} \begin{em}
+    \begin{changemargin}{1px}{2px}\noindent
 }{
+    \end{changemargin}
   \end{em} \par \addvspace{\baselineskip}
 }
 \newenvironment{corollary}{
   \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Corollary \thethm.}} \begin{em}
+  \begin{changemargin}{1px}{2px}\noindent
 }{
+  \end{changemargin}
   \end{em} \par \addvspace{\baselineskip}
 }
 \newenvironment{definition}{
   \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Definition \thethm.}} 
-  \begin{em}
+  \begin{em}\begin{changemargin}{1px}{2px}\noindent
 }{
+\end{changemargin}
   \end{em} \par \addvspace{\baselineskip} 
 }
 \newenvironment{example}{
-  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Example \thethm.}} \begin{em}
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent
+  \textbf{\underline{Example \thethm.}} \begin{em}
+    \begin{changemargin}{1px}{2px}\noindent
 }{
+  \end{changemargin}
   \end{em} \par \addvspace{\baselineskip}
-}
-\newenvironment{openproblem}{
-  \par \addvspace{\baselineskip} \noindent \textbf{\underline{Open Problem. \arabic{section}.\arabic{subsection}.\arabic{thm}.}} 
-  \refstepcounter{thm} \begin{em}
-}{
-  \end{em} \par \addvspace{\baselineskip} 
 }
 
 % Commands that are useful for writing about type theory and programming language design.

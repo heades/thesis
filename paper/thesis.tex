@@ -33,6 +33,7 @@
 %\documentclass[phd,dedicationpage,ackpage,figures,tables,appendix]{uithesis}
 
 % example
+%\documentclass[phd,appendix,dedicationpage,ackpage,epigraphpage,figures,abstractpage]{uithesis}
 \documentclass[phd,appendix,dedicationpage,ackpage,epigraphpage,figures]{uithesis}
 
 %=============================================================================
@@ -52,6 +53,21 @@
 \usepackage{makeidx}            % Enable indexing.
 \usepackage{tocloft}
 \usepackage{chngcntr}
+\usepackage{layouts}
+
+\newenvironment{changemargin}[2]{%
+  \begin{list}{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\leftmargin}{#1}%
+    \setlength{\rightmargin}{#2}%
+    \setlength{\listparindent}{\parindent}%
+    \setlength{\itemindent}{\parindent}%
+    \setlength{\parsep}{\parskip}%
+  }%
+  \item[]}{\end{list}}
+
+\usepackage{showframe}          % For checking margins.
+
 \counterwithout{figure}{chapter}
 \counterwithout{figure}{section}
 
@@ -61,17 +77,44 @@
 \newcommand{\Sep}[0]{\text{Sep}^3}
 \newcommand{\hscase}[1]{\par\begingroup\leftskip1em #1 \par\endgroup}
 
-\renewcommand{\cftpartfont}{\normalsize\bfseries}
+\renewcommand{\cfttoctitlefont}{\hfill\normalsize\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftpartfont}{\normalsize\normalfont}
+\renewcommand{\cftpartpagefont}{\normalsize\normalfont}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} 
+\renewcommand{\cftchapfont}{\normalsize\normalfont}
+\renewcommand{\cftchappagefont}{\normalsize\normalfont}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} 
 \cftsetindents{chapter}{0.25in}{0.5in}
 \cftsetindents{section}{0.5in}{0.5in}
 \cftsetindents{subsection}{0.75in}{0.5in}
+
+\setlength{\cftbeforepartskip}{14.48pt}
+\setlength{\cftbeforechapskip}{14.48pt}
+\setlength{\cftbeforetoctitleskip}{-16pt}
+\setlength\cftafterloftitleskip{0pt}
+\setlength\cftbeforeloftitleskip{-19pt}
+
+% Disables the box around hypperef links.
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=black,
+}
+
+% Figure separation lengths.
+\setlength{\textfloatsep}{70px}
+\setlength{\intextsep}{70px}
+\setlength{\floatsep}{70px}
 
 %=============================================================================
 % prelude
 %=============================================================================
 
 \title{The Semantic Analysis of Advanced Programming Languages}
-\author{Harley Daniel Eades III}
+\author{Harley D. Eades III}
 \dept{Computer Science}
 
 % multipleSupervisors=true for two advisors
@@ -93,13 +136,63 @@
 \copyrightyear{2014}
 
 \Abstract{
-\blindtext
+        We live in a time where computing devices power essential
+  systems of our society: our automobiles, our airplanes and even our
+  medical services.  In these safety-critical systems, bugs do not
+  just cost money to fix; they have a potential to cause harm, even
+  death.  Therefore, software correctness is of paramount importance.
+        Existing mainstream programming languages do not support
+  software verification as part of their design, but rely on testing,
+  and thus cannot completely rule out the possibility of bugs during
+  software development.  To fix this problem we must reshape the very
+  foundation on which programming languages are based.  Programming
+  languages must support the ability to verify the correctness of the
+  software developed in them, and this software verification must be
+  possible using the same language the software is developed in.  In
+  the first half of this dissertation we introduce three new
+  programming languages: Freedom of Speech, Separation of Proof from
+  Program, and Dualized Type Theory.  The Freedom of Speech language
+  separates a logical fragment from of a general recursive programming
+  language, but still allowing for the types of the logical fragment
+  to depend on general recursive programs while maintaining logical
+  consistency. Thus, obtaining the ability to verify properties of
+  general recursion programs. Separation of Proof from Program builds
+  on the Freedom of Speech language by relieving several restrictions,
+  and adding a number of extensions.  Finally, Dualized Type Theory is
+  a terminating functional programming language rich in constructive
+  duality, and shows promise of being a logical foundation of
+  induction and coninduction.
+        These languages have the ability to verify properties of
+  software, but how can we trust this verification?  To be able to put
+  our trust in these languages requires that the language be
+  rigorously and mathematically defined so that the programming
+  language itself can be studied as a mathematical object.  Then we
+  must show one very important property, logical consistency of the
+  fragment of the programming language used to verify mathematical
+  properties of the software.  In the second half of this dissertation
+  we introduce a well-known proof technique for showing logical
+  consistency called hereditary substitution.  Hereditary substitution
+  shows promise of being less complex than existing proof techniques
+  like the Tait-Girard Reducibility method.  However, we are unsure
+  which programming languages can be proved terminating using
+  hereditary substitution.  Our contribution to this line of work is
+  the application of the hereditary substitution technique to
+  predicative polymorphic programming languages, and the first proof
+  of termination using hereditary substitution for a classical type
+  theory.
 }
 
 \dedication{To my lovely wife, Jenny Eades.}
 
-\epigraph{``Program testing can be used to show the presence of bugs, but never to show their absence!''
---Dijkstra (1970)}
+\epigraph{  
+  \begin{flushright}
+    \begin{center}
+      Program testing can be used to show the presence of bugs, but never to show their absence!
+    \end{center}
+    \ \\
+    --Dijkstra (1970)
+  \end{flushright}
+}
 
 \acknowledgements{The first person I would like to acknowledge is my
   advisor Aaron Stump.  He is one of the kindest and most intelligent
@@ -140,6 +233,8 @@
 \makeindex
 
 \begin{document}
+
+\addtocontents{toc}{\vskip -0.9cm} 
 
 \frontmatter
 
@@ -237,9 +332,6 @@ stands as a successful step towards the solution of the second major
 problem outlined above.
 % section introduction (end)
 
-\chapter*{Novel Contributions}
-\label{sec:novel_contributions}
-\addcontentsline{toc}{listhead}{NOVEL CONTRIBUTIONS}
 This thesis consists of two major topics.  The first topic is on the
 design of general purpose dependently-typed functional programming
 languages. This topic is covered in Part~\ref{part:design} (Design).
@@ -299,8 +391,6 @@ outlines each contribution:
 \end{itemize}
 % section novel_contributions (end)
 
-\addcontentsline{toc}{blankhead}{PART}
-\vspace{-12pt}
 \part{BACKGROUND}          
 \label{part:background}
 \import*{background/}{background}
@@ -308,6 +398,9 @@ outlines each contribution:
 
 \part{DESIGN}
 \label{part:design}
+
+\chapter{Freedom of Speech}
+\label{chap:freedom_of_speech}
 The design of any programming language must facilitate reasoning about
 the programming language itself.  This facilitation comes in the form
 of a rigorous definition which makes mathematically precise all of the
@@ -384,8 +477,6 @@ respectively that is based on a logic rich in duality that shows
 promise of being a logical framework for induction and coinduction
 that is type safe and supports their mixture.
 
-\chapter{Freedom of Speech}
-\label{chap:freedom_of_speech}
 \import*{free-speech/}{FS-design-inc}
 % chapter freedom_of_speech (end)
 
@@ -393,7 +484,7 @@ that is type safe and supports their mixture.
 \label{chap:separation_of_proof_from_program}
 \import*{sep3/}{sep3-inc}
 % chapter separation_of_proof_from_program (end)
-
+\addtocontents{toc}{\vspace{-15px}}
 \chapter{Dualized Logic and Type Theory}
 \label{chap:dualized_type_theory_de}
 \import*{dil-dtt/}{design-inc}
@@ -402,6 +493,9 @@ that is type safe and supports their mixture.
 
 \part{BASIC SYNTACTIC ANALYSIS}
 \label{part:basic-analysis}
+
+\chapter{Freedom of Speech}
+\label{chap:freedom_of_speech_anal}
 The following chapters conduct basic meta-theoretic analysis of the
 freedom of speech language, and dualized logic and its corresponding
 type theory dualized type theory.  We consider these analysis to be
@@ -427,8 +521,6 @@ meta-theoretic analysis is necessary to be able to trust the programs
 we write, and the verification of programs carried out within the
 languages themselves.
 
-\chapter{Freedom of Speech}
-\label{chap:freedom_of_speech_anal}
 \import*{free-speech/}{FS-analysis-inc}
 % chapter freedom_of_speech (end)
 
@@ -451,6 +543,8 @@ translating DIL into a classical logic.
 \part{NORMALIZATION BY HEREDITARY SUBSTITUTION}
 \label{part:norm-hs}
 
+\chapter{Stratified System F and Beyond}
+\label{chap:stratified_system_f_and_beyond}
 One motivation for the work in this thesis is that programming
 languages must contain the means of verifying the software written in
 them.  This verification would catch major bugs during development as
@@ -478,8 +572,6 @@ all of the following chapters we assume the reader is familiar with
 hereditary substitution.  If the reader is not, then they should first
 read Section~\ref{sec:hereditary_substitution}.
 
-\chapter{Stratified System F and Beyond}
-\label{chap:stratified_system_f_and_beyond}
 \import*{norm-by-hs/ssf/}{ssf.tex}
 \import*{norm-by-hs/ssf+/}{ssf+.tex}
 \import*{norm-by-hs/dep-ssf/}{dep-ssf.tex}
@@ -530,8 +622,6 @@ languages.  These new languages will have the means to prevent major
 bugs in safety critical devices from reaching the public, but there is
 a lot more work to be done.
 
-\section*{Future Work}
-\label{sec:future_work}
 The following list addresses future work related to each theory:
 \begin{itemize}
 \item[-] The freedom of speech language has a call-by-value
@@ -570,146 +660,140 @@ The following list addresses future work related to each theory:
 
 
 %=============================================================================
-\appendix
+%\appendix
 %=============================================================================
+%\addtocontents{toc}{\protect\vspace{-16pt}}
+\addcontentsline{toc}{listhead}{APPENDIX}
 
-\chapter{Type Theories}
-\label{chap:type_theories}
-\section{The $\lambda$-Calculus}
+\chapter*{Appendix}
+
+\section*{The $\lambda$-Calculus}
 \label{sec:the_lambda-calculus}
 \Lamall{}
-% section the_lambda-calculus (end)
+% section* the_lambda-calculus (end)
 
 \newpage
-\section{Church-Style Simply Typed $\lambda$-Calculus}
+\section*{Church-Style Simply Typed $\lambda$-Calculus}
 \label{sec:church_style_simply_typed_lambda-calculus}
 \CHSTLCall{}
-% section church_style_simply_typed_lambda-calculus (end)
+% section* church_style_simply_typed_lambda-calculus (end)
 
 \newpage
-\section{Curry-Style Simply Typed $\lambda$-Calculus}
+\section*{Curry-Style Simply Typed $\lambda$-Calculus}
 \label{sec:curry_style_simply_typed_lambda-calculus}
 \CSTLCall{}
-% section curry_style_simply_typed_lambda-calculus (end)
+% section* curry_style_simply_typed_lambda-calculus (end)
 
 \newpage
-\section{Combinatory Logic}
+\section*{Combinatory Logic}
 \label{sec:combinatory_logic}
 \Comball{}
-% section combinatory_logic (end)
+% section* combinatory_logic (end)
 
 \newpage
-\section{G\"odel's System T}
+\section*{G\"odel's System T}
 \label{sec:godels_system_t}
 \Tall{}
-% section godels_system_t (end)
+% section* godels_system_t (end)
 
 \newpage
-\section{Girard-Reynold's System F}
+\section*{Girard-Reynold's System F}
 \label{sec:girard-reynolds_system_f}
 \Fall{}
-% section girard-reynolds_system_f (end)
+% section* girard-reynolds_system_f (end)
 
 \newpage
-\section{Stratified System F}
+\section*{Stratified System F}
 \label{sec:stratified_system_f}
 \SSFall{}
-% section SSF (end)
+% section* SSF (end)
 
 \newpage
-\section{Stratified System $\Fp$}
+\section*{Stratified System $\Fp$}
 \label{sec:stratified_system_f+}
 {\scriptsize \SSFpall{}}
 
-% section SSF+ (end)
+% section* SSF+ (end)
 
 \newpage
-\section{Dependent Stratified System $\F$}
+\section*{Dependent Stratified System $\F$}
 \label{sec:dep_stratified_system_f}
 \DepSSFall{}
-% section DSSF+ (end)
+% section* DSSF+ (end)
 
-% \newpage
-% \section{System $\text{F}^\omega$}
-% \label{sec:system_fw}
-% \Fwall{}
-% % section system_fw (end)
-
-\newpage
-\section{The $\lambda\mu$-Calculus}
+\section*{The $\lambda\mu$-Calculus}
 \label{sec:lamu_all}
 \Lamuall{}
-% section lamu_all (end)
+% section* lamu_all (end)
 
 \newpage
-\section{The $\lambda\Delta$-Calculus}
+\section*{The $\lambda\Delta$-Calculus}
 \label{sec:lamd_all}
 \Lamdall{}
-% section lamd_all (end)
+% section* lamd_all (end)
 
 \newpage
-\section{The $\LBMMT$-Calculus}
+\section*{The $\LBMMT$-Calculus}
 \label{sec:lbmmt_all}
 \LBMMTall{}
-% section lbmmt_all (end)
+% section* lbmmt_all (end)
 
 \newpage
-\section{The Dual-Calculus}
+\section*{The Dual-Calculus}
 \label{sec:dc_all}
 \DCall{}
-% section dual_calculus_all (end)
+% section* dual_calculus_all (end)
 
 \newpage
-\section{Martin-L\"of's Type Theory}
+\section*{Martin-L\"of's Type Theory}
 \label{sec:tt_all}
 \TTall{}
-% section tt_all (end)
+% section* tt_all (end)
 
 \newpage
-\section{The Calculus of Constructions}
+\section*{The Calculus of Constructions}
 \label{sec:coc_all}
 \CoCall{}
-% section coc_all (end)
+% section* coc_all (end)
 
 \newpage
-\section{The Separated Calculus of Constructions}
+\section*{The Separated Calculus of Constructions}
 \label{sec:coc_sep_all}
 \CoCSall{}
-% section coc_sep_all (end)
+% section* coc_sep_all (end)
 
 \newpage
-\section{Freedom of Speech}
+\section*{Freedom of Speech}
 \label{sec:freedom_of_speech_all}
 \FSall{}
-% section freedom_of_speech_all (end)
+% section* freedom_of_speech_all (end)
 
 \newpage
-\section{Annotated Separation of Proof from Program}
+\section*{Annotated Separation of Proof from Program}
 \label{sec:annotated_separation_of_proof_from_program}
 \Sepall{}
-% section annotated_separated_of_proof_from_program (end)
+% section* annotated_separated_of_proof_from_program (end)
 
 \newpage
-\section{Unannotated Separation of Proof from Program}
+\section*{Unannotated Separation of Proof from Program}
 \label{sec:unannotated_separation_of_proof_from_program}
 \SepUall{}
 
 \import*{sep3/}{sep3-app-inc}
-% section annotated_separation_of_proof_from_program (end)
+% section* annotated_separation_of_proof_from_program (end)
 
 \newpage
-\section{Pinto and Uustalu's L}
+\section*{Pinto and Uustalu's L}
 \label{sec:pinto_and_uustalu's_l}
 \Lall{}
-% section pinto_and_uustalu's_l (end)
+% section* pinto_and_uustalu's_l (end)
 
 \newpage
-\section{Dualized Intuitionistic Logic, Dualized Type Theory, and
+\section*{Dualized Intuitionistic Logic, Dualized Type Theory, and
   Dualized Classical Logic}
 \label{sec:dualized_intuitionistic_logic}
 \dttall{}
-% section dualized_intuitionistic_logic (end)
-% section type_theories (end)
+% section* dualized_intuitionistic_logic (end)
 
 %=============================================================================
 % bibliography
@@ -719,7 +803,7 @@ The following list addresses future work related to each theory:
 \bibliography{thesis}
 
 % \clearpage
-% \addcontentsline{toc}{chapter}{Index}
+% \addcontentsline{toc}{section*}{Index}
 % \IfFileExists{thesis.ind}{\input{thesis.ind}}{}
 
 \end{document}

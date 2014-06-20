@@ -149,22 +149,22 @@ The typing rules are defined in Fig.~\ref{fig:lof_typing}.
 \begin{figure}
   \begin{center}
     \begin{mathpar}
-        \TTdruleTXXUnit{}      \and
-        \TTdruleTXXVar{}       \and
-        \TTdruleTXXSum{}       \and
-        \TTdruleTXXCaseOne{}   \and
-        \TTdruleTXXProd{}      \and
-        \TTdruleTXXProdOne{}   \and
-        \TTdruleTXXProdTwo{}   \and
-        \TTdruleTXXPi{}        \and
-        \TTdruleTXXAppOne{}    \and
-        \TTdruleTXXArrow{}     \and
-        \TTdruleTXXAppTwo{}    \and
-        \TTdruleTXXCoProdOne{} \and
-        \TTdruleTXXCoProdTwo{} \and
-        \TTdruleTXXCaseTwo{}   \and
-        \TTdruleTXXAbort{}     \and
-        \TTdruleTXXConv{}
+        \TTdruleUnit{}      \and
+        \TTdruleVar{}       \and
+        \TTdruleSum{}       \and
+        \TTdruleCaseOne{}   \and
+        \TTdruleProd{}      \and
+        \TTdruleProdOne{}   \and
+        \TTdruleProdTwo{}   \and
+        \TTdrulePi{}        \and
+        \TTdruleAppOne{}    \and
+        \TTdruleArrow{}     \and
+        \TTdruleAppTwo{}    \and
+        \TTdruleCoProdOne{} \and
+        \TTdruleCoProdTwo{} \and
+        \TTdruleCaseTwo{}   \and
+        \TTdruleAbort{}     \and
+        \TTdruleConv{}
     \end{mathpar}
   \end{center}
   \caption{Typing Rules for Martin L\"of's Type Theory}
@@ -195,7 +195,7 @@ are straightforward, so we only comment on the elimination rule for sum
 types.  The rule is defined as
 \begin{center}
   \begin{mathpar}
-    \TTdruleTXXCaseTwo{}.
+    \TTdruleCaseTwo{}.
   \end{mathpar}
 \end{center}
 We mentioned above that this rule corresponds to the elimination form
@@ -230,7 +230,7 @@ reduction which is not symmetric.  This is a definitional equality and
 it can be used during type checking implicitly at will using the following rule:
 \begin{center}
   \begin{math}
-    \TTdruleTXXConv{}
+    \TTdruleConv{}
   \end{math}
 \end{center}
 We now describe when Martin-L\"of's Type Theory is extensional or

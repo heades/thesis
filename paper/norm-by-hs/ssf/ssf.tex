@@ -1,7 +1,7 @@
-\section{Normalization of Stratified System F (SSF)}
+\section{Stratified System F }
 \label{subsec:normalization_stratified_system_f}
 In \cite{Eades:2010} Harley Eades and Aaron Stump show that
-SSF\index{Stratified System F (SSF)} is
+Stratified System F (SSF) \index{Stratified System F (SSF)} is
 normalizing using a proof method which uses the hereditary
 substitution function implicitly.  We find it apparent that the
 hereditary substitution technique we have introduced in
@@ -617,7 +617,7 @@ We have stated all the basic lemmas we will need.  We now proceed to
 the proof of normalization for SSF using hereditary substitution.
 % subsection basic_syntactic_lemmas (end)
 
-\subsection{Well-Founded Ordering on Types}
+\subsection{Ordering on Types}
 \label{subsec:well-founded_ordering_on_types_ssf}
 The following definition defines a well-founded ordering on the types
 of SSF.  It consists of essentially the strict-subexpression ordering
@@ -744,7 +744,7 @@ well-founded.
 \end{proof}
 % subsection well-founded_ordering_on_types (end)
 
-\subsection{The Hereditary Substitution Function}
+\subsection{Hereditary Substitution}
 \label{subsec:the_hereditary_substitution_function}
 The definition of the hereditary substitution function is a basic
 extension of hereditary substitution function for STLC.  Before
@@ -873,7 +873,7 @@ The remaining parts of the lemma are similar to part two.
 \end{proof}
 % subsubsection the_hereditary_substitution_function (end)
 
-\subsection{Properties of the Hereditary Substitution Function}
+\subsection{Main Properties}
 \label{sec:properties_of_the_hereditary_substitution_function_ssf}
 We now define $rset$ as an extension of the same function for STLC by
 adding type application redexes to the set of overall redexes
@@ -1319,7 +1319,7 @@ conseqences of inversion.
 \end{proof}
 % subsection properties_of_the_hereditary_substitution_function_ssf (end)
 
-\subsection{Substitution for the Interpretation of Types.}
+\subsection{The Main Substitution Lemma}
 \label{subsec:substitution_for_the_interpretation_of_types_ssf}
 The definition of the interpretation of types is identical to the
 definition for STLC\index{Simply Typed $\lambda$-Calculus} (Definition~\ref{def:interpretation_of_types_stlc}),
@@ -1455,7 +1455,7 @@ the proof of the type soundness theorem
 \end{proof}
 % subsubsection substitution_for_the_interpretation_of_types_ssf (end)
 
-\subsection{Concluding Normalization.}
+\subsection{Concluding Normalization}
 \label{subsec:soundness_of_typing_ssf}
 We are now ready to present our main result.  The next theorem shows
 that the type assignment rules are sound with respect to the

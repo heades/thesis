@@ -1,25 +1,27 @@
 \input{dep-SSF-ott}
-\section{Dependent Stratified System $\F$ (DSS$\F$)}
+\section{Dependent Stratified System $\F$}
 \label{sec:dependent_ssf_with_type_equality}
-DSS$\F$ is SSF extended with dependent types\index{Dependent Type} and equations between
-terms\index{Equality Type}.  Equations between terms are an important concept in
-Martin-L\"of type theory~\cite{hofmann+94,nps90}\index{Martin-L\"of's
-  Type Theory (MLTT)}, and play a central
-role also in dependently typed programming languages, such as the
-\textsc{Guru} language~\cite{stump+09}, $\Sep$\index{Separation of
-  Proof from Proof ($\Sep$)}
-(Section~\ref{chap:separation_of_proof_from_program}), the freedom of
-speech language\index{Freedom of Speech} (Section~\ref{chap:freedom_of_speech}), Coq
-\cite{CoqRefMan:2008}, and many more.  The syntax and reduction rules
-are defined in Fig.~\ref{fig:syntax_ssfe}.  The kind-assignment rules
-are defined in Fig.~\ref{fig:kinding_rules_ssfe}.  One thing to note
-regarding the kind-assignment rules is that the level of an equation
-is the same level as the type of the terms in the equation.  The terms
-used in an equation must have the same type -- also known as
-homogenous equality.  Finally, the type-assignment rules are defined
-in Fig.~\ref{fig:typing_rules_ssfe}.  Note that $t_1 \join t_2$
-denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
-\redto^* t$.
+Dependent Stratified System $\F$ (DSS$\F$) is SSF extended with
+dependent types\index{Dependent Type} and equations between
+terms\index{Equality Type}.  Equations between terms are an important
+concept in Martin-L\"of type
+theory~\cite{hofmann+94,nps90}\index{Martin-L\"of's Type Theory
+  (MLTT)}, and play a central role also in dependently typed
+programming languages, such as the \textsc{Guru}
+language~\cite{stump+09}, $\Sep$\index{Separation of Proof from Proof
+  ($\Sep$)} (Section~\ref{chap:separation_of_proof_from_program}), the
+freedom of speech language\index{Freedom of Speech}
+(Section~\ref{chap:freedom_of_speech}), Coq \cite{CoqRefMan:2008}, and
+many more.  The syntax and reduction rules are defined in
+Fig.~\ref{fig:syntax_ssfe}.  The kind-assignment rules are defined in
+Fig.~\ref{fig:kinding_rules_ssfe}.  One thing to note regarding the
+kind-assignment rules is that the level of an equation is the same
+level as the type of the terms in the equation.  The terms used in an
+equation must have the same type -- also known as homogenous equality.
+Finally, the type-assignment rules are defined in
+Fig.~\ref{fig:typing_rules_ssfe}.  Note that $t_1 \join t_2$ denotes
+there exists a term $t$ such that $t_1 \redto^* t$ and $t_2 \redto^*
+t$.
 
 \begin{figure}[t]
   \begin{center}
@@ -37,7 +39,7 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
       \end{tabular}
     \end{tabular}
     \end{center}
-  \caption[]{Syntax of Terms, Types, and Kinds and Reduction Rules for DSS$\F$}
+  \caption{Syntax of Terms, Types, and Kinds and Reduction Rules for DSS$\F$}
   \label{fig:syntax_ssfe}
   \label{fig:reduction_rules_ssfe}
 \end{figure}
@@ -84,7 +86,7 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
         }{\Gamma \vdash t_1 = t_2 : *_p}
       \end{math}
     \end{tabular}	
-    \caption[]{DSS$\F$ Kinding Rules}
+    \caption{DSS$\F$ Kinding Rules}
     \label{fig:kinding_rules_ssfe}
   \end{center}
 \end{figure}
@@ -157,7 +159,7 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
       \end{math}\\
     \end{tabular}
     
-    \caption[]{DSS$\F$ Type-Assignment Rules}
+    \caption{DSS$\F$ Type-Assignment Rules}
     \label{fig:typing_rules_ssfe}
   \end{center}
 \end{figure}
@@ -589,7 +591,7 @@ a_1.\exists a_2\ldots\exists a_n$.
 \end{proof}
 % subsection basic_syntactic_lemmas (end)
 
-\subsection{The Ordering on Types and The Hereditary Substitution Function}
+\subsection{Hereditary Substitution}
 \label{sec:the_hereditary_substitution_function_ssfe}
 The ordering on types is defined as follows:
 \begin{definition}

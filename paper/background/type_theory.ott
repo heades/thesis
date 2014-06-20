@@ -172,7 +172,7 @@ defns
   G |- C : True
 
   defn
-  G |- t : T :: :: typing :: 'T_' 
+  G |- t : T :: :: typing :: '' 
     {{ tex [[G]] \vdash [[t]] : [[T]] }}
   by
    

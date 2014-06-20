@@ -356,18 +356,18 @@ this chapter.
 
 The type system contains many rules, and so we break up the system and
 introduce it in chunks.  To see the complete definition in one place
-see Appendix~\ref{sec:freedom_of_speech_all}.  Recall from the
-previous section that the syntax is collapsed.  Types and programs are
-described by a single syntactic category called expressions.  This
-then implies that we only have a single judgment defining the typing
-relation.  This judgment is denoted $[[G |- e : e' th]]$, and we read
-this judgment as the expression $[[e]]$ has type $[[e']]$ in fragment
-$[[th]]$ in environment $[[G]]$.  We can think of this judgment as
-being parametric in $[[th]]$, and thus is two judgments in one.  If
-$[[th]]$ is $[[L]]$, then $[[e]]$ is a proof or logical program, while
-if $[[th]]$ is $[[P]]$, then $[[e]]$ is a potentially diverging
-program.  So it is the typing judgment that does the carving out of
-the two fragments.
+see the appendix.  Recall from the previous section that the syntax is
+collapsed.  Types and programs are described by a single syntactic
+category called expressions.  This then implies that we only have a
+single judgment defining the typing relation.  This judgment is
+denoted $[[G |- e : e' th]]$, and we read this judgment as the
+expression $[[e]]$ has type $[[e']]$ in fragment $[[th]]$ in
+environment $[[G]]$.  We can think of this judgment as being
+parametric in $[[th]]$, and thus is two judgments in one.  If $[[th]]$
+is $[[L]]$, then $[[e]]$ is a proof or logical program, while if
+$[[th]]$ is $[[P]]$, then $[[e]]$ is a potentially diverging program.
+So it is the typing judgment that does the carving out of the two
+fragments.
 
 We begin introducing the type system with the kinding rules:
 \begin{center}
@@ -639,6 +639,7 @@ the argument supplied to $[[f]]$ at the sight of the recursive call.
 Thus, termination is clearly captured by the type of $[[f]]$.
 
 Lastly, we have the rule for general recursion:
+\vspace{-30px}
 \begin{center}
   \begin{mathpar}                                         
     \FSdruleRec{}

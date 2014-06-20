@@ -328,7 +328,7 @@
 \setcounter{secnumdepth}{3}	% by Duckki
 \renewcommand{\chaptername}{CHAPTER}
 \renewcommand{\bibname}{REFERENCES}
-\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\listfigurename}{\hfill\normalsize\bfseries LIST OF FIGURES\hfill}
 \renewcommand{\listtablename}{LIST OF TABLES}
 \renewcommand{\listalgorithmname}{LIST OF ALGORITHMS}
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
@@ -424,7 +424,7 @@
       \refstepcounter{chapter}%
       \typeout{\@chapapp\space\thechapter.}%
       \addcontentsline{toc}{chapter}%
-         {\protect\numberline{\thechapter}\uppercase{#1}}%
+         {\chaptername~\thechapter. \hspace{1em}\uppercase{#1}}%
       \addtocontents{toc}{\protect\vspace{\li}}%
   \else
       \addcontentsline{toc}{chapter}{\uppercase{#1}}%
@@ -437,6 +437,25 @@
       \@makechapterhead{#2}%
       \@afterheading
  \fi}
+\renewcommand{\thepart}{\Alph{part}}
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\uppercase{\partname}~\thepart.\hspace{1em}{\normalfont #1}}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    \markboth{}{}%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >-2\relax
+       \normalsize\bfseries \underline{\MakeUppercase{\partname}\nobreakspace\thepart}
+       \par
+       \vskip 20\p@
+     \fi
+     \normalsize \bfseries \underline{#2}\par}%
+    \@endpart}
 
 %%\def\@part[#1]#2{}
 
@@ -487,9 +506,10 @@
 \newcommand{\l@head}            {\@dottedtocline{0}{\z@}{1.5em}}
 \newcommand{\l@blankhead}       {\protect\vspace{\li}\mydottedtocline{0}{\z@}{1.5em}}
 %\newcommand{\l@blankhead}       {\mydottedtocline{0}{\z@}{1.5em}}
-\renewcommand{\l@chapter}       {\protect\vspace{\li}\@dottedtocline{0}{2.0em}{1.5em}}
-\newcommand{\l@chapterx}       {\protect\vspace{\li}\@dottedtocline{0}{2.0em}{1.5em}}
-%\renewcommand{\l@chapter}       {\@dottedtocline{0}{2.0em}{1.5em}}
+\renewcommand{\l@chapter}       {\protect\vspace{\li}\@dottedtocline{2}{2.0em}{1.5em}}
+\renewcommand{\l@part}          {\@dottedtocline{1}{3.5em}{2.3em}}
+\newcommand{\l@chapterx}       {\protect\vspace{\li}\@dottedtocline{2}{2.0em}{1.5em}}
+\renewcommand{\l@chapter}       {\@dottedtocline{0}{2.0em}{1.5em}}
 \renewcommand{\l@section}       {\@dottedtocline{1}{3.5em}{2.3em}}
 \renewcommand{\l@subsection}    {\@dottedtocline{2}{5.8em}{3.2em}}
 \renewcommand{\l@subsubsection} {\@dottedtocline{3}{9.0em}{4.1em}}
@@ -516,7 +536,7 @@
 \renewcommand{\appendix}{\savedAppendix
 \addtocontents{toc}{\protect\vspace{\li}}	% by Duckki
 %\addcontentsline{toc}{head}{APPENDIX}
-\addcontentsline{toc}{blankhead}{APPENDIX}	% AJR fix
+\addcontentsline{toc}{listhead}{APPENDIX}	% AJR fix
 }
 
 \newcommand{\frontmatter}{
@@ -554,7 +574,7 @@
         \newpage
         \phantomsection	% by Duckki
         \addcontentsline{toc}{listhead}{LIST OF FIGURES}%
-        \addtocontents{lof}{\vspace{11mm}\vbox{\noindent Figure \protect\hfill}}
+        \addtocontents{lof}{\vspace{11mm}\vbox{\noindent Figure \protect\hfill}\linespread{2}\selectfont}
         \listoffigures
      }{}
 

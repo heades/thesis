@@ -48,15 +48,17 @@ defined in Fig.~\ref{fig:F_typing}.
       \end{math}\\
       \\
       Full $\beta$-reduction: & \\      
-      \begin{mathpar}
-          \FdruleRXXBeta{}    \and  
-          \FdruleRXXTypeRed{} \and
-          \FdruleRXXLam{}     \and
-          \FdruleRXXTypeAbs{} \and     
-          \FdruleRXXAppOne{}  \and
-          \FdruleRXXAppTwo{}  \and    
+      \begin{math}
+        \begin{array}{ccc}
+          \FdruleRXXBeta{}    &       \FdruleRXXTypeRed{} \\
+          & \\
+          \FdruleRXXLam{}     &          \FdruleRXXTypeAbs{}\\
+          & \\
+          \FdruleRXXAppOne{}  &         \FdruleRXXAppTwo{}  \\
+          & \\
           \FdruleRXXTypeApp{}   
-      \end{mathpar}
+        \end{array}
+      \end{math}      
     \end{tabular}
   \end{center}
 
@@ -123,24 +125,6 @@ example functions in system F.
       \begin{tabular}{rl}
         Type: & $[[Forall X.(Forall Y.((PAIRTY X Y) -> Y))]]$\\
         Term: & $[[\\X.\\Y.(\p:PAIRTY X Y.((p [Y]) (\x:X.\y:Y.y)))]]$\\      
-      \end{tabular}
-      \\
-      Natural Number $1$: \\
-      \begin{tabular}{rl}
-        Type: & $[[Forall X.((X->X)->(X->X))]]$\\
-        Term: & $[[\\X.(\s:(X->X).(\z:X.(s z)))]]$\\      
-      \end{tabular}
-      \\
-      Natural Number $2$: \\
-      \begin{tabular}{rl}
-        Type: & $[[Forall X.((X->X)->(X->X))]]$\\
-        Term: & $[[\\X.(\s:(X->X).(\z:X.(s (s z))))]]$\\      
-      \end{tabular}
-      \\
-      Natural Number $3$: \\
-      \begin{tabular}{rl}
-        Type: & $[[Forall X.((X->X)->(X->X))]]$\\
-        Term: & $[[\\X.(\s:(X->X).(\z:X.(s (s (s z)))))]]$\\      
       \end{tabular}
       \\
       Natural Number $n$: \\

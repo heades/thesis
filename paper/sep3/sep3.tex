@@ -66,11 +66,9 @@ and a large amount of syntax.  Therefore, we do not have the space to
 introduce the complete definition in the same style as we did for
 freedom of speech, but instead concentrate on the most important
 aspects of the design.  If the reader wishes to wade through the
-entire definition, then please see
-Appendix~\ref{sec:annotated_separation_of_proof_from_program} and
-Appendix~\ref{sec:unannotated_separation_of_proof_from_program}, but
-the reader may wish to read this chapter first to understand the need
-for two appendices.
+entire definition, then please see the appendix but the reader may
+wish to read this chapter first to understand the need for two
+appendices.
 
 $\Sep$ consists of two distinct phases: compile time and runtime, and
 $\Sep$ separates each phase into its own language.  The compile time
@@ -97,8 +95,7 @@ conjecture that the metatheory of $\Sep$ would be easier to carry out
 in the unannotated language rather than the annotated one.  We do not
 pursue this strand of thought further, but wanted to simply comment on
 this notion. We do not define the eraser functions here, but the
-interested reader can find their complete definitions at the end of
-Appendix~\ref{sec:unannotated_separation_of_proof_from_program}.
+interested reader can find their complete definitions in the appendix.
 Throughout the remainder of this chapter we will concentrate solely on
 the annotated $\Sep$ language which we will just call $\Sep$.
 
@@ -300,7 +297,8 @@ the freedom of speech language with the addition of the necessary
 proofs of the new predicates just discussed.  Thus, we do not go over
 each proof construct.  The typing rules for logical kinds, predicates,
 and proofs can be found in Figure~\ref{fig:logk-ty},
-Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
+Figure~\ref{fig:pred-ty}, Figure~\ref{fig:proofs-ty}, and
+Figure~\ref{fig:proofs-ty-cont} respectively.
 \begin{figure}
   \scriptsize
   \begin{mathpar}
@@ -352,6 +350,13 @@ Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
     \SepdrulePRFXXApp{} \and
     \SepdrulePRFXXLetPRF{} \and
     \SepdrulePRFXXLetPRD{} \and
+  \end{mathpar}
+  \caption{Type-checking Rules for Proofs}
+  \label{fig:proofs-ty}
+\end{figure}
+\begin{figure}
+  \scriptsize
+  \begin{mathpar}
     \SepdrulePRFXXLet{} \and
     \SepdrulePRFXXJoin{} \and
     \SepdrulePRFXXConv{} \and
@@ -365,8 +370,8 @@ Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
     \SepdrulePRFXXCase{} \and
     \SepdrulePRFXXTCase{} 
   \end{mathpar}
-  \caption{Type-checking Rules for Proofs}
-  \label{fig:proofs-ty}
+  \caption{Type-checking Rules for Proofs Continued}
+  \label{fig:proofs-ty-cont}
 \end{figure}
 The reader may wish to look over the typing rules for proofs to get an
 idea of which proof construct introduces each of the new predicates.
@@ -461,9 +466,8 @@ is as follows: \[ \SepdrulePRFXXOrd{} \] This rule is very much like
 the rule for introducing the termination predicate in that it is
 defined for values only, however, when mixed with equality it can be
 very powerful.  The judgment $[[t subexpp t']]$ is the subexpression
-ordering on datatype constructors.  See
-Appendix~\ref{sec:annotated_separation_of_proof_from_program} for the
-complete definition.  
+ordering on datatype constructors.  See the appendix for the complete
+definition.
 
 The structural order predicate is then used in the definition of
 induction in the logical fragment: \[ \SepdrulePRFXXInd{} \] As we can
