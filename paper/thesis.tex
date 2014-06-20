@@ -1,4 +1,4 @@
-%  -*- reftex-include-file-commands: import; -*-
+% -*- reftex-include-file-commands: import; -*-
 % you should only have one "documentclass" line.  the following lines
 % are samples that give various options.  the nofrontmatter option is
 % nice because it suppresses the title and signature pages when you want
@@ -33,32 +33,38 @@
 %\documentclass[phd,dedicationpage,ackpage,figures,tables,appendix]{uithesis}
 
 % example
-\documentclass[phd,appendix,dedicationpage,ackpage,epigraphpage]{uithesis}
+\documentclass[phd,appendix,dedicationpage,ackpage,epigraphpage,figures]{uithesis}
 
 %=============================================================================
 % User packages
 %=============================================================================
 \usepackage{bookmark}		% [recommended] for PDF bookmark generation
-\usepackage{blindtext} 	% example text generation
 \usepackage{mathpartir}
 \usepackage{amsmath, amssymb,amsthm}
-\usepackage{todonotes}
 \usepackage{tikz}
 \usetikzlibrary{matrix, automata,arrows, decorations.pathreplacing}
 \usepackage{diagrams}
 \usepackage{supertabular}
-\usepackage{chronology}
 \usepackage{import}
 \usepackage{verbatim}
 \usepackage{supertabular}
 \usepackage{stmaryrd}
-\usepackage{chronology}
 \usepackage{makeidx}            % Enable indexing.
+\usepackage{tocloft}
+\usepackage{chngcntr}
+\counterwithout{figure}{chapter}
+\counterwithout{figure}{section}
+
 \input{type-theory_inc}
 
 \newcommand{\defeq}{\stackrel{\mathsf{def} }{\equiv}}
 \newcommand{\Sep}[0]{\text{Sep}^3}
 \newcommand{\hscase}[1]{\par\begingroup\leftskip1em #1 \par\endgroup}
+
+\renewcommand{\cftpartfont}{\normalsize\bfseries}
+\cftsetindents{chapter}{0.25in}{0.5in}
+\cftsetindents{section}{0.5in}{0.5in}
+\cftsetindents{subsection}{0.75in}{0.5in}
 
 %=============================================================================
 % prelude
@@ -137,8 +143,9 @@
 
 \frontmatter
 
-\section{Introduction}
+\chapter*{Introduction}
 \label{sec:introduction}
+\addcontentsline{toc}{listhead}{INTRODUCTION}
 
 There are two major problems growing in two areas.  The first is in
 Computer Science, in particular software engineering. Software is
@@ -230,8 +237,9 @@ stands as a successful step towards the solution of the second major
 problem outlined above.
 % section introduction (end)
 
-\section{Novel Contributions}
+\chapter*{Novel Contributions}
 \label{sec:novel_contributions}
+\addcontentsline{toc}{listhead}{NOVEL CONTRIBUTIONS}
 This thesis consists of two major topics.  The first topic is on the
 design of general purpose dependently-typed functional programming
 languages. This topic is covered in Part~\ref{part:design} (Design).
@@ -291,12 +299,14 @@ outlines each contribution:
 \end{itemize}
 % section novel_contributions (end)
 
-\part{Background}          
+\addcontentsline{toc}{blankhead}{PART}
+\vspace{-12pt}
+\part{BACKGROUND}          
 \label{part:background}
 \import*{background/}{background}
 % part background (end)
 
-\part{Design}
+\part{DESIGN}
 \label{part:design}
 The design of any programming language must facilitate reasoning about
 the programming language itself.  This facilitation comes in the form
@@ -390,7 +400,7 @@ that is type safe and supports their mixture.
 % chapter dualized_type_theory (end)
 % part design (end)
 
-\part{Basic Syntactic Analysis}
+\part{BASIC SYNTACTIC ANALYSIS}
 \label{part:basic-analysis}
 The following chapters conduct basic meta-theoretic analysis of the
 freedom of speech language, and dualized logic and its corresponding
@@ -438,7 +448,7 @@ translating DIL into a classical logic.
 % chapter dtt (end)
 % part basic-analysis (end)
 
-\part{Normalization by Hereditary Substitution}
+\part{NORMALIZATION BY HEREDITARY SUBSTITUTION}
 \label{part:norm-hs}
 
 One motivation for the work in this thesis is that programming
@@ -482,8 +492,9 @@ read Section~\ref{sec:hereditary_substitution}.
 % chapter the_lambdadelta-calculus (end)
 % part norm-hs (end)
 
-\chapter{Conclusion}
+\chapter*{Conclusion}
 \label{chap:conclusion}
+\addcontentsline{toc}{listhead}{CONCLUSION}
 
 Bugs are the bane of software development, and in order to rid the
 world of such problems we must revisit the very foundations of
@@ -519,7 +530,7 @@ languages.  These new languages will have the means to prevent major
 bugs in safety critical devices from reaching the public, but there is
 a lot more work to be done.
 
-\section{Future Work}
+\section*{Future Work}
 \label{sec:future_work}
 The following list addresses future work related to each theory:
 \begin{itemize}
@@ -707,9 +718,9 @@ The following list addresses future work related to each theory:
 \bibliographystyle{uithesis}
 \bibliography{thesis}
 
-\clearpage
-\addcontentsline{toc}{chapter}{Index}
-\IfFileExists{thesis.ind}{\input{thesis.ind}}{}
+% \clearpage
+% \addcontentsline{toc}{chapter}{Index}
+% \IfFileExists{thesis.ind}{\input{thesis.ind}}{}
 
 \end{document}
 

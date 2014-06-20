@@ -438,6 +438,8 @@
       \@afterheading
  \fi}
 
+%%\def\@part[#1]#2{}
+
  \newcommand{\chapterx}[2][]{\ifnum \c@secnumdepth >\m@ne
       \refstepcounter{chapter}%
       \typeout{\@chapapp\space\thechapter.}%
@@ -536,7 +538,7 @@
      \abstractpg			% (internal) abstract (optional)
      %\setcounter{tocdepth}{6}
      \setcounter{tocdepth}{3}	% changed by Duckki
-     \tableofcontents
+     {\tableofcontents}
      % The vbox is a harmless way of preventing a space being added
      % to the end of the Page label
      \addtocontents{toc}{\vbox{\noindent \protect\hfill}}
@@ -648,9 +650,7 @@
         \theoremlisttype{allname}   % required to print out the type before the number
         \vspace{5mm}
         \listtheorems{example,lem,thm}
-     }{}
-    \addcontentsline{toc}{blankhead}{CHAPTER}
-
+     }{}    
   } % ifthenelse nofrontmatter
 
   \raggedbottom

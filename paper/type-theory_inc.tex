@@ -7,7 +7,7 @@
 %% This makes sure \ref has the section, subsection, and thm number.
 \def\thethm{\thesubsection.\arabic{thm}}
 %% This makes the figure numbering match the other environments.
-\renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
+% \renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
 
 \newenvironment{thm}{
  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Theorem \thethm.}} \begin{em}
