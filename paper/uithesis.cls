@@ -327,8 +327,8 @@
 %\setcounter{secnumdepth}{6}
 \setcounter{secnumdepth}{3}	% by Duckki
 \renewcommand{\chaptername}{CHAPTER}
-\renewcommand{\bibname}{REFERENCES}
-\renewcommand{\listfigurename}{\hfill\normalsize\bfseries LIST OF FIGURES\hfill}
+\renewcommand{\bibname}{\normalsize\normalfont REFERENCES}
+\renewcommand{\listfigurename}{\vspace{5px}\hfill\normalsize\normalfont LIST OF FIGURES\hfill\vspace{12px}}
 \renewcommand{\listtablename}{LIST OF TABLES}
 \renewcommand{\listalgorithmname}{LIST OF ALGORITHMS}
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
@@ -350,7 +350,7 @@
        {\z@}%
        {1.2\li}%
        {1pt}%
-       {\reset@font\centering\normalsize}}
+       {\reset@font\centering\normalsize\normalfont}}
 
 \renewcommand{\subsubsection}
    {\@startsection
@@ -441,7 +441,7 @@
 \def\@part[#1]#2{%
     \ifnum \c@secnumdepth >-2\relax
       \refstepcounter{part}%
-      \addcontentsline{toc}{part}{\uppercase{\partname}~\thepart.\hspace{1em}{\normalfont #1}}%
+      \addcontentsline{toc}{part}{\normalsize\uppercase{\partname}~\thepart.\hspace{1em}{\normalsize\normalfont #1}}%
     \else
       \addcontentsline{toc}{part}{#1}%
     \fi
@@ -450,11 +450,11 @@
      \interlinepenalty \@M
      \normalfont
      \ifnum \c@secnumdepth >-2\relax
-       \normalsize\bfseries \underline{\MakeUppercase{\partname}\nobreakspace\thepart}
+       \normalsize\normalfont \underline{\MakeUppercase{\partname}\nobreakspace\thepart}
        \par
        \vskip 20\p@
      \fi
-     \normalsize \bfseries \underline{#2}\par}%
+     \normalsize \normalfont \underline{#2}\par}%
     \@endpart}
 
 %%\def\@part[#1]#2{}
@@ -482,11 +482,11 @@
   \vspace*{\uitchapadd}%
   {\singlespace \parindent \z@ \centering \normalsize
     \ifnum \c@secnumdepth >\m@ne
-          \bfseries \@chapapp{} \thechapter \par
+          \normalfont \@chapapp{} \thechapter \par
        \fi
     \interlinepenalty\@M
     \vskip \li
-    \bfseries\uppercase{#1}\par\nobreak
+    \normalfont\uppercase{#1}\par\nobreak
     \vskip 2\li
   }}
 
@@ -836,8 +836,8 @@
 % Pain in the ass formatting: the text of the acknowledgement has to
 % appear 4 singlespace lines below the heading, rather than 2 like in
 % the rest of the front matter.
-	{\singlespace\parindent \z@ \reset@font \normalsize \bfseries
-	 \centering ACKNOWLEDGEMENTS\par \nobreak \vskip 2\li }
+	{\singlespace\parindent \z@ \reset@font \normalsize \normalfont
+	 \vspace{3px}\centering ACKNOWLEDGEMENTS\par \nobreak \vskip 2\li }
 	\doublespace
 	  \@acknowledgements
 	\vfill

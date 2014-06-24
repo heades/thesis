@@ -80,7 +80,6 @@ This judgment can be read as $t$ models type $T$ in context $\Gamma$.
 \noindent
 We now turn to the fundamental property of logical relations.  We state this property as
 follows:
-\vspace{-17px}
 \begin{lemma}
   \label{lemma:fundamental_property}
   If $\Gamma \vdash t : T$ then $\Gamma \models e : T$.
@@ -131,12 +130,12 @@ two new type checking rules.  They are defined as follows:
   \begin{math}
     \begin{array}{lll}
       $$\mprset{flushleft}
-      \inferrule* [right=fold] {
+      \inferrule* [right=\ifrName{fold}] {
         \Gamma,\Delta \vdash t : [\mu \alpha.T/\alpha]T
       }{\Gamma,\Delta \vdash \text{fold}\ t:\mu \alpha.T}
       &
       $$\mprset{flushleft}
-      \inferrule* [right=unfold] {
+      \inferrule* [right=\ifrName{unfold}] {
         \Gamma,\Delta \vdash t : \mu \alpha.T
       }{\Gamma,\Delta \vdash \text{unfold}\ t:[\mu \alpha.T/\alpha]T}
     \end{array}
@@ -244,7 +243,6 @@ to be an element of the set Type.  Atom and Type are defined by the
 following definition.
 \begin{definition}
   \label{def:wellformed_interpretations}
-  \ \\
   \begin{math}
     \begin{array}{lllll}
       \text{Atom} & = & \{ (k,t) \,|\ k \in \nat \land t \in Closed^{Term} \}\\
@@ -288,7 +286,11 @@ types (logical relations).
       \,\,\,\,\,\,\,\,\,\,\,\,\,\,
       \forall j \leq k.\forall v.(j, v) \in \vinterp{T_1}_\rho \implies 
               (j, [v/x]t) \in \tinterp{T_2}_{\rho} \}\\
-      & \\
+    \end{array}
+  \end{math}\\
+  \ \\
+  \begin{math}
+    \begin{array}{llllllll}
       \vbinterp{n}{\mu \alpha.T}_\rho = \{ (k,fold\ v) \in Atom^{value}\ |\ 
         k < n \land \forall j < k.(j,v) \in 
         \vinterp{T}_{\rho[\alpha \mapsto \vbinterp{k}{\mu \alpha.T}_\rho]}\}\\

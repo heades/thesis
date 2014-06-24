@@ -1,6 +1,6 @@
 metavar var, x, y, z, f, u, v ::=
 
-metavar C ::= {{ com data constructor constant }}
+metavar C ::= 
 
 metavar cvar, c {{ tex \mathsf{c} }} ::=
   
@@ -8,19 +8,19 @@ indexvar ivar, n, m, k, r, s ::=
 
 grammar
 
-stage, ep {{tex \varepsilon}} :: 'sgn_' ::= {{ com compile time versus run time }}
+stage, ep {{tex \varepsilon}} :: 'sgn_' ::= 
   | + :: :: Plus
   | - :: :: Minus 
 
-ks {{tex \xi}} :: 'xi_' ::= {{ com logicality }}
+ks {{tex \xi}} :: 'xi_' ::= 
   | L :: :: L
   | P :: :: P
       
-decl, d :: 'd_' ::= {{ com datatype declaration }}
+decl, d :: 'd_' ::= 
   | data Ctor C t where M                      :: :: data_decl
       {{ tex data\,C \,[[t]]\,where\,[[M]] }}     
  
-SuperKind, L :: 'L_' ::= {{ com syntax for super kinds }}
+SuperKind, L :: 'L_' ::= 
    | Logical i ::   :: Logical
      {{ tex [[Logical]]_{[[i]]} }}
   | erase ( L )      :: M :: Erasure
@@ -37,14 +37,14 @@ ArgClass, A :: 'A_' ::=
   | predicate                     ::   :: Predicate
   | LK                            ::   :: logical_kinds
   | [ t1 / x1 ] ... [ tn / xn ] A :: M :: subst_term
-  | | A |                         :: M :: erasure {{com for metatheory}}
+  | | A |                         :: M :: erasure 
 
 Arg, a :: 'a_' ::= 
   | term       ::   :: terms
   | proof      ::   :: proofs
   | predicate  ::   :: predicate
 
-LogicalKind, LK :: 'LK_' ::= {{ com syntax for logical kinds }}
+LogicalKind, LK :: 'LK_' ::= 
   | x                              ::   :: var
   | Formula i                      ::   :: Formula
     {{ tex [[Formula]]_{[[i]]} }}
@@ -55,7 +55,7 @@ LogicalKind, LK :: 'LK_' ::= {{ com syntax for logical kinds }}
   | ( LK )                         :: M :: parens
   | [ a1 / x1 ] ... [ an / xn ] LK :: M :: subst_lk
 
-predicate, P :: 'P_' ::= {{ com syntax for predicate }}
+predicate, P :: 'P_' ::= 
   |  x                                       ::   :: Var
   | \ L x . P                                ::   :: predicate (+ bind x in P +)
     {{ tex \Lambda [[x]]\,.\,[[P]] }}  
@@ -87,7 +87,7 @@ predicate, P :: 'P_' ::= {{ com syntax for predicate }}
   | sigma P                                  :: M :: substitution
     {{ tex \sigma\ [[P]] }}
   | | P |                                   :: M :: eraser
-proof, p :: 'p_' ::= {{ com syntax for proofs. }}
+proof, p :: 'p_' ::= 
   | x                                      ::   :: Var
   | injl p                                 ::   :: InjectLeft
   | injr p                                 ::   :: InjectRight
@@ -126,7 +126,7 @@ pf_value {{ tex proof value }}, pv :: 'pfval_' ::=
   | valax                                  ::   :: Val
   | ( pf_value )                           :: S :: parens
 
-term, t, w :: 't_' ::= {{ com unannotated programmatic expressions }}
+term, t, w :: 't_' ::= 
   | x                                      ::   :: Var
   | Type i                                 ::   :: Type {{ tex [[Type]]_{[[i]]} }}
   | Pi ep x : A . t                        ::   :: program_pi (+ bind x in t +)
@@ -155,7 +155,7 @@ term, t, w :: 't_' ::= {{ com unannotated programmatic expressions }}
   | sigma t                                :: M :: substitution
     {{ tex \sigma\ [[t]] }}
   | CC_t [ t ]                             :: M :: context
-  | | t |                                  :: M :: erasure {{com for metatheory}}
+  | | t |                                  :: M :: erasure 
 
 sub :: '' ::=
   {{ tex \sigma }}
@@ -185,13 +185,13 @@ exp, e :: 'e_' ::=
   | [ a1 / x1 ] e1 ... [ an / xn ] en  :: M :: subst_term_arg
   | [ t'1 / x] t1 ... [ t'n / x] tn    :: M :: term_subst_term
   | [ t1 / x1 ] ... [ tn / xn ] A      :: M :: subst_term_A
-  | | e |                              :: M :: erasure {{com for metatheory}}
+  | | e |                              :: M :: erasure 
 
 q :: 'q_' ::=
   | proof    ::  :: proofs
   | t1 = t2  ::  :: equations
 
-g {{ tex \gamma }} :: 'gam_' ::= {{ com annotation on variables in context }}
+g {{ tex \gamma }} :: 'gam_' ::= 
   | val    ::   :: Val
 
 proof_branches, R :: 'proof_branches_' ::=
@@ -218,7 +218,7 @@ Q :: 'Q_' ::=
   | Type :: :: Type
   | LK   :: :: LogicalKind
 
-index, i, j :: 'index_' ::= {{ com indices }}
+index, i, j :: 'index_' ::= 
   | i + j         ::   :: sum
   | max ( i , j ) ::   :: max
   | 1             ::   :: one
@@ -615,7 +615,6 @@ Jtyp :: '' ::=
   defn
   D , G |- val t  :: :: value :: 'V_' 
     {{tex [[D]],[[G]] [[|-]] [[val]]\ [[t]] }}
-    {{com not type dependent, since op. sem. depends on it}}
   by
 
   x : val t in G

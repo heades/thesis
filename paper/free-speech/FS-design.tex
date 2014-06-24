@@ -1,6 +1,6 @@
 \input{free-speech-ott}
 
-\renewcommand{\FSdrulename}[1]{\textsc{\scriptsize #1}}
+\renewcommand{\FSdrulename}[1]{{\normalfont\scriptsize \text{#1}}}
 
 \newcommand{\tvdash}[1]{\vdash^{#1}}
 \newcommand{\arrowT}[5]{(#1 :^{#2} #3)^{#4} \to #5}
@@ -180,21 +180,22 @@ programmatic denoted $[[contra]]$ and $[[abort]]$ respectively.
 The CBV reduction relation is broken up into three different
 judgments.  The first is denoted $[[e1 ~b> e2]]$ and defines standard
 CBV $\beta$-reduction and consists of two rules
-$\FSdrulename{CBV\_App}$ and $\FSdrulename{CBV\_Rec}$ where values are
+$\FSdrulename{\normalsize CBV\_App}$ and $\FSdrulename{\normalsize CBV\_Rec}$ where values are
 defined in Figure~\ref{fig:FS-syn-red}.  We will see that the latter rule
 can be used for both terminating and non-terminating recursion
 depending on which fragment the recursor is typed in.  Note that there
 are no congruence rules in the definition of the first judgment.  The
 second judgment denoted $[[e1 ~> e2]]$ extends the first with
 congruence rules, and a rule for aborting a contradictory computation.
-This judgment consists of two rules $\FSdrulename{Red\_Ctxt}$ and
-$\FSdrulename{Red\_Abort}$.  These two are defined in terms of
+This judgment consists of two rules $\FSdrulename{\normalsize Red\_Ctxt}$ and
+$\FSdrulename{\normalsize Red\_Abort}$.  These two are defined in terms of
 evaluation contexts which can be thought of as a means of specifying
 where with in an expression computation can take place. The syntax of
 evaluation contexts can be found in Figure~\ref{fig:FS-syn-red}.  This
 defines a fragment of the syntax of expressions where exactly one well
 formed subexpression has been replaced with a hole.  Holes are denoted
 $[[ [] ]]$. Let's consider a few examples:
+\vspace{-25px}
 \begin{example}
   \label{ex:FS-WF-ECTX}
   The following are all well-formed contexts:
@@ -227,11 +228,11 @@ operation that takes an evaluation context and an expression and
     \end{math}
   \end{center}
 \end{definition}
-At this point one can easily see that the $\FSdrulename{Red\_Ctxt}$
-and $\FSdrulename{Red\_Abort}$ are actually a family of congruence
+At this point one can easily see that the $\FSdrulename{\normalsize Red\_Ctxt}$
+and $\FSdrulename{\normalsize Red\_Abort}$ are actually a family of congruence
 rules parametric in the evaluation context $[[C]]$. Now the rule
-$\FSdrulename{Red\_Ctxt}$ simply extended the CBV $\beta$-reduction to
-evaluation contexts, while the rule $\FSdrulename{Red\_Abort}$ says
+$\FSdrulename{\normalsize Red\_Ctxt}$ simply extended the CBV $\beta$-reduction to
+evaluation contexts, while the rule $\FSdrulename{\normalsize Red\_Abort}$ says
 that if $[[abort]]$ appears anywhere in an evaluation context, then the
 computation is aborted and concludes just $[[abort]]$.  Let's consider
 an example using what we have introduced thus far before moving onto
@@ -334,13 +335,13 @@ never ran.  This shows how call-by-name\index{Call-by-name Reduction
 There is one final judgment defined with the reduction relation in
 Figure~\ref{fig:FS-syn-red}, and it is denoted $[[e1 \v/ e2]]$. We
 call this the joinability judgment\index{Join}\index{Equality} and is defined by only one rule
-\FSdrulename{ComputeJoin}. This rule states that whenever there exists
+\FSdrulename{\normalsize ComputeJoin}. This rule states that whenever there exists
 an expression $[[e]]$ such that the expressions $[[e1]]$ and $[[e2]]$
 both reduce to $[[e]]$ in any number of steps, then $[[e1]]$ and
 $[[e2]]$ are joinable.  If $[[e1 \v/ e2]]$ holds then we consider the
 expressions $[[e1]]$ and $[[e2]]$ to be equivalent.  This judgment
 will be used to give the $[[join]]$ expression its type in the typing
-rule \FSdrulename{join}.
+rule \FSdrulename{\normalsize join}.
 % section syntax_and_reduction_relation (end)
 
 \section{Type System}
@@ -356,7 +357,7 @@ this chapter.
 
 The type system contains many rules, and so we break up the system and
 introduce it in chunks.  To see the complete definition in one place
-see the appendix.  Recall from the previous section that the syntax is
+see the appendix in \cite{Eades:2014-full}.  Recall from the previous section that the syntax is
 collapsed.  Types and programs are described by a single syntactic
 category called expressions.  This then implies that we only have a
 single judgment defining the typing relation.  This judgment is
@@ -370,10 +371,15 @@ So it is the typing judgment that does the carving out of the two
 fragments.
 
 We begin introducing the type system with the kinding rules:
+\vspace{-50px}
 \begin{center}
   \begin{mathpar}
     \FSdruleKXXType{} \and
-    \FSdruleKXXNat{}  \and
+    \FSdruleKXXNat{}  
+  \end{mathpar}
+
+  \ \\
+  \begin{mathpar}
     \FSdruleKXXPi{}   \and
     \FSdruleKXXEq{}          
   \end{mathpar}
@@ -393,7 +399,7 @@ expressions.  These are the only expressions that will be considered
 types.
 
 A few remarks about the types.  Notice that the rule
-$\FSdrulename{K\_Pi}$ does not require the consistency classifier of
+$\FSdrulename{\normalsize K\_Pi}$ does not require the consistency classifier of
 the arguments to match the consistency classifier of the range type.
 This allows functions to take in arguments from one fragment and then
 produce a program of the opposite fragment.  For example, the type
@@ -411,6 +417,7 @@ valid expression.
 Now that we have characterized the types we can introduce how both
 logical and programmatic programs are typed.  First, we introduce the
 axioms for natural numbers and assumptions:
+\vspace{-35px}
 \begin{center}
   \begin{mathpar}
     \FSdruleSucc{} \and
@@ -427,6 +434,7 @@ wishes to ensure that the program they are constructing is terminating
 then they can construct it in the logical fragment.  To use the
 natural numbers in the programmatic fragment we add an additional
 typing rule:
+\vspace{-40px}
 \begin{center}
   \begin{mathpar}
     \FSdruleCoerce{}
@@ -437,7 +445,7 @@ the programmatic fragment.  This corresponds to the edge relating the
 logical fragment to the programmatic fragment in the diagram * from
 the introduction of this chapter.  Thus, natural numbers can be used
 in either fragment.  The third rule we introduce above is the variable
-rule \FSdrulename{Var} which depends on the premise $[[G |- e : Type
+rule \FSdrulename{\normalsize Var} which depends on the premise $[[G |- e : Type
 th]]$.  This premise -- we will see these all throughout the
 definition of the typing relation -- ensures that the expression
 $[[e]]$ is indeed a type.  This is necessary because we only have one
@@ -447,11 +455,12 @@ judgment.
 
 Programmatic and logical functions are introduced using two styles of
 $\lambda$-abstractions:
+\vspace{-40px}
 \begin{center}
   \begin{mathpar}
     \FSdruleLam{}       \and
     $$\mprset{flushleft}
-    \inferrule* [right=ILam] {
+    \inferrule* [right=\ifrName{ILam}] {
       [[G |- e1 : Type th']]
       \\\\
       [[G, x : th' e1 |- v : e2   th]]
@@ -464,17 +473,17 @@ The former introduces $\lambda$-abstractions with runtime relevant
 arguments, while the latter introduces $\lambda$-abstractions whose
 argument is compile time relavent only.  We call the latter implicit
 $\lambda$-abstractions, because the argument is left implicit.  The
-\FSdrulename{Lam} rule is intuitive, but notice that again the arguments
+\FSdrulename{\normalsize Lam} rule is intuitive, but notice that again the arguments
 consistency classifier does not have to match the bodies, thus
 allowing freedom of speech.  
 
-The typing rule \FSdrulename{ILam} has a restriction on the body of
+The typing rule \FSdrulename{\normalsize ILam} has a restriction on the body of
 the implicit $\lambda$-abstraction. In fact, there are a number of value
 restrictions in the definition of the typing relation.  This
 restriction is necessary in order to maintain the meta-theoretic
 property called progress\index{Progress}. This property states that every well-typed
 program can either take a computational step or is already a value.
-Suppose the restriction on \FSdrulename{ILam} is lifted. Then the
+Suppose the restriction on \FSdrulename{\normalsize ILam} is lifted. Then the
 judgment $[[. |- Z Z : (x : L Nat = (y : L Nat) + -> Nat)- -> Nat L]]$
 holds, but $[[Z Z]]$ is neither a value nor a redex.  It is a stuck term!
 Thus, this value restriction is necessary to rule out stuck terms of
@@ -491,7 +500,7 @@ two types of applications:
 The former eliminates function types with runtime arguments, while the
 latter eliminates function types with compile-time arguments.  These
 rules are straightforward, but do contain value restrictions similar
-to \FSdrulename{ILam}.  These restrictions prevent the application of
+to \FSdrulename{\normalsize ILam}.  These restrictions prevent the application of
 a logical function to a diverging non-value computation.  For example,
 if we lift the value restriction then we could type
 $([[e]]\,\mathsf{loop})$ in the logical fragment, where
@@ -505,6 +514,7 @@ So far we have seen the typing rules for types, natural numbers,
 $\lambda$-abstractions, and applications.  Now we introduce the typing
 rules for introducing and eliminating -- or using -- equations.  The
 typing rules are as follows:
+\vspace{-35px}
 \begin{center}
   \begin{mathpar}
     \FSdrulejoin{}       \and
@@ -524,11 +534,11 @@ proof of an equation between types.  We can now introduce equations,
 but how are they used?  If we have a proof that the expressions
 $[[e1]]$ and $[[e1']]$ are equivalent, that is we know 
 $[[G |- e' : e1 = e1' L]]$, and if we also have an expression $[[e]]$ whose
-type depends on $[[e1]]$, then the rule \FSdrulename{Conv} allows us to replace
+type depends on $[[e1]]$, then the rule \FSdrulename{\normalsize Conv} allows us to replace
 $[[e1]]$ in the type $[[e]]$ with its equivalent $[[e1']]$.  Thus,
-the rule \FSdrulename{Conv} allows one to substitute equals for equals in types.
+the rule \FSdrulename{\normalsize Conv} allows one to substitute equals for equals in types.
 
-The rules \FSdrulename{Join} and \FSdrulename{Conv} have one
+The rules \FSdrulename{\normalsize Join} and \FSdrulename{\normalsize Conv} have one
 particular disadvantage.  Suppose 
 \[ 
   \begin{array}{lll}
@@ -536,12 +546,13 @@ particular disadvantage.  Suppose
     [[G |- \x1.x: (x1 : L Nat) + -> z L]] \text{, and }\\ 
     [[G |- Z : Nat L]].
   \end{array}
-\]  Then $[[G |- (\x1.x) Z : z L]]$.  By applying $\FSdrulename{Conv}$ and using
+\]  Then $[[G |- (\x1.x) Z : z L]]$.  By applying $\FSdrulename{\normalsize Conv}$ and using
 the assumption $u$, we may conclude $[[G |- (\x1.x) Z : y L]]$, but 
 $[[(\x1.x) Z ~> x]]$ and $[[G |- x:z L]]$.  Therefore, we have obtained a counterexample to type preservation!
 Notice that if we knew $[[z = y]]$ then this would no longer be a counterexample, but it is impossible to prove that $[[z = y]]$
-from knowing $[[((x1 : L Nat) + -> z) = ((x1 : L Nat) + -> y)]]$ using only \FSdrulename{Join} and \FSdrulename{Conv}.  So
+from knowing $[[((x1 : L Nat) + -> z) = ((x1 : L Nat) + -> y)]]$ using only \FSdrulename{\normalsize Join} and \FSdrulename{\normalsize Conv}.  So
 to prevent counterexamples such as these we add the following rules:
+\vspace{-33px}
 \begin{center}  
   \begin{mathpar}
     \FSdruleInjDom{} \and
@@ -552,13 +563,13 @@ These rules are known as injectivity\index{Injectivity} rules for dependent prod
 The second rule may seem a bit strange, especially the second premise,
 because we are substituting a value $[[v]]$ for two free variables of
 possibly different types.  This is, however, not a problem, because
-from the premises of $\FSdrulename{InjRan}$, $\FSdrulename{InjDom}$,
-and $\FSdrulename{Conv}$ we may conclude $[[G |- v:e'1 th]]$.  Then by
-$\FSdrulename{InjDom}$ we know $[[G |- injdom:e1 = e'1 L]]$, and
+from the premises of $\FSdrulename{\normalsize InjRan}$, $\FSdrulename{\normalsize InjDom}$,
+and $\FSdrulename{\normalsize Conv}$ we may conclude $[[G |- v:e'1 th]]$.  Then by
+$\FSdrulename{\normalsize InjDom}$ we know $[[G |- injdom:e1 = e'1 L]]$, and
 clearly $[[G |- v : e1 th]]$ is equivalent to $[[G |- v : [e1/x]x
-th]]$.  Thus by $\FSdrulename{Conv}$, $[[G |- v : [e'_1/x]x th]]$, which
+th]]$.  Thus by $\FSdrulename{\normalsize Conv}$, $[[G |- v : [e'_1/x]x th]]$, which
 is equivalent to $[[G |- v:e'1 th]]$.  So the rule
-\FSdrulename{InjRan} is sound.
+\FSdrulename{\normalsize InjRan} is sound.
 
 Equational reasoning is based on the runtime behavior of programs, but
 there are a number of different programs of a different type so what
@@ -569,6 +580,7 @@ it is possible to start with inconsistent assumptions, and in these
 cases the logical fragment needs to be able to trigger a
 contradiction.  We introduce the following rules to eliminate
 contradictory equations:
+\vspace{-33px}
 \begin{center}
   \begin{mathpar}
     \FSdruleAbort{}       \and
@@ -578,14 +590,14 @@ contradictory equations:
 \end{center}
 The first rule introduces $[[abort]]$ and states that $[[abort]]$ can
 have any type.  As we have seen above $[[abort]]$ is used to indicate
-error states.  The second rule, \FSdrulename{ContraAbort}, introduces
+error states.  The second rule, \FSdrulename{\normalsize ContraAbort}, introduces
 the proof $[[contra]]$ with any well-defined type as long as there is
 a proof of some value being equivalent to $[[abort]]$.  This means, if
 a program enters an error state, then a contradiction has occurred. An
 example might be trying to verify the correctness of $\mathsf{div}$
 for all natural numbers.  Then when $[[Z]]$ is given as the second
 argument it will reduce to abort.  Thus, we would be able to obtain
-our result by using $[[contra]]$.  The third rule, \FSdrulename{Contra},
+our result by using $[[contra]]$.  The third rule, \FSdrulename{\normalsize Contra},
 is similar to the previous rule, except it requires a proof that
 $[[Z]]$ is equivalent to a natural number greater than $[[Z]]$.  
 
@@ -602,6 +614,7 @@ functions taking logical arguments which breaks the freedom of speech
 property.  To observe inconsistencies arising from equations between
 dependent products having different compile time or runtime arguments,
 or different consistency classifiers we add the following two rules:
+\vspace{-32px}
 \begin{center}
   \begin{mathpar}
     \FSdruleContraPiTh{} \and
@@ -617,8 +630,9 @@ meta-theoretic analysis of Freedom of Speech.
 The final three rules of the freedom of speech design handle natural
 number -- terminating -- and general recursion.  Terminating recursion
 is restricted to the logical fragment, but can be moved over to the
-programmatic fragment using the \FSdrulename{Coerce} typing rule.
+programmatic fragment using the \FSdrulename{\normalsize Coerce} typing rule.
 Terminating recursion is introduced using the following rules:
+\vspace{-33px}
 \begin{center}
   \begin{mathpar}
     \FSdruleRecNat{}     \and
@@ -674,8 +688,8 @@ interesting insight is meta-theoretic and is discussed in
 Chapter~\ref{chap:freedom_of_speech_anal}.  In the following chapter
 we introduce the design of a dependently-typed functional programming
 language inspired by freedom of speech, but lifts all of the value
-restrictions, and is greatly extended to include complete programs
-with data types and pattern matching.
+restrictions, and is extended to include data types and pattern
+matching.
 % section type_system (end)
 
 %%% Local Variables: 

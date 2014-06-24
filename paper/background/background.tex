@@ -17,22 +17,22 @@
 \include{type-theory_inc}
 
 %% Formatting the Ott names.  This is really a bug in Ott.
-\renewcommand{\CSTLCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CHSTLCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CSTLCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CoCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CoCSdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Fdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Fwdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\SSFdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Tdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Combdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\DCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\LBMMTdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Lamdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Lamddrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Lamudrulename}[1]{ {\scriptsize \textsc{#1}} }
-\renewcommand{\TTdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\CSTLCdrulename}[1]{{\tiny \text{#1}}}
+\renewcommand{\CHSTLCdrulename}[1]{{\scriptsize \text{#1}}}
+%\renewcommand{\CSTLCdrulename}[1]{{\scriptsize \text{#1}}}
+\renewcommand{\CoCdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\CoCSdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Fdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Fwdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\SSFdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Tdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Combdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\DCdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\LBMMTdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Lamdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Lamddrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Lamudrulename}[1]{ {\normalfont\scriptsize \text{#1}} }
+\renewcommand{\TTdrulename}[1]{\normalfont\scriptsize \text{#1}}
 
 \chapter{A Brief History of Type Theory}
 \label{chap:the_history_of_type_theory}
@@ -123,7 +123,7 @@ formulas of intuitionistic propositional logic.
 
 \begin{definition}
   \label{def:bhk-interpretation}  
-    The BHK-interpretation:\\
+    The BHK-interpretation:
   \begin{center}
     \begin{tabular}{lll}
       $c\,r\,(A_1 \land A_2)$ & $\iff$ & $c = (t_0,t_1)$ such that $t_0\,r\,A_1$ and 
@@ -743,7 +743,6 @@ this formally as follows:
 \end{lemma}
 \noindent
 The final property is soundness with respect to reduction. 
-\vspace{-20px}
 \begin{lemma}
   \label{lemma:soundness_reduction}
   If $\Gamma \vdash t : T$ and $\Gamma, x:T, \Gamma' \vdash t':T'$ then
@@ -781,7 +780,6 @@ The interpretation of types was inspired by the work of Prawitz in
 \cite{Prawitz:2005} although we use open terms here where he used
 closed terms.  Next we show that the definition of the interpretation
 of types is closed under hereditary substitutions.
-\vspace{-20px}
 \begin{lemma}
   If $n' \in \interp{T'}_{\Gamma,x:T,\Gamma'}$, $n \in \interp{T}_\Gamma$, then 
   $[n/x]^T n' \in \interp{T'}_{\Gamma,\Gamma'}$.

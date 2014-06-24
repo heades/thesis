@@ -46,21 +46,22 @@ is called left-to-right CBV and is defined next.
 \begin{definition}
   \label{def:lamu_cbv}
   CBV is defined by the following rules:
+  \vspace{-30px}
   \begin{center}
     \begin{mathpar}      
-      \inferrule* [right=Beta] {
+      \inferrule* [right=\ifrName{Beta}] {
         \ 
       }{(\lambda x.t)\,v \redto [v/x]t} 
       \and
-      \inferrule* [right=Struct] {
+      \inferrule* [right=\ifrName{Struct}] {
         \ 
       }{(\mu \alpha.s)\,v \redto [v/^* \alpha]s}
       \and      
-      \inferrule* [right=Naming] {
+      \inferrule* [right=\ifrName{Naming}] {
         \ 
       }{[\alpha](\mu \beta.s) \redto [\alpha/\beta]s}
       \and
-      \inferrule* [right=Context] {
+      \inferrule* [right=\ifrName{Context}] {
         t \redto t'
       }{E[t] \redto E[t']}
     \end{mathpar}
@@ -85,19 +86,19 @@ but we redefine the evaluation contexts.
   \vspace{-37px}
   \begin{center}
     \begin{mathpar}
-        \inferrule* [right=Beta] {
+        \inferrule* [right=\ifrName{Beta}] {
           \ 
         }{(\lambda x.t)\,t' \redto [t/x]t}
         \and
-        \inferrule* [right=Struct] {
+        \inferrule* [right=\ifrName{Struct}] {
           \ 
         }{(\mu \alpha.s)\,t \redto [t/^* \alpha]s}
         \and
-        \inferrule* [right=Naming] {
+        \inferrule* [right=\ifrName{Naming}] {
           \ 
         }{[\alpha](\mu \beta.s) \redto [\alpha/\beta]s}
         \and
-        \inferrule* [right=Context] {
+        \inferrule* [right=\ifrName{Context}] {
           t \redto t'
         }{E[t] \redto E[t']}
     \end{mathpar}
@@ -131,7 +132,7 @@ contexts.  Then we add the following reduction rule:
 \begin{center}
   \begin{math}
     $$\mprset{flushleft}
-    \inferrule* [right=LetCtx] {
+    \inferrule* [right=\ifrName{LetCtx}] {
       \ 
     }{v\,(\textsf{let}\,x = \Box\,\textsf{in}\,t) \redto [v/x]t}
   \end{math}
@@ -153,7 +154,7 @@ We can reduce the previous term by first reducing the $\mu$-redex, but
 we can also start by reducing the let-redex, because
 $\mu$-abstractions are values. However, the two reducts obtained from
 doing these reductions are not always joinable.  This forms a critical
-pair and shows an overlap between the $\LBMMTdrulename{LetCtx}$ rule
+pair and shows an overlap between the $\LBMMTdrulename{\normalsize LetCtx}$ rule
 and the $\mu$-reduction rule.  This can be overcome by giving priority
 to one or the other redex.  Now if we give priority to $\mu$-redexes
 over all other redexes then it turns out that the reduction strategy
@@ -183,7 +184,7 @@ and then discuss how they used it to show that CBV is dual to CBN.
 Curien and Herbelin called their extension of the $\lambda\mu$-calculus
 the $\LBMMT$-calculus.  Despite the ugly name it is a beautiful type
 theory.  Its syntax and reduction rules are in
-Fig.~\ref{fig:lbmmt_syntax} and its typing rules are in Fig.~\ref{fig:lbmmt_typing}.
+Figure~\ref{fig:lbmmt_syntax} and its typing rules are in Figure~\ref{fig:lbmmt_typing}.
 \begin{figure}
   \index{$\LBMMT$-Calculus}
   \begin{center}
@@ -217,16 +218,20 @@ Fig.~\ref{fig:lbmmt_syntax} and its typing rules are in Fig.~\ref{fig:lbmmt_typi
 \begin{figure}
   \begin{center}
     \begin{tabular}{lll}           
-      \ \ \ \ \ \ \ Terms:\\
+      \ \ \ \ \ \ \ Terms:\\      
         \begin{mathpar}
-            \LBMMTdruleVar{} \and
-            \LBMMTdruleLam{} \and
-            \LBMMTdruleMu{}  \and
-            \LBMMTdruleCoCtx{}
-        \end{mathpar}\\
+        \begin{array}{lll}
+          \LBMMTdruleVar{} &
+          \LBMMTdruleLam{} \\
+          & \\
+          \LBMMTdruleMu{}  &
+          \LBMMTdruleCoCtx{}
+        \end{array}
+      \end{mathpar}
+        \\
       &\\
       \ \ \ \ \ \ \ Contexts:\\
-        \begin{mathpar}
+      \begin{mathpar}
             \LBMMTdruleCovar{} \and
             \LBMMTdruleComu{}  \and
             \LBMMTdruleCtx{}   \and

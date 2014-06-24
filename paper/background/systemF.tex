@@ -32,8 +32,8 @@ arithmetic, in a similar, although different, way Girard did
 \cite{Wadler:2007}.
 
 The syntax for terms, types, and the reduction rules are defined in
-Fig.~\ref{fig:F_syntax} and the definition of the typing relation is
-defined in Fig.~\ref{fig:F_typing}.
+Figure~\ref{fig:F_syntax} and the definition of the typing relation is
+defined in Figure~\ref{fig:F_typing}.
 \begin{figure}
   \index{Girard/Reynolds System F}
   \begin{center}
@@ -95,7 +95,7 @@ Church style so terms do contain type annotations.  We need a
 reduction rule to eliminate the bound variable in $[[\\X.t]]$ with an
 actual type much like application for $\lambda$-abstractions.  Hence,
 we extended the reduction rules of STLC with a new rule
-$\Fdrulename{R\_TypeRed}$ which does just that.  We next consider some
+$\Fdrulename{\normalsize R\_TypeRed}$ which does just that.  We next consider some
 example functions in system F.
 
 \begin{example}
@@ -152,7 +152,7 @@ iteration.  That is for any function $f$ from any type $[[X]]$ to
 $[[X]]$ and value $v$ of type $[[X]]$ we have $n\,[X]\,f\,v \redto^* f^n
 v$, where $n$ is the term $n$ in the above table.
 
-There is one important property of $\Fdrulename{TypeApp}$ which the
+There is one important property of $\Fdrulename{\normalsize TypeApp}$ which the
 reader should take notice of.  Notice that there are no restrictions
 on what types $[[T]]$ ranges over.  That is there is nothing
 preventing $[[T]]$ from being $[[Forall X.T']]$.  This property is

@@ -25,7 +25,7 @@ Martin-L\"of's Type Theory and then we describe how to make it
 intensional and then extensional.
 
 The syntax of Martin-L\"of's Type Theory is defined in
-Fig.~\ref{fig:lof_syntax}.
+Figure~\ref{fig:lof_syntax}.
 \begin{figure}
   \begin{center}
     \begin{math}
@@ -101,7 +101,7 @@ $[[a]]$.  We can define projections for simple pairs as follows:
   \end{math}
 \end{center}
 
-The kinding rules are defined in Fig.~\ref{fig:lof_kinding}.
+The kinding rules are defined in Figure~\ref{fig:lof_kinding}.
 \begin{figure}
   \begin{center}
     \begin{mathpar}
@@ -121,7 +121,7 @@ These rules derive the judgment $[[G |- T : Type]]$ which describes
 all well-formed types -- inhabitants of $\mathsf{Type}$.  Now types
 are also propositions of intuitionistic logic.  The judgment $[[G |- T
     : True]]$ describes which propositions are true constructively.
-The rules deriving this judgment are in Fig.~\ref{fig:lof_validity}.
+The rules deriving this judgment are in Figure~\ref{fig:lof_validity}.
 Note that while $[[0]]$ is a type, it is not a true proposition.  This
 judgment validates the correspondence between types and propositions.
 In fact we could have denoted $[[(x:A)->B]]$ as $\forall [[x]]:[[A]].[[B]]$
@@ -129,23 +129,23 @@ and $[[{x:A}->B]]$ as $\exists [[x]]:[[A]].[[B]]$.
 \begin{figure}
   \begin{center}
     \begin{mathpar}
-        \TTdruleLXXTrue{}     \and
-        \TTdruleLXXProd{}     \and
-        \TTdruleLXXForalli{}  \and
-        \TTdruleLXXForalle{}  \and  
-        \TTdruleLXXImpi{}     \and
-        \TTdruleLXXImpe{}     \and
-        \TTdruleLXXOriOne{}   \and
-        \TTdruleLXXOriTwo{}   \and 
-        \TTdruleLXXOre{}      \and
-        \TTdruleLXXExti{}     \and
-        \TTdruleLXXExte{}
+        \TTdruleLTrue{}     \and
+        \TTdruleLProd{}     \and
+        \TTdruleLForalli{}  \and
+        \TTdruleLForalle{}  \and  
+        \TTdruleLImpi{}     \and
+        \TTdruleLImpe{}     \and
+        \TTdruleLOriOne{}   \and
+        \TTdruleLOriTwo{}   \and 
+        \TTdruleLOre{}      \and
+        \TTdruleLExti{}     \and
+        \TTdruleLExte{}
     \end{mathpar}
   \end{center}
   \caption{Validity for Martin-L\"of's Type Theory}
   \label{fig:lof_validity}
 \end{figure}
-The typing rules are defined in Fig.~\ref{fig:lof_typing}.
+The typing rules are defined in Figure~\ref{fig:lof_typing}.
 \begin{figure}
   \begin{center}
     \begin{mathpar}
@@ -221,7 +221,7 @@ The final judgment of Martin-L\"of's Type Theory is the definitional
 equality judgment. It has the form $[[G |- a = b : A]]$. The rules
 deriving this judgment tell us when we can consider two terms as being
 equal.  Then two types whose elements are equal based on this judgment
-are equal.  The equality\index{Equality} rules are defined in Fig.~\ref{fig:lof_eq} where
+are equal.  The equality\index{Equality} rules are defined in Figure~\ref{fig:lof_eq} where
 we leave the congruence rules implicit for presentation purposes.
 
 These rules look very much like full $\beta$-reduction, but these are

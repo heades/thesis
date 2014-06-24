@@ -1,6 +1,6 @@
 \input{lam-delta-ott}
 
-\renewcommand{\LamDeltadrulename}[1]{\textsc{\scriptsize #1}}
+\renewcommand{\LamDeltadrulename}[1]{{\normalfont\scriptsize \text{#1}}}
 
 So far in this chapter we have introduced proofs of normalization for
 several extensions of SSF, which is an intuitionistic logic.  In fact,
@@ -102,34 +102,31 @@ metric we previously used.
 \begin{definition}
   \label{def:hereditary_substitution_function}
   The naive hereditary substitution function is defined as follows:
-  \small
   \begin{itemize}
   \item[] $[[ [t/x] A x]] = [[t]]$
-  \item[] $[[ [t/x] A y]] = [[y]]$\\
+  \item[] $[[ [t/x] A y]] = [[y]]$
 
   \item[] $[[ [t/x] A (\ y:A'.t')]] = [[\y:A'.([t/x ] A t')]]$
-  \item[] $[[ [t/x] A (\m y:A'.t')]] = [[\m y:A'.([t/x] A t')]]$\\
+  \item[] $[[ [t/x] A (\m y:A'.t')]] = [[\m y:A'.([t/x] A t')]]$
 
   \item[] $[[ [t/x] A (t1 t2)]] = [[([t/x] A t1) ([t/x] A t2)]]$\\
     \begin{tabular}{lll}
       & Where $[[([t/x] A t1)]]$ is not a $\lambda$-abstraction or $\Delta$-abstraction,  or both $[[([t/x] A t1)]]$ \\
       & and  $[[t1]]$ are $\lambda$-abstractions or $\Delta$-abstractions.\\
-      & \\
     \end{tabular}
 
   \item[] $[[ [t/x] A (t1 t2)]] = [[ [s'2/y] A'' s'1]]$\\
     \begin{tabular}{lll}
       & Where $[[([t/x] A t1)]] = [[\ y:A''.s'1]]$ for some $[[y]]$, $[[s'1]]$ and $[[A'']]$, \\
       & $[[ [t/x] A t2]] = [[s'2]]$, and $[[ctype A (x,t1)]] = [[A'' -> A']]$. \\
-      & \\
     \end{tabular}
 
   \item[] $[[ [t/x] A (t1 t2)]] = \Delta z:[[{-A'}]].[ [[\y:A'' -> A'.(z (y s2))]]/[[y]] ]^{[[{-(A''->A')}]]} [[s]]$\\
     \begin{tabular}{lll}
       & Where $[[([t/x] A t1)]] = [[\m y:{-(A''->A')}.s]]$ for some, $[[y]]$ $[[s]]$, 
       and $[[A'' -> A']]$, \\      
-      & $[[([t/x] A t2)]] = [[s2]]$ for some $[[s2]]$, $[[ctype A (x,t1)]] = [[A'' -> A']]$, and $[[z]]$ is completely fresh.\\
-      & \\
+      & $[[([t/x] A t2)]] = [[s2]]$ for some $[[s2]]$, $[[ctype A (x,t1)]] = [[A'' -> A']]$, and \\
+      & $[[z]]$ is completely fresh.
     \end{tabular}  
   \end{itemize}
 \end{definition}
@@ -178,7 +175,6 @@ hereditary substitution function for the $\lambda\Delta$-calculus.
 \begin{definition}
   \label{def:hereditary_substitution_function}
   The hereditary substitution function is defined as follows:
-  \small
   \begin{itemize}
   \item[] $[[<Th,A1,A2>x]] = [[\y:A1 -> A2.(z (y t))]]$\\
     \begin{tabular}{lll}
@@ -190,8 +186,8 @@ hereditary substitution function for the $\lambda\Delta$-calculus.
       & Where $[[(x,z,t)]] \not\in [[Th]]$ for any $[[z]]$ or $[[t]]$.\\
       & \\
     \end{tabular}
-  \item[] $[[<Th,A1,A2>(\y:A.t)]] = [[\y:A.<Th, A1, A2>t]]$\\
-  \item[] $[[<Th,A1,A2>(\m y:A.t)]] = [[\m y:A.<Th, A1, A2>t]]$\\
+  \item[] $[[<Th,A1,A2>(\y:A.t)]] = [[\y:A.<Th, A1, A2>t]]$
+  \item[] $[[<Th,A1,A2>(\m y:A.t)]] = [[\m y:A.<Th, A1, A2>t]]$
 
   \item[] $[[<Th,A1,A2>(x t')]] = [[z [t/y] A1 s]]$\\
     \begin{tabular}{lll}
@@ -213,16 +209,16 @@ hereditary substitution function for the $\lambda\Delta$-calculus.
   \item[] $[[<Th,A1,A2>(t1 t2)]] = [[s1 s2]]$\\
     \begin{tabular}{lll}
       & Where $[[t1]]$ is either not a variable, or it is both a variable
-      and $([[t1]],[[z']],[[t']]) \not \in [[Th]]$ for any \\
-      & $[[t']]$ and $[[z']]$, $[[<Th,A1,A2>t1]] = [[s1]]$, and $[[<Th,A1,A2>t2]] = [[s2]]$.\\
+      and $([[t1]],[[z']],[[t']]) \not \in [[Th]]$ \\
+      & for any $[[t']]$ and $[[z']]$, $[[<Th,A1,A2>t1]] = [[s1]]$, and $[[<Th,A1,A2>t2]] = [[s2]]$.\\
       & \\
     \end{tabular}
 
   \item[] $[[ [t/x] A x]] = [[t]]$
-  \item[] $[[ [t/x] A y]] = [[y]]$\\
+  \item[] $[[ [t/x] A y]] = [[y]]$
 
   \item[] $[[ [t/x] A (\ y:A'.t')]] = [[\y:A'.([t/x ] A t')]]$
-  \item[] $[[ [t/x] A (\m y:A'.t')]] = [[\m y:A'.([t/x] A t')]]$\\
+  \item[] $[[ [t/x] A (\m y:A'.t')]] = [[\m y:A'.([t/x] A t')]]$
 
   \item[] $[[ [t/x] A (t1 t2)]] = [[([t/x] A t1) ([t/x] A t2)]]$\\
     \begin{tabular}{lll}
@@ -251,7 +247,6 @@ We can see in the final case of the hereditary substitution function that the cu
 case is now well founded. Lets consider an example which illustrates how our new definition operates. 
 \begin{example}
   \label{ex:struct_reduction}
-  \small
   Consider the terms $[[t]] \equiv [[\m f:{-(base->base)}.(f (\m f':{-(base -> base)}.(f' (\z:base.z))))]]$ and $[[t']] \equiv [[x u]]$,
   where $[[u]]$ is a free variable of type $[[base]]$.  Again, our goal is to compute $[[ [t/x] (base -> base) t']]$ using
   the definition of the hereditary substitution function in Definition~\ref{def:hereditary_substitution_function}.
@@ -336,7 +331,7 @@ In the next section we prove the definition of the hereditary substitution funct
 % and $\beta$-reduction can do.
 Just as we did for the previous system we now prove the properties of
 hereditary substitution.  We introduce some notation to make working
-with multi-substitutions a bit easier.  The sets of all first, second,
+with \\ multi-substitutions a bit easier.  The sets of all first, second,
 and third projections of the triples in $[[Th]]$ are denoted $[[Th
 1]]$, $[[Th 2]]$, and $[[Th 3]]$ respectively.  We denote the
 assumption of all elements of $[[Th]]^i$ having the type $[[T]]$ as
@@ -363,7 +358,8 @@ the following lemma.
 \end{lemma}
 \begin{proof}
   We prove part one first. This is a proof by induction on the structure of $t$.
-
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $[[t]] \equiv [[x]]$.  Then $[[ctype T (x,x)]] = [[T]]$.  Clearly,
     $[[head(x)]] = [[x]]$ and $[[T]]$ is a subexpression of itself.
@@ -374,7 +370,6 @@ the following lemma.
     Therefore, $[[head(t1 t2)]] = [[x]]$ and certainly $[[T'']]$ is a subexpression of $[[T]]$.
   \end{itemize}
 
-  \ \\
   We now prove part two.  This is also a proof by induction on the structure of $t$.
 
   \begin{itemize}
@@ -387,6 +382,7 @@ the following lemma.
     Now $[[t]] > [[t1]]$ so by the induction hypothesis $[[T1 -> T2]] \equiv [[T'' -> T']]$.
     Therefore, $[[T1]] \equiv [[T'']]$ and $[[T2]] \equiv [[T']]$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 
 \begin{lemma}[Properties of $[[ctype]]$ Continued]
@@ -406,14 +402,12 @@ the following lemma.
 \begin{proof}
   We prove part one first. This is a proof by induction on the structure of $[[t1 t2]]$.
 
-  \ \\
   The only possibilities for the form of $[[t1]]$ is $[[x]]$ or $[[s1 s2]]$.  All other 
   forms would not result in $[[ [t/x] T t1]]$ being a $\lambda$-abstraction and $[[t1]]$ not.
   If $[[t1]] \equiv [[x]]$ then there exist a type $[[T'']]$ such that $[[T]] \equiv [[T'' -> T']]$ and
   $[[ctype T (x,x t2)]] = [[T']]$ when $[[ctype T (x,x)]] = [[T]] \equiv [[T'' -> T']]$ in this case.  We know
   $[[T'']]$ to exist by inversion on $[[G,x:T,G' |- t1 t2:T']]$.
 
-  \ \\
   Now suppose $[[t1]] \equiv [[s1 s2]]$.  Now knowing $[[t1]]$ to not a $\lambda$-abstraction
   implies that $[[s1]]$ is also not a $\lambda$-abstraction or $[[ [t/x] T t1]]$ would be an application
   instead of a $\lambda$-abstraction.  So it must be the case that $[[ [t/x] T s1]]$ is a $\lambda$-abstraction
@@ -427,7 +421,7 @@ the following lemma.
   $[[ctype T (x,t1)]] = [[ctype T (x,s1 s2)]] = [[T'' -> T']]$ 
   when $[[ctype T (x,s1)]] = [[A'' -> (T'' -> A')]]$, because we know $[[ctype T (x,s1)]] = [[A]]$.
 
-  \ \\
+  \noindent
   The proof of part two is similar to the proof of part one.
 \end{proof}
 The first two properties of the hereditary substitution function are
@@ -439,7 +433,7 @@ totality and type preservation.
     exists a term $[[s]]$ such that $[[<Th,A,A'>t']] = [[s]]$ and $[[G, Th 2 :{-A'} |- s : B]]$.
   
   \item[ii.] If $[[G |- t : A]]$ and $[[G, x:A, G' |- t':B]]$, then there exists a term $[[s]]$ 
-    such that $[[ [t/x] A t']] = [[s]]$ and $[[G,G' |- s:B]]$.
+    such \\ that $[[ [t/x] A t']] = [[s]]$ and $[[G,G' |- s:B]]$.
   \end{itemize}
 \end{lemma}
 \begin{proof}
@@ -449,8 +443,9 @@ totality and type preservation.
   the strict subexpression ordering on terms. We first prove part one
   and then part two.  In both parts we case split on $[[t']]$.
 
-  \ \\
   \noindent Part One.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $[[t']]$ is a variable $[[x]]$.  Then either there exists
     a term $[[a]]$ such that $[[(x,z,a)]] \in [[Th]]$ or not.  Suppose so. Then 
@@ -518,9 +513,11 @@ totality and type preservation.
     \end{itemize}
 
   \end{itemize}
-
-  \ \\
+  \end{changemargin}
+  
   \noindent Part two.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $[[t']]$ is either $[[x]]$ or a variable $[[y]]$ distinct from $[[x]]$.  
     Trivial in both cases.
@@ -541,7 +538,7 @@ totality and type preservation.
       \end{math}
     \end{center}
     It suffices to show that $[[G,G' |- \y:A1.s1:A1 -> A2]]$.  
-    By simply applying the typing rule $\LamDeltadrulename{Lam}$ using
+    By simply applying the typing rule $\LamDeltadrulename{\normalsize Lam}$ using
     $[[G,G',y:A1 |- s1:A2]]$ we obtain $[[G,G' |- \y:A1.s1:A1 -> A2]]$.
     
   \item[Case.] Suppose $[[t']] \equiv [[\m y:{-B}.t'1]]$.  Similar to the previous case.
@@ -558,16 +555,14 @@ totality and type preservation.
     We only consider the non-trivial cases when $[[s1]] \equiv [[\y:B'.s'1]]$ and $[[t'1]]$ is not a 
     $\lambda$-abstraction, and $[[s1]] \equiv [[\m y:{-(B'->B)}.s'1]]$ and $[[t'1]]$ is not a 
     $\Delta$-abstraction.  Consider the former.
-
-    \ \\
+    
     Now by Lemma~\ref{lemma:ctype_props} it is the case that 
     there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, 
     $[[B'']] \equiv [[B' -> B]]$, and $[[B]]$ is a subexpression of $[[A]]$, hence
     $[[A]] > [[B']]$.  By the definition of the hereditary substitution function
     $[[ [t/x] A (t'1 t'2)]] = [[ [s2/y] B' s'1]]$. Therefore, by the induction hypothesis there exists a 
     term $[[s]]$ such that $[[ [s2/y] A s'1]] = [[s]]$ and $[[G,G' |- s:B]]$.
-
-    \ \\
+    
     At this point consider when $[[s1]] \equiv [[\m y:{-(B'->B)}.s'1]]$ and $[[t'1]]$ is not a 
     $\Delta$-abstraction.  Again, by Lemma~\ref{lemma:ctype_props} it is the case that 
     there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'']] \equiv [[B' -> B]]$ and
@@ -576,6 +571,7 @@ totality and type preservation.
     $[[G,r:{-B} |- s'' : _|_]]$.  Therefore, $[[ [t/x] A (t'1 t'2)]] = [[\m r:{-B}.<(y,r,s2),B',B>s'1]] = [[\m r:{-B}.s'']]$,
     and by the $\Delta$-abstraction typing rule $[[G |- \m r:{-B}.s'' : B]]$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 The next property shows that the hereditary substitution function is
 normality preserving. The proof of normality preservation depends on
@@ -612,14 +608,15 @@ $[[head (<Th,A,A'>(n1 n2))]] = [[head ((<Th,A,A'> n1) (<Th,A,A'> n2))]] = [[head
   \end{itemize} 
 \end{lemma}
 \begin{proof}
-  This is a mutually inductive proof using the lexicographic combination
+  This is a mutually inductive proof using the lexicographic combination\\
   $([[A]], f,[[n']])$ of our ordering on types,
   the natural number ordering where $f \in \{0,1\}$, and
   the strict subexpression ordering on terms. We first prove part one
   and then part two.  In both parts we case split on $[[n']]$.
-
-  \ \\
+  
   \noindent Part One.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $[[n']]$ is a variable $[[x]]$.  Then either there exists
     a normal form $[[m]]$ and variable $[[z]]$, such that, $[[(x,z,m)]] \in [[Th]]$ or not.  
@@ -674,9 +671,11 @@ $[[head (<Th,A,A'>(n1 n2))]] = [[head ((<Th,A,A'> n1) (<Th,A,A'> n2))]] = [[head
       the induction hypothesis and Lemma~\ref{lemma:ssub_var_head}.
     \end{itemize}
   \end{itemize}
-
-  \ \\
+  \end{changemargin}
+  
   \noindent Part two.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $[[n']]$ is either $[[x]]$ or a variable $[[y]]$ distinct from $[[x]]$.  
     Trivial in both cases.
@@ -710,8 +709,7 @@ $[[head (<Th,A,A'>(n1 n2))]] = [[head ((<Th,A,A'> n1) (<Th,A,A'> n2))]] = [[head
     $[[n'1]]$ is not a 
     $\lambda$-abstraction, and $[[m1]] \equiv [[\m y:{-(B'->B)}.m'1]]$ and $[[n'1]]$ is not a 
     $\Delta$-abstraction.  Consider the former.
-
-    \ \\
+   
     Now by Lemma~\ref{lemma:ctype_props} it is the case that 
     there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, 
     $[[B'']] \equiv [[B' -> B]]$, and $[[B]]$ is a subexpression of $[[A]]$, hence
@@ -719,8 +717,7 @@ $[[head (<Th,A,A'>(n1 n2))]] = [[head ((<Th,A,A'> n1) (<Th,A,A'> n2))]] = [[head
     $[[ [n/x] A (n'1 n'2)]] = [[ [m2/y] B' m'1]]$. Therefore, by the induction hypothesis there 
     exists a 
     normal form $[[m]]$ such that $[[ [m2/y] A m'1]] = [[m]]$.
-
-    \ \\
+    
     At this point consider when $[[m1]] \equiv [[\m y:{-(B'->B)}.m'1]]$ and $[[n'1]]$ is not a 
     $\Delta$-abstraction.  Again, by Lemma~\ref{lemma:ctype_props} it is the case that 
     there exists a $[[B'']]$ such that $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'']] \equiv [[B' -> B]]$ and
@@ -728,6 +725,7 @@ $[[head (<Th,A,A'>(n1 n2))]] = [[head ((<Th,A,A'> n1) (<Th,A,A'> n2))]] = [[head
     Then by the induction hypothesis, there exists a term $m''$, such that, $[[<(y,r,m2),B',B>m'1]] = m''$ and 
     Therefore, $[[ [n/x] A (n'1 n'2)]] = [[\m r:{-B}.<(y,r,m2),B',B>m'1]] = [[\m r:{-B}.m'']]$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 \noindent
 The final correctness property of the hereditary substitution function is
@@ -747,14 +745,15 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
   \end{itemize}  
 \end{lemma}
 \begin{proof}
-  This is a mutually inductive proof using the lexicographic combination
+  This is a mutually inductive proof using the lexicographic combination\\
   $([[A]], f,[[t']])$ of our ordering on types,
   the natural number ordering where $f \in \{0,1\}$, and
   the strict subexpression ordering on terms. We first prove part one
   and then part two.  In both parts we case split on $[[t']]$.
 
-  \ \\
   \noindent Part One.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $[[t']]$ is a variable $[[x]]$.  Then either there exists
     a term $[[a]]$ such that $[[(x,z,a)]] \in [[Th]]$ or not.  Suppose so. 
@@ -779,9 +778,10 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
         \begin{center}
           \begin{math}
             \begin{array}{lll}
-              [[lift Th A A' (x (\y:A.t''2))]] & = & [[(\y:A->A'.(z (y t))) (\y:A.(lift Th A A' t''2))]]\\
-              & \redto & [[z ((\y:A.(lift Th A A' t''2)) t)]]\\
-              & \redto & [[z ([t/y](lift Th A A' t''2))]]\\
+              [[lift Th A A' (x (\y:A.t''2))]] \\
+              \,\,\,= [[(\y:A->A'.(z (y t))) (\y:A.(lift Th A A' t''2))]]\\
+              \,\,\,\redto [[z ((\y:A.(lift Th A A' t''2)) t)]]\\
+              \,\,\,\redto [[z ([t/y](lift Th A A' t''2))]]\\
             \end{array}
           \end{math}
         \end{center}
@@ -865,9 +865,11 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
       the induction hypothesis.
     \end{itemize}
   \end{itemize}
+  \end{changemargin}
 
-  \ \\
-  \noindent Part two\\
+  \noindent Part two
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $[[t']]$ is a variable $[[x]]$ or $[[y]]$ distinct from $[[x]]$.  
     Trivial in both cases.
@@ -891,8 +893,7 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
     $[[s1]]$ is not a $\lambda$-abstraction or a $\Delta$-abstraction then 
     $[[ [t/x] A t' = ([t/x] A t'1) ([t/x] A t'2) == s1 s2]]$. Thus, by two applications of the
     induction hypothesis, $[[ [t/x]t' ~*> [t/x] A t']]$, because $[[ [t/x]t' = ([t/x] t'1) ([t/x] t'2)]]$.
-
-    \ \\
+    
     Suppose $[[s1 == \ y:B'.s'1]]$ and $[[t'1]]$ is not a $\lambda$-abstraction.  
     By Lemma~\ref{lemma:ctype_props} there exists a type $[[B'']]$ such that
     $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'' == B' -> B]]$, and $[[B'']]$ is a subexpression
@@ -916,12 +917,12 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
         }{[[a b ~*> c]]}
       \end{math}
     \end{center}
+    \vspace{-5px}
     where $[[a]]$, $[[a']]$, $[[b]]$, $[[b']]$, and $[[c]]$ are all terms.  We apply this
     result by instantiating $[[a]]$, $[[a']]$, $[[b]]$, $[[b']]$, and $[[c]]$ with
     $[[ [t/x] t'1]]$, $[[s1]]$, $[[ [t/x] t'2]]$, $[[s2]]$, and $[[ [s2/y] B' s'1]]$ 
     respectively.  Therefore, $[[ [t/x](t'1 t'2) ~*> [s2/y] B' s'1]]$.        
-
-    \ \\
+    
     Suppose $[[s1 == \m y:{-(B'->B)}.s'1]]$ and $[[t'1]]$ is not a $\Delta$-abstraction.
     By Lemma~\ref{lemma:ctype_props} there exists a type $[[B'']]$ such that
     $[[ctype A (x,t'1)]] = [[B'']]$, $[[B'' == B' -> B]]$, and $[[B'']]$ is a subexpression
@@ -942,6 +943,7 @@ Then $[[lift Th A A' t']] =^{def} [ [[\y:A -> A'.(zi (y ti))]]/[[xi]] ](\cdots([
     It suffices to show that $[[\m z:{-B}.(lift (y,z,s2) B' B s'1) ~*> \m z:{-B}.<(y,z,s2),B',B>s'1]]$,
     but this follows from the induction hypothesis, because $([[A]],0,[[t']]) > ([[B']],1,[[s'1]])$.
   \end{itemize} 
+  \end{changemargin}
 \end{proof}
 Using these properties it is now possible to conclude normalization for the $\lambda\Delta$-calculus.
 % subsection properties_of_the_hereditary_substitution_function (end)
@@ -990,8 +992,11 @@ substitution function we can now prove type soundness.
   \label{theorem:type_soundness}
   If $[[G |- t : T]]$ then $[[t]] \in \interp{[[T]]}_[[G]]$.
 \end{thm}
+\newpage
 \begin{proof}
   This is a proof by induction on the assumed typing derivation.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] \ \\
     \begin{center}
@@ -1033,6 +1038,7 @@ substitution function we can now prove type soundness.
     and by soundness with respect to reduction $[[ [n1/y](y n2) ~*> [n1/y] A (y n2)]]$.  Therefore, 
     $[[t1 t2]] \in \interp{[[B]]}_[[G]]$.  
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 \noindent
 Finally, we conclude normalization for the $\lambda\Delta$-calculus using hereditary substitution.
@@ -1100,6 +1106,7 @@ the computational content of the type-soundness theorem
   \label{def:norm_fun_hs}
   We define a normalization function for the $\lambda\Delta$-calculus using hereditary
   substitution as follows:
+  \vspace{-10px}
   \begin{center}
     \begin{itemize}
     \item[] $[[ norm_fun x ]] = [[x]]$\\
