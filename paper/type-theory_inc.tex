@@ -7,44 +7,69 @@
 %% This makes sure \ref has the section, subsection, and thm number.
 \def\thethm{\thesubsection.\arabic{thm}}
 %% This makes the figure numbering match the other environments.
-\renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
+% \renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
 
 \newenvironment{thm}{
+  \vspace{-30px}
  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Theorem \thethm.}} \begin{em}
-}{
+   %\begin{changemargin}{1px}{2px}\noindent   
+}{  
+  %\end{changemargin}
   \end{em} \par \addvspace{\baselineskip} 
+  \vspace{-30px}
 }
 \newenvironment{lemma}{
-  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Lemma \thethm.}} \begin{em}
-}{
+  \vspace{-30px}
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Lemma \thethm.}} \begin{em}    
+}{  
+  %\end{changemargin}
   \end{em} \par \addvspace{\baselineskip}
+  \vspace{-25px}
+}
+\newenvironment{lemmaItem}{
+  \vspace{-30px}
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent
+  \textbf{\underline{Lemma \thethm.}} \begin{em}    
+}{  
+  \end{em} \par \addvspace{\baselineskip}
+  \vspace{-25px}
 }
 \newenvironment{proposition}{
+  \vspace{-30px}
   \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Proposition \thethm.}} \begin{em}
+  %\begin{changemargin}{1px}{2px}\noindent
 }{
+  % \end{changemargin}
   \end{em} \par \addvspace{\baselineskip}
+  \vspace{-30px}
 }
 \newenvironment{corollary}{
+  \vspace{-30px}
   \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Corollary \thethm.}} \begin{em}
+    %\begin{changemargin}{1px}{2px}\noindent
 }{
+  %\end{changemargin}
   \end{em} \par \addvspace{\baselineskip}
+  \vspace{-30px}
 }
 \newenvironment{definition}{
+  \vspace{-30px}
   \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Definition \thethm.}} 
-  \begin{em}
-}{
+  \begin{em}\begin{changemargin}{1px}{2px}\noindent      
+}{  
+  \end{changemargin}
   \end{em} \par \addvspace{\baselineskip} 
+  \vspace{-25px}
 }
 \newenvironment{example}{
-  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent \textbf{\underline{Example \thethm.}} \begin{em}
-}{
+  \vspace{-30px}
+  \refstepcounter{thm} \par \addvspace{\baselineskip} \noindent
+  \textbf{\underline{Example \thethm.}} \begin{em}
+    \begin{changemargin}{1px}{2px}\noindent      
+}{  
+  \end{changemargin}
   \end{em} \par \addvspace{\baselineskip}
-}
-\newenvironment{openproblem}{
-  \par \addvspace{\baselineskip} \noindent \textbf{\underline{Open Problem. \arabic{section}.\arabic{subsection}.\arabic{thm}.}} 
-  \refstepcounter{thm} \begin{em}
-}{
-  \end{em} \par \addvspace{\baselineskip} 
+  \vspace{-30px}
 }
 
 % Commands that are useful for writing about type theory and programming language design.

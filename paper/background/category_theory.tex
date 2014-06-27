@@ -8,18 +8,17 @@ some basic definitions of category theory.  We begin with the definition of a
 category.
 \begin{definition}
   \label{def:category}
-  A \emph{category} \index{Category} denoted $\mathcal{C}, \mathcal{D},\cdots$ is an
-  abstract mathematical structure consisting of a set of objects $Obj$
-  denoted $A,B,C,\cdots$ and a set of morphisms $Mor$ denoted
-  $f,g,h,\cdots$.  Two functions assigning objects to morphisms called
-  $src$ and $tar$. The function $src$ assigns a morphism its source
-  object (domain object) while $tar$ assigns its target object (range
-  object).  We denote this assignment as $f : A \to B$, where $src(f)
-  = A$ and $tar(f) = B$. Now for each object $A \in Obj$ there exists
-  a unique family of morphisms called identities denoted $id_A : A \to
-  A$.  For any two morphisms $f : A \to B$ and $g : B \to C$ the
-  composition of $f$ and $g$ must be a morphism $g \circ f : A \to C$.
-  
+    A \emph{category} \index{Category} denoted $\mathcal{C}, \mathcal{D},\cdots$ is an
+    abstract mathematical structure consisting of a set of objects $Obj$
+    denoted $A,B,C,\cdots$ and a set of morphisms $Mor$ denoted
+    $f,g,h,\cdots$.  Two functions assigning objects to morphisms called
+    $src$ and $tar$. The function $src$ assigns a morphism its source
+    object (domain object) while $tar$ assigns its target object (range
+    object).  We denote this assignment as $f : A \to B$, where $src(f)
+    = A$ and $tar(f) = B$. Now for each object $A \in Obj$ there exists
+    a unique family of morphisms called identities denoted $id_A : A \to
+    A$.  For any two morphisms $f : A \to B$ and $g : B \to C$ the
+    composition of $f$ and $g$ must be a morphism $g \circ f : A \to C$.
   \ \\
   \noindent
   Morphisms must obey the following rules:
@@ -56,9 +55,9 @@ In order to interpret STLC we will need a category with some special
 features.  The first of these is the final object. 
 \begin{definition}
   \label{def:terminal_object}
-  An object $1$ of a category $\mathcal{C}$ is the
-  \emph{final}\index{Final/Terminal Object} object if and only if there exists
-  exactly one morphism $\Diamond_A : A \to 1$ for every object $A$.
+    An object $1$ of a category $\mathcal{C}$ is the
+    \emph{final}\index{Final/Terminal Object} object if and only if there exists
+    exactly one morphism $\Diamond_A : A \to 1$ for every object $A$.
 \end{definition}
 \noindent
 We will use the final object and finite products to interpret
@@ -151,6 +150,7 @@ $\langle [[G]], [[t]], [[T]] \rangle$ where $[[G |- t : T]]$.
     \end{math}
   \end{center}
   Finally, we interpret terms as follows:
+  \vspace{-20px}
   \begin{center}
     \begin{tabular}{lllllll}
       Variables:\\      
@@ -186,7 +186,7 @@ $\langle [[G]], [[t]], [[T]] \rangle$ where $[[G |- t : T]]$.
         \end{array}
       \end{math}
     \end{tabular}
-  \end{center}
+  \end{center} 
 \end{definition}
 In the previous definition $\hat{X}$ is just an additional object of
 the category.  It does not matter what we call it.  It does however

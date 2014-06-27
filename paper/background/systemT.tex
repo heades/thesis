@@ -7,8 +7,8 @@ natural numbers and primitive recursion.  In \cite{Girard:1989} the
 authors present system T with pairs and booleans, but we leave these
 out here for clarity.  The big improvement is primitive recursion.
 The syntax and reduction relation are defined in
-Fig.~\ref{fig:T_syntax} and the type-checking relation is defined in
-Fig.~\ref{fig:T_typing}.
+Figure~\ref{fig:T_syntax} and the type-checking relation is defined in
+Figure~\ref{fig:T_typing}.
 \begin{figure}
   \index{G\"odel's system T}
   \begin{center}
@@ -139,12 +139,15 @@ computations.
 
 \begin{example}
   \label{ex:T_reductions}
-  We give an example reduction of addition.  We define natural numbers using constructor
-  form, and define a more convenient syntax as follows:  
+  We give an example reduction of addition.  We define 
+  natural numbers using constructor
+  form, and define a more convenient syntax 
+  as follows:  
   $\hat{1} \defeq [[S 0]]$, $\hat{2} \defeq [[S (S 0)]]$, etc.  Now we provide the following
   reduction:
   \begin{center}
-    \begin{math}
+    \vspace{39px}
+    \begin{math}      
       \begin{array}{lll}
         [[add 2 3]] & \redto^2 &  [[R 2 (\z:Nat.(\w:Nat.(S z))) 3]]\\
              & \redto   & [[((\z:Nat.(\w:Nat.(S z))) (R 2 (\z:Nat.(\w:Nat.(S z))) 2)) 3]]\\

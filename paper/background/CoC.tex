@@ -54,29 +54,31 @@ Theory\index{Dependent Type}.  Now using the notion of dependency we define the 
 inference rules in the next definition.
 \begin{definition}
   \label{def:pst_rules}
-  Given a system of the $\lambda$-cube $(S, A, R)$ the inference rules are defined as follows:
+  Given a system of the $\lambda$-cube $(S, A, R)$ the inference rules
+  are defined as follows:
+  \vspace{-20px}
   \begin{center}
     \begin{mathpar}
 
-      \inferrule* [right=Beta] {
+      \inferrule* [right=\ifrName{Beta}] {
         \ 
       }{[[(\x:t.b) a]] \redto [[ [a/x]b]]}
 
       \and
 
-        \inferrule* [right=Axioms] {
+        \inferrule* [right=\ifrName{Axioms}] {
           (c,s) \in A
         }{[[.]] \vdash c : s}
         
         \and
 
-        \inferrule* [right=Var] {
+        \inferrule* [right=\ifrName{Var}] {
           [[G]] \vdash [[a]] : s          
         }{[[G, x: a |- x : a]]}
         
         \and
         
-        \inferrule* [right=Weakening] {
+        \inferrule* [right=\ifrName{Weakening}] {
           [[G |- a : b]]
           \\\\
           [[G]] \vdash [[a']] : s
@@ -86,40 +88,38 @@ inference rules in the next definition.
         
         \and
                 
-        \inferrule* [right=App] {
+        \inferrule* [right=\ifrName{App}] {
           [[G |- a' : b]]
           \\\\
           [[G |- a : (x : b) -> b']]
         }{[[G |- a a' : [a'/x]b']]}
         
-        \and
-        
-        \inferrule* [right=Conv] {
+      \end{mathpar}
+      \begin{math}
+        \begin{array}{cccc}
+          \inferrule* [right=\ifrName{Conv}] {
           [[G |- a : b]]
           \\\\
           [[G]] \vdash [[b']]:s
           \\
           [[b]] \equiv_\beta [[b']]
-        }{[[G |- a : b']]}\\
-        
-        \and
-
-        \inferrule* [right=Pi] {                 
+        }{[[G |- a : b']]}
+        &
+        \inferrule* [right=\ifrName{Pi}] {                 
           [[G]] \vdash [[a]]:s_1
           \\\\
           [[G,x:a]] \vdash [[b]]:s_2
           \\
           (s_1, s_2) \in R
-        }{[[G]] \vdash [[(x:a) -> b]]:s_2}
-        
-        \and
-
-        \inferrule* [right=Lam] {
+        }{[[G]] \vdash [[(x:a) -> b]]:s_2}\\
+        & \\
+        \inferrule* [right=\ifrName{Lam}] {
           [[G,x:a |- b : b']]
           \\
           [[G]] \vdash [[(x:a) -> b']] : s
         }{[[G |- \x:a.b:(x : a) -> b']]}
-    \end{mathpar}
+        \end{array}
+      \end{math}      
   \end{center}
 \end{definition}
 In the previous definition $s$ ranges over $S$, and we left out the

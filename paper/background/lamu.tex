@@ -15,7 +15,7 @@ computational perspective of free deduction which he called the
 $\lambda\mu$-calculus.  This type theory can be considered the first
 type-safe strongly normalizing classical type theory. We now briefly
 introduce the $\lambda\mu$-calculus.  The syntax and reduction rules
-are in Fig.~\ref{fig:lamu_syntax}.
+are in Figure~\ref{fig:lamu_syntax}.
 
   \begin{figure}
     \index{$\lambda\mu$-Calculus}
@@ -31,17 +31,22 @@ are in Fig.~\ref{fig:lamu_syntax}.
         \end{array}
       \end{math} \\
       & \\
-      Full $\beta$-reduction: \\
-      \begin{mathpar}
-        \LamudruleRXXBeta{}       \and
-        \LamudruleRXXStruct{}     \and
-        \LamudruleRXXRenaming{}   \and
-        \LamudruleRXXLam{}        \and
-        \LamudruleRXXMu{}         \and
-        \LamudruleRXXNaming{}     \and
-        \LamudruleRXXAppOne{}     \and
-        \LamudruleRXXAppTwo{}
-      \end{mathpar}
+      Full $\beta$-reduction: \\      
+        \begin{math}
+          \begin{array}{lll}
+            \LamudruleRXXBeta{}       &
+            \LamudruleRXXStruct{}     \\
+            & \\
+            \LamudruleRXXRenaming{}   &
+            \LamudruleRXXLam{}        \\
+            & \\
+            \LamudruleRXXMu{}         &
+            \LamudruleRXXNaming{}     \\
+            & \\
+            \LamudruleRXXAppOne{}     &
+            \LamudruleRXXAppTwo{}
+          \end{array}
+        \end{math}
     \end{tabular}
   \end{center}
 
@@ -61,7 +66,7 @@ statement denoted by the metavariable $[[s]]$.  Statements have the
 form $[[ [a]t]]$.  We can think of this as assigning (or naming) an
 output port to a term.  Now we extend the reduction rules with two new
 reduction rules and two new congruence rules for the $\mu$-abstraction
-and naming operator. The \Lamudrulename{R\_Struct} rule is called the
+and naming operator. The \Lamudrulename{\normalsize R\_Struct} rule is called the
 structural reduction rule.  This allows one to target reduction to a
 named subterm of the body of the $\mu$-abstraction.  This rule uses a
 special substitution operation $[[ [t /* a]s]]$ which says to replace
@@ -72,7 +77,7 @@ operation on terms. This is called structural substitution.
 As we said above the language of the $\lambda\mu$-calculus is an
 extension of the $\lambda$-calculus, but its type assignment is very
 different than STLC.  The type assignment rules are defined in
-Fig.~\ref{fig:lamu_typing}.
+Figure~\ref{fig:lamu_typing}.
 \begin{figure}
   \begin{center}
     \begin{mathpar}
@@ -120,14 +125,14 @@ truth of the statement.  This implies the following lemma.
     \begin{math}
       \begin{array}{lll}
         $$\mprset{flushleft}
-        \inferrule* [right=BtmInt] {
+        \inferrule* [right=\ifrName{BtmInt}] {
           [[a fresh in D]]
           \\
             [[s : G |- D]]
         }{[[\m a.s : G |- _|_, D]]}
         &
         $$\mprset{flushleft}
-        \inferrule* [right=BtmElim] {
+        \inferrule* [right=\ifrName{BtmElim}] {
           [[a fresh in D]]
           \\
             [[t : G |- _|_,D]]          
@@ -152,30 +157,31 @@ derivations here, because they are rather straightforward.
   \label{lemma:lamu_derived_rules}
   The following rules are derivable using the typing rules and the rules of
   Lemma~\ref{lemma:lamu_neg}:
+  \ \\
   \begin{center}
     \begin{math}
-      \begin{array}{lll}
+      \begin{array}{ccc}
         $$\mprset{flushleft}
-        \inferrule* [right=NegInt1] {
+        \inferrule* [right=\ifrName{NegInt1}] {
           [[t : G,A x |- _|_,D]]
-        }{[[\x.t:G |- {-A},D]]}
-        &
+        }{[[\x.t:G |- {-A},D]]} \\
+        & \\
         $$\mprset{flushleft}
-        \inferrule* [right=NegElim1] {
+        \inferrule* [right=\ifrName{NegElim1}] {
           [[t1 : G |- {-A},D]]
           \\
           [[t2 : G |- A, D]]
         }{[[t1 t2 : G |- _|_,D]]}\\       
         &\\
         $$\mprset{flushleft}
-        \inferrule* [right=NegInt2] {
+        \inferrule* [right=\ifrName{NegInt2}] {
           [[a fresh in D]]
           \\
           [[s : G, A x |- D]]
-        }{[[\x.\m a.s : G |- {-A},D]]}
-        &
+        }{[[\x.\m a.s : G |- {-A},D]]} \\
+        & \\
         $$\mprset{flushleft}
-        \inferrule* [right=NegElim2] {
+        \inferrule* [right=\ifrName{NegElim2}] {
           [[t1 : G |- {-A},D]]
           \\
           [[t2 : G |- A, D]]

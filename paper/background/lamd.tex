@@ -17,11 +17,11 @@ then the typing rules.  Lastly, we will define the reduction rules.
 It is our belief that the reduction rules may be more clear after the
 reader sees the typing rules.
 
-The language is defined in Fig.~\ref{fig:lamd_syntax}\footnote{We only
+The language is defined in Figure~\ref{fig:lamd_syntax}\footnote{We only
   include a subset of the reduction rules given by in Rehof and
   S\o{}rensen. Just as before negation is defined just as it is in
   intuitionistic logic.  For the others see \cite{Rehof:1994}.} and
-the typing rules in Fig.~\ref{fig:lamd_typing}.
+the typing rules in Figure~\ref{fig:lamd_typing}.
 \begin{figure}
   \index{$\lambda\Delta$-Calculus}
   \begin{center}
@@ -62,7 +62,7 @@ We give the formulation a la Church, but the formulation a la Curry
 does exist.  We can see that the syntax really is just the extension
 of STLC with the $[[\d x:T.t]]$ control operator.  This operator is
 the elimination form for absurdity $[[_|_]]$.  We can see this
-connection by looking at its typing rule $\Lamddrulename{Delta}$.
+connection by looking at its typing rule $\Lamddrulename{\normalsize Delta}$.
 Here we assume $[[{-A}]]$ and show $[[_|_]]$, and obtain
 $[[A]]$.  We can use this rule to prove LDN:
 \begin{example}
@@ -71,18 +71,18 @@ $[[A]]$.  We can use this rule to prove LDN:
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=Lam] {
+      \inferrule* [right=\ifrName{Lam}] {
         $$\mprset{flushleft}
-        \inferrule* [right=Delta] {
+        \inferrule* [right=\ifrName{Delta}] {
           $$\mprset{flushleft}
-          \inferrule* [right=App] {
+          \inferrule* [right=\ifrName{App}] {
             $$\mprset{flushleft}
-            \inferrule* [right=Var] {
+            \inferrule* [right=\ifrName{Var}] {
               \ 
             }{[[G |- x : {-{-A}}]]}
             \\
             $$\mprset{flushleft}
-            \inferrule* [right=Var] {
+            \inferrule* [right=\ifrName{Var}] {
               \ 
             }{[[G |- y : {-A}]]}
           }{[[G |- x y : _|_]]}
@@ -100,7 +100,7 @@ the $\lambda\Delta$-calculus.
   The following embeds the Church style formulation of the $\lambda\mu$-calculus into
   the $\lambda\Delta$-calculus:
   
-  \ \\
+  \noindent
   Context:
   \begin{center}
     \begin{math}
@@ -112,7 +112,7 @@ the $\lambda\Delta$-calculus.
     \end{math}
   \end{center}
 
-  \ \\
+  \noindent
   Terms and Statements:
   \begin{center}
     \begin{math}
@@ -135,15 +135,16 @@ the $\lambda\Delta$-calculus.
     \end{math}
   \end{center}
 \end{definition}
+\vspace{5px}
 Using the previous definition we can now prove that if a term is typeable in the $\lambda\mu$-calculus
 then we can construct a corresponding term of the same type in the $\lambda\Delta$-calculus. 
-\begin{lemma}
+\begin{lemmaItem}
   \label{lemma:lamu_is_lamd}
   \begin{itemize}
   \item[i.] If $[[t]]:\Gamma \vdash [[A]],\Delta$ then $[[G]],|\Delta| \vdash |[[t]]|:[[A]]$.
   \item[ii.] If $[[t]]:\Gamma \vdash .,\Delta$ then $[[G]],|\Delta| \vdash |[[t]]|:[[_|_]]$.
   \end{itemize}
-\end{lemma}
+\end{lemmaItem}
 \noindent
 The previous lemma establishes that the $\lambda\Delta$-calculus is at
 least as expressive -- in terms of typeability -- than the
@@ -155,27 +156,24 @@ equivalent with respect to typeability\index{Equivalence between the
 generality that the typing context $[[G]]$ is sorted so that all
 negative types come after all positive types.  A negative type is of
 the form $[[{-A}]]$.  
+\newpage
 \begin{definition}
   \label{def:embed_lamd_lamu}
   The following embeds the Church style formulation of the $\lambda\Delta$-calculus into the
   $\lambda\mu$-calculus:
-  
-  \ \\
-  Contexts:\\  
-  If $[[G]] \equiv [[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]], [[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]$, then
   \begin{center}
+    \begin{tabular}{lll}
+    Contexts:\\  
+    \,\,\,If $[[G]] \equiv [[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]], [[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]$, then\\
     \begin{math}
       \begin{array}{lll}
-        |[[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]]| & := & [[A1]]^{[[x1]]}, \ldots, [[Ai]]^{[[xi]]} \equiv [[G]]_\mu\\
+        \,\,\,\,|[[x1]] : [[A1]], \ldots, [[xi]] : [[Ai]]| & := & [[A1]]^{[[x1]]}, \ldots, [[Ai]]^{[[xi]]} \equiv [[G]]_\mu\\
         &\\
-        |[[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]| & := & [[B1]]^{\alpha_1},\ldots,[[Bj]]^{\alpha_j} \equiv \Delta\\
+        \,\,\,\,|[[y1]] : [[{-B1}]], \ldots, [[yj]] : [[{-Bj}]]| & := & [[B1]]^{\alpha_1},\ldots,[[Bj]]^{\alpha_j} \equiv \Delta\\
       \end{array}
-    \end{math}
-  \end{center}
-  
-  \ \\
-  Terms:
-  \begin{center}
+    \end{math}\\
+    & \\
+    Terms:\\    
     \begin{math}
       \begin{array}{lll}
         |[[x]]|  & := & [[x]]\\
@@ -188,6 +186,7 @@ the form $[[{-A}]]$.
           \text{, where } \alpha \not \equiv \beta
       \end{array}
     \end{math}
+  \end{tabular}
   \end{center}
 \end{definition}
 \noindent

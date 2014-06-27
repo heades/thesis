@@ -1,9 +1,9 @@
 \newcommand{\Fw}[0]{\text{F}^\omega} In Girard's thesis
 \cite{Girard:1971} Girard extends the type language of system F with a
 copy of STLC.  This type theory is called system $\Fw$.  The syntax
-and reduction rules are in Fig.~\ref{fig:Fw_syntax}, the kinding rules
-in Fig.~\ref{fig:Fw_kinding}, and the typing rules in
-Fig.~\ref{fig:Fw_typing}.
+and reduction rules are in Figure~\ref{fig:Fw_syntax}, the kinding rules
+in Figure~\ref{fig:Fw_kinding}, and the typing rules in
+Figure~\ref{fig:Fw_typing}.
 \begin{figure}
   \index{System $\Fw$}
   \begin{center}
@@ -13,25 +13,44 @@ Fig.~\ref{fig:Fw_typing}.
       \begin{math}
         \begin{array}{lll}
           [[K]] & ::= & [[Type]]\,|\,[[K -> K']]\\
-          [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X.T]]\,|\,[[\X:K.T]]\,|\,[[T1 T2]]\\
-          [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
+          [[T]] & ::= & [[X]]\,|\,[[T -> T']]\,|\,[[Forall X:K.T]]\,|\,[[\X:K.T]]\,|\,[[T1 T2]]\\
+          [[t]] & ::= & [[x]]\,|\,[[\x:T.t]]\,|\,[[\\X:K.t]]\,|\,[[t1 t2]]\,|\,[[t [T] ]]
         \end{array}
       \end{math} \\
       \\
       Full $\beta$-reduction:\\
-      \begin{mathpar}
-        \FwdruleRXXBeta{}         \and
-        \FwdruleRXXTypeRed{}      \and
-        \FwdruleRXXLam{}          \and
-        \FwdruleRXXTypeAbs{}      \and  
-        \FwdruleRXXAppOne{}       \and
-        \FwdruleRXXAppTwo{}       \and 
-        \FwdruleRXXTypeApp{}      \and
-        \FwdruleTRXXTypeBeta{}    \and    
-        \FwdruleTRXXTypeLam{}     \and
-        \FwdruleTRXXTypeAppOne{}  \and
-        \FwdruleTRXXTypeAppTwo{}
-      \end{mathpar}
+      \begin{math}
+        \begin{array}{cccc}
+          \FwdruleRXXBeta{}       &       \FwdruleRXXTypeRed{}      \\
+          & \\
+          \FwdruleRXXLam{}          &    \FwdruleRXXTypeAbs{}      \\
+          & \\
+          \FwdruleRXXAppOne{}       &   \FwdruleRXXAppTwo{}       \\  
+          & \\
+          \FwdruleRXXTypeApp{}      &     \FwdruleTRXXTypeBeta{}    \\
+          & \\
+          \FwdruleTRXXTypeLam{}     &    \FwdruleTRXXTypeAppOne{}  \\
+          & \\
+          \FwdruleTRXXTypeAppTwo{}
+        \end{array}
+      \end{math}\\
+      \\
+      Type $\beta$-equality:\\
+      \begin{math}
+        \begin{array}{cccc}
+          \FwdruleEqXXRefl{}       &
+          \FwdruleEqXXSym{}      \\
+          & \\
+          \FwdruleEqXXTrans{}          &
+          \FwdruleEqXXLam{}      \\
+          & \\
+          \FwdruleEqXXApp{}       &
+          \FwdruleEqXXImp{}       \\
+          & \\
+          \FwdruleEqXXForall{}      &
+          \FwdruleEqXXBeta{}    
+        \end{array}
+      \end{math}
     \end{tabular}
   \end{center}
 
@@ -58,7 +77,8 @@ Fig.~\ref{fig:Fw_typing}.
       \FwdruleLam{}       \and
       \FwdruleTypeAbs{}   \and
       \FwdruleApp{}       \and
-      \FwdruleTypeApp{}
+      \FwdruleTypeApp{}   \and
+      \FwdruleConv{}
     \end{mathpar}
   \end{center}
   \caption{Typing relation for the system $\Fw$}

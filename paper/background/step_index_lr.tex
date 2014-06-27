@@ -22,7 +22,7 @@ direct proof using the logical relations\footnote{This section is
   Programming Language Summer School.}.  We do not show any proofs
 here, but they can all be found in the extended version of
 \cite{Ahmed:2006} which can be accessed through Ahmed's web
-page\footnote{\url{http://www.ccs.neu.edu/home/amal/papers/lr-recquant-techrpt.pdf}}.
+page\footnote{http://www.ccs.neu.edu/home/amal/papers/lr-recquant-techrpt.pdf}.
 
 We begin with the proof of type safety of the call-by-value STLC, and
 then extend this to include iso-recursive types.  To get the proof of
@@ -31,8 +31,9 @@ logical relations.
 \begin{definition}
   \label{def:logical_relations}
   We define logical relations for values and then we extend this definition to
-  terms.\\
-  \ \\
+  terms.
+  
+  \noindent
   Logical relations for values: \\
   \begin{math}
     \small
@@ -44,9 +45,10 @@ logical relations.
       \forall v.v \in \mathcal{V} \interp{T_1} \implies 
               [v/x]t \in \mathcal{E}\interp{T_2} \}\\
     \end{array}
-  \end{math}
-  \ \\
-  \ \\
+  \end{math}\\
+  
+  \vspace{-20px}
+  \noindent
   Logical relations extended to terms:\\
   \begin{math}
     \begin{array}{lll}
@@ -54,8 +56,8 @@ logical relations.
       \exists v.t \redto^* v \land v \in \mathcal{V}\interp{T} \}
     \end{array}
   \end{math}
-  \ \\
-  \ \\
+  
+  \noindent
   Well-formed substitutions:\\
   \begin{math}
     \begin{array}{lllll}
@@ -128,12 +130,12 @@ two new type checking rules.  They are defined as follows:
   \begin{math}
     \begin{array}{lll}
       $$\mprset{flushleft}
-      \inferrule* [right=fold] {
+      \inferrule* [right=\ifrName{fold}] {
         \Gamma,\Delta \vdash t : [\mu \alpha.T/\alpha]T
       }{\Gamma,\Delta \vdash \text{fold}\ t:\mu \alpha.T}
       &
       $$\mprset{flushleft}
-      \inferrule* [right=unfold] {
+      \inferrule* [right=\ifrName{unfold}] {
         \Gamma,\Delta \vdash t : \mu \alpha.T
       }{\Gamma,\Delta \vdash \text{unfold}\ t:[\mu \alpha.T/\alpha]T}
     \end{array}
@@ -241,7 +243,6 @@ to be an element of the set Type.  Atom and Type are defined by the
 following definition.
 \begin{definition}
   \label{def:wellformed_interpretations}
-  \ \\
   \begin{math}
     \begin{array}{lllll}
       \text{Atom} & = & \{ (k,t) \,|\ k \in \nat \land t \in Closed^{Term} \}\\
@@ -285,7 +286,11 @@ types (logical relations).
       \,\,\,\,\,\,\,\,\,\,\,\,\,\,
       \forall j \leq k.\forall v.(j, v) \in \vinterp{T_1}_\rho \implies 
               (j, [v/x]t) \in \tinterp{T_2}_{\rho} \}\\
-      & \\
+    \end{array}
+  \end{math}\\
+  \ \\
+  \begin{math}
+    \begin{array}{llllllll}
       \vbinterp{n}{\mu \alpha.T}_\rho = \{ (k,fold\ v) \in Atom^{value}\ |\ 
         k < n \land \forall j < k.(j,v) \in 
         \vinterp{T}_{\rho[\alpha \mapsto \vbinterp{k}{\mu \alpha.T}_\rho]}\}\\

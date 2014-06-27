@@ -327,8 +327,8 @@
 %\setcounter{secnumdepth}{6}
 \setcounter{secnumdepth}{3}	% by Duckki
 \renewcommand{\chaptername}{CHAPTER}
-\renewcommand{\bibname}{REFERENCES}
-\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\bibname}{\normalsize\normalfont REFERENCES}
+\renewcommand{\listfigurename}{\vspace{5px}\hfill\normalsize\normalfont LIST OF FIGURES\hfill\vspace{12px}}
 \renewcommand{\listtablename}{LIST OF TABLES}
 \renewcommand{\listalgorithmname}{LIST OF ALGORITHMS}
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
@@ -350,7 +350,7 @@
        {\z@}%
        {1.2\li}%
        {1pt}%
-       {\reset@font\centering\normalsize}}
+       {\reset@font\centering\normalsize\normalfont}}
 
 \renewcommand{\subsubsection}
    {\@startsection
@@ -424,7 +424,7 @@
       \refstepcounter{chapter}%
       \typeout{\@chapapp\space\thechapter.}%
       \addcontentsline{toc}{chapter}%
-         {\protect\numberline{\thechapter}\uppercase{#1}}%
+         {\chaptername~\thechapter. \hspace{1em}\uppercase{#1}}%
       \addtocontents{toc}{\protect\vspace{\li}}%
   \else
       \addcontentsline{toc}{chapter}{\uppercase{#1}}%
@@ -437,6 +437,27 @@
       \@makechapterhead{#2}%
       \@afterheading
  \fi}
+\renewcommand{\thepart}{\Alph{part}}
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\normalsize\uppercase{\partname}~\thepart.\hspace{1em}{\normalsize\normalfont #1}}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    \markboth{}{}%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >-2\relax
+       \normalsize\normalfont \underline{\MakeUppercase{\partname}\nobreakspace\thepart}
+       \par
+       \vskip 20\p@
+     \fi
+     \normalsize \normalfont \underline{#2}\par}%
+    \@endpart}
+
+%%\def\@part[#1]#2{}
 
  \newcommand{\chapterx}[2][]{\ifnum \c@secnumdepth >\m@ne
       \refstepcounter{chapter}%
@@ -461,11 +482,11 @@
   \vspace*{\uitchapadd}%
   {\singlespace \parindent \z@ \centering \normalsize
     \ifnum \c@secnumdepth >\m@ne
-          \bfseries \@chapapp{} \thechapter \par
+          \normalfont \@chapapp{} \thechapter \par
        \fi
     \interlinepenalty\@M
     \vskip \li
-    \bfseries\uppercase{#1}\par\nobreak
+    \normalfont\uppercase{#1}\par\nobreak
     \vskip 2\li
   }}
 
@@ -485,9 +506,10 @@
 \newcommand{\l@head}            {\@dottedtocline{0}{\z@}{1.5em}}
 \newcommand{\l@blankhead}       {\protect\vspace{\li}\mydottedtocline{0}{\z@}{1.5em}}
 %\newcommand{\l@blankhead}       {\mydottedtocline{0}{\z@}{1.5em}}
-\renewcommand{\l@chapter}       {\protect\vspace{\li}\@dottedtocline{0}{2.0em}{1.5em}}
-\newcommand{\l@chapterx}       {\protect\vspace{\li}\@dottedtocline{0}{2.0em}{1.5em}}
-%\renewcommand{\l@chapter}       {\@dottedtocline{0}{2.0em}{1.5em}}
+\renewcommand{\l@chapter}       {\protect\vspace{\li}\@dottedtocline{2}{2.0em}{1.5em}}
+\renewcommand{\l@part}          {\@dottedtocline{1}{3.5em}{2.3em}}
+\newcommand{\l@chapterx}       {\protect\vspace{\li}\@dottedtocline{2}{2.0em}{1.5em}}
+\renewcommand{\l@chapter}       {\@dottedtocline{0}{2.0em}{1.5em}}
 \renewcommand{\l@section}       {\@dottedtocline{1}{3.5em}{2.3em}}
 \renewcommand{\l@subsection}    {\@dottedtocline{2}{5.8em}{3.2em}}
 \renewcommand{\l@subsubsection} {\@dottedtocline{3}{9.0em}{4.1em}}
@@ -514,7 +536,7 @@
 \renewcommand{\appendix}{\savedAppendix
 \addtocontents{toc}{\protect\vspace{\li}}	% by Duckki
 %\addcontentsline{toc}{head}{APPENDIX}
-\addcontentsline{toc}{blankhead}{APPENDIX}	% AJR fix
+\addcontentsline{toc}{listhead}{APPENDIX}	% AJR fix
 }
 
 \newcommand{\frontmatter}{
@@ -536,7 +558,7 @@
      \abstractpg			% (internal) abstract (optional)
      %\setcounter{tocdepth}{6}
      \setcounter{tocdepth}{3}	% changed by Duckki
-     \tableofcontents
+     {\tableofcontents}
      % The vbox is a harmless way of preventing a space being added
      % to the end of the Page label
      \addtocontents{toc}{\vbox{\noindent \protect\hfill}}
@@ -552,7 +574,7 @@
         \newpage
         \phantomsection	% by Duckki
         \addcontentsline{toc}{listhead}{LIST OF FIGURES}%
-        \addtocontents{lof}{\vspace{11mm}\vbox{\noindent Figure \protect\hfill}}
+        \addtocontents{lof}{\vspace{11mm}\vbox{\noindent Figure \protect\hfill}\linespread{2}\selectfont}
         \listoffigures
      }{}
 
@@ -648,9 +670,7 @@
         \theoremlisttype{allname}   % required to print out the type before the number
         \vspace{5mm}
         \listtheorems{example,lem,thm}
-     }{}
-    \addcontentsline{toc}{blankhead}{CHAPTER}
-
+     }{}    
   } % ifthenelse nofrontmatter
 
   \raggedbottom
@@ -816,8 +836,8 @@
 % Pain in the ass formatting: the text of the acknowledgement has to
 % appear 4 singlespace lines below the heading, rather than 2 like in
 % the rest of the front matter.
-	{\singlespace\parindent \z@ \reset@font \normalsize \bfseries
-	 \centering ACKNOWLEDGEMENTS\par \nobreak \vskip 2\li }
+	{\singlespace\parindent \z@ \reset@font \normalsize \normalfont
+	 \vspace{3px}\centering ACKNOWLEDGEMENTS\par \nobreak \vskip 2\li }
 	\doublespace
 	  \@acknowledgements
 	\vfill

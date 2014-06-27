@@ -1,6 +1,6 @@
 metavar var, x, y, z, f, u, v ::=
 
-metavar K {{tex \mathsf{K} }}, C {{tex \mathsf{C} }} ::= {{ com data constructor constant }}
+metavar K {{tex \mathsf{K} }}, C {{tex \mathsf{C} }} ::= 
 
 metavar cvar, c {{ tex \mathsf{c} }} ::=
 
@@ -8,11 +8,11 @@ indexvar ivar, n, m, k, r, s ::=
 
 grammar
 
-program, prog :: 'prog_' ::= {{com Syntax of programs. }}
+program, prog :: 'prog_' ::= 
   | pdef      :: :: ProgBase
   | prog pdef :: :: ProgStep
 
-program_def, pdef :: 'prog_def_' ::= {{com Syntax of top-level definitions. }}
+program_def, pdef :: 'prog_def_' ::= 
   | datatype_decl          :: :: DataTypeDeclaration
   | predicateType x : : LK :: :: PredicateTypeDef
   | predef x = P           :: :: PredicateDef
@@ -24,19 +24,19 @@ program_def, pdef :: 'prog_def_' ::= {{com Syntax of top-level definitions. }}
   | termdef x = t          :: :: TermDef
     {{tex \Sepkw{term}\,[[x]] = [[t]] }}
 
-stage, ep {{tex \varepsilon}} :: 'sgn_' ::= {{ com compile time versus run time }}
+stage, ep {{tex \varepsilon}} :: 'sgn_' ::= 
   | + :: :: Plus
   | - :: :: Minus
 
-ks {{tex \xi}} :: 'xi_' ::= {{ com logicality }}
+ks {{tex \xi}} :: 'xi_' ::= 
   | L :: :: L
   | P :: :: P
       
-datatype_decl, d :: 'd_' ::= {{ com datatype declaration }}
+datatype_decl, d :: 'd_' ::= 
   | data Ctor C t where M                      :: :: data_decl
       {{ tex data\,\mathsf{C} \,[[t]]\,where\,[[M]] }}     
  
-SuperKind, L :: 'L_' ::= {{ com syntax for super kinds }}
+SuperKind, L :: 'L_' ::= 
    | Logical i ::   :: Logical_Kind
      {{ tex [[Logical]]_{[[i]]} }}
 
@@ -57,7 +57,7 @@ Arg, a :: 'a_' ::=
   | proof      ::   :: proofs
   | predicate  ::   :: predicate
   
-LogicalKind, LK :: 'LK_' ::= {{ com syntax for logical kinds }}
+LogicalKind, LK :: 'LK_' ::= 
   | x                              ::   :: var
   | Formula i                      ::   :: Formula
     {{ tex [[Formula]]_{[[i]]} }}
@@ -68,7 +68,7 @@ LogicalKind, LK :: 'LK_' ::= {{ com syntax for logical kinds }}
   | ( LK )                         :: S :: parens
   | [ a1 / x1 ] ... [ an / xn ] LK :: M :: subst_lk
 
-predicate, P :: 'P_' ::= {{ com syntax for predicate }}
+predicate, P :: 'P_' ::= 
   |  x                                       ::   :: Var
   | \ L x : A . P                            ::   :: predicate (+ bind x in P +)
     {{ tex \Lambda [[x]]:[[A]]\,.\,[[P]] }}  
@@ -100,7 +100,7 @@ predicate, P :: 'P_' ::= {{ com syntax for predicate }}
   | sigma P                                  :: M :: substitution
     {{ tex \sigma\ [[P]] }}
 
-proof, p :: 'p_' ::= {{ com syntax for proofs. }}
+proof, p :: 'p_' ::= 
   | x                                      ::   :: Var
   | injl p with P                          ::   :: InjectLeft
   | injr p with P                          ::   :: InjectRight
@@ -143,7 +143,7 @@ pf_value {{ tex proof value }}, pv :: 'pfval_' ::=
   | valax t                                                    ::   :: Val
   | ( pf_value )                                               :: S :: parens
 
-term, t, w :: 't_' ::= {{ com annotated programmatic expressions }}
+term, t, w :: 't_' ::= 
   | x                                      ::   :: Var
   | Type i                                 ::   :: Type {{ tex [[Type]]_{[[i]]} }}
   | Pi ep x : A . t                        ::   :: program_pi (+ bind x in t +)
@@ -213,7 +213,7 @@ q :: 'q_' ::=
   | proof    ::  :: proofs
   | t1 = t2  ::  :: equations
 
-g {{ tex \gamma }} :: 'gam_' ::= {{ com annotation on variables in context }}
+g {{ tex \gamma }} :: 'gam_' ::= 
   | val      ::   :: Val
 
 proof_branches, R :: 'proof_branches_' ::=
@@ -236,7 +236,7 @@ W :: 'W_' ::=
   | Type      :: :: Type
   | Formula i :: :: Formula
 
-index, i, j :: 'index_' ::= {{ com indices }}
+index, i, j :: 'index_' ::= 
   | i + j         ::  :: sum
   | max ( i , j ) ::  :: max
   | 1             ::  :: one

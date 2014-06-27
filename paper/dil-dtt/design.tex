@@ -2,7 +2,8 @@
 \input{largedot}
 \input{dtt-ott}
 \input{L-ott}
-\newcommand{\ifrName}[1]{\textsc{#1}}
+\renewcommand{\dttdrulename}[1]{{\normalfont\scriptsize \text{#1}}}
+\renewcommand{\Ldrulename}[1]{{\normalfont\scriptsize \text{#1}}}
 
 \newcommand{\ndto}[1]{\to_{#1}}
 \newcommand{\ndwedge}[1]{\wedge_{#1}}
@@ -217,8 +218,8 @@ and $|<<G>>|$ respectively. The reader should note that it is possible
 for some nodes in the sequent to not appear in the graph.  For
 example, the sequent $<<n : A |- . n : A,.>>$ is a derivable sequent.
 Now the complete graph can always be recovered if needed by using the
-graph structural rules $\Ldrulename{refl}$, $\Ldrulename{trans}$,
-$\Ldrulename{monL}$, and $\Ldrulename{monR}$.
+graph structural rules $\Ldrulename{\normalsize refl}$, $\Ldrulename{\normalsize trans}$,
+$\Ldrulename{\normalsize monL}$, and $\Ldrulename{\normalsize monR}$.
 
 The labeling on formulas essentially adds constraints to the set of
 Kripke models.  This is evident in the proof of consistency for DIL in
@@ -291,10 +292,7 @@ are represented as lists of formulas.
   \caption{Syntax for DIL.}
   \label{fig:dil-syntax}
 \end{figure}
-Throughout the sequel we denote the opposite of a polarity $[[p]]$ by
-$[[bar p]]$.  This is defined by $[[bar +]] = [[-]]$ and $[[bar -]]
-= +$.  The inference rules for DIL are in Figure~\ref{fig:dil-ifr}.
-\begin{figure*}[t]
+\begin{figure}[t]
     \begin{mathpar}
         \dttdruleax{} \and
         \dttdruleunit{} \and
@@ -307,7 +305,10 @@ $[[bar p]]$.  This is defined by $[[bar +]] = [[-]]$ and $[[bar -]]
   
   \caption{Inference Rules for DIL.}
   \label{fig:dil-ifr}
-\end{figure*}
+\end{figure}
+Throughout the sequel we denote the opposite of a polarity $[[p]]$ by
+$[[bar p]]$.  This is defined by $[[bar +]] = [[-]]$ and $[[bar -]]
+= +$.  The inference rules for DIL are in Figure~\ref{fig:dil-ifr}.
 
 The sequent has the form $[[Gr ; G |- p A@n]]$ which when $[[p]]$ is
 positive (resp. negative) can be read as the formula $[[A]]$ is true
@@ -316,7 +317,7 @@ the graph $[[Gr]]$.  The inference rules depend on a reachability
 judgment that provides a means of proving when a node is reachable
 from another within some graph $[[Gr]]$.  This judgment is defined in
 Figure~\ref{fig:dil-reach}.
-\begin{figure*}
+\begin{figure}
     \begin{mathpar}
       \dttdrulerelXXax{} \and
       \dttdrulerelXXrefl{} \and
@@ -326,24 +327,24 @@ Figure~\ref{fig:dil-reach}.
   
   \caption{Reachability Judgment for DIL.}
   \label{fig:dil-reach}
-\end{figure*}
-In addition, the $\ifrName{imp}$ rule depends on the operations 
+\end{figure}
+In addition, the $\ifrName{\normalsize imp}$ rule depends on the operations 
 $[[ | Gr | ]]$ and $[[| G |]]$ which simply compute the list of all 
 the nodes in $[[Gr]]$ and $[[G]]$
 respectively.  The condition $[[n' notin |Gr|,|G|]]$ in the
-$\ifrName{imp}$ rule is required for consistency.
+$\ifrName{\normalsize imp}$ rule is required for consistency.
 
 The most interesting inference rules of DIL are the rules for
 implication and coimplication from Figure~\ref{fig:dil-ifr}.  Let us
 consider these two rules in detail. These rules mimic the definitions
 of the interpretation of implication and coimplication in a Kripke
-model.  The $\ifrName{imp}$ rule states that the formula $[[p (A ->p
+model.  The $\ifrName{\normalsize imp}$ rule states that the formula $[[p (A ->p
 B)]]$ holds at node $[[n]]$ if assuming $[[p A@n']]$ for an arbitrary
 node $[[n']]$ reachable from $[[n]]$, then $[[p B @ n']]$ holds.
 Notice that when $[[p]]$ is positive $[[n']]$ will be a future node,
 but when $[[p]]$ is negative $[[n']]$ will be a past node.  Thus,
 universally quantifying over past and future worlds is modeled here by
-adding edges to the graph.  Now the $\ifrName{impBar}$ rule states the
+adding edges to the graph.  Now the $\ifrName{\normalsize impBar}$ rule states the
 formula $[[p (A ->bar p B)]]$ is derivable if there exists a node
 $[[n']]$ that is provably reachable from $[[n]]$, $[[bar p A]]$ is
 derivable at node $[[n']]$, and $[[p B @ n']]$ is derivable at node
@@ -357,34 +358,34 @@ first show that the formula $[[A /\- ~A]]$ has a proof in DIL that
 contains a cut that cannot be eliminated.  This also serves as an
 example of a derivation in DIL. Consider the following where we leave
 off the reachability derivations for clarity and $[[G']] \equiv
-[[h(-(A /\- ~A) @ n), h(-A@n)]]$:
+[[G,h(-(A /\- ~A) @ n), h(-A@n)]]$:
 \begin{center}  
   \scriptsize
   \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=\tiny andBar] {
+      \inferrule* [right=\tiny \ifrName{andBar}] {
         $$\mprset{flushleft}
-        \inferrule* [right=\tiny cut] {
+        \inferrule* [right=\tiny \ifrName{cut}] {
           $$\mprset{flushleft}
-          \inferrule* [right=\tiny andBar] {
+          \inferrule* [right=\tiny \ifrName{andBar}] {
             $$\mprset{flushleft}
-            \inferrule* [right=\tiny impBar] {
+            \inferrule* [right=\tiny \ifrName{impBar}] {
               $$\mprset{flushleft}
-              \inferrule* [right=\tiny ax] {
+              \inferrule* [right=\tiny \ifrName{ax}] {
                 \,
-              }{[[Gr ; G, G' |- -A @ n]]}
+              }{[[Gr ; G' |- -A @ n]]}
               \\
               $$\mprset{flushleft}
-              \inferrule* [right=\tiny unit] {
+              \inferrule* [right=\tiny \ifrName{unit}] {
                 \,
-              }{[[Gr ; G, G' |- +<+> @ n]]}
-            }{[[Gr ; G, G' |- + ~A @ n]]}
-          }{[[Gr ; G, G' |- +(A /\- ~A) @ n]]}
+              }{[[Gr ; G' |- +<+> @ n]]}
+            }{[[Gr ; G' |- + ~A @ n]]}
+          }{[[Gr ; G' |- +(A /\- ~A) @ n]]}
           \\
           $$\mprset{flushleft}
-          \inferrule* [right=\tiny ax] {
+          \inferrule* [right=\tiny \ifrName{ax}] {
             \,
-          }{[[Gr ; G, G' |- -(A /\- ~A) @ n]]}
+          }{[[Gr ; G' |- -(A /\- ~A) @ n]]}
         }{[[Gr ; G, -(A /\- ~A) @ n |- +A @ n]]}
       }{[[Gr ; G, -(A /\- ~A) @ n |- +(A /\- ~A) @ n]]}
   \end{math}
@@ -394,11 +395,11 @@ Now using only an axiom cut we may conclude the following derivation:
   \scriptsize
   \begin{math}
     $$\mprset{flushleft}
-    \inferrule* [right=\scriptsize cut] {
+    \inferrule* [right=\scriptsize \ifrName{cut}] {
       [[Gr ; G, -(A /\- ~A) @ n |- +(A /\- ~A) @ n]]
       \\
       $$\mprset{flushleft}
-      \inferrule* [right=\scriptsize ax] {
+      \inferrule* [right=\scriptsize \ifrName{ax}] {
         \,
       }{[[Gr ; G, -(A /\- ~A) @ n |- -(A /\- ~A) @ n]]}
     }{[[Gr ; G |- +(A /\- ~A) @ n]]}
@@ -506,15 +507,15 @@ Then we can construct the following typing derivation:
   \footnotesize
   \begin{math}
     $$\mprset{flushleft}
-    \inferrule* [right=\tiny cut] {
+    \inferrule* [right=\tiny \ifrName{cut}] {
       D_1
       \\
       $$\mprset{flushleft}
-      \inferrule* [right=\tiny impBar] {
+      \inferrule* [right=\tiny \ifrName{impBar}] {
         D_2
         \\
         $$\mprset{flushleft}
-        \inferrule* [right=\tiny ax] {
+        \inferrule* [right=\tiny \ifrName{ax}] {
           \,
         }{[[Gr ; H' |- y : -B@n]]}
       }{[[Gr ; H' |- <t' , y> : -(A->+B)@n]]}
@@ -574,7 +575,7 @@ Then we have the following result.
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=case] {
+      \inferrule* [right=\ifrName{case}] {
         [[Gr ; H, x : p A@n |- t1 : p C@n]]
         \\\\
         [[Gr ; H, x : p B@n |- t2 : p C@n]]

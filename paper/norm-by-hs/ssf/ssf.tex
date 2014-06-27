@@ -1,7 +1,7 @@
-\section{Normalization of Stratified System F (SSF)}
+\section{Stratified System F }
 \label{subsec:normalization_stratified_system_f}
 In \cite{Eades:2010} Harley Eades and Aaron Stump show that
-SSF\index{Stratified System F (SSF)} is
+Stratified System F (SSF) \index{Stratified System F (SSF)} is
 normalizing using a proof method which uses the hereditary
 substitution function implicitly.  We find it apparent that the
 hereditary substitution technique we have introduced in
@@ -123,7 +123,10 @@ kindable types are kindable with respect to a well-formed context.
   \label{lemma:kinding_ok_ssf}
 \end{lemma}
 \begin{proof}
-  This is a proof by structural induction on the kinding derivation of $\Gamma \vdash T:*_p$.
+  This is a proof by structural induction on the kinding derivation of
+  $\Gamma \vdash T:*_p$.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]\ \\
     \begin{center}
@@ -168,6 +171,7 @@ kindable types are kindable with respect to a well-formed context.
     By the induction hypothesis $\Gamma,X:*_p\ Ok$, and by inversion of the type-variable
     well-formed contexts rule $\Gamma\ Ok$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 \noindent
 The previous lemma ensures that if a type is kindable then we could
@@ -232,6 +236,8 @@ proof of Context Weakening for the Interpretation of Types
 \begin{proof}
   We show level weakening for kinding by structural induction on the kinding derivation 
   of $T:*_r$.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]\ \\
     \begin{center}
@@ -277,21 +283,25 @@ proof of Context Weakening for the Interpretation of Types
     Now by the induction hypothesis $\Gamma,X:*_q \vdash T':*_{s-1}$.  Lastly, we 
     reapply the rule and obtain $\Gamma \vdash \forall X:*_q.T' : *_{s}$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 
 \begin{lemma}[Substitution for Kinding, Context-Ok]
+  \begin{changemargin}{10px}{5px}\noindent
   Suppose $\Gamma \vdash T':*_p$.  If $\Gamma,X:*_p,\Gamma' \vdash T:*_q$ 
   with a derivation of depth $d$, then $\Gamma,[T'/X]\Gamma' \vdash [T'/X]T:*_q$
   with a derivation of depth $d$.
   Also, if $\Gamma,X:*_p,\Gamma'\ Ok$ with a derivation of depth $d$, then 
   $\Gamma,[T'/X]\Gamma'\ Ok$ with a derivation of depth $d$.
+  \end{changemargin}
   \label{lemma:substitution_for_kinding_ssf}
 \end{lemma}
 \begin{proof}
   This is a prove by induction on $d$.  We prove the first implication first, and then the 
   second, doing a case analysis for each implication on the form of the derivation whose depth 
   is being considered. 
-
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]\ \\
     \begin{center}
@@ -377,20 +387,24 @@ proof of Context Weakening for the Interpretation of Types
     by reapplying the rule above $\Gamma,[T'/X]\Gamma'',x:[T'/X]T\ Ok$, therefore,\\
     $\Gamma,[T'/X]\Gamma'\ Ok$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 
 \begin{lemma}[Context Strengthening for Kinding, Context-Ok]
+  \begin{changemargin}{10px}{5px}\noindent
   If $\Gamma,x:T',\Gamma' \vdash T:*_p$ with a derivation of depth $d$, then 
   $\Gamma,\Gamma' \vdash T:*_p$ with a derivation of depth $d$.  Also, if 
   $\Gamma,x:T,\Gamma'\ Ok$ with a 
   derivation of depth $d$, then $\Gamma,\Gamma'\ Ok$ with a derivation of depth $d$.
   \label{lemma:context_strengthening_for_kinding_ssf}
+  \end{changemargin}
 \end{lemma}
 \begin{proof}
   This is a prove by induction on $d$.  We prove the first implication first, and then the 
   second, doing a case analysis for each implication on the form of the derivation whose depth 
   is being considered.
-
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]\ \\
     \begin{center}
@@ -406,7 +420,7 @@ proof of Context Weakening for the Interpretation of Types
       \end{math}
     \end{center}
     
-    By the second implication of the induction hypothesis, $\Gamma,\Gamma'\ Ok$. Also, 
+    By the second implication of the induction hypothesis, $\Gamma,\Gamma'\ Ok$. Also, \\
     $(\Gamma,\Gamma')(X) = *_p$.  Now by reapplying the rule above, 
     $\Gamma,\Gamma' \vdash X:*_q$.
     
@@ -475,6 +489,7 @@ proof of Context Weakening for the Interpretation of Types
     Therefore, by reapplying the rule above, $\Gamma,\Gamma'',y:T'\ Ok$, which is equivalent 
     to $\Gamma,\Gamma'\ Ok$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 
 \begin{lemma}[Context Weakening for Kinding]
@@ -485,6 +500,8 @@ proof of Context Weakening for the Interpretation of Types
 \begin{proof}
   This is a proof by structural induction on the kinding derivation of 
 $\Gamma,\Gamma' \vdash T:*_p$.
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.]\ \\
   \begin{center}
@@ -530,6 +547,7 @@ $\Gamma,\Gamma' \vdash T:*_p$.
   reapplying the forall-type
   kind-checking rule $\Gamma,\Gamma'',\Gamma' \vdash \forall X:*_p.T:*_{max(p,q)+1}$.
 \end{itemize}
+\end{changemargin}
 \end{proof}
 
 \begin{lemma}[Regularity]
@@ -537,7 +555,10 @@ $\Gamma,\Gamma' \vdash T:*_p$.
   \label{lemma:regularity_ssf}
 \end{lemma}
 \begin{proof}
-  This proof is by structural induction on the derivation of $\Gamma \vdash t:T$.
+  This proof is by structural induction on the derivation of $\Gamma
+  \vdash t:T$.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] \ \\
   \begin{center}
@@ -611,13 +632,14 @@ $\Gamma,\Gamma' \vdash T:*_p$.
   $\Gamma,X:*_p \vdash T_1:*_q$.  Now, by Lemma~\ref{lemma:substitution_for_kinding_ssf},
   $\Gamma \vdash [T_2/X]T_1:*_q$.
 \end{itemize}
+\end{changemargin}
 \end{proof}
 \noindent
 We have stated all the basic lemmas we will need.  We now proceed to
-the proof of normalization for SSF using hereditary substitution.
+the proof \\ of normalization for SSF using hereditary substitution.
 % subsection basic_syntactic_lemmas (end)
 
-\subsection{Well-Founded Ordering on Types}
+\subsection{Ordering on Types}
 \label{subsec:well-founded_ordering_on_types_ssf}
 The following definition defines a well-founded ordering on the types
 of SSF.  It consists of essentially the strict-subexpression ordering
@@ -629,8 +651,8 @@ the level of the type actually decreases.  That is, we know the level
 of the universal type is larger than the level of the instantiation.
 This is exactly the point of stratification!
 \begin{definition}\index{Ordering on Types}
-  The ordering $>_\Gamma$ is defined as the least relation satisfying the universal closures of 
-  the following formulas:
+  The ordering $>_\Gamma$ is defined as the least relation satisfying
+  the universal closures \\ of the following formulas:
   \begin{center}
     \begin{tabular}{lll}
       \begin{tabular}{lll}
@@ -648,13 +670,13 @@ This is exactly the point of stratification!
 We need transitivity in a number of places so we state that next.
 
 \begin{lemma}[Transitivity of $>_\Gamma$]
-  Let $T$, $T'$, and $T''$ be kindable types.  If $T >_\Gamma T'$ and 
+  Let $T$, $T'$, and $T''$ be kindable types.  \\ If $T >_\Gamma T'$ and 
   $T' >_\Gamma T''$ then $T >_\Gamma T''$.
   \label{lemma:transitivity_ssf}
 \end{lemma}
-\begin{proof}
-  Suppose $T >_\Gamma T'$ and $T' >_\Gamma T''$.  If 
-  $T \equiv T_1 \rightarrow T_2$ then,
+\begin{proof}  
+  Suppose $T >_\Gamma T'$ and $T' >_\Gamma T''$.  
+  If $T \equiv T_1 \rightarrow T_2$ then,
   $T'$ must be a subexpression of $T$.  Now if $T' \equiv T'_1 \rightarrow T'_2$ 
   then,
   $T''$ must be a subexpression of $T'$, which implies that $T''$ is a subexpression of 
@@ -713,6 +735,8 @@ the ordering on types $>_\Gamma$.
 \begin{proof}
   Assume $T >_\Gamma T'$ for some types $T$ and $T'$.  We case split on
   the form of $T$.  Clearly, $T$ is not a type variable.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]  Suppose $T \equiv T_1 \to T_2$.  Then $T'$ must be of the 
     form $T_1$ or $T_2$.  In both
@@ -728,6 +752,7 @@ the ordering on types $>_\Gamma$.
     form $[T_2/X]T_1$ for some type $\Gamma \vdash T_2:*_l$.  It is obvious that
     the level of $T$ is always larger than the level of $T'$.  Hence, $(l,d) > (l',d')$.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 \noindent We now have the desired results to prove that the ordering $>_\Gamma$ is 
 well-founded.
@@ -744,7 +769,7 @@ well-founded.
 \end{proof}
 % subsection well-founded_ordering_on_types (end)
 
-\subsection{The Hereditary Substitution Function}
+\subsection{Hereditary Substitution}
 \label{subsec:the_hereditary_substitution_function}
 The definition of the hereditary substitution function is a basic
 extension of hereditary substitution function for STLC.  Before
@@ -830,7 +855,8 @@ of the properties are as usual.
 \end{lemma}
 \begin{proof}
   We prove part one first. This is a proof by induction on the structure of $t$.
-
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] Suppose $t \equiv x$.  Then $ctype_T(x,x) = T$.  Clearly,
   $head(x) = x$ and $T \equiv T$.
@@ -840,18 +866,18 @@ of the properties are as usual.
   hypothesis $head(t_1) = x$ and $T' \to T'' \leq_{\Gamma,\Gamma'} T$.
   Therefore, $head(t_1\ t_2) = x$, and certainly, $T'' \leq_{\Gamma,\Gamma'} T$.
 \end{itemize}
-
-\ \\
+\end{changemargin}
+\noindent
 Next we prove part two.  This is a proof by induction on the structure of $t_1\ t_2$.
 
-\ \\
+\noindent
 The only possiblities for the form of $t_1$ is $x$, $\hat{t}_1\ \hat{t}_2$, or $\hat{t}[T'']$.  All other 
 forms would not result in $[t/x]^T t_1$ being a $\lambda$-abstraction and $t_1$ not.
 If $t_1 \equiv x$ then there exist a type $T''$ such that $T \equiv T'' \to T'$ and
 $ctype_T(x,x\ t_2) = T'$ when $ctype_T(x,x) = T \equiv T'' \to T'$ in this case.  We know
 $T''$ to exist by inversion on $\Gamma,x:T,\Gamma' \vdash t_1\ t_2:T'$.
 
-\ \\
+\noindent
 Now suppose $t_1 \equiv (\hat{t}_1\ \hat{t}_2)$.  Now knowing $t'_1$ to not be a $\lambda$-abstraction
 implies that $\hat{t}_1$ is also not a $\lambda$-abstraction or $[t/x]^T t_1$ would be an application
 instead of a $\lambda$-abstraction.  So it must be the case that $[t/x]^T \hat{t}_1$ is a $\lambda$-abstraction
@@ -865,15 +891,15 @@ By part two of Lemma~\ref{lemma:ctype_props_ssf} we know $\psi \equiv \psi'' \to
 $ctype_T(x,t_1) = ctype_T(x,\hat{t}_1\ \hat{t}_2) = T'' \to T'$ 
 when $ctype_T(x,\hat{t}_1) = \psi'' \to (T'' \to T')$, because we know $ctype_T(x,\hat{t}_1) = \psi$.
 
-\ \\
+\noindent
 The case where $t_1$ is a type application is similar to the previous case.
 
-\ \\
+\noindent
 The remaining parts of the lemma are similar to part two.
 \end{proof}
 % subsubsection the_hereditary_substitution_function (end)
 
-\subsection{Properties of the Hereditary Substitution Function}
+\subsection{Main Properties}
 \label{sec:properties_of_the_hereditary_substitution_function_ssf}
 We now define $rset$ as an extension of the same function for STLC by
 adding type application redexes to the set of overall redexes
@@ -921,7 +947,8 @@ the only difference are their proofs.
 \begin{proof}
   This is a proof by induction on the lexicorgraphic combination $(T, t')$ of $>_{\Gamma,\Gamma'}$ and
 the strict subexpression ordering.  We case split on $t'$.
-
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] Suppose $t'$ is either $x$ or a variable $y$ distinct from $x$.  
   Trivial in both cases.
@@ -962,17 +989,20 @@ the strict subexpression ordering.  We case split on $t'$.
 \item[Case.] Suppose $t' \equiv t'_1[T'']$. Similar to the previous
   case.  
 \end{itemize}
+\end{changemargin}
 \end{proof}
 
 \begin{lemma}[Redex Preserving]
   \label{lemma:redex_preserving_ssf}
-  If $\Gamma \vdash t : T$, $\Gamma, x:T, \Gamma' \vdash t':T'$, then
+  If $\Gamma \vdash t : T$, $\Gamma, x:T, \Gamma' \vdash t':T'$, \\ then
   $|rset(t', t)| \geq |rset([t/x]^T t')|$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the lexicorgraphic combination
 $(T, t')$ of $>_{\Gamma,\Gamma'}$ and the strict subexpression ordering.
-We case split on the structure of $t'$.  
+We case split on the structure of $t'$. 
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent 
 \begin{itemize}
 \item[Case.] Let $t' \equiv x$ or $t' \equiv y$ where $y$ is distinct from $x$.  Trivial. 
   
@@ -1029,7 +1059,9 @@ We case split on the structure of $t'$.
   
   \ \\
   \noindent
-  Suppose $[t/x]^T t'_1$ is not a $\lambda$-abstractions or $ctype_T(x,t'_1)$ is undefined.  Then
+  Suppose $[t/x]^T t'_1$ is not a $\lambda$-abstractions or
+  $ctype_T(x,t'_1)$ is undefined.  \\
+  Then
   \begin{center}
     \begin{math}
       \begin{array}{lll}
@@ -1055,8 +1087,9 @@ We case split on the structure of $t'$.
       \begin{array}{lll}
         rset([t/x]^T (\lambda y:T_1.t''_1)\ t'_2) & = & rset([t/x]^T (\lambda y:T_1.t''_1)\ [t/x]^T t'_2)\\
         & = & rset((\lambda y:T_1.[t/x]^T t''_1)\ [t/x]^T t'_2)\\
-        & = & \{(\lambda y:T_1.[t/x]^T t''_1)\ [t/x]^T t'_2\} \cup 
-        rset([t/x]^T t''_1) \cup rset([t/x]^T t'_2).\\
+        & = & \{(\lambda y:T_1.[t/x]^T t''_1)\ [t/x]^T t'_2\} \\
+        &   & \cup\,rset([t/x]^T t''_1) \\
+        &   & \cup\,rset([t/x]^T t'_2).\\
         
       \end{array}
     \end{math}
@@ -1215,8 +1248,9 @@ We case split on the structure of $t'$.
       \begin{array}{lll}
         rset([t/x]^T (\lambda y:T_1.t''_1)\ t'_2) & = & rset([t/x]^T (\lambda y:T_1.t''_1)\ [t/x]^T t'_2)\\
         & = & rset((\lambda y:T_1.[t/x]^T t''_1)\ [t/x]^T t'_2)\\
-        & = & \{(\lambda y:T_1.[t/x]^T t''_1)\ [t/x]^T t'_2\} \cup 
-        rset([t/x]^T t''_1) \cup rset([t/x]^T t'_2).\\
+        & = & \{(\lambda y:T_1.[t/x]^T t''_1)\ [t/x]^T t'_2\} \\
+        &   & \cup\,rset([t/x]^T t''_1)\\
+        &   & \cup\,rset([t/x]^T t'_2).\\
         
       \end{array}
     \end{math}
@@ -1226,6 +1260,7 @@ We case split on the structure of $t'$.
   $|\{ (\lambda y:T_1.t''_1)\ t'_2\}\ \cup\ rset(t''_1,t)\ \cup\ rset(t'_2,t)| \geq $ 
   $|\{(\lambda y:T_1.[t/x]^T t''_1)\ [t/x]^T t'_2\}\ \cup\ rset([t/x]^T t''_1)\ \cup\ rset([t/x]^T t'_2)|$.
 \end{itemize}
+\end{changemargin}
 \end{proof}
 
 \begin{lemma}[Normality Preserving]
@@ -1253,7 +1288,8 @@ the induction hypothesis we must show that the input terms to the
 substitution and the hereditary substitution functions are typeable.
 We do not explicitly state typing results that are simple
 conseqences of inversion.
-
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] Suppose $t'$ is a variable $x$ or $y$ distinct from $x$.  
   Trivial in both cases.
@@ -1316,10 +1352,11 @@ conseqences of inversion.
   $[t/x](t'_1[T]) \equiv ([t/x]t'_1)[T] \redto^* ([t'/x]^T t'_1)[T] \redto [T/X]s'$.  Thus,
   $[t/x]t' \redto^* [t'/x]^T t'$.  
 \end{itemize}
+\end{changemargin}
 \end{proof}
 % subsection properties_of_the_hereditary_substitution_function_ssf (end)
 
-\subsection{Substitution for the Interpretation of Types.}
+\subsection{The Main Substitution Lemma}
 \label{subsec:substitution_for_the_interpretation_of_types_ssf}
 The definition of the interpretation of types is identical to the
 definition for STLC\index{Simply Typed $\lambda$-Calculus} (Definition~\ref{def:interpretation_of_types_stlc}),
@@ -1351,6 +1388,8 @@ the proof of the type soundness theorem
 \end{lemma}
 \begin{proof}
   This proof is by structural induction on $n$.
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.]  Let $n \equiv x$.  By the definition of the interpretation of types 
   $\Gamma(x) = T$.  Clearly,
@@ -1390,15 +1429,18 @@ the proof of the type soundness theorem
   $\Gamma \vdash T':*_l$. Thus, $n[T'] \in
   \interp{[T'/X]T''}_{\Gamma,\Gamma'}$.
 \end{itemize}
+\end{changemargin}
 \end{proof}
 \begin{lemma}[Type Substitution for the Interpretation of Types]
-  If $n \in \interp{T'}_{\Gamma,X:*_l,\Gamma'}$ and 
+  \,\\ If $n \in \interp{T'}_{\Gamma,X:*_l,\Gamma'}$ and 
   $\Gamma \vdash T:*_l$, then 
   $[T/X]n \in \interp{[T/X]T'}_{\Gamma,[T/X]\Gamma'}$.
   \label{lemma:type_sub_ssf}
 \end{lemma}
 \begin{proof}
   This proof is by structural induction on $n$.
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] $n$ is a variable $y$.  Clearly, $[T/X]n \equiv $
   $[T/X]y = y \in \interp{T'}_{\Gamma,X:*_l,\Gamma'}$, and\\
@@ -1452,10 +1494,11 @@ the proof of the type soundness theorem
   to \\
   $[T/X](n'[\psi]) \in \interp{[T/X]([\psi/Y]\psi')}_{\Gamma,[T/X]\Gamma'}$.
 \end{itemize}
+\end{changemargin}
 \end{proof}
 % subsubsection substitution_for_the_interpretation_of_types_ssf (end)
 
-\subsection{Concluding Normalization.}
+\subsection{Concluding Normalization}
 \label{subsec:soundness_of_typing_ssf}
 We are now ready to present our main result.  The next theorem shows
 that the type assignment rules are sound with respect to the
@@ -1466,8 +1509,10 @@ interpretation of types.
   \label{thm:soundness_ssf}
 \end{thm}
 \begin{proof}
-  This is a proof by induction on the structure of the typing derivation of $t$.
-
+  This is a proof by induction on the structure of the typing
+  derivation of $t$.
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.]\ \\
   \begin{center}
@@ -1569,6 +1614,7 @@ interpretation of types.
   of the interpretation of types $n' \in \interp{T_1}_{\Gamma,X:*_l}$. Therefore, by
   Lemma~\ref{lemma:type_sub_ssf} $[T_2/X]n' \in \interp{[T_2/X]T_1}_{\Gamma}$.
 \end{itemize}
+\end{changemargin}
 \end{proof}
 \noindent Therefore, we conclude normalization of SSF.
 \begin{corollary}[Normalization]\index{Weak Normalization}

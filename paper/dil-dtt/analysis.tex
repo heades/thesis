@@ -5,7 +5,7 @@ In this section we prove consistency of DIL with respect to Rauszer's
 Kripke semantics\index{Kripke Semantics} for BINT logic.  All of the results in this section
 have been formalized in the Agda proof assistant\footnote{Agda source
   code is available at
-  \url{https://github.com/heades/DIL-consistency}}.  We begin by first
+  https://github.com/heades/DIL-consistency}.  We begin by first
 defining a Kripke frame.
 
 \begin{definition}
@@ -47,6 +47,7 @@ Now we can interpret formulas in a Kripke model as follows:
     \end{tabular}
   \end{center}
 \end{definition}
+\noindent
 The interpretation of formulas really highlights the fact that implication is dual to coimplication.  Monotonicity
 holds for this interpretation.
 
@@ -126,6 +127,7 @@ interpretation of contexts.
 \end{definition}
 Combining these interpretations results in the following
 definition of validity.
+\newpage
 \begin{definition}\index{Validity}
   \label{def:validity}
   Suppose $(W, R, V)$ is a Kripke model, $[[G]]$ is a context, 
@@ -202,11 +204,11 @@ of the logic throughout the sequel.
     \footnotesize
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=\footnotesize axCut] {
+      \inferrule* [right=\footnotesize \ifrName{axCut}] {
         [[p' B @ n' in (G3, p' B @ n')]]
         \\
         $$\mprset{flushleft}
-        \inferrule* [right=\footnotesize Weakening] {
+        \inferrule* [right=\footnotesize \ifrName{Weakening}] {
           [[Gr ; G3 |- bar p' B @ n']]
         }{[[Gr ; G3, p' B @ n' |- bar p' B @ n']]}
       }{[[Gr ; G1 , G2 , p' B @ n' |- p A @ n]]}
@@ -242,17 +244,17 @@ admissibility of those rules in DIL.
 \end{lemma}
 \begin{proof}
   Suppose $[[Gr ; G, bar p A @ n |- p B @ n]]$ is derivable. By weakening
-  we know $[[Gr ; G,bar p (A /\bar p B)@n, bar p B @ n, bar p A @ n |- p B @ n]]$. 
+  we know \[ [[Gr ; G,bar p (A /\bar p B)@n, bar p B @ n, bar p A @ n |- p B @ n]].\] 
   Then $[[Gr ; G |- p (A /\bar p B) @ n]]$ is derivable as follows:
   \begin{center}
     \small
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=\scriptsize Cut] {
+      \inferrule* [right=\scriptsize \ifrName{Cut}] {
         $$\mprset{flushleft}
-        \inferrule* [right=\scriptsize AndBar] {
+        \inferrule* [right=\scriptsize \ifrName{AndBar}] {
           $$\mprset{flushleft}
-          \inferrule* [right=\scriptsize Cut] {
+          \inferrule* [right=\scriptsize \ifrName{Cut}] {
             D_1
             \\
             D_2
@@ -260,7 +262,7 @@ admissibility of those rules in DIL.
         }{[[Gr ; G, bar p (A /\bar p B)@n |- p (A /\bar p B) @ n]]}
         \\
         $$\mprset{flushleft}
-        \inferrule* [right=ax] {
+        \inferrule* [right=\ifrName{ax}] {
           \,
         }{[[Gr ; G, bar p (A /\bar p B)@n |- bar p (A /\bar p B) @ n]]}
       }{[[Gr ; G |- p (A /\bar p B) @ n]]}
@@ -273,9 +275,9 @@ admissibility of those rules in DIL.
       \begin{array}{lll}
         D_0: \\
         & $$\mprset{flushleft}
-              \inferrule* [right=\scriptsize AndBar] {
+              \inferrule* [right=\scriptsize \ifrName{AndBar}] {
                 $$\mprset{flushleft}
-                \inferrule* [right=\scriptsize ax] {
+                \inferrule* [right=\scriptsize \ifrName{ax}] {
                   \,
                 }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, p A @ n |- p A@n]]}
               }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, p A @ n |- p (A /\bar p B)@n]]}
@@ -288,11 +290,11 @@ admissibility of those rules in DIL.
         D_1: \\
         &
         $$\mprset{flushleft}
-      \inferrule* [right=\scriptsize Cut] {              
+      \inferrule* [right=\scriptsize \ifrName{Cut}] {              
         [[Gr ; G,bar p (A /\bar p B)@n, bar p B @ n, bar p A @ n |- p B @ n]]
         \\
         $$\mprset{flushleft}
-        \inferrule* [right=\scriptsize ax] {
+        \inferrule* [right=\scriptsize \ifrName{ax}] {
           \,
         }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, bar p A @ n |- bar p B @ n]]}
       }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n |- p A @ n]]}
@@ -304,9 +306,9 @@ admissibility of those rules in DIL.
       \begin{array}{lll}
         D_2: \\
       & $$\mprset{flushleft}
-            \inferrule* [right=\scriptsize Cut] {
+            \inferrule* [right=\scriptsize \ifrName{Cut}] {
               $$\mprset{flushleft}
-              \inferrule* [right=\scriptsize ax] {
+              \inferrule* [right=\scriptsize \ifrName{ax}] {
                 \,
               }{[[Gr ; G, bar p (A /\bar p B)@n, bar p B @ n, p A @ n |- bar p (A /\bar p B)@n]]}
               \\
@@ -318,8 +320,8 @@ admissibility of those rules in DIL.
 
 \begin{lemma}[MonoL]
   \label{lemma:monol}
-  If $[[Gr ; G , p A @ n1 , p A @ n2,G' |- p' B @ n']]$ is derivable and $[[n1 <=p n2 in Gr]]$, then
-  $[[Gr ; G , p A @ n1,G' |- p' B @ n']]$ is derivable.
+  If $[[Gr ; G , p A @ n1 , p A @ n2,G' |- p' B @ n']]$ is derivable
+  \\ and $[[n1 <=p n2 in Gr]]$, then $[[Gr ; G , p A @ n1,G' |- p' B @ n']]$ is derivable.
 \end{lemma}
 \begin{proof}
   This result easily follows by part one of Corollary~\ref{coro:mono}, and contraction (Lemma~\ref{lemma:contract}).
@@ -384,17 +386,17 @@ implication in the general monotonicity lemma.
 \begin{definition}
   \label{def:raise}
   We define the function $[[raise]]$ on abstract graphs as follows:
+  \vspace{-10px}
   \begin{center}
-    \small
     \begin{math}
       \begin{array}{lll}
         [[raise ( n1 , n2 , . )]] & = & [[.]]\\
         [[raise ( n1 , n2 , (n1 <=p  m, Gr))]] & = & [[n2 <=p m , raise (n1 , n2, Gr)]]\\
         [[raise ( n1 , n2 , ( m <=p n1, Gr))]] & = & [[m <= p n2 , raise (n1 , n2, Gr)]]\\
-        [[raise ( n1 , n2 , (m <=p m' , Gr ))]] & = & [[m <=  p m' , raise (n1 , n2, Gr)]], 
-        \text{where } [[m]] \not\equiv [[n1]] \text{ and } [[m']] \not\equiv [[n1]].\\
-        [[raise ( n1 , n2 , (m <=bar p m' , Gr ))]] & = &[[m <=  bar p m' , raise (n1 , n2, Gr)]],
-        \text{where } [[m]] \not\equiv [[n1]] \text{ and } [[m']] \not\equiv [[n1]].\\
+        [[raise ( n1 , n2 , (m <=p m' , Gr ))]] & = & [[m <=  p m' , raise (n1 , n2, Gr)]],\\
+        \,\,\,\,\,\text{where } [[m]] \not\equiv [[n1]] \text{ and } [[m']] \not\equiv [[n1]].\\
+        [[raise ( n1 , n2 , (m <=bar p m' , Gr ))]] & = &[[m <=  bar p m' , raise (n1 , n2, Gr)]],\\
+        \,\,\,\,\,\text{where } [[m]] \not\equiv [[n1]] \text{ and } [[m']] \not\equiv [[n1]].\\
       \end{array}
     \end{math}
   \end{center}
@@ -403,16 +405,16 @@ The following asserts that the orientation of an edge can be flipped,
 as long as the polarity is flipped. 
 \begin{lemma}[RelAssumFlip]
   \label{lemma:relassumflip}
-  If $[[Gr1 , n1 <=p n2, Gr2 |- m <=p' m']]$, then $[[Gr1 , n2 <=bar p n1, Gr2 |- m <=p' m']]$.
+  If $[[Gr1 , n1 <=p n2, Gr2 |- m <=p' m']]$, then \\ $[[Gr1 , n2 <=bar p n1, Gr2 |- m <=p' m']]$.
 \end{lemma}
   \begin{proof}
     This is a proof by induction on the form of the assumed
-    derivation.  We only consider the case of the $\ifrName{ax}$ rule,
+    derivation.  We only consider the case of the $\ifrName{\normalsize ax}$ rule,
     because the remainder of the cases hold either trivially or by
     simple applicaitons of the induction hypothesis followed by the
     rule in the corresponding case.
-
-    
+    \vspace{-25px}
+    \begin{changemargin}{10px}{5px}\noindent
     \begin{itemize}
     \item[Case.]\ \\ 
       \begin{center}
@@ -426,10 +428,11 @@ as long as the polarity is flipped.
       We only consider the non-trivial case when $[[Gr , n <= p'' n' , Gr']] \equiv [[Gr1 , n1 <=p n2, Gr2]]$.
       This implies that $[[n]] \equiv [[m]] \equiv [[n1]]$, $[[n']] \equiv [[m']] \equiv [[n2]]$, and 
       $[[p'']] \equiv [[p']] \equiv [[p]]$.  
-      It suffices to show $[[Gr1 , n2 <=bar p n1, Gr2 |- n1 <= p * n2]]$.  Clearly, we know by the $\ifrName{rel\_ax}$
-      rule, $[[Gr1 , n2 <=bar p n1, Gr2 |- n2 <=bar p * n1]]$, and then by the $\ifrName{rel\_flip}$ rule we know
+      It suffices to show $[[Gr1 , n2 <=bar p n1, Gr2 |- n1 <= p * n2]]$.  Clearly, we know by the $\ifrName{\normalsize rel\_ax}$
+      rule, $[[Gr1 , n2 <=bar p n1, Gr2 |- n2 <=bar p * n1]]$, and then by the $\ifrName{\normalsize rel\_flip}$ rule we know
       $[[Gr1 , n2 <=bar p n1, Gr2 |- n1 <=p * n2]]$.    
     \end{itemize}
+    \end{changemargin}
   \end{proof}
 Using the $[[raise]]$ function we can show that all nodes related to
 some node $[[n1]]$ which is related to a node $[[n2]]$ in some
@@ -444,6 +447,8 @@ requirements for implication in the general monotonicity lemma
 \end{lemma}
   \begin{proof}
     This is a proof by induction on the form of $[[Gr, Gr1 |- m <=p' * m']]$.
+    \vspace{-25px}
+    \begin{changemargin}{10px}{5px}\noindent
     \begin{itemize}
     \item[Case.]\ \\ 
       \begin{center}
@@ -477,24 +482,26 @@ requirements for implication in the general monotonicity lemma
       Now suppose $[[p']] \equiv [[bar p]]$.  if $[[m']] \not\equiv [[n1]]$, then clearly, we obtain
       our result.  Consider the case where $[[m']] \equiv [[n1]]$.  Then it suffices to show
       $[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <= bar p * n1]]$ 
-      where $[[Gr1]] \equiv [[Gr1', m <=bar p n1,Gr1'']]$. This holds by the following derivation:
-      \begin{center}
-        \scriptsize
-        \begin{math}
-          $$\mprset{flushleft}
-          \inferrule* [right=\scriptsize \ifrName{rel\_trans}] {                       
-              $$\mprset{flushleft}
-            \inferrule* [right=\scriptsize \ifrName{rel\_ax}] {
-              \ 
-            }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <=bar p * n2]]}
-            \\
-            $$\mprset{flushleft}
-            \inferrule* [right=\scriptsize \ifrName{rel\_flip}] {
-              [[Gr |- n1 <=p* n2]]
-            }{[[Gr |- n2 <=bar p* n1]]}
-          }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <= bar p * n1]]}
-        \end{math}
-      \end{center}      
+      where $[[Gr1]] \equiv [[Gr1', m <=bar p n1,Gr1'']]$. Finally, this case follows by applying
+      the \dttdrulename{\normalsize rel\_trans} rule.
+      % This holds by the following derivation:
+      % \begin{center}
+      %   \scriptsize
+      %   \begin{math}
+      %     $$\mprset{flushleft}
+      %     \inferrule* [right=\scriptsize \ifrName{rel\_trans}] {                       
+      %         $$\mprset{flushleft}
+      %       \inferrule* [right=\scriptsize \ifrName{rel\_ax}] {
+      %         \ 
+      %       }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <=bar p * n2]]}
+      %       \\
+      %       $$\mprset{flushleft}
+      %       \inferrule* [right=\scriptsize \ifrName{rel\_flip}] {
+      %         [[Gr |- n1 <=p* n2]]
+      %       }{[[Gr |- n2 <=bar p* n1]]}
+      %     }{[[Gr,raise(n1,n2,Gr1') , m <= bar p n2 , raise(n1,n2,Gr1'') |- m <= bar p * n1]]}
+      %   \end{math}
+      % \end{center}      
       
     \item[Case.]\ \\ 
       \begin{center}
@@ -506,7 +513,7 @@ requirements for implication in the general monotonicity lemma
         \end{math}
       \end{center}
       Note that in this case $[[m']] \equiv [[m]]$.  Our result follows from simply
-      an application of the $\ifrName{rel\_refl}$ rule.
+      an application of the $\ifrName{\normalsize rel\_refl}$ rule.
 
     \item[Case.]\ \\ 
       \begin{center}
@@ -518,7 +525,7 @@ requirements for implication in the general monotonicity lemma
         \end{math}
       \end{center}
       This case holds by two applications of the induction hypothesis followed by
-      applying the $\ifrName{rel\_trans}$ rule.
+      applying the $\ifrName{\normalsize rel\_trans}$ rule.
       
     \item[Case.]\ \\ 
       \begin{center}
@@ -534,6 +541,7 @@ requirements for implication in the general monotonicity lemma
       $[[Gr,raise(n2,n1,Gr) |- m' <= bar p' * m]]$ implies
       $[[Gr,raise(n1,n2,Gr) |- m <= p' * m']]$, but this easily follows by repeated applications of Lemma~\ref{lemma:relassumflip}.
     \end{itemize}
+    \end{changemargin}
   \end{proof}
 \noindent
 We can now use the previous result to raise the lower bound on sequents.
@@ -555,7 +563,8 @@ We can now use the previous result to raise the lower bound on sequents.
     This is a proof by induction on the form of $[[Gr,Gr1,Gr' ; G |- p A @ n]]$.  We assume with out loss of generality that
     $[[n1 in | Gr1 |]]$, and that $[[n1]] \not\equiv [[n2]]$.  
     If this is not the case then $[[raise(n1,n2,Gr1)]] = [[Gr1]]$, and the result holds trivially.
-    
+    \vspace{-25px}
+    \begin{changemargin}{10px}{5px}\noindent
     \begin{itemize}
     \item[Case.]\ \\ 
       \begin{center}
@@ -568,7 +577,7 @@ We can now use the previous result to raise the lower bound on sequents.
       \end{center}
       Clearly, if $[[Gr,Gr1,Gr' |- n' <= p * n]]$, then $[[Gr,Gr',Gr1 |- n' <= p * n]]$.
       Thus, this case follows by raising the lower bound (Lemma~\ref{lemma:raise_lower}), and applying
-      the $\ifrName{ax}$ rule.
+      the $\ifrName{\normalsize ax}$ rule.
 
     \item[Case.]\ \\ 
       \begin{center}
@@ -591,7 +600,7 @@ We can now use the previous result to raise the lower bound on sequents.
         \end{math}
       \end{center}
       This case holds by two applications of the induction hypothesis, and then applying
-      the $\ifrName{and}$ rule.
+      the $\ifrName{\normalsize and}$ rule.
 
     \item[Case.]\ \\ 
       \begin{center}
@@ -618,7 +627,7 @@ We can now use the previous result to raise the lower bound on sequents.
       Since we know $[[n1]] \not\equiv [[n2]]$, then by Lemma~\ref{lemma:graph_node_containment} we know\\
       $[[n1]],[[n2]] \in [[| Gr,Gr' |]]$. Thus, $[[n']] \not\equiv [[n1]] \not\equiv [[n2]]$.  Now by the
       induction hypothesis we know $[[(Gr,raise(n1,n2,Gr1),Gr', n <= p n') ; G , p A1 @ n' |- p A2 @ n']]$.
-      This case then follows by the application of the $\ifrName{imp}$ rule to the former.
+      This case then follows by the application of the $\ifrName{\normalsize imp}$ rule to the former.
 
 
     \item[Case.]\ \\ 
@@ -662,6 +671,7 @@ We can now use the previous result to raise the lower bound on sequents.
       \end{center}
       Similar to the previous case.
     \end{itemize}
+    \end{changemargin}
   \end{proof}
 Finally, we have everything we need to prove that general
 monotonicity is admissible in DIL.  This implies the usual
@@ -676,7 +686,8 @@ admissible monotonicity rule as a corollary.
     This is a proof by induction on the form of $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p B @ m]]$.
     We assume without loss of generality that all of $[[n1]], [[n'1]] \ldots , [[ni]], [[n'i]]$ are unique.  Thus, they
     are all member of $[[|Gr|]]$.
-    
+    \vspace{-25px}
+    \begin{changemargin}{10px}{5px}\noindent
     \begin{itemize}
     \item[Case.]\ \\ 
       \begin{center}
@@ -736,7 +747,7 @@ admissible monotonicity rule as a corollary.
         \end{math}
       \end{center}
       This case follows easily by applying the induction hypothesis to each premise and then
-      applying the $\ifrName{and}$ rule.
+      applying the $\ifrName{\normalsize and}$ rule.
 
     \item[Case.]\ \\ 
       \begin{center}
@@ -747,7 +758,8 @@ admissible monotonicity rule as a corollary.
           }{[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni |- p (B1 /\ bar p B2) @ m]]}
         \end{math}
       \end{center}
-      This case follows easily by the induction hypothesis and then applying $\ifrName{andBar}$.      
+      This case follows easily by the induction hypothesis and then
+      applying \\ $\ifrName{\normalsize andBar}$.      
 
     \item[Case.]\ \\ 
       \begin{center}
@@ -764,7 +776,7 @@ admissible monotonicity rule as a corollary.
       We know by assumption $[[Gr |- n1 <= p1 * n'1]]$, \ldots, $[[Gr |- ni <= pi * n'i]]$, and by graph weakening 
       (Lemma~\ref{lemma:graph_weakening})
       $[[Gr, m <= p n' |- n1 <= p1 * n'1]]$, \ldots, $[[Gr, m <= p n' |- ni <= pi * n'i]]$.  We also know by
-      applying the $\ifrName{rel\_refl}$ rule that $[[Gr, m <=p n' |- n' <= bar p * n']]$ and 
+      applying the $\ifrName{\normalsize rel\_refl}$ rule that $[[Gr, m <=p n' |- n' <= bar p * n']]$ and 
       $[[Gr, m <=p n' |- n' <= p * n']]$.  
       Thus, by the induction hypothesis we know 
       $[[(Gr, m <= p n') ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, p B1 @ n' |- p B2 @ n']]$.
@@ -772,7 +784,7 @@ admissible monotonicity rule as a corollary.
       $[[Gr1]] \equiv [[m <=p n']]$ and the assumption $[[Gr |- m <=p * m']]$ to obtain \\
       $[[(Gr, raise(m, m', m <= p n')) ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, p B1 @ n' |- p B2 @ n']]$, but this is
       equivalent to $[[(Gr, m <= p n') ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, p B1 @ n' |- p B2 @ n']]$.  
-      Finally, using the former, we obtain our result by applying the $\ifrName{imp}$ rule.
+      Finally, using the former, we obtain our result by applying the $\ifrName{\normalsize imp}$ rule.
 
 
     \item[Case.]\ \\ 
@@ -830,7 +842,7 @@ admissible monotonicity rule as a corollary.
       $[[bar pj Aj @ n'j in (bar p1 A1 @ n' dots bar pi Ai @ n'i)]]$.  This case then follows by applying the induction
       hypothesis to $[[Gr ; bar p1 A1 @ n1 , ... , bar pi Ai @ ni, bar p B @ m |- pj Aj @ nj]]$, to obtain,
       $[[Gr ; bar p1 A1 @ n'1 dots bar pi Ai @ n'i, bar p B @ m'1 |- pj Aj @ n'j]]$, followed by applying the
-      $\ifrName{axCut}$ rule.
+      $\ifrName{\normalsize axCut}$ rule.
 
     \item[Case.]\ \\ 
       \begin{center}
@@ -845,6 +857,7 @@ admissible monotonicity rule as a corollary.
       \end{center}
       Similar to the previous case.
     \end{itemize}
+    \end{changemargin}
   \end{proof}
 \noindent
 The proofs of the admissible rules MonoL and MonoR depend on the
@@ -920,8 +933,9 @@ requires a particular formula as the active formula.  We define
 such a translation in the following definition.
 \begin{definition}
   \label{def:focusing}
-  An activation of a derivable L-sequent $<<G |- Gr D>>$ is a DIL-sequent
-  $[[-Gr-;{G}+,{D1,D2}- |- +{A}@n]]$, where $<<D>> = <<D1,n : A,D2>>$.
+  An activation of a derivable L-sequent $<<G |- Gr D>>$ is a
+  DIL-sequent \\ $[[-Gr-;{G}+,{D1,D2}- |- +{A}@n]]$, where 
+  $<<D>> = <<D1,n : A,D2>>$.
 \end{definition}
 Finally, the following theorem is the main result showing that any
 activation of a derivable L-sequent is derivable in DIL.
@@ -932,7 +946,8 @@ activation of a derivable L-sequent is derivable in DIL.
 \end{thm}
   \begin{proof}
   This is a proof by induction on the form of the sequent $<<G |- Gr D>>$.
-
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]\ \\ 
     \begin{center}
@@ -987,11 +1002,11 @@ activation of a derivable L-sequent is derivable in DIL.
     \begin{center}
       \begin{math}
         $$\mprset{flushleft}
-        \inferrule* [right=Exchange] {
+        \inferrule* [right=\ifrName{Exchange}] {
           $$\mprset{flushleft}
-        \inferrule* [right=Ax] {
+        \inferrule* [right=\ifrName{ax}] {
           $$\mprset{flushleft}
-          \inferrule* [right=Refl] {
+          \inferrule* [right=\ifrName{Refl}] {
             \ 
           }{[[-Gr- |- n <=+* n]]}
         }{[[-Gr-; {G}+,{D}-,+{A}@n |- + {A}@n]]}
@@ -1008,13 +1023,13 @@ activation of a derivable L-sequent is derivable in DIL.
       \small
       \begin{math}
         $$\mprset{flushleft}
-        \inferrule* [right=\scriptsize Left-to-Right] {
+        \inferrule* [right=\scriptsize \ifrName{L-to-R}] {
           $$\mprset{flushleft}
-          \inferrule* [right=\scriptsize Exchange] {
+          \inferrule* [right=\scriptsize \ifrName{Exchange}] {
             $$\mprset{flushleft}
-          \inferrule* [right=\scriptsize Ax] {
+          \inferrule* [right=\scriptsize \ifrName{ax}] {
             $$\mprset{flushleft}
-            \inferrule* [right=\scriptsize Refl] {
+            \inferrule* [right=\scriptsize \ifrName{Refl}] {
               \ 
             }{[[-Gr- |- n <=+* n]]}
           }{[[-Gr- ; {G}+ , {D1}- ,{D2}- , - B @ n', + A @ n |- +{A} @ n ]] }
@@ -1090,7 +1105,7 @@ activation of a derivable L-sequent is derivable in DIL.
     \end{center}
     It suffices to show that every activation of $<<G |- Gr n : True, D>>$ is derivable.
     Consider the activation $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$.  This is easily derivable
-    by applying the \ifrName{unit} rule.  Now any other activation of
+    by applying the \ifrName{\normalsize unit} rule.  Now any other activation of
     $<<G |- Gr n : True, D>>$ 
     implies $[[-Gr- ; {G}+ , {D}- |- + {True} @ n]]$ is derivable by Lemma~\ref{lemma:refocus}, and hence,
     are derivable.
@@ -1158,8 +1173,8 @@ activation of a derivable L-sequent is derivable in DIL.
     are derivable.  In particular, we know $[[-Gr- ; {G}+,+T1@n, +T2@n, {D1}-,{D2}- |- + A @ n']]$ where
     $[[{D}-]] = [[{D1}-]],-A@n',[[{D2}-]]$. Using exchange we know $[[-Gr- ; {G}+,{D1}-,{D2}-,+T1@n, +T2@n |- + A @ n']]$, and
     by the left-to-right lemma $[[-Gr- ; {G}+, {D1}-,{D2}-, +T1@n, - A @ n' |- - T2@n]]$, and finally by one more application
-    of exchange $[[-Gr- ; {G}+, {D1}-, {D2}-,- A @ n', +T1@n |- - T2@n]]$.  At this point we know 
-    $[[-Gr- ; {G}+, {D1}-, {D2}-, - A @ n' |- - T1 /\+ T2 @ n]]$ by the using the admissible $\ifrName{andL}$ rule (Lemma~\ref{lemma:andl}).
+    of exchange \\ $[[-Gr- ; {G}+, {D1}-, {D2}-,- A @ n', +T1@n |- - T2@n]]$.  At this point we know 
+    $[[-Gr- ; {G}+, {D1}-, {D2}-, - A @ n' |- - T1 /\+ T2 @ n]]$ by the using the admissible $\ifrName{\normalsize andL}$ rule (Lemma~\ref{lemma:andl}).
     Now using left-to-right \\
     $[[-Gr- ; {G}+, {D1}-, {D2}-, + T1 /\+ T2 @ n  |- + A @ n']]$ is derivable. Lastly, by exchange 
     $[[-Gr- ; {G}+, + T1 /\+ T2 @ n, {D1}-, {D2}- |- + A @ n']]$ is derivable, which is clearly and an arbitrary
@@ -1178,7 +1193,7 @@ activation of a derivable L-sequent is derivable in DIL.
     \end{center}
     We know by the induction hypothesis that all activations of $<<G |- Gr n : A, D>>$ and
     $<<G |- Gr n : B, D>>$ are derivable.  In particular, $[[-Gr- ; {G}+,{D}- |- +A @ n]]$
-    and $[[-Gr- ; {G}+,{D}- |- +B @ n]]$ are derivable. Now by applying the $\ifrName{and}$ rule
+    and $[[-Gr- ; {G}+,{D}- |- +B @ n]]$ are derivable. Now by applying the $\ifrName{\normalsize and}$ rule
     we obtain $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$, which is a particular activation of 
     $<<G |- Gr n : A /\ B, D>>$. Finally, consider any other activation, then that sequent implies 
     $[[-Gr- ; {G}+,{D}- |- + A /\+ B @ n]]$ is derivable using Lemma~\ref{lemma:refocus}.  
@@ -1205,7 +1220,7 @@ activation of a derivable L-sequent is derivable in DIL.
     $[[-Gr-; {G}+,{D'}-, - C @ n' |- -{A}@n]]$ and $[[-Gr-; {G}+,{D'}-, - E @ n'' |- -{B}@n]]$, and by applying
     weakening (and exchange) we know \\ $[[-Gr-; {G}+,{D'}-, - C @ n', - E @ n'' |- -{A}@n]]$ and 
     $[[-Gr-; {G}+,{D'}-, -C@n',- E @ n'' |- -{B}@n]]$.  At this point we can apply 
-    the $\ifrName{and}$ rule to obtain $[[-Gr-; {G}+,{D'}-, - C @ n',- E @ n'' |- - {A} /\- {B} @ n]]$ to which we can apply
+    the $\ifrName{\normalsize and}$ rule to obtain $[[-Gr-; {G}+,{D'}-, - C @ n',- E @ n'' |- - {A} /\- {B} @ n]]$ to which we can apply
     the left-to-right lemma to and obtain \\
     $[[-Gr-; {G}+,{D'}-,- E @ n'',+ {A} /\- {B} @ n |- + C @ n']]$.  Finally, we can apply 
     exchange again to obtain $[[-Gr-; {G}+, + {A} /\- {B} @ n, {D'}-,- E @ n'' |- + C @ n']]$, which -- modulo exchange -- is
@@ -1221,8 +1236,8 @@ activation of a derivable L-sequent is derivable in DIL.
         }{<<G |- Gr x : T1 \/ T2, D>>}
       \end{math}
     \end{center}
-    This case is similar to the case of $\ifrName{andR}$ case, except,
-    it makes use of the $\ifrName{andBar}$ rule.
+    This case is similar to the case of $\ifrName{\normalsize andR}$ case, except,
+    it makes use of the $\ifrName{\normalsize andBar}$ rule.
 
   \item[Case.]\ \\ 
     \begin{center}
@@ -1242,7 +1257,7 @@ activation of a derivable L-sequent is derivable in DIL.
     $[[-Gr-;{G}+,{D}- |- +{T1}@n2]]$ is derivable, and so is $[[-Gr-;{G}+, {D}- |- -{T2}@n2]]$. The latter
     being derivable by applying the induction hypothesis followed by exchange 
     (Lemma~\ref{lemma:exchange}) and the left-to-right lemma (Lemma~\ref{lemma:refocus}). We know $<<n1 Gr n2>>$ by assumption
-    and so by Lemma~\ref{lemma:reach} $[[-Gr- |- n1 <=+* n2]]$.  Thus, by applying the \ifrName{impBar} rule we obtain
+    and so by Lemma~\ref{lemma:reach} $[[-Gr- |- n1 <=+* n2]]$.  Thus, by applying the \ifrName{\normalsize impBar} rule we obtain
     $[[-Gr-;{G}+,{D}- |- - {T1}->+{T2} @ n1]]$.  At this point we can apply left-to-right to the previous sequent and obtain 
     and activation of $<<G , n1 : T1 -> T2 |- Gr D>>$, thus we obtain our result.
 
@@ -1260,10 +1275,10 @@ activation of a derivable L-sequent is derivable in DIL.
     This case follows the same pattern as the previous cases.  We know by the induction hypothesis
     that all activations of $<<G, y : T1 |- h(Gr U {(x,y)}) y : T2, D>>$ are derivable.  In particular,
     $[[-Gr-,n1 <=+ n2 ; {G}+, +{T1}@n2,{D}- |- +{T2}@n2]]$ is
-    derivable.  By exchange (Lemma~\ref{lemma:exchange})
-    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n2 |- +{T2}@n2]]$ is derivable, and by applying the $\ifrName{imp}$ rule
+    derivable.  By exchange (Lemma~\ref{lemma:exchange})\\
+    $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n2 |- +{T2}@n2]]$ is derivable, and by applying the $\ifrName{\normalsize imp}$ rule
     we obtain $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$, which is a particular activation of 
-    $<<G |- Gr n1 : T1 -> T2, D>>$.  Note that in the previous application of $\ifrName{imp}$ we use
+    $<<G |- Gr n1 : T1 -> T2, D>>$.  Note that in the previous application of $\ifrName{\normalsize imp}$ we use
     the fact that if $<<n2 notin Gr, G, D>>$, then $[[n2 notin |-Gr-|,|{G}+,{D}-|]]$. 
     Lastly, any other activation of $<<G |- Gr n1 : T1 -> T2, D>>$ implies
     $[[-Gr- ; {G}+, {D}- |- + {T1} ->+ {T2}@n1]]$ is derivable by the left-to-right lemma, and hence is derivable.
@@ -1286,7 +1301,7 @@ activation of a derivable L-sequent is derivable in DIL.
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,+{T1}@n1 |- +{T2}@n1]]$ is derivable.  Now by the left-to-right lemma we know \\
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}-,-{T2}@n1 |- -{T1}@n1]]$, and by
     assumption we know $<<y notin Gr, G, D>>$ which implies 
-    $[[n1 notin |-Gr-|,|{G}+,{D}-|]]$ is derivable.  Thus, by applying the $\ifrName{imp}$ rule we know  
+    $[[n1 notin |-Gr-|,|{G}+,{D}-|]]$ is derivable.  Thus, by applying the $\ifrName{\normalsize imp}$ rule we know  
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$ is derivable.  Clearly, this is a particular activation of
     $<<G, n2 : T1 - T2 |- Gr D>>$, and any other activation implies
     $[[-Gr-,n1 <=+ n2 ; {G}+, {D}- |- - {T2} ->- {T1}@n2]]$ is derivable by the left-to-right lemma, and hence are derivable.
@@ -1304,10 +1319,11 @@ activation of a derivable L-sequent is derivable in DIL.
         }{<<G |- Gr x : T1 - T2, D>>}
       \end{math}
     \end{center}
-    This case follows in the same way as the case for $\ifrName{impL}$,
+    This case follows in the same way as the case for $\ifrName{\normalsize impL}$,
     except the particular activation of $<<G, y : T2 |- Gr D>>$ has to have the active formulas such that the
-    rule $\ifrName{impBar}$ can be applied.
+    rule $\ifrName{\normalsize impBar}$ can be applied.
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 
 \begin{corollary}[Completeness]\index{Completeness}
@@ -1321,15 +1337,16 @@ activation of a derivable L-sequent is derivable in DIL.
 % section completeness (end)
 % section dualized_intuitionistic_logic (end)
 
-\section{Type Preservation and Strong Normalization of DTT}
+\section{Metatheory of DTT}
 \label{sec:dualized_type_theory}
 We now present the basic metatheory of DTT, starting with type
 preservations. We begin with the inversion lemma which is necessary
 for proving type preservation.
 \begin{lemma}[Inverstion]\index{Dualized Type Theory!Inversion}
   \label{lemma:inverstion}
+  \vspace{-30px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
-  \item[] 
   \item[i.] If $[[Gr;H, x : p A @ n, H' |- x : p A @ n']]$, then 
     $[[Gr |- n <=p* n']]$.
   \item[ii.] If $[[Gr;H |- (t1,t2) : p (A /\p B) @ n]]$, then 
@@ -1343,6 +1360,7 @@ for proving type preservation.
     $[[Gr |- n <=bar p * n']]$, $[[Gr;H |- t1 : bar p A @ n']]$, and
     $[[Gr;H |- t2 : p B @ n']]$ for some node $[[n']]$.
   \end{itemize}
+  \end{changemargin}
 \end{lemma}
 \begin{proof}
   Each case of the above lemma holds by a trivial proof by induction
@@ -1373,7 +1391,8 @@ for typing.
   This is a proof by induction on the assumed reachability
   derivation.  Throughout each case suppose we have nodes $[[n4]]$
   and $[[n5]]$.
-  
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]\ \\ 
     \begin{center}
@@ -1407,9 +1426,9 @@ for typing.
       \end{math}
     \end{center}
     By the induction hypothesis we know that for any nodes $[[n'4]]$ and $[[n'5]]$ that
-    $[[ [n'4/n'5]Gr1,[n'4/n'5]Gr2 |- n1 <= p * n']]$, and for any nodes $[[n''4]]$ and $[[n''5]]$ that
+    $[[ [n'4/n'5]Gr1,[n'4/n'5]Gr2 |- n1 <= p * n']]$, and for any nodes $[[n''4]]$ and $[[n''5]]$ that\\
     $[[ [n''4/n''5]Gr1, [n''4/n''5]Gr2 |- n' <= p * n3]]$.  Choose $[[n4]]$ for $[[n'4]]$ and $[[n''4]]$ and
-    $[[n5]]$ for $[[n'5]]$ and $[[n''5]]$ to obtain $[[ [n4/n5]Gr1,[n4/n5]Gr2 |- n1 <= p * n']]$ and
+    $[[n5]]$ for $[[n'5]]$ and $[[n''5]]$ to obtain \\ $[[ [n4/n5]Gr1,[n4/n5]Gr2 |- n1 <= p * n']]$ and
     $[[ [n4/n5]Gr1, [n4/n5]Gr2 |- n' <= p * n3]]$.  Finally, this case follows by reapplying the 
     rule to the previous two facts.
 
@@ -1425,6 +1444,7 @@ for typing.
     Similar to the previous case.
 
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 
 \begin{lemma}[Node Substitution for Reachability]\index{Dualized Type
@@ -1437,7 +1457,8 @@ for typing.
   This is a proof by induction on the form of the assumed reachability
   derivation.  Throughout the following cases we assume $[[Gr, Gr' |-
   n1 <=p1* n3]]$ holds.
-  
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.]\ \\ 
     \begin{center}
@@ -1451,9 +1472,9 @@ for typing.
     Suppose $[[Gr1, n4 <= p n5, Gr2]] = [[Gr, n1 <=p1 n2,Gr']]$.  Then
     either $[[n1 <=p1 n2]] \in [[Gr1]]$, $[[n1 <=p1 n2]] \in [[Gr2]]$,
     or $[[n1 <=p1 n2]] \equiv [[n4 <=p n5]]$.  Suppose $[[n1 <=p1 n2]] \in [[Gr1]]$,
-    then $[[Gr1]] = [[Gr'1, n1 <=p n2,Gr''1]]$.  Then it is easy to see that
-    $[[ [n3/n2]Gr'1,[n3/n2]Gr''1 , [n3/n2]n4 <= p [n3/n2]n5 , [n3/n2]Gr2 |- [n3/n2]n4 <= p * [n3/n2]n5]]$
-    is derivable by applying $\dttdrulename{Ax}$.  The case where $[[n1 <=p1 n2]] \in [[Gr2]]$ is
+    then $[[Gr1]] = [[Gr'1, n1 <=p n2,Gr''1]]$.  Then it is easy to see that\\
+    $[[ [n3/n2](Gr'1,Gr''1 , n4 <= p n5) , [n3/n2]Gr2 |- [n3/n2]n4 <= p * [n3/n2]n5]]$
+    is derivable by applying $\dttdrulename{\normalsize ax}$.  The case where $[[n1 <=p1 n2]] \in [[Gr2]]$ is
     similar.
 
     Now suppose $[[n1 <=p1 n2]] \equiv [[n4 <=p n5]]$.  Then we know by assumption that 
@@ -1510,6 +1531,7 @@ for typing.
     This case holds by applying the induction hypothesis to the
     premise, and then reapplying the rule.    
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 
 \begin{lemma}[Node Substitution for Typing]\index{Dualized Type
@@ -1522,19 +1544,20 @@ for typing.
     This is a proof by induction on the form of the assumed typing
     derivation.  Throughout each of the following cases we assume
     $[[Gr,Gr' |- n1 <=p1 * n4]]$ holds.
-
+    \vspace{-25px}
+    \begin{changemargin}{10px}{5px}\noindent
     \begin{itemize}
     \item[Case.]\ \\ 
       \begin{center}
         \begin{math}
           $$\mprset{flushleft}
-          \inferrule* [right=\ifrName{Ax}] {
+          \inferrule* [right=\ifrName{ax}] {
             [[Gr, n1 <=p1 n2,Gr' |- n <= p * n3]]
           }{[[Gr, n1 <=p1 n2,Gr' ; H1 , y : p2 A @ n , H2 |- y : p2 A @ n3]]}
         \end{math}
       \end{center}
-      First, by node substitution for reachability (Lemma~\ref{lemma:node_substitution_for_reachability}) we know
-      $[[ [n4/n2]Gr,[n4/n2]Gr' |- [n4/n2]n <= p * [n4/n2]n3]]$.  Thus, by applying the $\dttdrulename{Ax}$ rule we may derive
+      First, by node substitution for reachability (Lemma~\ref{lemma:node_substitution_for_reachability}) we know\\
+      $[[ [n4/n2]Gr,[n4/n2]Gr' |- [n4/n2]n <= p * [n4/n2]n3]]$.  Thus, by applying the $\dttdrulename{\normalsize ax}$ rule we may derive
       $[[ [n4/n2]Gr,[n4/n2]Gr' ; [n4/n2]H1 , y : p2 A @ [n4/n2]n , [n4/n2]H2 |- y : p2 A @ [n4/n2]n3]]$.
 
     \item[Case.]\ \\ 
@@ -1592,13 +1615,13 @@ for typing.
       $[[n' notin | Gr, n1 <=p1 n2,Gr' | , | G |]]$ which implies that $[[n']]$ must be distinct from $[[n1]]$, 
       and hence a contradiction, thus $[[n']]$ cannot be $[[n4]]$.  Therefore, we know 
       $[[ n' notin | [n4/n2]Gr, [n4/n2]Gr' | , | [n4/n2]G |]]$.   
-
-      \ \\
+      
+      \noindent
       By the induction hypothesis we know 
-      \[ [[([n4/n2]Gr,[n4/n2]Gr', [n4/n2]n3 <= p [n4/n2]n') ; [n4/n2]H , x : p2 A1 @ [n4/n2]n' |- t' : p2 A2 @ [n4/n2]n']] \] which
+      \[ [[ [n4/n2](Gr,Gr', n3 <= p n') ; [n4/n2]H , x : p2 A1 @ [n4/n2]n' |- t' : p2 A2 @ [n4/n2]n']] \] which
       is equivalent to 
       \[ [[([n4/n2]Gr,[n4/n2]Gr', [n4/n2]n3 <= p n') ; [n4/n2]H , x : p2 A1 @ n' |- t' : p2 A2 @ n']]. \] 
-      Finally, this case follows by applying the $\dttdrulename{Imp}$ rule using
+      Finally, this case follows by applying the $\dttdrulename{\normalsize Imp}$ rule using\\
       $[[ n' notin | [n4/n2]Gr, [n4/n2]Gr' | , | [n4/n2]G |]]$ and the previous fact.
       
 
@@ -1609,15 +1632,18 @@ for typing.
           \inferrule* [right=\ifrName{ImpBar}] {
             [[Gr, n1 <=p1 n2,Gr' |- n3 <= bar p2 * n']]
             \\\\
-            [[Gr, n1 <=p1 n2,Gr' ; H |- t1 : bar p2 A1 @ n'  &&  Gr, n1 <=p1 n2,Gr' ; H |- t2 : p2 A2 @ n']]
+            [[Gr, n1 <=p1 n2,Gr' ; H |- t1 : bar p2 A1 @ n']]
+            \\\\
+            [[Gr, n1 <=p1 n2,Gr' ; H |- t2 : p2 A2 @ n']]
           }{[[Gr, n1 <=p1 n2,Gr' ; H |- < t1 , t2 > : p2 (A1 ->bar p2 A2) @ n3]]}
         \end{math}
       \end{center}
       We now by assumption that $[[Gr,Gr' |- n1 <=p1 * n4]]$ holds.  So by node substitution for reachability
       (Lemma~\ref{lemma:node_substitution_for_reachability}) we know $[[ [n4/n2]Gr,[n4/n2]Gr' |- [n4/n2]n3 <= bar p2 * [n4/n2]n']]$.
-      Now by the induction hypothesis we know $[[ [n4/n2]Gr,[n4/n2]Gr' ; [n4/n2]H |- t1 : bar p2 A1 @ [n4/n2]n']]$  and \\
+      Now by the induction hypothesis we know \\
+      $[[ [n4/n2]Gr,[n4/n2]Gr' ; [n4/n2]H |- t1 : bar p2 A1 @ [n4/n2]n']]$  and \\
       $[[ [n4/n2]Gr,[n4/n2]Gr' ; [n4/n2]H |- t2 : p2 A2 @ [n4/n2]n']]$.  This case then follows by applying the rule
-      $\dttdrulename{ImBar}$ to the previous three facts.
+      $\dttdrulename{\normalsize ImBar}$ to the previous three facts.
 
     \item[Case.]\ \\ 
       \begin{center}
@@ -1633,6 +1659,7 @@ for typing.
       This case follows by applying the induction hypothesis to each premise, and then reapplying
       the rule.
     \end{itemize}  
+    \end{changemargin}
   \end{proof}
 
 \begin{lemma}[Substitution for Typing]\index{Dualized Type
@@ -1644,12 +1671,14 @@ for typing.
   \begin{proof}
     This proof holds by a straightforward induction on the second
     assumed typing relation. 
+    \vspace{-25px}
+    \begin{changemargin}{10px}{5px}\noindent
     \begin{itemize}
     \item[Case.]\ \\ 
       \begin{center}
         \begin{math}
           $$\mprset{flushleft}
-          \inferrule* [right=\ifrName{Ax}] {
+          \inferrule* [right=\ifrName{ax}] {
             [[Gr |- n <= p * n']]
           }{[[Gr ; H1 , y : p C @ n , H2 |- y : p C @ n']]}
         \end{math}
@@ -1734,6 +1763,7 @@ for typing.
       \end{center}
       Similarly to the previous case.
     \end{itemize}  
+    \end{changemargin}
   \end{proof}
 \noindent
 Finally, we prove type preservation.
@@ -1747,7 +1777,8 @@ Finally, we prove type preservation.
     derivation.  We only consider non-trivial cases.  All the other
     cases either follow directly from assumptions or are similar to the
     cases we provide below.
-
+    \vspace{-25px}
+    \begin{changemargin}{10px}{5px}\noindent
     \begin{itemize}    
     \item[Case.]\ \\ 
       \begin{center}
@@ -1771,7 +1802,9 @@ Finally, we prove type preservation.
         \begin{center}
           \begin{math}
             \begin{array}{lll}
-              (1) & [[Gr, (n' <= + n'') ; H, x : bar p A @ n, y : + B1 @ n'' |- t'1 : + B2 @ n'']] \text{ for some } [[n'' notin |Gr|,|H,x : bar p A @ n|]]\\
+              (1) & [[Gr, (n' <= + n'') ; H, x : bar p A @ n, y : + B1
+              @ n'' |- t'1 : + B2 @ n'']] \\
+              & \,\,\,\,\,\text{ for some } [[n'' notin |Gr|,|H,x : bar p A @ n|]]\\
               (2) & [[Gr ; H , x : bar p A @ n |- t'2 : + B1 @ n''']] \\
               (3) & [[Gr ; H , x : bar p A @ n |- t''2 : - B2 @ n''']]\\
               (4) & [[Gr |- n' <=+* n''']]\\
@@ -1780,13 +1813,13 @@ Finally, we prove type preservation.
         \end{center}
       \end{itemize}
       Using (1) and (4) we may apply node substitution for typing (Lemma~\ref{lemma:node_substitution_for_typing}) to obtain
-      \[ (5)\,[[ [n'''/n'']Gr; [n'''/n'']H, x : bar p A @ n, y : + B1 @ n''' |- t'1 : + B2 @ n''']]. \]
+      $(5)\,[[ [n'''/n'']Gr; [n'''/n'']H, x : bar p A @ n, y : + B1 @ n''' |- t'1 : + B2 @ n''']]$.
       
       Finally, by applying substitution for typing using (2) and (5) we obtain
       \[ (6)\,[[ [n'''/n'']Gr; [n'''/n'']H, x : bar p A @ n |- [t'2/y]t'1 : + B2 @ n''']],  \]  and since
       $[[n'']]$ is a fresh in $[[Gr]]$ and $[[H]]$ we know (6) is equivalent to
       \[ (7)\,[[ Gr; H, x : bar p A @ n |- [t'2/y]t'1 : + B2 @ n''']].  \]
-      Finally, by applying the $\dttdrulename{Cut}$ rule using (7) and (3) we obtain 
+      Finally, by applying the $\dttdrulename{\normalsize Cut}$ rule using (7) and (3) we obtain 
       \[ [[ Gr; H |- nu x . [t'2/y]t'1 * t''2 : p A @ n]]. \]
       
     % \item[Case.] Suppose $[[nu x . t1 * t2 == nu x. c * (nu y. t'2 * t''2)]]$ , thus, $[[t1 == c]]$ and $[[t2 == nu y. t'2 * t''2]]$.  
@@ -1797,6 +1830,7 @@ Finally, we prove type preservation.
       
       
     \end{itemize}
+    \end{changemargin}
   \end{proof}
 \begin{figure}
     \begin{mathpar}
@@ -1985,7 +2019,8 @@ If $[[ J |-c t : p A]]$ then for all $\sigma\in\interp{\Gamma}$, $\sigma t\in\in
 \begin{proof}
 The proof is by induction on the derivation of $[[ J |-c t : p A]]$.  We consider
 the two possible polarities for the conclusion of the typing judgment separately.
-
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.]\ 
 
@@ -2221,7 +2256,7 @@ one-step successors of $[[nu y . (nu x . sigma t1 * sigma t2) * t']]$
 are in $\SN$, using also Lemma~\ref{lem:stepinterp}.  If it is $t'$,
 $\sigma t_1$, or $\sigma t_2$ which steps, then the result follows by
 the inner IH.  The only possible other reduction is by the
-\dttdrulename{RBetaL} reduction rule (Figure~\ref{fig:dtt-red}).  And
+\dttdrulename{\normalsize RBetaL} reduction rule (Figure~\ref{fig:dtt-red}).  And
 then, since $t'\in\interp{A}^-$, we may apply the IH to conclude that
 $[t'/x](\sigma t_1)\in\interp{B}^+$ and $[t'/x](\sigma t_2)\in\interp{B}^-$.
 By the definition of $\in\interp{B}^+$, this suffices to prove
@@ -2246,13 +2281,13 @@ Lemma~\ref{lem:stepinterp}, to show that all one-step successors of
 $[[nu y. t' * (nu x . sigma t1 * sigma t2)]]$ are in $\SN$.  If it is
 $t'$, $\sigma t_1$, or $\sigma t_2$ which steps, then the result holds
 by inner IH.  The only other reduction possible is by
-\dttdrulename{RBetaR}, since $t'$ cannot be a cut term by the
+\dttdrulename{\normalsize RBetaR}, since $t'$ cannot be a cut term by the
 definition of $\interp{A}^{+c}$.  In this case, the IH gives us
 $[t'/x]\sigma t_1\in\interp{B}^+$ and $[t'/x]\sigma
 t_2\in\interp{B}^-$, and we then have $[[nu y . [t'/x]sigma t1 *
 [t'/x]sigma t2]]\in\SN$ by the definition of $\interp{B}^+$.
 \end{itemize}
-
+\end{changemargin}
 \end{proof}
 
 \begin{corollary}[Strong Normalization]
@@ -2277,10 +2312,10 @@ The reduction relation of Figure~\ref{fig:dtt-red} is locally confluent.
 \end{lemma}
 \begin{proof} We may view the reduction rules as higher-order pattern
   rewrite rules.  It is easy to confirm that all critical pairs (e.g.,
-  between \dttdrulename{RBetaR} and the rules \dttdrulename{RImp},
-  \dttdrulename{RImpBar}, \dttdrulename{RAnd1},
-  \dttdrulename{RAndBar1}, \dttdrulename{RAnd2}, and
-  \dttdrulename{RAndBar2}) are joinable.  Local confluence then
+  between \dttdrulename{\normalsize RBetaR} and the rules \dttdrulename{\normalsize RImp},
+  \dttdrulename{\normalsize RImpBar}, \dttdrulename{\normalsize RAnd1},
+  \dttdrulename{\normalsize RAndBar1}, \dttdrulename{\normalsize RAnd2}, and
+  \dttdrulename{\normalsize RAndBar2}) are joinable.  Local confluence then
   follows by the higher-order critical pair lemma~\cite{nipkow91}.
 \end{proof}
 

@@ -17,22 +17,22 @@
 \include{type-theory_inc}
 
 %% Formatting the Ott names.  This is really a bug in Ott.
-\renewcommand{\CSTLCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CHSTLCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CSTLCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CoCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\CoCSdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Fdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Fwdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\SSFdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Tdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Combdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\DCdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\LBMMTdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Lamdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Lamddrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\Lamudrulename}[1]{ {\scriptsize \textsc{#1}} }
-\renewcommand{\TTdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\CSTLCdrulename}[1]{{\tiny \text{#1}}}
+\renewcommand{\CHSTLCdrulename}[1]{{\scriptsize \text{#1}}}
+%\renewcommand{\CSTLCdrulename}[1]{{\scriptsize \text{#1}}}
+\renewcommand{\CoCdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\CoCSdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Fdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Fwdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\SSFdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Tdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Combdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\DCdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\LBMMTdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Lamdrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Lamddrulename}[1]{\normalfont\scriptsize \text{#1}}
+\renewcommand{\Lamudrulename}[1]{ {\normalfont\scriptsize \text{#1}} }
+\renewcommand{\TTdrulename}[1]{\normalfont\scriptsize \text{#1}}
 
 \chapter{A Brief History of Type Theory}
 \label{chap:the_history_of_type_theory}
@@ -98,7 +98,7 @@ follows similarly. Furthermore, we do not go into complete detail of
 each of these correspondences, but we give plenty of references for
 the curious reader.
 
-\section{Type Theory and Logic}
+\section{Logic}
 \label{sec:type_theory_logic}
 Intuitionism\index{Intuitionism} began with Luitzen Brouwer.  Implicit
 in his work was an interpretation of the formulas of propositional and
@@ -122,10 +122,10 @@ defines the assignment of proof terms using these constructs to
 formulas of intuitionistic propositional logic.
 
 \begin{definition}
-  \label{def:bhk-interpretation}
-  The BHK-interpretation:\\
+  \label{def:bhk-interpretation}  
+    The BHK-interpretation:
   \begin{center}
-          \begin{tabular}{lll}
+    \begin{tabular}{lll}
       $c\,r\,(A_1 \land A_2)$ & $\iff$ & $c = (t_0,t_1)$ such that $t_0\,r\,A_1$ and 
             $t_1\,r\,A_2$.\\
       $c\,r\,(A_1 \lor A_2)$  & $\iff$ & ($c = inl(t)$ and $t\,r\,A_1$) or ($c = inr(t)$ and 
@@ -135,7 +135,7 @@ formulas of intuitionistic propositional logic.
                               &     & $(\lambda x.t)d\,r\,A_2$.
     \end{tabular}
   \end{center}
-  We say a construction $c$ realizes $A$ $\iff$ $c\,r\,A$.  
+  We say a construction $c$ realizes $A$ $\iff$ $c\,r\,A$.      
 \end{definition}
 This was the first step towards the correspondence between type theory
 and logic.  The second was due to Curry.  We mentioned in
@@ -184,12 +184,12 @@ to be normalizing in
 Section~\ref{chap:metatheory_of_programming_languages}.
 % subsection type_theory_logic  (end)
 
-\section{Type Theory and Category Theory}
+\section{Category Theory}
 \label{sec:tt_ct}
 \input{category_theory-inc.tex}
 % subsection tt_ct (end)
 
-\section{The Impact of the Computational Trinity on Programming Languages}
+\section{Impact}
 \label{sec:three_perspectives_programming_languages}
 The reader may now be wondering what the benefits are of the computational
 trinity if there are any at all.  The three
@@ -327,7 +327,7 @@ modern type theory.  It is now time to see what we can use these for
 in programming language research.
 % chapter dependent_type_theory (end)
 
-\chapter{Dependent Types, Proof Assistants, and Programming Languages}
+\chapter{Dependent Types in Practice}
 \label{chap:the_design_of_programming_languages}
 Type theories are wonderful core languages for programming languages.
 Many programming languages have been created based on type
@@ -484,7 +484,7 @@ logics by the computational trinity, and can be used to
 proof check large scale mathematics.  Dependent types are the future
 of programming languages.
 % chapter the_design_of_programming_languages (end)
-
+\addtocontents{toc}{\vspace{-15px}}
 \chapter{Metatheory of Type Theories}
 \label{chap:metatheory_of_programming_languages}
 In this section we discuss how to reason about type theories at the
@@ -624,7 +624,7 @@ definition.
 The $ctype$ function simply computes the type of a term in weak-head normal form.
 The following lemma states two very important properties of $ctype$.  We
 do not include any proofs here, but they can be found in \cite{Eades:2011}.
-\begin{lemma}
+\begin{lemmaItem}
   \label{lemma:ctype_props_stlc}
   \begin{itemize}
   \item[i.] If $ctype_T(x,t) = T'$ then $head(t) = x$ and $T'$ 
@@ -633,7 +633,7 @@ do not include any proofs here, but they can be found in \cite{Eades:2011}.
   \item[ii.] If $\Gamma,x:T,\Gamma' \vdash t:T'$ and $ctype_T(x,t) = T''$ then
     $T' \equiv T''$.   
   \end{itemize}
-\end{lemma}
+\end{lemmaItem}
 \noindent
 The purpose of $ctype$ is to detect when a new redex will be created in the
 definition of the hereditary substitution function. We define the
@@ -946,11 +946,11 @@ about a type theory with recursive types is contextual
 equivalence\index{Contextual Equivalence} of
 terms.  Logical relations are usually used to prove such a property,
 but they turn out not to work in the presence of recursive types.
-This was an outstanding open problem until Andrew Appel and David
+This was an outstanding open problem until Andrew Appel and David 
 McAllester were able to find an extension of logical relations called
 step-indexed logical relations.
 
-Step-indexed models were first introduced by Andrew Appel and David
+Step-indexed models were first introduced by Andrew Appel and David \\
 McAllester in \cite{Appel:2001} as the semantics of recursive types.
 At the time it was not known how to model recursive types without
 using complex machinery like domain theory.  Later, Amal Ahmed

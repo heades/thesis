@@ -1,0 +1,44 @@
+        We live in a time where computing devices power essential
+  systems of our society: our automobiles, our airplanes and even our
+  medical services.  In these safety-critical systems, bugs do not
+  just cost money to fix; they have a potential to cause harm, even
+  death.  Therefore, software correctness is of paramount importance.
+        Existing mainstream programming languages do not support
+  software verification as part of their design, but rely on testing,
+  and thus cannot completely rule out the possibility of bugs during
+  software development.  To fix this problem we must reshape the very
+  foundation on which programming languages are based.  Programming
+  languages must support the ability to verify the correctness of the
+  software developed in them, and this software verification must be
+  possible using the same language the software is developed in.  In
+  the first half of this dissertation we introduce three new
+  programming languages: Freedom of Speech, Separation of Proof from
+  Program, and Dualized Type Theory.  The Freedom of Speech language
+  separates a logical fragment from of a general recursive programming
+  language, but still allowing for the types of the logical fragment
+  to depend on general recursive programs while maintaining logical
+  consistency. Thus, obtaining the ability to verify properties of
+  general recursion programs. Separation of Proof from Program builds
+  on the Freedom of Speech language by relieving several restrictions,
+  and adding a number of extensions.  Finally, Dualized Type Theory is
+  a terminating functional programming language rich in constructive
+  duality, and shows promise of being a logical foundation of
+  induction and coninduction.
+        These languages have the ability to verify properties of
+  software, but how can we trust this verification?  To be able to put
+  our trust in these languages requires that the language be
+  rigorously and mathematically defined so that the programming
+  language itself can be studied as a mathematical object.  Then we
+  must show one very important property, logical consistency of the
+  fragment of the programming language used to verify mathematical
+  properties of the software.  In the second half of this dissertation
+  we introduce a well-known proof technique for showing logical
+  consistency called hereditary substitution.  Hereditary substitution
+  shows promise of being less complex than existing proof techniques
+  like the Tait-Girard Reducibility method.  However, we are unsure
+  which programming languages can be proved terminating using
+  hereditary substitution.  Our contribution to this line of work is
+  the application of the hereditary substitution technique to
+  predicative polymorphic programming languages, and the first proof
+  of termination using hereditary substitution for a classical type
+  theory.

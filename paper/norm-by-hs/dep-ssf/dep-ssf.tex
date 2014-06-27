@@ -1,25 +1,27 @@
 \input{dep-SSF-ott}
-\section{Dependent Stratified System $\F$ (DSS$\F$)}
+\section{Dependent Stratified System $\F$}
 \label{sec:dependent_ssf_with_type_equality}
-DSS$\F$ is SSF extended with dependent types\index{Dependent Type} and equations between
-terms\index{Equality Type}.  Equations between terms are an important concept in
-Martin-L\"of type theory~\cite{hofmann+94,nps90}\index{Martin-L\"of's
-  Type Theory (MLTT)}, and play a central
-role also in dependently typed programming languages, such as the
-\textsc{Guru} language~\cite{stump+09}, $\Sep$\index{Separation of
-  Proof from Proof ($\Sep$)}
-(Section~\ref{chap:separation_of_proof_from_program}), the freedom of
-speech language\index{Freedom of Speech} (Section~\ref{chap:freedom_of_speech}), Coq
-\cite{CoqRefMan:2008}, and many more.  The syntax and reduction rules
-are defined in Fig.~\ref{fig:syntax_ssfe}.  The kind-assignment rules
-are defined in Fig.~\ref{fig:kinding_rules_ssfe}.  One thing to note
-regarding the kind-assignment rules is that the level of an equation
-is the same level as the type of the terms in the equation.  The terms
-used in an equation must have the same type -- also known as
-homogenous equality.  Finally, the type-assignment rules are defined
-in Fig.~\ref{fig:typing_rules_ssfe}.  Note that $t_1 \join t_2$
-denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
-\redto^* t$.
+Dependent Stratified System $\F$ (DSS$\F$) is SSF extended with
+dependent types\index{Dependent Type} and equations between
+terms\index{Equality Type}.  Equations between terms are an important
+concept in Martin-L\"of type
+theory~\cite{hofmann+94,nps90}\index{Martin-L\"of's Type Theory
+  (MLTT)}, and play a central role also in dependently typed
+programming languages, such as the Guru
+language~\cite{stump+09}, $\Sep$\index{Separation of Proof from Proof
+  ($\Sep$)} (Section~\ref{chap:separation_of_proof_from_program}), the
+freedom of speech language\index{Freedom of Speech}
+(Section~\ref{chap:freedom_of_speech}), Coq \cite{CoqRefMan:2008}, and
+many more.  The syntax and reduction rules are defined in
+Figure~\ref{fig:syntax_ssfe}.  The kind-assignment rules are defined in
+Figure~\ref{fig:kinding_rules_ssfe}.  One thing to note regarding the
+kind-assignment rules is that the level of an equation is the same
+level as the type of the terms in the equation.  The terms used in an
+equation must have the same type -- also known as homogenous equality.
+Finally, the type-assignment rules are defined in
+Figure~\ref{fig:typing_rules_ssfe}.  Note that $t_1 \join t_2$ denotes
+there exists a term $t$ such that $t_1 \redto^* t$ and $t_2 \redto^*
+t$.
 
 \begin{figure}[t]
   \begin{center}
@@ -37,7 +39,7 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
       \end{tabular}
     \end{tabular}
     \end{center}
-  \caption[]{Syntax of Terms, Types, and Kinds and Reduction Rules for DSS$\F$}
+  \caption{Syntax of Terms, Types, and Kinds and Reduction Rules for DSS$\F$}
   \label{fig:syntax_ssfe}
   \label{fig:reduction_rules_ssfe}
 \end{figure}
@@ -64,8 +66,8 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
           \\\\
           \Gamma,x:T_1 \vdash T_2 : *_q
         }{\Gamma \vdash \Pi x:T_1.T_2 : *_{max(p,q)}}
-      \end{math}
-      &
+      \end{math} \\
+      & \\
       \begin{math}
         $$\mprset{flushleft}
         \inferrule* [right=] {
@@ -84,7 +86,7 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
         }{\Gamma \vdash t_1 = t_2 : *_p}
       \end{math}
     \end{tabular}	
-    \caption[]{DSS$\F$ Kinding Rules}
+    \caption{DSS$\F$ Kinding Rules}
     \label{fig:kinding_rules_ssfe}
   \end{center}
 \end{figure}
@@ -157,7 +159,7 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
       \end{math}\\
     \end{tabular}
     
-    \caption[]{DSS$\F$ Type-Assignment Rules}
+    \caption{DSS$\F$ Type-Assignment Rules}
     \label{fig:typing_rules_ssfe}
   \end{center}
 \end{figure}
@@ -167,14 +169,14 @@ denotes there exists a term $t$ such that $t_1 \redto^* t$ and $t_2
     \begin{tabular}{lll}
       \begin{math}
         $$\mprset{flushleft}
-        \inferrule* [right=$\text{TE}_{\text{Q}_1}$] {
+        \inferrule* [right={$\scriptsize\normalfont \text{TE}_{\text{Q}_1}$}] {
           \Gamma \vdash p:t_1 = t_2
         }{\Gamma \vdash [t_1/x]T \approx [t_2/x]T}
       \end{math}
       &
       \begin{math}
         $$\mprset{flushleft}
-        \inferrule* [right=$\text{TE}_{\text{Q}_2}$] {
+        \inferrule* [right={$\scriptsize\normalfont \text{TE}_{\text{Q}_2}$}] {
           \Gamma \vdash [t_1/x]T \approx [t_1/x]T'
           \\
           \Gamma \vdash p:t_1 = t_2
@@ -194,7 +196,7 @@ the rest of the section.  The most interesting results covered in this
 section are the proof that type-syntactic equality is an equivalence
 relation, and syntactic inversion of the typing relation.  The latter
 depends on a judgment called type-syntactic equality.  It is defined
-in Fig.~\ref{fig:type_equality_ssfe}.  We show that syntactic
+in Figure~\ref{fig:type_equality_ssfe}.  We show that syntactic
 conversion holds for syntactic-type equality in
 Lemma~\ref{lemma:type_syntactic_conversion_ssfe}.  We only state the
 syntactic inversion lemma for the typing relation, because syntactic
@@ -209,7 +211,9 @@ indication.  We now list several basic lemmata:
   Similar to the proof of the same lemma for SS$\Fp$.
 \end{proof}
 \begin{lemma}[Type Substitution for Kinding, Typing, and Context-Ok]
-  Suppose $\Gamma \vdash T':*_p$.  Then
+  \,\\Suppose $\Gamma \vdash T':*_p$.  Then
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[i.] if $\Gamma,X:*_p,\Gamma' \vdash T:*_q$ with a
     derivation of depth $d$, then $\Gamma,[T'/X]\Gamma' \vdash
@@ -222,6 +226,7 @@ indication.  We now list several basic lemmata:
   \item[iii.] if $\Gamma,X:*_p,\Gamma'\ Ok$ with a derivation of depth $d$, then 
     $\Gamma,[T'/X]\Gamma'\ Ok$ with a derivation of depth $d$.
   \end{itemize}
+  \end{changemargin}
   \label{lemma:substitution_for_kinding_ssfe}
 \end{lemma}
 \begin{proof}
@@ -231,6 +236,8 @@ indication.  We now list several basic lemmata:
 \begin{lemma}[Term Substitution for Kinding, Typing, and Context-Ok]
   \label{lemma:term_substitution_for_kinding_context_ok_ssfe}
   Suppose $\Gamma \vdash t':T'$.  Then
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[i.] if $\Gamma,x:T',\Gamma' \vdash T:*_l$ with a
     derivation of depth $d$, then $\Gamma,[t'/x]\Gamma' \vdash
@@ -241,6 +248,7 @@ indication.  We now list several basic lemmata:
   \item[iii.] if $\Gamma,x:T',\Gamma'\ Ok$ with a derivation of depth $d$, then 
     $\Gamma,[t'/x]\Gamma'\ Ok$ with a derivation of depth $d$.
   \end{itemize}
+  \end{changemargin}
 \end{lemma}
 \begin{proof}
   All cases hold by straightforward induction on the $d$.
@@ -248,9 +256,9 @@ indication.  We now list several basic lemmata:
 
 \begin{lemma}[Context Weakening for Kinding and Typing]
   \label{lemma:context_weakening_for_kinding_and_typing_ssfe}
-  Assume $\Gamma,\Gamma'',\Gamma'\ Ok$, $\Gamma,\Gamma' \vdash T:*_p$ and 
-  $\Gamma,\Gamma' \vdash t:T$.  Then i. $\Gamma,\Gamma'',\Gamma' \vdash T:*_p$ and
-  ii. $\Gamma,\Gamma'',\Gamma' \vdash t:T$. 
+  \,\\Assume $\Gamma,\Gamma'',\Gamma'\ Ok$, $\Gamma,\Gamma' \vdash T:*_p$ and 
+  $\Gamma,\Gamma' \vdash t:T$.  Then i. $\Gamma,\Gamma'',\Gamma'
+  \vdash T:*_p$ \\ and ii. $\Gamma,\Gamma'',\Gamma' \vdash t:T$. 
 \end{lemma}
 \begin{proof}
   Similar to the proof of the same lemma for SS$\Fp$.
@@ -288,27 +296,28 @@ explicit mention.
 \end{proof}
 \begin{lemma}[Substitution for Type Equality]
   \label{lemma:substitution_for_type_equality_ssfe}
-  If $\Gamma,x:T,\Gamma' \vdash T' \approx T''$ and $\Gamma \vdash t:T$ then
+  If $\Gamma,x:T,\Gamma' \vdash T' \approx T''$ \\ and $\Gamma \vdash t:T$ then
   $\Gamma,[t/x]\Gamma' \vdash [t/x]T' \approx [t/x]T''$.
 \end{lemma}
 \begin{proof}
   This holds by straightforward induction on the form of the assumed
   type equality derivation.
 \end{proof}
-\begin{lemma}[]
+\begin{lemma}
   \label{lemma:pis_are_equal_to_pis_ssfe}
   If $\Gamma \vdash T \approx \Pi j:T_1.T_2$ then there exists a term $h$ and types $T'_1$ and $T'_2$
   such that $T \equiv \Pi h:T'_1.T'_2$.
 \end{lemma}
 \begin{proof}
   This is a proof by induction on the form of the assume type-equality derivation.
-
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.]\ \\
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=$\text{TE}_{\text{Q}_1}$] {
+      \inferrule* [right=$\scriptsize \text{TE}_{\text{Q}_1}$] {
         \Gamma \vdash p:t_1 = t_2
       }{\Gamma \vdash [t_1/x](\Pi j:T'_1.T'_2) \approx [t_2/x](\Pi j:T'_1.T'_2)}
     \end{math}
@@ -319,7 +328,7 @@ explicit mention.
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=$\text{TE}_{\text{Q}_2}$] {
+      \inferrule* [right=$\scriptsize \text{TE}_{\text{Q}_2}$] {
         \Gamma \vdash [t_1/x]T' \approx [t_1/x](\Pi j:T'_1.T'_2)
         \\
         \Gamma \vdash p:t_1 = t_2
@@ -329,6 +338,7 @@ explicit mention.
   By the induction hypothesis $T \equiv [t_1/x]T' \equiv \Pi h:\psi_1.\psi_2$ for some term
   $h$ and types $\psi_1$ and $\psi_2$.  
 \end{itemize}
+\end{changemargin}
 \end{proof}
 \begin{lemma}[Type Equality Context Conversion]
   \label{lemma:type_equality_context_conversion}
@@ -367,7 +377,7 @@ needed in the proof of syntactic inversion.
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=$\text{TE}_{\text{Q}_1}$] {
+      \inferrule* [right=$\scriptsize \text{TE}_{\text{Q}_1}$] {
         \Gamma \vdash p:t_1 = t_2
       }{\Gamma \vdash [t_1/x]T' \approx [t_2/x]T'}
     \end{math}
@@ -379,7 +389,7 @@ needed in the proof of syntactic inversion.
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=$\text{TE}_{\text{Q}_2}$] {
+      \inferrule* [right=$\scriptsize \text{TE}_{\text{Q}_2}$] {
         \Gamma \vdash [t_1/x]T' \approx [t_1/x]T''
         \\
         \Gamma \vdash p:t_1 = t_2
@@ -429,9 +439,11 @@ a_1.\exists a_2\ldots\exists a_n$.
 \end{lemma}
 \begin{proof}
   We prove all cases by induction on the form of the typing relation.
-
+  \vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] Part i.\\
+  \vspace{-30px}
   \begin{itemize}
   \item[Case.] \ \\
     \begin{center}
@@ -469,6 +481,7 @@ a_1.\exists a_2\ldots\exists a_n$.
   \end{itemize}
   
 \item[Case.] Part ii.\\
+    \vspace{-30px}
   \begin{itemize}
   \item[Case.] \ \\
     \begin{center}
@@ -498,6 +511,7 @@ a_1.\exists a_2\ldots\exists a_n$.
   Similar to the previous case.
 
 \item[Case.] Part iii.\\
+    \vspace{-30px}
   \begin{itemize}
   \item[Case.] \ \\
     \begin{center}
@@ -525,6 +539,7 @@ a_1.\exists a_2\ldots\exists a_n$.
   \end{itemize}
   
 \item[Case.] Part iv.\\
+    \vspace{-30px}
   \begin{itemize}
   \item[Case.] \ \\
     \begin{center}
@@ -554,6 +569,7 @@ a_1.\exists a_2\ldots\exists a_n$.
   Similar to the previous case.
 
 \item[Case.] Part v.\\
+    \vspace{-30px}
   \begin{itemize}
   \item[Case.] \ \\
     \begin{center}
@@ -586,10 +602,11 @@ a_1.\exists a_2\ldots\exists a_n$.
     Similar to the previous case.
   \end{itemize}
 \end{itemize}
+\end{changemargin}
 \end{proof}
 % subsection basic_syntactic_lemmas (end)
 
-\subsection{The Ordering on Types and The Hereditary Substitution Function}
+\subsection{Hereditary Substitution}
 \label{sec:the_hereditary_substitution_function_ssfe}
 The ordering on types is defined as follows:
 \begin{definition}
@@ -649,7 +666,8 @@ The type-syntactic-equality relation respects this ordering.
   This is a proof by case analysis on the kinding derivation of 
 $\Gamma \vdash T:*_p$, with a case analysis on the derivation of 
 $T >_\Gamma T'$.\\
-
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.]\ \\
   \begin{center}
@@ -717,6 +735,7 @@ $T >_\Gamma T'$.\\
   for kinding $\Gamma \vdash [T''/X]T:*_t$, and we have the required kinding 
   derivation for $T'$.  
 \end{itemize}
+\end{changemargin}
 \end{proof}
 The following lemma is used in the proof of totality of the hereditary substitution function.
 \begin{lemma}[Congruence of Products]
@@ -729,7 +748,6 @@ The following lemma is used in the proof of totality of the hereditary substitut
   if $\Gamma \vdash \Pi y:T'_1.T'_2 \approx \Pi y:T_1.T_2$ and $\psi$ is
   a subexpression of $T''$ then $T'' >_\Gamma T_1$ and $T'' >_{\Gamma,y:T_1} T_2$.
 
-  \ \\
   It must be the case that $T'' >_\Gamma T'_1$ and $T'' >_{\Gamma,y:T_1} T'_2$, because
   $T'_1$ and $T'_2$ are both subexpressions of $T''$.  By injectivity of $\Pi$-types
   for typed equality we obtain $\Gamma \vdash T'_1 \approx T_1$ and $\Gamma,y:T_1 \vdash T'_2 \approx T_2$.
@@ -737,7 +755,7 @@ The following lemma is used in the proof of totality of the hereditary substitut
 \end{proof}
 
 The hereditary substitution function is fully defined in
-Fig.~\ref{fig:hereditary_substitution_function_ssfe}.  We do not
+Figure~\ref{fig:hereditary_substitution_function_ssfe}.  We do not
 repeat the definition of $ctype_T$ for DSS$\F$, because it is
 exactly the same as the previous system. 
 \begin{figure}[t]\index{Dependent Stratified System $\F$
@@ -767,8 +785,8 @@ exactly the same as the previous system.
   \item[] $[t/x]^{T} (t_1\ t_2) = [([t/x]^{T} t_2)/y]^{T''} s'_1$\\
     \begin{tabular}{lll}
       & Where $([t/x]^{T} t_1) \equiv \lambda y:T''.s'_1$ 
-        for some $y$ and $s'_1$ and $t_1$ is not a $\lambda$-abstraction, and \\
-      & $ctype_T(x,t_1) = \Pi y:T''.T'$.\\
+        for some $y$ and $s'_1$ and $t_1$ is not a $\lambda$-abstraction, \\ 
+      & and $ctype_T(x,t_1) = \Pi y:T''.T'$.\\
     \end{tabular}
 
   \item[] $[t/x]^T (t'[T']) = ([t/x]^T t')[T']$\\
@@ -780,8 +798,8 @@ exactly the same as the previous system.
     \item[] $[t/x]^{T} (t'[T']) = [T'/X]s'_1$\\
       \begin{tabular}{lll}
         & Where $[t/x]^{T} t' \equiv \Lambda X:*_l.s'_1$,
-        for some $X$, $s'_1$ and $\Gamma \vdash T':*_q$, such that, $q \leq l$ and\\
-	& $t'$ is not a type abstraction.
+        for some $X$, $s'_1$ and $\Gamma \vdash T':*_q$, such that, $q \leq l$\\
+	& and $t'$ is not a type abstraction.
       \end{tabular}
   \end{itemize}
   \caption{Hereditary Substitution Function for Stratified System $\F$}
@@ -790,14 +808,12 @@ exactly the same as the previous system.
 Next we have the properties of the hereditary substitution function.
 All of the proofs are similar to the proofs for SS$\Fp$, so we omit
 them here.
-\begin{lemma}[Total, Type Preserving, and Sound with Respect to Reduction]
+\begin{lemma}[Total, Type Preserving, and Sound w.r.t Reduction]
   \label{lemma:total_ssfe}
-  Suppose $\Gamma \vdash t : T$ and $\Gamma, x:T, \Gamma' \vdash t':T'$.  Then
-  \begin{itemize}
-  \item[i.] there exists a term $t''$ and a type $T''$ such that $[t/x]^T t' = t''$, 
-    $\Gamma,[t/x]\Gamma' \vdash t'':T''$, and $\Gamma,\Gamma' \vdash T'' \approx [t/x]T'$, and
-  \item[ii.] $[t/x]t' \redto^* [t/x]^T t'$.
-  \end{itemize}
+  \,\\ Suppose $\Gamma \vdash t : T$ and $\Gamma, x:T, \Gamma' \vdash t':T'$.  Then
+  there exists a term $t''$ and a type $T''$ such that $[t/x]^T t' = t''$, 
+  $\Gamma,[t/x]\Gamma' \vdash t'':T''$, and $\Gamma,\Gamma' \vdash T'' \approx [t/x]T'$, \\
+  and $[t/x]t' \redto^* [t/x]^T t'$.  
 \end{lemma}
 
 \begin{corollary}
@@ -897,6 +913,8 @@ We now conclude type soundness for SS$\F$, and hence normalization.
 \end{thm}
 \begin{proof}
   This is a proof by induction on the structure of the typing derivation of $t$.
+  \vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.]\ \\
   \begin{center}
@@ -958,16 +976,17 @@ We now conclude type soundness for SS$\F$, and hence normalization.
       \end{array}
     \end{math}
   \end{center}
-  for some fresh variable $z \not \in FV(n_1,n_2,T_1,T_2,x)$.  By Lemma~\ref{lemma:total_ssfe}, Lemma~\ref{corollary:normalization_preserving_ssfe},
+  for some fresh variable $z \not \in FV(n_1,n_2,T_1,T_2,x)$.  By Lemma~\ref{lemma:total_ssfe}, \\
+  Lemma~\ref{corollary:normalization_preserving_ssfe},
   and Corollary~\ref{corollary:type_preserving_ssfe} $[n_1/x](z\ n_2) \redto^* [n_1/x]^{T_1} (z\ n_2)$, $[n_1/x]^{T_1} (z\ n_2)$ is normal, and
   $\Gamma \vdash [n_1/x]^{T_1} (z\ n_2):[n_2/x]T_2$.  Thus, $t_1\ t_2 \normto [n_1/x]^{T_1} (z\ n_2)$.  It suffices to show that 
   $\Gamma \vdash [n_1/x]^{T_1} (z\ n_2):[t_2/x]T_2$.  This is justified by the following typing derivation:
   \begin{center}
     \begin{math}
       $$\mprset{flushleft}
-      \inferrule* [right=Conv] {
+      \inferrule* [right=\ifrName{Conv}] {
         $$\mprset{flushleft}
-        \inferrule* [right=Join] {
+        \inferrule* [right=\ifrName{Join}] {
           \Gamma \vdash t_2:T_1
           \\\\
           \Gamma \vdash n_2:T_1
@@ -1064,6 +1083,7 @@ We now conclude type soundness for SS$\F$, and hence normalization.
   Lemma~\ref{lemma:type_sub_ssfe} $[T_2/X]n' \in \interp{[T_2/X]T_1}_{\Gamma}$ and
   $t[T_2] \in \interp{[T_2/X]T_1}_{\Gamma}$, since $t[T_2] \join [T_2/X]n'$.
 \end{itemize}
+\end{changemargin}
 \end{proof}
 \begin{corollary}[Normalization]
   If $\Gamma \vdash t:T$, then there exists a normal form $n$, such

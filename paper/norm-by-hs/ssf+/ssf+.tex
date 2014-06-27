@@ -16,9 +16,9 @@
     }}
 }
 \input{SSF+-ott}
-\section{Stratified System $\Fp$ (SS$\Fp$)}
+\section{Stratified System $\Fp$}
 \label{sec:stratified_system_f_with_sum_types}
-Stratified System $\Fp$ is an extension of SSF with sum types denoted
+Stratified System $\Fp$ (SS$\Fp$) is an extension of SSF with sum types denoted
 $T_1 + T_2$, whose elimination form $\textit{case}\ t\
 \textit{of}\ x_1.t_1,x_2.t_2$ is used to case split on a whether or
 not term $t$ with a sum type is truly $x_1$ of type $T_1$, or else
@@ -66,7 +66,7 @@ handled straightforwardly with hereditary substitution.
     \end{tabular}
   \end{center}
   
-  \caption[]{Syntax, Reduction Rules, Commuting Conversions for SS$\Fp$}
+  \caption{Syntax, Reduction Rules, and Commuting Conversions for SS$\Fp$}
   \label{fig:syntax_ssfp}
 \end{figure}
 
@@ -122,7 +122,7 @@ handled straightforwardly with hereditary substitution.
         }{\Gamma \vdash X : *_q}
       \end{mathpar}
     
-    \caption[]{SS$\Fp$ Kinding Rules}
+    \caption{SS$\Fp$ Kinding Rules}
     \label{fig:kinding_rules_ssfp}
   \end{center}
 \end{figure}
@@ -177,16 +177,16 @@ handled straightforwardly with hereditary substitution.
         }{\Gamma \vdash \ccon{t}{x}{t_1}{t_2}: T}
       \end{mathpar}
     
-    \caption[]{SS$\Fp$ Type-Assignment Rules}
+    \caption{SS$\Fp$ Type-Assignment Rules}
     \label{fig:typing_rules_ssfp}
   
 \end{figure}
 The syntax, reduction rules, and commuting conversions for SS$\Fp$ can
-be found in Fig.~\ref{fig:syntax_ssfp}.  The kind-assignment rules are
-defined in Fig.~\ref{fig:kinding_rules_ssfp} and the type-assignment
-rules in defined in Fig.~\ref{fig:typing_rules_ssfp}. The
+be found in Figure~\ref{fig:syntax_ssfp}.  The kind-assignment rules are
+defined in Figure~\ref{fig:kinding_rules_ssfp} and the type-assignment
+rules in defined in Figure~\ref{fig:typing_rules_ssfp}. The
 kinding/typing relations depend on well-formed contexts which are
-defined in Fig.~\ref{fig:well-formed_ssfp}.  To ensure substitutions
+defined in Figure~\ref{fig:well-formed_ssfp}.  To ensure substitutions
 over contexts behave in an expected manner, we rename variables as
 necessary to ensure contexts have at most one declaration per
 variable.  Lastly, the basic meta-theoretic results are used
@@ -212,7 +212,7 @@ similar to the proofs for SSF):
 \end{proof}
 
 \begin{lemma}[Substitution for Kinding, Context-Ok]
-  Suppose $\Gamma \vdash T':*_p$.  If $\Gamma,X:*_p,\Gamma' \vdash T:*_q$ 
+  Suppose $\Gamma \vdash T':*_p$.  \\ If $\Gamma,X:*_p,\Gamma' \vdash T:*_q$ 
   with a derivation of depth $d$, then $\Gamma,[T'/X]\Gamma' \vdash [T'/X]T:*_q$
   with a derivation of depth $d$.
   Also, if $\Gamma,X:*_p,\Gamma'\ Ok$ with a derivation of depth $d$, then 
@@ -240,7 +240,7 @@ straightforward extension of the ordering for SSF.
 \begin{definition}\index{Ordering on Types}
   Suppose $\text{op} \in \{+,\to\}$.  Then the ordering $>_\Gamma$ is
   defined as the least relation satisfying the universal closures of
-  the following formulas:\\
+  the following formulas:
   \begin{center}
     \begin{tabular}{lll}
       \begin{tabular}{lll}
@@ -297,8 +297,8 @@ We need transitivity in a number of places in the proof of the main
 substitution lemma.  
 
 \begin{lemma}[Transitivity of $>_\Gamma$]
-  Let $T$, $T'$, and $T''$ be kindable types.  If $T >_\Gamma T'$ and 
-  $T' >_\Gamma T''$ then $T >_\Gamma T''$.
+  Let $T$, $T'$, and $T''$ be kindable types.  \\
+  If $T >_\Gamma T'$ and $T' >_\Gamma T''$ then $T >_\Gamma T''$.
   \label{lemma:transitivity_ssfp}
 \end{lemma}
 \begin{proof}
@@ -307,12 +307,12 @@ substitution lemma.
 \end{proof}
 % subsection ordering_on_types_ssfp (end)
 
-\subsection{The Hereditary Substitution Function}
+\subsection{Hereditary Substitution}
 \label{sec:the_hereditary_substitution_function_ssfp}
 
 The definition of the hereditary substitution function for SS$\Fp$ is
-in Fig.~\ref{fig:hereditary_substitution_function_part1} and
-Fig.~\ref{fig:hereditary_substitution_function_part2}.  First, one
+in Figure~\ref{fig:hereditary_substitution_function_part1} and
+Figure~\ref{fig:hereditary_substitution_function_part2}.  First, one
 should read this definition as a mutually recursive function in terms
 of the hereditary substitution function $[t/x]^T t'$, the
 application reduction function $app_T\ t_1\ t_2$, and case
@@ -323,7 +323,6 @@ $ctype_T(x, t)$ as the proof of normalization of SSF
 here.
 \begin{figure}\index{Stratified System $\Fp$ (SS$\Fp$)!Hereditary
     Substitution Function}
-  \small
   \begin{itemize}
   \item[] $app_T\ t_1\ t_2 = t_1\ t_2$
     \hscase{
@@ -342,15 +341,17 @@ here.
     }
   \item[] $rcase_{T}\ inl(t')\ y\ t_1\ t_2 = [t'/y]^{T_1}\ t_1$
   \item[] $rcase_{T}\ inr(t')\ y\ t_1\ t_2 = [t'/y]^{T_2}\ t_2$
-  \item[] $rcase_{T}\,(\ccon{t'_0}{x}{t'_1}{t'_2})\,y\,t_1\,t_2 = 
-    \ccon{t'_0}{x}{(rcase_{T}\,t'_1\,y\,t_1\,t_2)}{(rcase_{T}\,t'_2\,y\,t_1\,t_2)}$
+  \item[] $rcase_{T}\,(\ccon{t'_0}{x}{t'_1}{t'_2})\,y\,t_1\,t_2 =$\\
+    \vspace{-15px}
+    \hscase{
+      $\ccon{t'_0}{x}{(rcase_{T}\,t'_1\,y\,t_1\,t_2)}{(rcase_{T}\,t'_2\,y\,t_1\,t_2)}$
+    }
   \end{itemize}
   \caption{Hereditary Substitution Function for Stratified System $\Fp$}
   \label{fig:hereditary_substitution_function_part1}
 \end{figure}
 
 \begin{figure}
-  \small
   \begin{itemize}   
   \item[] $[t/x]^T x = t$
   \item[] $[t/x]^T y = y$
@@ -428,7 +429,7 @@ redexes are potentially created are similar to these cases.  The
 function $rcase_T$ handles reducing case constructs.
 % subsection the_hereditary_substitution_function_ssfp (end)
 
-\subsection{Properties of The Hereditary Substitution Function}
+\subsection{Main Properties}
 \label{sec:properties_of_the_hereditary_substitution_function_ssfp}
 We are now to the point where we can prove the properties of the
 hereditary substitution function.  Just as we did in the proof for SSF
@@ -436,7 +437,8 @@ we first must show the properties of $ctype_T$ hold.
 
 \begin{lemma}[Properties of $ctype_T$]
   \label{lemma:ctype_props_ssfp}
-  \small
+  \vspace{-30px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[i.] If $ctype_T(x,t) = T'$ then $head(t) = x$ and $T'$ 
     is a subexpression of $T$.
@@ -464,6 +466,7 @@ we first must show the properties of $ctype_T$ hold.
     $\Gamma \vdash t:T$, $[t/x]^T t_0 = inr(t')$, and $t_0$ is not then 
     there exists a type $T$ such that $ctype_T(x,t_0) = T$.
   \end{itemize}
+  \end{changemargin}
 \end{lemma}
 \begin{proof}
   The first two cases are equivalent to the proof of the properties
@@ -471,14 +474,12 @@ we first must show the properties of $ctype_T$ hold.
   proof of part three.  This is a proof by induction on the structure
   of $t_1\ t_2$.
 
-  \ \\
   The only possiblities for the form of $t_1$ is $x$ or $\hat{t}_1\ \hat{t}_2$.  All other 
   forms would not result in $[t/x]^T t_1$ being a $\lambda$-abstraction and $t_1$ not.
   If $t_1 \equiv x$ then there exist a type $T''$ such that $T \equiv T'' \to T'$ and
   $ctype_T(x,x\ t_2) = T'$ when $ctype_T(x,x) = T \equiv T'' \to T'$ in this case.  We know
   $T''$ to exist by inversion on $\Gamma,x:T,\Gamma' \vdash t_1\ t_2:T'$.
 
-  \ \\
   Now suppose $t_1 \equiv (\hat{t}_1\ \hat{t}_2)$.  Now knowing $t'_1$ to not be a $\lambda$-abstraction
   implies that $\hat{t}_1$ is also not a $\lambda$-abstraction or $[t/x]^T t_1$ would be an application
   instead of a $\lambda$-abstraction.  So it must be the case that $[t/x]^T \hat{t}_1$ is a $\lambda$-abstraction
@@ -507,7 +508,8 @@ term of substitution.
   This is a proof by induction on the lexicorgraphic combination
   $(T, t')$ of $>_{\Gamma,\Gamma'}$ and the strict subexpression
   ordering.  We case split on $t'$.
-
+\vspace{-20px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] Suppose $t'$ is either $x$ or a variable $y$ distinct from $x$.  
   Trivial in both cases.
@@ -544,8 +546,7 @@ term of substitution.
   Then $[t/x]^T (t'_1\ t'_2) = [m_2/y]^{T''} m'_1$.  
   Therefore, by the induction hypothesis there exists a 
   term $m$ such that $[m_2/y]^{T''} m'_1 = m$ and $\Gamma,\Gamma' \vdash m:T''$.
-  
-  \ \\
+   
   Suppose $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$ and $t'_1$ is not a case construct.
   Now $[t/x]^T t' = \ccon{m'_0}{y}{app_T\ m'_1\ m_2}{app_T\ m'_2\ m_2}$.  By inversion on
   $\Gamma,\Gamma' \vdash m_1 : T'' \to T'$ we know there exists terms $T_1$ and $T_2$ such that
@@ -556,13 +557,11 @@ term of substitution.
   this result we prove the following proposition.  Note that $ctype_T(x,t'_1) = T'' \to T'$ which
   by Lemma~\ref{lemma:ctype_props_ssfp} is equivalent to $T'' \to T'$ and is 
   a subexpression of $T$, hence $T >_{\Gamma,\Gamma'} T''$ and $T >_{\Gamma,\Gamma'} T'$.
-
-  \ \\
+ 
   {\bf Proposition.}  For all 
   $\Gamma \vdash m_2 : T''$ and $\Gamma \vdash m'_1:T'' \to T'$
   there exists a term $q$ such that $app_T\ m'_1\ m_2 = q$ and $\Gamma \vdash q:T'$.
   
-  \ \\
   We prove this by nested induction on the ordering $(T, t', m'_1)$ and case splitting on 
   the structure of $m'_1$.
   \begin{itemize}
@@ -589,9 +588,7 @@ term of substitution.
     case-construct typing rule using $\Gamma \vdash m''_0:T_1+T_2$, $\Gamma,z:T_1 \vdash q':T'$, and
     $\Gamma,z:T_2 \vdash q'':T'$.        
   \end{itemize}
-
    
-  \ \\
   By the previous proposition there exists terms $q$ and $q'$ such that \\
   $[t/x]^T t' = \ccon{m'_0}{y}{app_T\ m'_1\ m_2}{app_T\ m'_2\ m_2}
   = \ccon{m'_0}{y}{q}{q'}$, where $app_T\ m'_1\ m_2 = q$, $\Gamma,\Gamma',y:T_1 \vdash q:T'$, $app_T\ m'_1\ m_2 = q'$
@@ -638,13 +635,13 @@ term of substitution.
     typing rule to i - iii above we obtain \\ $\Gamma,\Gamma' \vdash \ccon{m'_0}{y}{m'_1}{m'_2}:T'$.
     
   \item[Case.] Suppose $m'_0$ is an inject-left term, inject-right term, or case construct and $ctype_T(x,m_0) = T_1+T_2$.  Then\\
-    $[t/x]^{T} (\ccon{m_0}{y}{m_1}{m_2}) = rcase_{T}\ m'_0\ y\ m'_1\ m'_2$ and by Lemma~\ref{lemma:ctype_props_ssfp} we know
+    $[t/x]^{T} (\ccon{m_0}{y}{m_1}{m_2}) = rcase_{T}\ m'_0\ y\ m'_1\
+    m'_2$ and by \\ Lemma~\ref{lemma:ctype_props_ssfp} we know
     $T_1 + T_2 \equiv T_1+T_2$ and is a subexpression of $T$.
     It suffices to show that there exists some term
-    $q$ such that $rcase_{T}\ m'_0\ y\ m'_1\ m'_2 = q$ and $\Gamma, \Gamma' \vdash q:T'$.  We obtain this
+    $q$ such that \\ $rcase_{T}\ m'_0\ y\ m'_1\ m'_2 = q$ and $\Gamma, \Gamma' \vdash q:T'$.  We obtain this
     result by the following proposition.
-    
-    \ \\
+       
     {\bf Proposition.} For all $\Gamma \vdash q_0:T$, $\Gamma, y:T_1 \vdash q_1:T'$, 
     and $\Gamma, y:T_2 \vdash q_2:T'$ there exists a term $\hat{q}$ such that 
     $rcase_{T}\ q_0\ y\ q_1\ q_2 = \hat{q}$ and $\Gamma \vdash \hat{q}:T'$.  
@@ -689,6 +686,7 @@ term of substitution.
     \end{itemize}
   \end{itemize}
 \end{itemize}
+\end{changemargin}
 \end{proof}
 The next result we show is that the hereditary substitution function
 cannot create new redexes, but this requires we first show that
@@ -696,8 +694,9 @@ redexes are either preserved or destroyed. Just as we have seen before
 this requires the following definition.
 \begin{definition}
   \label{def:rset_ssfp}
-  The following function constructs the set of redexes within a term:
-  \begin{center}
+  The following function constructs the set of redexes within a
+  term:\\
+  \begin{changemargin}{10px}{5px}\noindent
     \begin{math}
       \begin{array}{lll}    
       rset(x) = \emptyset\\
@@ -729,7 +728,11 @@ this requires the following definition.
       rset(inl(t)) = rset(t)\\
       & \\
       rset(inr(t)) = rset(t)\\
-      & \\
+    \end{array}
+  \end{math}
+  \ \\
+  \begin{math}
+    \begin{array}{lll}     
       rset(\ccon{t_0}{x}{t_1}{t_2}) = rset(t_0) \cup rset(t_1,t_2)\\
       \hscase{
         \text{ Where } t_1 \text{ is not an inject-left term or an inject-right term.}
@@ -741,7 +744,7 @@ this requires the following definition.
       }\\
     \end{array}
     \end{math}
-  \end{center}
+    \end{changemargin}
   \ \\
   The extention of $rset$ to multiple arguments is defined as follows:
   \begin{center}
@@ -759,8 +762,10 @@ this requires the following definition.
   This is a proof by induction on the lexicorgraphic combination
   $(T, t')$ of $>_{\Gamma,\Gamma'}$ and the strict subexpression
   ordering.  We case split on the structure of $t'$, and we only show
-  the cases that differ from the proof of the same lemma for SSF
+  the cases that differ from the proof of the same lemma for SSF\\
   (Lemma~\ref{lemma:redex_preserving_ssf}).
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}  
   
 \item[Case.] Let $t' \equiv inl(t'')$. We know $rset(t', t) = rset(t'', t)$.  Since $t' > t''$ we can apply
@@ -806,16 +811,16 @@ this requires the following definition.
   $ctype_T(x,t'_1) = T$, $T \equiv T'' \to T'$, and $T$ is a subexpression of $T$.  Hence,
   $T >_{\Gamma,\Gamma'} T''$ and $T >_{\Gamma,\Gamma'} T'$.  At this point we must show the following
   proposition.
-  \ \\
+  
   {\bf Proposition.}  For all $\Gamma \vdash t_1:T'' \to T'$ and $\Gamma \vdash t_2:T''$ we have \\
   $|rset(app_T\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
   
-  \ \\
+  
   We prove this by nested induction on the ordering $(T, t', t_1)$ and case split on the structure of $t_1$. 
   
   \begin{itemize}
   \item[Case.] Suppose $t_1$ is not a $\lambda$-abstraction or a case construct.  Then
-    $app_T\ t_1\ t_2 = t_1\ t_2$ and $|rset(t_1\ t_2)| = |rset(t_1,t_2)|$.  Thus,
+    $app_T\ t_1\ t_2 = t_1\ t_2$ and $|rset(t_1\ t_2)| = |rset(t_1,t_2)|$.  Thus,\\
     $|rset(app_T\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.  
     
   \item[Case.] Suppose $t_1 \equiv \lambda y:T''.t''_1$.  Then $app_T\ t_1\ t_2 = [t_2/y]^{T''} t''_1$.
@@ -873,8 +878,7 @@ this requires the following definition.
       \end{math}
     \end{center}
     Therefore, $|rset(app_T\ t_1\ t_2)| \leq |rset(t_1,t_2)|$.
-
-    \ \\
+    
     Now suppose $t''_0 \equiv inl(\hat{t}_0)$.  We only show the case when $t''_0$ is an
     inject-left term, because the case when it is an inject-right term is similar.  By
     definition we know 
@@ -975,7 +979,6 @@ this requires the following definition.
   This implies that $|rset([t/x]^T t'_0,([t/x]^T t'_1),([t/x]^T t'_2))| \leq |rset(t'_0,t'_1,t'_2,t)|$.\\
   Therefore, $|rset(t', t)| \geq |rset([t/x]^T t')$.
   
-  \ \\
   Now suppose $[t/x]^T t'_0 \equiv inl(t''_0)$.  We only show the case for when $[t/x]^T t'_0$ is an inject-left
   term, because the case for when it is an inject-right term is similar.  We can see that 
   \begin{center}
@@ -1001,8 +1004,7 @@ this requires the following definition.
       \end{array}
     \end{math}
   \end{center}
-    
-  \ \\
+     
   Next suppose $[t/x]^T t'_0 \equiv \ccon{t''_0}{y}{t''_1}{t''_2}$.  Then 
   \begin{center}
     \begin{math}
@@ -1024,12 +1026,10 @@ this requires the following definition.
   subexpression of $T$. Thus, $T >_{\Gamma,\Gamma'} T_1$ and $T >_{\Gamma,\Gamma'} T_2$.
   It suffices to show that $|rset(rcase_T\ [t/x]^T t'_0\ [t/x]^T t'_1\ [t/x]^T t'_2)| \leq |rset([t/x]^T t'_0, [t/x]^T t'_1, [t/x]^T t'_2)|$ which
   is a consequence of the following proposition.
-    
-  \ \\
+      
   {\bf Proposition.}  For all $\Gamma \vdash t:T_1+T_2$, $\Gamma, y:T_1 \vdash t'_1:T'$, and 
   $\Gamma, y:T_2 \vdash t'_2:T'$ we have $|rset(rcase_{T}\ t\ y\ t'_1\ t'_2)| \leq |rset(t, t'_1, t'_2)|$.
-    
-  \ \\
+      
   We prove this proposition by nested induction on $(T, t', t)$ and we case split on $t$.
   \begin{itemize}
   \item[Case.] Suppose $t \equiv inl(t')$.  Then
@@ -1066,8 +1066,7 @@ this requires the following definition.
     are typeable.  By inversion on the assumption $\Gamma \vdash t:T_1+T_2$ we know 
     $\Gamma,z:T'_1 \vdash t_1:T_1+T_2$ and $\Gamma,z:T'_2 \vdash t_2:T_1+T_2$.  So by the inner induction 
     hypothesis $|rset(\rcase{T}{t_i}{y}{t'_1}{t'_2})| \leq |rset(t_i,t'_1,t'_2)|$.
-        
-    \ \\
+            
     We have two cases to consider either $t_0$ is not an inject-left term or an inject-right term, or it is.
     If not then
     \begin{center}
@@ -1105,8 +1104,7 @@ this requires the following definition.
       \end{math}
     \end{center}
     Therefore, $|rset(\rcase{T}{t}{y}{t'_1}{t'_2})| \leq |rset(t, t'_1, t'_2)|$.
-    
-    \ \\
+        
     Now suppose $t_0 \equiv inl(t'_0)$.  Then
     \begin{center}
       \begin{math}
@@ -1163,8 +1161,7 @@ this requires the following definition.
       \end{array}
     \end{math}
   \end{center}
-  
-  \ \\
+    
   Suppose $t'_0 \equiv inl(t''_0)$.  Again, we only show the case for when $t'_0$ is an inject-left term.
   We know 
   \begin{center}
@@ -1200,13 +1197,14 @@ this requires the following definition.
   which implies that $|rset([t/x]^T t')| \leq |rset(t',t)|$.
 
   Finally, suppose $t'_0 \equiv \ccon{t''_0}{z}{t''_1}{t''_2}$.  Then 
+  \vspace{-20px}
   \begin{center}
     \begin{math}
       \begin{array}{lll}
         |rset([t/x]^T t')| \\
-        \,\,\,\,= |rset(\ccon{[t/x]^T t'_0}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
-        \,\,\,\,= |rset(\ccon{\ccon{[t/x]^T t''_0}{z}{[t/x]^T t''_0 t''_1}{[t/x]^T t''_0 t''_2}}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
-        \,\,\,\,= |\{[t/x]^T t'\} \cup rset([t/x]^T t'_0, [t/x]^T t'_1, [t/x]^T t'_2)|
+        = |rset(\ccon{[t/x]^T t'_0}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
+        = |rset(\ccon{\ccon{[t/x]^T t''_0}{z}{[t/x]^T t''_0 t''_1}{[t/x]^T t''_0 t''_2}}{y}{[t/x]^T t'_1}{[t/x]^T t'_2})|\\
+        = |\{[t/x]^T t'\} \cup rset([t/x]^T t'_0, [t/x]^T t'_1, [t/x]^T t'_2)|
       \end{array}
     \end{math}
   \end{center}
@@ -1233,6 +1231,7 @@ this requires the following definition.
   Therefore, $|rset([t/x]^T t''_0, [t/x]^T t'_1, [t/x]^T t'_2)| \leq |rset(t''_0, t'_1, t'_2, t)|$
   which implies that $|rset([t/x]^T t')| \leq |rset(t',t)|$.  
 \end{itemize}
+\end{changemargin}
 \end{proof}
 \noindent
 We now use the previous result to show the hereditary substitution
@@ -1249,6 +1248,8 @@ function to be normality preserving.
   $|rset(n', n)| = 0$.  Therefore, $|rset(t)| = 0$ which implies $n''$ has no redexes.  It suffices to show
   that $n''$ has no structural redexes.  We prove this by induction on the lexicographic ordering $(T,n')$.
   We case split on the structure of $n'$.
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}
 \item[Case.] Suppose $n'$ is a variable $x$ or $y$ distinct from $x$.  Trivial in both cases.
   
@@ -1280,7 +1281,6 @@ function to be normality preserving.
   by the induction hypothesis there exists a term $m$ such that 
   $[m_2/y]^{T''} m'_1 = m$ and $m$ has no structural redexes..  
   
-  \ \\
   Suppose $m_1 \equiv \ccon{m'_0}{y}{m'_1}{m'_2}$.
   By inversion on
   $\Gamma,\Gamma' \vdash m_1 : T'' \to T'$ we know there exists terms $T_1$ and $T_2$ such that
@@ -1293,16 +1293,15 @@ function to be normality preserving.
   there exists terms $q$ and $q'$ such that $app_T\ m'_1\ m_2 = q$, $app_T\ m'_2\ m_2 = q'$ and $q$ and $q'$ have
   no structural redexes.  To obtain this result we prove the following proposition.
   
-  \ \\
   {\bf Proposition.}  For all normal terms $m_2$ and $m'_1$ such that  
   $\Gamma \vdash m_2 : T''$ and $\Gamma \vdash m'_1:T'' \to T'$
   there exists a term $q$ such that $app_T\ m'_1\ m_2 = q$ and $q$ has no structural redexes.
   
-  \ \\
   We prove this by nested induction on the ordering $(T, n', m'_1)$ and case splitting on 
   the structure of $m'_1$.
   \begin{itemize}
-  \item[Case.] Suppose $m'_1$ is neither a $\lambda$-abstraction or a case construct.  Then
+  \item[Case.] Suppose $m'_1$ is neither a $\lambda$-abstraction or a
+    case construct.  Then \\
     $app_T\  m'_1\ m_2 = m'_1\ m_2$.  Take $m'_1\ m_2$ for $q$ and we know $q$ has no structural
     redexes, because $m'_1$ and $m_2$ are normal.
     
@@ -1325,8 +1324,6 @@ function to be normality preserving.
     normal.  
   \end{itemize}
 
-  
-  \ \\
   By the previous proposition there exists terms $q$ and $q'$ such that \\
   $[n/x]^T n' = \ccon{m'_0}{y}{app_T\ m'_1\ m_2}{app_T\ m'_2\ m_2}
   = \ccon{m'_0}{y}{q}{q'}$, where $app_T\ m'_1\ m_2 = q$, $app_T\ m'_1\ m_2 = q'$, and
@@ -1367,8 +1364,7 @@ function to be normality preserving.
     So suppose $m'_0 \equiv \ccon{m''_0}{z}{m''_1}{m''_2}$ then it suffices to show that there exists some term
     $q$ such that $rcase_{T}\ m'_0\ y\ m'_1\ m'_2 = q$ and $q$ has no structural redexes.  We obtain this
     result by the following proposition.
-      
-    \ \\
+         
     {\bf Proposition.} For all normal terms $q$ and $q_1$ such that 
     $\Gamma \vdash q_0:T$, $\Gamma, y:T_1 \vdash q_1:T'$, 
     and $\Gamma, y:T_2 \vdash q_2:T'$ there exists a term $\hat{q}$ such that 
@@ -1411,6 +1407,7 @@ function to be normality preserving.
     \end{itemize}
   \end{itemize}
 \end{itemize}
+\end{changemargin}
 \end{proof}
 \noindent
 Finally, we show that the hereditary substitution function is
@@ -1430,7 +1427,8 @@ consistent with respect to reduction.
   inversion.  Furthermore, we only give the cases that differ from the
   proof of the same result for SSF
   (Lemma~\ref{lemma:soundness_reduction_ssf}).
-
+  \vspace{-25px}
+  \begin{changemargin}{10px}{5px}\noindent
   \begin{itemize}
   \item[Case.] Suppose $t' \equiv inl(t'_0)$.  Then $[t/x]^T t' = inl([t/x]^T t'_0)$.  We can
     see that $t' > t'_0$ so by the induction hypothesis $[t/x]t'_0 \redto^* [t/x]^T t'_0$.  Hence,
@@ -1448,7 +1446,6 @@ consistent with respect to reduction.
     $ctype_T(x,t'_0)$ is undefined.  The cases when $[t/x]^T t'_0$ is not an inject-left term, an inject-right term, 
     or a case construct, or $ctype_T(x,t'_0)$ is undefined are trivial.
     
-    \ \\
     Let's consider the case when $[t/x]^T t'_0$ is an inject-left term or an inject-right term and 
     $t'_0$ is not.  Since the case when $[t/x]^T t'_0$ is an inject-left term is similar to the case when
     it is an inject-right term we only consider the former.  Suppose $[t/x]^T t'_0 = inl(t''_0)$ and 
@@ -1471,8 +1468,7 @@ consistent with respect to reduction.
         \end{array}
       \end{math}
     \end{center}
-    
-    \ \\
+
     Suppose $[t/x]t'_0 = \ccon{t''_0}{z}{t''_1}{t''_2}$ and $t'_0$ is not.  It suffices to show that 
     $[t/x]t \redto^* [t/x]^T t'$, which is equivalent to showing 
     $[t/x](\ccon{t'_0}{y}{t'_1}{t'_2}) \redto^* [t/x]^T (\ccon{t'_0}{y}{t'_1}{t'_2})$.  Now
@@ -1505,12 +1501,10 @@ consistent with respect to reduction.
     $\Gamma,x:T,\Gamma' \vdash t'_0:T_1+T_2$.  Hence, $T >_{\Gamma,\Gamma'} T_1$ and
     $T >_{\Gamma,\Gamma'} T_2$.  
     
-    \ \\
     {\bf Proposition.} For all $\Gamma \vdash t_0:T_1+T_2$, $\Gamma,y:T_1 \vdash t_1:T''$ and
     $\Gamma,y:T_2 \vdash t_2:T''$ we have 
     $(\ccon{t_0}{y}{t_1}{t_2}) \redto^* (\rcase{T}{t_0}{y}{t_1}{t_2})$.
-    
-    \ \\
+
     We prove this by nested induction on the ordering $(T,t',t_0)$ and case splitting on
     the structure of $t_0$.  
     \begin{itemize}
@@ -1570,7 +1564,7 @@ consistent with respect to reduction.
     split on whether or not $\hat{t}'_1$ is a $\lambda$-abstraction and $t'_1$ is not, $\hat{t}'_1$ is a case construct and
     $t'_1$ is not, $ctype_T(x,t'_1)$ is undefined, or $\hat{t}'_1$ is neither a $\lambda$-abstraction or a case construct.  
     We only show the case where $\hat{t}'_1$ is a case construct.
-    \ \\
+
     Finally, suppose $\hat{t}'_1 \equiv \ccon{t_0}{y}{t_1}{t_2}$ and $t'_0$ is not a case construct.  By Lemma~\ref{lemma:ctype_props_ssfp}
     there exists a type $T$ such that $ctype_T(x,t'_1) = T$, $T \equiv T'' \to T'$ and $T$ is a subexpression
     of $T$, where by inversion on the assumption $\Gamma,x:T,\Gamma' \vdash t':T'$ there exists a type $T''$ such that
@@ -1603,12 +1597,10 @@ consistent with respect to reduction.
     \end{center}
     It suffices to show that $(t_1\ ([t/x] t'_2)) \redto^* (app_T\ t_1\ ([t/x] t'_2))$ and 
     $(t_2\ ([t/x] t'_2)) \redto^* (app_T\ t_2\ ([t/x] t'_2))$.  This is a consequence of the following proposition:
-    
-    \ \\
+
     {\bf Proposition.} For all $\Gamma \vdash t_1:T_1 \to T_2$ and $\Gamma \vdash t_2:T_1$ we have
     $(t_1\ t_2) \redto^* (app_T\ t_1\ t_2)$.
-    
-    \ \\
+
     We prove this by nested induction on the ordering $(T, t', t_1)$ and case split on the
     structure of $t_1$.  
     \begin{itemize}
@@ -1644,6 +1636,7 @@ consistent with respect to reduction.
       which implies $(t_1\ t_2) \redto^* (app_T\ t_1\ t_2)$.
     \end{itemize} 
   \end{itemize}
+  \end{changemargin}
 \end{proof}
 % subsection properties_of_the_hereditary_substitution_function_ssfp (end)
 
@@ -1693,7 +1686,8 @@ normalization of SS$\Fp$.
   This is a proof by induction on the assumed typing derivation.  We
   only show the cases that differ from the proof of type soundness for
   SSF (Theorem~\ref{thm:soundness_ssf}).
-
+\vspace{-25px}
+\begin{changemargin}{10px}{5px}\noindent
 \begin{itemize}  
 \item[Case.]\ \\
   \begin{center}
@@ -1755,9 +1749,10 @@ normalization of SS$\Fp$.
   Lemma~\ref{lemma:soundness_reduction_ssfp}, and Lemma~\ref{corollary:normalization_preserving_ssfp} 
   allow us to conclude that $[n_0/z](\ccon{z}{x}{n_1}{n_2}) \redto^* [n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2})$,
   $\Gamma \vdash [n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2}) :T$, and $[n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2})$
-  is normal.  Thus, $[n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2}) \in \interp{T}_\Gamma$ and we obtain 
+  is normal.  Thus, \\ $[n_0/z]^{T_1+T_2}(\ccon{z}{x}{n_1}{n_2}) \in \interp{T}_\Gamma$ and we obtain 
   $\ccon{t_0}{x}{t_1}{t_2} \in \interp{T}_\Gamma$. 
 \end{itemize}
+\end{changemargin}
 \end{proof}
 
 \begin{corollary}[Normalization]

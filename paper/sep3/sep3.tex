@@ -1,8 +1,8 @@
 \input{sep3-annotated-ott}
 \input{sep3-unannotated-ott}
 
-\renewcommand{\Sepdrulename}[1]{\scriptsize \textsc{#1}}
-\renewcommand{\SepUdrulename}[1]{\scriptsize \textsc{#1}}
+\renewcommand{\Sepdrulename}[1]{{\normalfont\scriptsize \text{#1}}}
+\renewcommand{\SepUdrulename}[1]{{\normalfont\scriptsize \text{#1}}}
 % See the seppp.tex file for reminders of the motivation of the
 % design.
 
@@ -66,11 +66,9 @@ and a large amount of syntax.  Therefore, we do not have the space to
 introduce the complete definition in the same style as we did for
 freedom of speech, but instead concentrate on the most important
 aspects of the design.  If the reader wishes to wade through the
-entire definition, then please see
-Appendix~\ref{sec:annotated_separation_of_proof_from_program} and
-Appendix~\ref{sec:unannotated_separation_of_proof_from_program}, but
-the reader may wish to read this chapter first to understand the need
-for two appendices.
+entire definition, then please see the appendix in
+\cite{Eades:2014-full} but the reader may wish to read this chapter
+first to understand the need for two definitions.
 
 $\Sep$ consists of two distinct phases: compile time and runtime, and
 $\Sep$ separates each phase into its own language.  The compile time
@@ -97,8 +95,7 @@ conjecture that the metatheory of $\Sep$ would be easier to carry out
 in the unannotated language rather than the annotated one.  We do not
 pursue this strand of thought further, but wanted to simply comment on
 this notion. We do not define the eraser functions here, but the
-interested reader can find their complete definitions at the end of
-Appendix~\ref{sec:unannotated_separation_of_proof_from_program}.
+interested reader can find their complete definitions in the appendix.
 Throughout the remainder of this chapter we will concentrate solely on
 the annotated $\Sep$ language which we will just call $\Sep$.
 
@@ -142,7 +139,8 @@ only discuss a few important aspects of the fragment.
 
 In the freedom of speech language the connection between the two
 fragments is very explicit.  The connection from the logical fragment
-to the programmatic fragment is modeled by the $\Sepdrulename{Coerce}$
+to the programmatic fragment is modeled by the
+$\Sepdrulename{\normalsize Coerce}$
 rule, and the connection from the programmatic fragment was modeled by
 the dependent product types\index{Dependent Product Type}, which allowed arguments to functions to be
 programs from the programmatic fragment.  However, $\Sep$ does not
@@ -160,6 +158,7 @@ fragment over the freedom of speech language, and that is the lifting
 of the value restrictions.  For example, the following are the
 $\lambda$-abstraction and function application rules from the
 programmatic fragment of $\Sep$:
+\vspace{-56px}
 \begin{center}
   \begin{mathpar}
     \SepdruleTRMXXLamPL{}  \and
@@ -171,21 +170,21 @@ We can see that these rules look very much like the rules of freedom
 of speech, but there are some small differences.  First, we annotate
 bound variables by their stage annotations.  This facilitates
 reasoning as well as the definitions of the eraser
-functions. Secondly, in the $\Sepdrulename{TRM\_LamPL}$ we annotate
+functions. Secondly, in the $\Sepdrulename{\normalsize TRM\_LamPL}$ we annotate
 the free variable $[[x]]$ in the context of the premise with the
 $\mathsf{val}$ annotation.  This indicates that $[[x]]$ ranges over
 programmatic values, and this is used to enforce
 call-by-value\index{Call-by-value Reduction (CBV)}
-applications. Compare this to the rule $\Sepdrulename{TRM\_LamMI}$
+applications. Compare this to the rule $\Sepdrulename{\normalsize TRM\_LamMI}$
 where $[[x]]$ does not only range over values, but also over diverging
 terms.
 
 These rules include the freedom of speech property\index{Freedom of Speech}.  The type $[[A]]$
 is an alias for one of $[[t]]$, $[[P]]$, or $[[LK]]$, which means
-compile-time functions -- using $\Sepdrulename{TRM\_LamMI}$ -- can
+compile-time functions -- using $\Sepdrulename{\normalsize TRM\_LamMI}$ -- can
 take in programmatic arguments, proof arguments, or even predicates.
 
-Finally, the application rule $\Sepdrulename{TRM\_App}$ does not
+Finally, the application rule $\Sepdrulename{\normalsize TRM\_App}$ does not
 contain any value restriction.  The argument $[[a]]$ ranges over
 general terms, proofs, and predicates.  Thus, we have successfully
 lifted the value restriction in the programmatic fragment.
@@ -198,7 +197,6 @@ follows:
 
 \begin{center}  
   \begin{math}
-    \scriptsize
     \begin{array}{llllllllllllllll}      
       \begin{array}{lll}
       \text{(Super Kinds) } [[L]] ::= & [[Logical i]]\\
@@ -207,60 +205,57 @@ follows:
     \end{array}
     &
     \begin{array}{lllllll}           
-      \text{(Logical Kind) } [[LK]] ::= 
-      & [[x]] \\
-      & \mid \mathsf{Formula}_{[[i]]} \\
-      & \mid [[Forall x : A.LK]]\\
+      \text{(Logical Kind) } [[LK]] ::= [[x]] \\
+      \,\,\,\,\,\,\,\mid \mathsf{Formula}_{[[i]]} \\
+      \,\,\,\,\,\,\,\mid [[Forall x : A.LK]]\\
     \end{array}\\
     & \\
       \begin{array}{llllll}
-        \text{(Predicates) } [[P]] ::= 
-        & [[x]] \\
-        & \mid [[\ L x : A . P]] \\
-        & \mid [[P a]] \\
-        & \mid [[Forall x : A . P]] \\
-        & \mid [[let x = p in P]] \\
-        & \mid [[let x = P in P']] \\
-        & \mid [[let x = t [ p ] in P]] \\
-        & \mid [[t1 = t2]] \\
-        & \mid [[t !]] \\
-        & \mid [[P1 + P2]] \\
-        & \mid [[Exists x : A . P]] \\
-        & \mid [[bot i]] \\
-        & \mid [[t < t']] \\
-        & \\
-        & \\
-        & \\
-        & \\
-        & \\
-        & \\        
-        & \\
-        & \\
+        \text{(Predicates) } [[P]] ::= [[x]] \\
+        \,\,\,\,\,\,\,\mid [[\ L x : A . P]] \\
+        \,\,\,\,\,\,\,\mid [[P a]] \\
+        \,\,\,\,\,\,\,\mid [[Forall x : A . P]] \\
+        \,\,\,\,\,\,\,\mid [[let x = p in P]] \\
+        \,\,\,\,\,\,\,\mid [[let x = P in P']] \\
+        \,\,\,\,\,\,\,\mid [[let x = t [ p ] in P]] \\
+        \,\,\,\,\,\,\,\mid [[t1 = t2]] \\
+        \,\,\,\,\,\,\,\mid [[t !]] \\
+        \,\,\,\,\,\,\,\mid [[P1 + P2]] \\
+        \,\,\,\,\,\,\,\mid [[Exists x : A . P]] \\
+        \,\,\,\,\,\,\,\mid [[bot i]] \\
+        \,\,\,\,\,\,\,\mid [[t < t']] \\
+         \\
+         \\
+         \\
+         \\
+         \\
+         \\        
+         \\
+         \\
       \end{array}
       &
       \begin{array}{lll}
-        \text{(Proofs) } [[p]] ::= 
-        & [[x]] \\
-        & \mid [[injl p with P]] \\
-        & \mid [[injr p with P]] \\
-        & \mid [[case p of x . p' , y . p'']] \\
-        & \mid [[\ L x : A . p]] \\
-        & \mid [[p a]] \\ 
-        & \mid [[(a , p ) as P]] \\
-        & \mid [[case p1 of ( x , y ) . p2]] \\
-        & \mid [[let x = p' in p]] \\
-        & \mid [[let x = P in p]] \\
-        & \mid [[let x = t [ y ] in p]] \\
-        & \mid [[join t1 t2]] \\
-        & \mid [[conv p by q1 ... qn at x1 ... xm . P]] \\
-        & \mid [[predconv p P]] \\
-        & \mid [[valax t]] \\
-        & \mid [[ord t t']] \\
-        & \mid [[case t [ x ] p of R]] \\
-        & \mid [[tcase t [ x ] of abort -> p1 | ! -> p2]] \\
-        & \mid [[ind f x : t , p1 . p2]] \\
-        & \mid [[contra p1]] \\
-        & \mid [[contraval p1 p2]]\\
+        \text{(Proofs) } [[p]] ::= [[x]] \\
+        \,\,\,\,\,\,\,\mid [[injl p with P]] \\
+        \,\,\,\,\,\,\,\mid [[injr p with P]] \\
+        \,\,\,\,\,\,\,\mid [[case p of x . p' , y . p'']] \\
+        \,\,\,\,\,\,\,\mid [[\ L x : A . p]] \\
+        \,\,\,\,\,\,\,\mid [[p a]] \\ 
+        \,\,\,\,\,\,\,\mid [[(a , p ) as P]] \\
+        \,\,\,\,\,\,\,\mid [[case p1 of ( x , y ) . p2]] \\
+        \,\,\,\,\,\,\,\mid [[let x = p' in p]] \\
+        \,\,\,\,\,\,\,\mid [[let x = P in p]] \\
+        \,\,\,\,\,\,\,\mid [[let x = t [ y ] in p]] \\
+        \,\,\,\,\,\,\,\mid [[join t1 t2]] \\
+        \,\,\,\,\,\,\,\mid [[conv p by q1 ... qn at x1 ... xm . P]] \\
+        \,\,\,\,\,\,\,\mid [[predconv p P]] \\
+        \,\,\,\,\,\,\,\mid [[valax t]] \\
+        \,\,\,\,\,\,\,\mid [[ord t t']] \\
+        \,\,\,\,\,\,\,\mid [[case t [ x ] p of R]] \\
+        \,\,\,\,\,\,\,\mid [[tcase t [ x ] of abort -> p1 | ! -> p2]] \\
+        \,\,\,\,\,\,\,\mid [[ind f x : t , p1 . p2]] \\
+        \,\,\,\,\,\,\,\mid [[contra p1]] \\
+        \,\,\,\,\,\,\,\mid [[contraval p1 p2]]\\
       \end{array}
     \end{array}
   \end{math}
@@ -300,7 +295,8 @@ the freedom of speech language with the addition of the necessary
 proofs of the new predicates just discussed.  Thus, we do not go over
 each proof construct.  The typing rules for logical kinds, predicates,
 and proofs can be found in Figure~\ref{fig:logk-ty},
-Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
+Figure~\ref{fig:pred-ty}, Figure~\ref{fig:proofs-ty}, and
+Figure~\ref{fig:proofs-ty-cont} respectively.
 \begin{figure}
   \scriptsize
   \begin{mathpar}
@@ -352,6 +348,13 @@ Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
     \SepdrulePRFXXApp{} \and
     \SepdrulePRFXXLetPRF{} \and
     \SepdrulePRFXXLetPRD{} \and
+  \end{mathpar}
+  \caption{Type-checking Rules for Proofs}
+  \label{fig:proofs-ty}
+\end{figure}
+\begin{figure}
+  \scriptsize
+  \begin{mathpar}
     \SepdrulePRFXXLet{} \and
     \SepdrulePRFXXJoin{} \and
     \SepdrulePRFXXConv{} \and
@@ -365,8 +368,8 @@ Figure~\ref{fig:pred-ty}, and Figure~\ref{fig:proofs-ty} respectively.
     \SepdrulePRFXXCase{} \and
     \SepdrulePRFXXTCase{} 
   \end{mathpar}
-  \caption{Type-checking Rules for Proofs}
-  \label{fig:proofs-ty}
+  \caption{Type-checking Rules for Proofs Continued}
+  \label{fig:proofs-ty-cont}
 \end{figure}
 The reader may wish to look over the typing rules for proofs to get an
 idea of which proof construct introduces each of the new predicates.
@@ -379,7 +382,7 @@ and programmatic fragments.  The termination predicate adds the
 ability to prove programmatic programs terminating.  The termination
 predicate is denoted $[[t !]]$, and can be read as the program $[[t]]$
 terminates at a value.  We prove $[[t !]]$ using the rule
-$\Sepdrulename{PRF\_Val}$:
+$\Sepdrulename{\normalsize PRF\_Val}$:
 \[ \SepdrulePRFXXVal{} \] This rule says, that if we can show $[[D, G
 |- val t]]$, then we can prove $[[t !]]$.  We call the judgment $[[D,
 G |- val t]]$ the semantic value judgment.  If it holds, then $[[t]]$
@@ -401,7 +404,7 @@ judgment.
   \caption{Semantic Values}
   \label{fig:sem-val}
 \end{figure}
-One may feel that the rule $\Sepdrulename{PRF\_Val}$ is a bit
+One may feel that the rule $\Sepdrulename{\normalsize PRF\_Val}$ is a bit
 restrictive.  This rule is supposed to allow the proof that a
 terminating program is indeed terminating, but on the nose it seems
 that the only things we can prove are terminating are semantic
@@ -409,11 +412,11 @@ values, which are trivially terminating.  However, this is not the
 case.  If one can prove that $[[t]]$ is terminating for some non-value
 $[[t]]$, then one must have constructed the value of $[[t]]$, say
 $[[v]]$.  Now it is trivially the case that $[[t]]$ and $[[v]]$ are
-joinable, thus using $\Sepdrulename{PRF\_Join}$ we can prove $[[t =
+joinable, thus using $\Sepdrulename{\normalsize PRF\_Join}$ we can prove $[[t =
 v]]$.  In addition, since we know $[[v]]$ is a value, then we can
 prove that it is a semantic value trivially.  Thus, using these two
 proofs we can then prove $[[D, G |- valax v : t !]]$ using the rules
-$\Sepdrulename{PRF\_Val}$ and $\Sepdrulename{PRF\_Conv}$.
+$\Sepdrulename{\normalsize PRF\_Val}$ and $\Sepdrulename{\normalsize PRF\_Conv}$.
 
 The termination cast is a means of casting programs to values if they
 can be proven to be terminating.  That is, any terminating program may
@@ -461,9 +464,8 @@ is as follows: \[ \SepdrulePRFXXOrd{} \] This rule is very much like
 the rule for introducing the termination predicate in that it is
 defined for values only, however, when mixed with equality it can be
 very powerful.  The judgment $[[t subexpp t']]$ is the subexpression
-ordering on datatype constructors.  See
-Appendix~\ref{sec:annotated_separation_of_proof_from_program} for the
-complete definition.  
+ordering on datatype constructors.  See the appendix for the complete
+definition.
 
 The structural order predicate is then used in the definition of
 induction in the logical fragment: \[ \SepdrulePRFXXInd{} \] As we can

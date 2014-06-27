@@ -116,7 +116,7 @@ defns
   G |- A + B : Type
 
   defn
-  G |- T : True :: :: validity :: 'L_'
+  G |- T : True :: :: validity :: 'L'
     {{ tex [[G]] \vdash [[T]] : \mathsf{True} }}
   by 
 
@@ -172,7 +172,7 @@ defns
   G |- C : True
 
   defn
-  G |- t : T :: :: typing :: 'T_' 
+  G |- t : T :: :: typing :: '' 
     {{ tex [[G]] \vdash [[t]] : [[T]] }}
   by
    
